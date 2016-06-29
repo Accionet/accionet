@@ -1,0 +1,25 @@
+<html ng-app="accionet-web-app">
+
+<head>
+    <title>Lugares - Accionet</title>
+    <% include ../head.ejs %>
+</head>
+
+<body ng-controller="placeController">
+    <% include ../message_log.ejs %>
+    <div class="container" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
+        <div class="header">
+            <h1> editar:  {{selectedPlace.name}}</h1>
+        </div>
+
+        <br>
+
+        <% include partials/form.ejs %>
+
+    </div>
+    <% include ../scripts.ejs %>
+    <% include partials/places_scripts.ejs %>
+
+</body>
+
+</html>

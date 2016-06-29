@@ -130,6 +130,7 @@ function buildInsertIntoQuery(params) {
     //delete the last ","
     query = query.substring(0, query.length - 1);
 
+  
     query += ") values(";
     for (var i = 0; i < params.keys.length; i++) {
         query += " $" + (i + 1) + ",";

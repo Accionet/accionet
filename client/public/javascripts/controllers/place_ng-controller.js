@@ -19,21 +19,20 @@ controllers
 
         $http.put('/places/' + place.id + '/toggleIsActive')
             .success(function(data) {
-              locallyUpdatePlace(data.place);
-              })
+                locallyUpdatePlace(data.place);
+            })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
     };
 
     function locallyUpdatePlace(updated_place) {
-      if(selectedPlace && selectedPlace.id == updated_place.id)
-        selectedPlace = updated_place();
-
-        for (var place in $scope.places) {
-          if (place.id == updated_place.id) {
-            place = updated_place;
-          }
+        if ($scope.selectedPlace && $scope.selectedPlace.id == updated_place.id)
+            $scope.selectedPlace = updated_place;
+        for (var i = 0; i < $scope.places.length; i++) {
+            if ($scope.places[i].id == updated_place.id) {
+                $scope.places[i] = updated_place;
+            }
         }
     }
 
@@ -41,7 +40,6 @@ controllers
     $scope.createPlace = function(place) {
 
         if ($scope.validForm()) {
-          console.log("crear");
             $http.post('/places/new', $scope.selectedPlace)
                 .success(function(data) {
                     $scope.formData = {};
@@ -57,8 +55,7 @@ controllers
     $scope.updatePlace = function(place) {
 
         if ($scope.validForm()) {
-          console.log("crear");
-            $http.put('/places/' + $scope.selectedPlace.id +  '/edit', $scope.selectedPlace)
+            $http.put('/places/' + $scope.selectedPlace.id + '/edit', $scope.selectedPlace)
                 .success(function(data) {
                     place = data.place;
                 })
@@ -69,8 +66,6 @@ controllers
     };
 
     $scope.validForm = function() {
-      var bo = !($scope.form.$error.required || $scope.form.$error.maxlength || $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer);
-        console.log(bo);
         return !($scope.form.$error.required || $scope.form.$error.maxlength || $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer);
     };
 

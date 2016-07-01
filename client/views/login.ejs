@@ -1,0 +1,33 @@
+<html ng-app="accionet-web-app">
+
+<head>
+    <title>Lugares - Accionet</title>
+    <% include head.ejs %>
+</head>
+
+<body ng-controller="loginController">
+
+    <% include message_log.ejs %>
+
+<div>
+  <form name="form">
+      <div>
+          <label for="email"> Email: </label>
+          <input name="email" type="email" placeholder="email" ng-model="user.email" required />
+      </div>
+
+      <div>
+          <label for="password"> Contraseña: </label>
+          <input name="password" placeholder="contraseña" type="password" ng-model="user.password" required />
+      </div>
+
+  </form>
+
+  <button class="btn" ng-click="createPlace(selectedPlace)"> Ingresar </button>
+
+</div>
+
+        <% include scripts.ejs %>
+</body>
+
+</html>

@@ -1,6 +1,8 @@
 var pg = require('pg');
 var path = require('path');
 
+var User = require('../models/users.js');
+
 
 var connectionString = require(path.join(__dirname, '../', '../', 'config'));
 
@@ -38,3 +40,17 @@ console.log(query);
 query.on('end', function() {
     client.end();
 });
+
+
+//Insert users
+
+// var user1 = User.new();
+// user1.firstName = 'Antonio';
+// user1.lastName = 'Fontaine';
+// user1.description = 'Encargado del mantenimiento y desarrollo de esta aplicación';
+// user1.isActive = true;
+// user1.email = 'antonio@accionet.cl';
+// user1.password = '1234';
+// user1.is_super_user = true;
+//
+// User.save(user1);

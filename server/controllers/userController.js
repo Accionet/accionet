@@ -2,29 +2,22 @@
 
 
 var path = require('path');
-var Places = require('../models/places.js');
+var Places = require('../models/users.js');
 
 
 
 
-exports.index = function(req, res) {
-    Places.all(function(err, response) {
-        if (err) {
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-                error: "ERROR:" + err,
-                places: []
-            });
-        }
+exports.login = function(req, res) {
 
-        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-            places: response.results
+
+        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {
+            places: result
         });
 
-    });
 };
 
 
-exports.activePlaces = function(req, res) {
+exports.logout = function(req, res) {
 
 };
 
@@ -50,15 +43,14 @@ exports.create = function(req, res) {
 
     console.log(req.body);
     if (req.body.name && req.body.email) {
-        Places.save(req.body, function(err, response) {
+        Places.save(req.body, function(err, message) {
             if (err) {
                 return res.status(400).send({
-                    error: "ERROR:" + err
+                    error: err
                 });
             }
             return res.status(200).send({
-                success: response.success,
-                place: response.entry
+                success: message
             });
         });
     } else {
@@ -75,24 +67,17 @@ exports.toggleIsActive = function(req, res) {
                 error: err
             });
         }
-        console.log('----------------------toggleIsActive');
-        console.log(response);
         return res.status(200).send({
-            success: response.success,
-            place: response.entry
+            success: response.message,
+            place: response.place
 
         });
     });
 };
 
 
-/* sets the is_active to true */
-exports.activate = function(req, res) {
-
-};
-
 exports.edit = function(req, res) {
-    Places.findById(req.params.id, function(err, response) {
+    Places.findById(req.params.id, function(err, place) {
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: "ERROR:" + err,
@@ -100,7 +85,7 @@ exports.edit = function(req, res) {
             });
         }
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'edit.ejs'), {
-            place: response.results[0]
+            place: place
         });
 
     });
@@ -108,17 +93,15 @@ exports.edit = function(req, res) {
 };
 
 exports.show = function(req, res) {
-    Places.findById(req.params.id, function(err, response) {
+    Places.findById(req.params.id, function(err, place) {
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: "ERROR:" + err,
                 places: []
             });
         }
-        console.log(response);
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
-            place: response.results[0]
-
+            place: place
         });
 
     });
@@ -134,8 +117,8 @@ exports.update = function(req, res) {
             });
         }
         return res.status(200).send({
-            success: response.success,
-            place: response.entry
+            success: response.message,
+            place: response.place
         });
     });
 

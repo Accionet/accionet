@@ -1,7 +1,7 @@
 <form name="form">
     <div>
         <label for="name"> Nombre: </label>
-        <input name="name" type="text" placeholder="Nombre"  ng-model="selectedPlace.name" required  ng-maxlength="80"/>
+        <input name="name" type="text" placeholder="Nombre" ng-model="selectedPlace.name" required ng-maxlength="80" />
         <p ng-show="form.name.$error.required"> No puede ser vacio </p>
         <p ng-show="form.name.$error.maxlength"> No puede tener más de 80 caracteres </p>
     </div>
@@ -24,10 +24,9 @@
     </div>
 
     <div>
-      <label for="visits"> Visitas diarias: </label>
-      <input type="number" ng-model="selectedPlace.daily_visits" name="visits"
-             min="0" integer />
-      <p ng-show="form.visits.$error.integer">No es número entero </p>
+        <label for="visits"> Visitas diarias: </label>
+        <input type="number" ng-model="selectedPlace.daily_visits" name="visits" min="0" integer />
+        <p ng-show="form.visits.$error.integer">No es número entero </p>
     </div>
 
     <div>

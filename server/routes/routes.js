@@ -10,7 +10,8 @@ var placeController = require('../controllers/placeController.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  placeController.index(req, res, next);
+  res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {
+  });
   //res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 

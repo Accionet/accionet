@@ -48,7 +48,6 @@ exports.new = function(req, res) {
 
 exports.create = function(req, res) {
 
-    console.log(req.body);
     if (req.body.name && req.body.email) {
         Places.save(req.body, function(err, message) {
             if (err) {
@@ -74,11 +73,12 @@ exports.toggleIsActive = function(req, res) {
                 error: err
             });
         }
-        return res.status(200).send({
-            success: response.message,
-            place: response.place
+        console.log("llego la respuesta de: ");
+        console.log(response);
+        json  = { place: response };
+        console.log(json);
 
-        });
+        return res.status(200).send(json);
     });
 };
 
@@ -120,8 +120,8 @@ exports.show = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    console.log(req.params.id);
-    console.log(req.body);
+
+    console.log('controller');
     Places.update(req.params.id, req.body, function(err, response) {
         if (err) {
             return res.status(400).send({

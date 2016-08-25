@@ -5,8 +5,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./server/routes/routes');
+
 var users = require('./server/routes/users');
+
+// var passport = require('passport');
+var flash    = require('connect-flash');
+
+require('./server/passport/config');
+
+var routes = require('./server/routes/routes');
 
 var app = express();
 
@@ -23,7 +30,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './client', 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+// app.use('/users', users);
+
+
+//required for passport
+// app.use(session({ secret: 'freewififoreveryone' })); // session secret
+// app.use(passport.initialize());
+// app.use(passport.session()); // persistent login sessions
+
+// app.use(flash()); // use connect-flash for flash messages stored in session
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

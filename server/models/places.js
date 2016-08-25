@@ -4,71 +4,21 @@ var path = require('path');
 var pg = require('pg');
 var connectionString = require(path.join(__dirname, '../', '../', 'config'));
 var q = require('q');
+var base = require('../models/base.js');
+
+var table_name = "places";
 
 
 
 //Return all the places active or not
 exports.all = function(callback) {
-    var deferrer = q.defer();
-    var results = [];
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            console.log(err);
-            deferrer.reject(err);
-        }
-
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM places ORDER BY id ASC;");
-
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            results.push(row);
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            done();
-            deferrer.resolve(results);
-        });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
-    });
+    base.all(table_name, callback);
 };
 
 //Creates a json representing an empty place
 exports.new = function(callback) {
 
-    var deferrer = q.defer();
-    var place = {};
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            deferrer.reject(err);
-        }
-
-        // SQL Query > Select Data
-        var query = client.query("SELECT column_name FROM information_schema.columns WHERE table_name = 'places';");
-
-        // Stream results back one row at a time
-        query.on('row', function(row) {
-            place[row.column_name] = null;
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            done();
-            deferrer.resolve(place);
-        });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
-    });
+    base.new(table_name, callback);
 };
 
 
@@ -120,80 +70,33 @@ function parseToPlace(attr) {
 
 
 
-//params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
-function buildInsertIntoQuery(params) {
-
-    query = "INSERT INTO places(";
-    for (var j = 0; j < params.keys.length; j++) {
-        query += " " + params.keys[j] + ",";
-    }
-    //delete the last ","
-    query = query.substring(0, query.length - 1);
-
-  
-    query += ") values(";
-    for (var i = 0; i < params.keys.length; i++) {
-        query += " $" + (i + 1) + ",";
-    }
-
-    //delete the last ","
-    query = query.substring(0, query.length - 1);
-
-    query += ");";
-
-    console.log(query);
-    return query;
-}
-
-//params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
-function buildUpdateQuery(id, params) {
-    //UPDATE places SET name=($1), is_active=($2) WHERE id=($3)
-    query = "UPDATE places SET";
-    for (var j = 0; j < params.keys.length; j++) {
-        query += " " + params.keys[j] + "=($" + (j + 1) + "),";
-    }
-    //delete the last ","
-    query = query.substring(0, query.length - 1);
-
-    query += " WHERE id=($" + (params.keys.length + 1);
-    query += ");";
-
-    console.log(query);
-    return query;
-}
 
 //Creates a json with the attr in attr
 exports.save = function(attr, callback) {
 
     var deferrer = q.defer();
 
-    place = parseToPlace(attr);
+    setDefaultAttributes(attr);
 
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-        // Handle connection errors
+    base.save(attr, table_name, function(err, success) {
         if (err) {
-            done();
             deferrer.reject(err);
         }
+        if (success)
+            deferrer.resolve(attr.name + " agregado exitósamente.");
 
-        query_string = buildInsertIntoQuery(place);
-        var query = client.query(query_string, place.values);
-        //    var query  = client.query("INSERT INTO places values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)", values);
-
-
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            done();
-            deferrer.resolve(place.name + " agregado exitósamente.");
-        });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
+        //It should never get to here
+        deferrer.reject("ERROR");
     });
-
-
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
 };
+
+
+function setDefaultAttributes(attr) {
+    if(!attr.is_active)
+      attr.is_active = false;
+}
 
 /*Similar idea tu parseToPlace method, but it doesn't include all the attributes, only the existing ones*/
 function parseToPlaceForUpdate(attr) {
@@ -235,51 +138,30 @@ function parseToPlaceForUpdate(attr) {
     return place;
 }
 
-function sendUpdateRequest(id, attr, callback) {
+exports.update = function(id, attr, callback) {
 
     var deferrer = q.defer();
 
-    place = parseToPlaceForUpdate(attr);
 
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-        // Handle connection errors
+
+    base.update(id, attr, table_name, function(err, place) {
+
         if (err) {
-            done();
+            console.log("ERROR: " + err);
             deferrer.reject(err);
         }
-
-        var query_string = buildUpdateQuery(id, place);
-
-        place.values.push(id);
-        var query = client.query(query_string, place.values);
-
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            done();
-            findPlaceById(id, function(err, place) {
-                if (err) {
-                    console.log("ERROR: " + err);
-                    deferrer.reject(err);
-                }
-                response = {
-                    message: "Cambios a " + place.name + " agregados exitosamente.",
-                    place: place
-                };
-                deferrer.resolve(response);
-            });
-
-        });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
+        response = {
+            message: "Cambios a " + place.name + " agregados exitosamente.",
+            place: place
+        };
+        deferrer.resolve(response);
     });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+};
 
 
-}
-
-exports.update = sendUpdateRequest;
-
+//######### FIX FROM HERE DOWN
 
 exports.toggleIsActive = function(id, callback) {
     var deferrer = q.defer();
@@ -307,7 +189,7 @@ exports.toggleIsActive = function(id, callback) {
             attr = {
                 is_active: !is_active
             };
-            sendUpdateRequest(id, attr, callback);
+            base.update(id, attr, table_name, callback);
         });
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
@@ -315,35 +197,10 @@ exports.toggleIsActive = function(id, callback) {
 
 };
 
-function findPlaceById(id, callback) {
+exports.findById = function(id, callback) {
+    base.findById(id, table_name, callback);
+};
 
-    var deferrer = q.defer();
-    var place;
-
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-        // Handle connection errors
-        if (err) {
-            done();
-            deferrer.reject(err);
-        }
-
-
-        var query = client.query("SELECT * FROM places WHERE places.id = $1", [id]);
-
-        query.on('row', function(row) {
-            place = row;
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', function() {
-            done();
-            deferrer.resolve(place);
-        });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
-    });
-}
-
-exports.findById = findPlaceById;
+exports.findOne = function(id, attr, callback) {
+    base.findOne(id, place, table_name, callback);
+};

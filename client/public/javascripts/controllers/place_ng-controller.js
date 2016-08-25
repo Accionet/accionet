@@ -19,6 +19,8 @@ controllers
 
         $http.put('/places/' + place.id + '/toggleIsActive')
             .success(function(data) {
+
+                console.log();
                 locallyUpdatePlace(data.place);
             })
             .error(function(data) {
@@ -53,6 +55,7 @@ controllers
 
     // updates a place
     $scope.updatePlace = function(place) {
+        console.log('update');
 
         if ($scope.validForm()) {
             $http.put('/places/' + $scope.selectedPlace.id + '/edit', $scope.selectedPlace)

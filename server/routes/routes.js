@@ -8,6 +8,7 @@ var connectionString = require(path.join(__dirname, '../', '../', 'config'));
 
 var placeController = require('../controllers/placeController.js');
 var userController = require('../controllers/userController.js');
+var surveyController = require('../controllers/surveyController.js');
 
 
 
@@ -63,12 +64,28 @@ router.post('/places/new', function(req, res, next) {
 });
 
 router.put('/places/:id/edit', function(req, res, next) {
-    console.log('routes');
     placeController.update(req, res, next);
 });
 
 router.put('/places/:id/toggleIsActive', function(req, res, next) {
     placeController.toggleIsActive(req, res, next);
+});
+
+//////////////////////////////////////////////
+///////////// SURVEY ////////////////////////
+////////////////////////////////////////////
+
+
+router.get('/survey', function(req, res, next) {
+  res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'answer.ejs'), {
+      error: "ERROR:",
+      places: []
+  });
+});
+
+
+router.post('/survey/:id/response', function(req, res, next) {
+    surveyController.responseSurvey(req, res, next);
 });
 
 

@@ -205,7 +205,6 @@ function parseForSave(table_name, regular_json, callback) {
             keys: [],
             values: []
         };
-
         for (var i = 0; i < columns.length; i++) {
 
             //id cannot be set
@@ -238,8 +237,12 @@ exports.save = function(attr, table_name, callback) {
                 deferrer.reject(err);
             }
             query_string = buildInsertIntoQuery(params, table_name);
-            var query = client.query(query_string, params.values);
+
+            console.log('-----------------------------------------');
             console.log(query_string);
+            console.log(params);
+
+            var query = client.query(query_string, params.values);
 
             query.on('row', function(row) {
 
@@ -250,6 +253,8 @@ exports.save = function(attr, table_name, callback) {
 
             // After all data is returned, close connection and return results
             query.on('end', function() {
+                // console.log(params);
+                // console.log('saved');
                 done();
                 deferrer.resolve(entry);
             });

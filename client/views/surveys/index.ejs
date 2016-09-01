@@ -1,0 +1,81 @@
+<html ng-app="accionet-web-app">
+
+<head>
+    <title>Lugares - Accionet</title>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body ng-controller="surveyController">
+
+    <% include ../partials/message_log.ejs %>
+
+        <div id="wrapper">
+
+            <%= include ../partials/navbar.ejs %>
+
+                <div id="page-wrapper" ng-init="initializeSurveys(' <%= JSON.stringify(surveys) %>', null)">
+                    <!-- <div class="container" ng-init="initializeSurveys(' <%= JSON.stringify(surveys) %>', null)">
+                        <div class="header">
+                            <h1>Índice de lugares</h1>
+                        </div>
+
+                        <br>
+                        <ul ng-repeat="survey in surveys">
+                            <li>
+                                <h6> Nombre: {{ survey.name }} </h6>
+                                <p> Descripción: {{survey.description}} </p>
+                                <p> Status: {{survey.status}} </p>
+                                <p> Admin. mail: {{survey.email}} </p>
+                                <p> Mail fue confirmado: {{survey.email_verified}} </p>
+                                <p> Descripción: {{survey.description}} </p>
+                                <p> Activo: {{survey.is_active}} </p>
+                                <p> Creado el: {{survey.created_at}} </p>
+                                <p> Visitas diarias: {{survey.daily_visits}} </p>
+
+                                <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}"> ver </a>
+                                <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}/edit"> editar </a>
+                                <a ng-if="survey.is_active" ng-click="toggleIsActive(survey)"> desactivar </a>
+                                <a ng-if="!survey.is_active" ng-click="toggleIsActive(survey)"> activar </a>
+                            </li>
+                            <hr>
+
+                        </ul>
+
+                        <a class="btn" ng-click="setSelectedSurvey(null)" href="/surveys/new"> Crear nuevo lugar </a>
+                    </div> -->
+                    <!-- /.row -->
+                    <div class="header">
+                        <h1>Índice de Encuestas</h1>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr ng-repeat="survey in surveys">
+                                    <td>
+                                        <span class="glyphicon glyphicon-file"></span> {{survey.name}}
+                                    </td>
+                                    <td class="text-right text-nowrap">
+                                        <a class="pull-right red icon-list-holder"><i class="fa fa-trash"></i></a>
+                                        <a ng-click="toggleIsActive(survey)" class="pull-right dark-red icon-list-holder"  ng-if="survey.is_active" ><i class="fa fa-ban"></i></a>
+                                        <a ng-click="toggleIsActive(survey)" class="pull-right dark-green icon-list-holder"  ng-if="!survey.is_active" ><i class="fa fa-check"></i></a>
+                                        <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}/edit" class="pull-right orange icon-list-holder"><i class="fa fa-edit"></i></a>
+                                        <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}" ng-click="setSelectedSurvey(survey)" class="pull-right green icon-list-holder"><i class="fa fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+                <!-- /#page-wrapper -->
+
+        </div>
+
+        <% include ../partials/scripts.ejs %>
+
+            <% include partials/surveys_scripts.ejs %>
+</body>
+
+</html>

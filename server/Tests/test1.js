@@ -9,7 +9,10 @@ Surveys.all(function(err, surveys) {
     console.log(err);
     return err;
   }
-
-  console.log(surveys);
-
+console.log(("******************************************"));
+   console.log(surveys);
+   var str = JSON.stringify(surveys)
+   console.log(str);
+   json = JSON.parse(str);
+   console.log(json);
 });

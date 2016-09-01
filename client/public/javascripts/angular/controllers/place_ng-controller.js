@@ -7,6 +7,7 @@ controllers
 
     // Get all places
     $scope.initializePlaces = function(places, selectedPlace) {
+        console.log(places[0]);
         if (places)
             $scope.places = JSON.parse(places);
         if (selectedPlace)

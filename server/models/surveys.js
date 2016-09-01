@@ -46,10 +46,13 @@ exports.all = function(callback) {
             var query = client.query(query_string);
 
             query.on('row', function(row) {
+                var str = "" + row;
+
                 results.push(row);
             });
             query.on('end', function() {
                 done();
+
                 deferrer.resolve(results);
             });
 

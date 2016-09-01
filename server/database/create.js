@@ -29,7 +29,7 @@ var path = require('path');
 //SURVEYS
 
     //access_type could be read, write and read, owner  (owner is the only one than can delete it?)
-    queries.push(client.query('CREATE TABLE access(id SERIAL PRIMARY KEY, user_id SERIAL references users(id), place_id SERIAL references places(id), access_type varchar(80), created_at TIMESTAMP, updated_at TIMESTAMP)'));
+    queries.push(client.query('CREATE TABLE access(id SERIAL PRIMARY KEY, userid SERIAL references users(id), place_id SERIAL references places(id), access_type varchar(80), created_at TIMESTAMP, updated_at TIMESTAMP)'));
     queries[queries.length - 1].on('end', function() {
         // client.end();
         console.log("TABLA access creada");

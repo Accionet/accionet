@@ -2,12 +2,13 @@
 
 <head>
     <title>Lugares - Accionet</title>
-    <% include ../head.ejs %>
+    <% include ../partials/head.ejs %>
 </head>
 
 <body ng-controller="placeController">
-    <% include ../message_log.ejs %>
-    <div class="container" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
+    <% include ../partials/message_log.ejs %>
+    <%= include ../partials/navbar.ejs %>
+    <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
         <div class="header">
             <h1> Nuevo lugar {{selectedPlace.name}}</h1>
         </div>
@@ -18,7 +19,7 @@
 
         <button class="btn" ng-click="createPlace(selectedPlace)"> Crear </button>
     </div>
-    <% include ../scripts.ejs %>
+    <% include ../partials/scripts.ejs %>
     <% include partials/places_scripts.ejs %>
 
 </body>

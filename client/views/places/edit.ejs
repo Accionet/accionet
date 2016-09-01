@@ -2,24 +2,27 @@
 
 <head>
     <title>Lugares - Accionet</title>
-    <% include ../head.ejs %>
+    <% include ../partials/head.ejs %>
 </head>
 
 <body ng-controller="placeController">
-    <% include ../message_log.ejs %>
-    <div class="container" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
-        <div class="header">
-            <h1> editar:  {{selectedPlace.name}}</h1>
-        </div>
+    <% include ../partials/message_log.ejs %>
+        <%= include ../partials/navbar.ejs %>
 
-        <br>
+            <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
+                <div class="header">
+                    <h1> editar:  {{selectedPlace.name}}</h1>
+                </div>
 
-        <% include partials/form.ejs %>
+                <br>
 
-        <button class="btn" ng-click="updatePlace(selectedPlace)"> Guardar cambios </button>
-    </div>
-    <% include ../scripts.ejs %>
-    <% include partials/places_scripts.ejs %>
+                <% include partials/form.ejs %>
+
+                    <button class="btn" ng-click="updatePlace(selectedPlace)"> Guardar cambios </button>
+
+            </div>
+            <% include ../partials/scripts.ejs %>
+                <% include partials/places_scripts.ejs %>
 
 </body>
 

@@ -1,19 +1,33 @@
-body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+.red{
+  color: rgb(218, 83, 79);
 }
-a {
-    color: #00B7FF;
+
+.dark-red{
+  color: rgb(158, 61, 60);
 }
-ul {
-    list-style-type: none;
-    padding-left: 10px;
+
+.green{
+  color: rgb(91, 184, 93);
 }
-.container {
-    max-width: 400px;
-    background-color: #eeeeee;
-    border: 1px solid black;
+
+.dark-green{
+  color: rgb(45, 92, 46);
 }
-.header {
-    text-align: center;
+
+.yellow{
+  color: yellow;
+}
+
+.orange{
+  color: rgb(242, 172, 74);
+}
+
+.blue{
+  color: rgb(52, 122, 182);
+}
+
+.icon-list-holder{
+  margin: 3px;
+  padding: 3px;
 }

@@ -2,44 +2,80 @@
 
 <head>
     <title>Lugares - Accionet</title>
-    <% include ../head.ejs %>
+    <% include ../partials/head.ejs %>
 </head>
 
 <body ng-controller="placeController">
 
-  <% include ../message_log.ejs %>
-    <div class="container" ng-init="initializePlaces(' <%= JSON.stringify(places) %>', null)">
-        <div class="header">
-            <h1>Índice de lugares</h1>
+    <% include ../partials/message_log.ejs %>
+
+        <div id="wrapper">
+
+            <%= include ../partials/navbar.ejs %>
+
+                <div id="page-wrapper" ng-init="initializePlaces(' <%= JSON.stringify(places) %>', null)">
+                    <!-- <div class="container" ng-init="initializePlaces(' <%= JSON.stringify(places) %>', null)">
+                        <div class="header">
+                            <h1>Índice de lugares</h1>
+                        </div>
+
+                        <br>
+                        <ul ng-repeat="place in places">
+                            <li>
+                                <h6> Nombre: {{ place.name }} </h6>
+                                <p> Descripción: {{place.description}} </p>
+                                <p> Status: {{place.status}} </p>
+                                <p> Admin. mail: {{place.email}} </p>
+                                <p> Mail fue confirmado: {{place.email_verified}} </p>
+                                <p> Descripción: {{place.description}} </p>
+                                <p> Activo: {{place.is_active}} </p>
+                                <p> Creado el: {{place.created_at}} </p>
+                                <p> Visitas diarias: {{place.daily_visits}} </p>
+
+                                <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}"> ver </a>
+                                <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}/edit"> editar </a>
+                                <a ng-if="place.is_active" ng-click="toggleIsActive(place)"> desactivar </a>
+                                <a ng-if="!place.is_active" ng-click="toggleIsActive(place)"> activar </a>
+                            </li>
+                            <hr>
+
+                        </ul>
+
+                        <a class="btn" ng-click="setSelectedPlace(null)" href="/places/new"> Crear nuevo lugar </a>
+                    </div> -->
+                    <!-- /.row -->
+                    <div class="header">
+                        <h1>Índice de lugares</h1>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr ng-repeat="place in places">
+                                    <td>
+                                        <span class="glyphicon glyphicon-file"></span> {{place.name}}
+                                    </td>
+                                    <td class="text-right text-nowrap">
+                                        <a class="pull-right red icon-list-holder"><i class="fa fa-trash"></i></a>
+                                        <a ng-click="toggleIsActive(place)" class="pull-right dark-red icon-list-holder"  ng-if="place.is_active" ><i class="fa fa-ban"></i></a>
+                                        <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder"  ng-if="!place.is_active" ><i class="fa fa-check"></i></a>
+                                        <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder"><i class="fa fa-edit"></i></a>
+                                        <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}" ng-click="setSelectedPlace(place)" class="pull-right green icon-list-holder"><i class="fa fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+                <!-- /#page-wrapper -->
+
         </div>
 
-        <br>
-        <ul ng-repeat="place in places">
-            <li>
-            <h6> Nombre: {{ place.name }} </h6>
-            <p> Descripción: {{place.description}} </p>
-            <p> Status: {{place.status}} </p>
-            <p> Admin. mail: {{place.email}} </p>
-            <p> Mail fue confirmado: {{place.email_verified}} </p>
-            <p> Descripción: {{place.description}} </p>
-            <p> Activo: {{place.is_active}} </p>
-            <p> Creado el: {{place.created_at}} </p>
-            <p> Visitas diarias: {{place.daily_visits}} </p>
+        <% include ../partials/scripts.ejs %>
 
-            <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}"> ver </a>
-            <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}/edit"> editar </a>
-            <a ng-if="place.is_active" ng-click="toggleIsActive(place)"> desactivar </a>
-            <a ng-if="!place.is_active" ng-click="toggleIsActive(place)"> activar </a>
-            </li>
-            <hr>
-
-        </ul>
-
-        <a class="btn" ng-click="setSelectedPlace(null)" href="/places/new"> Crear nuevo lugar </a>
-    </div>
-    <% include ../scripts.ejs %>
-
-    <% include partials/places_scripts.ejs %>
+            <% include partials/places_scripts.ejs %>
 </body>
 
 </html>

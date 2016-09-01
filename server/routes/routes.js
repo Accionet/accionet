@@ -9,6 +9,7 @@ var connectionString = require(path.join(__dirname, '../', '../', 'config'));
 var placeController = require('../controllers/placeController.js');
 var userController = require('../controllers/userController.js');
 var surveyController = require('../controllers/surveyController.js');
+var dashboardController = require('../controllers/dashboardController.js');
 
 
 
@@ -19,9 +20,17 @@ router.get('/', function(req, res, next) {
     //res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 
+router.get('/login', function(req, res, next) {
+    //userController.login(req,res);
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {});
+    //res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
+});
+
+
+
 /* GET home page. */
 router.get('/dashboard', function(req, res, next) {
-    placeController.index(req, res, next);
+    dashboardController.index(req, res, next);
     //res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 
@@ -42,7 +51,7 @@ router.get('/logout', function(req, res) {
 ////////////////////////////////////////////
 
 
-router.get('/places', function(req, res, next) {
+router.get('/places/all', function(req, res, next) {
     placeController.index(req, res, next);
 });
 

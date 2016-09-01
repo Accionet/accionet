@@ -1,53 +1,35 @@
-# Flat Admin V.2 Bootstrap Templates
+# [Start Bootstrap](http://startbootstrap.com/) - [SB Admin 2](http://startbootstrap.com/template-overviews/sb-admin-2/)
 
-### *No maintenance
+[SB Admin 2](http://startbootstrap.com/template-overviews/sb-admin-2/) is an open source, admin dashboard template for [Bootstrap](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/).
 
-#### Change log (v2.1.2)
+## Getting Started
 
-* Fix some bugs
-* Fix sidebar bugs
-* change iCheck to [Checkbox3](https://github.com/tui2tone/checkbox3)
-* Add Theming to Navbar and Sidebar
-* Add Green Theme
+To begin using this template, choose one of the following options to get started:
+* [Download the latest release on Start Bootstrap](http://startbootstrap.com/template-overviews/sb-admin-2/)
+* Clone the repo: `git clone https://github.com/BlackrockDigital/startbootstrap-sb-admin-2.git`
+* Fork the repo
 
-## [Live Demo](http://tui2tone.github.io/flat-admin-bootstrap-templates/html/)
+## Using the Source Files
 
-Completely free bootstrap administrator templates with Bootstrap 3.
+After cloning the repo take a look at the `gulpfile.js` and check out the tasks available:
+* `gulp` The default task will compile the LESS and JS into the `dist` directory and minify the output, and it will copy all vendor libraries from `bower_components` into the `vendor` directory
+* `gulp dev` The dev task will serve up a local version of the template and will watch the LESS, JS, and HTML files for changes and reload the browser windo automatically
 
-- Responsive admin templates for all devices.
-- A lot  of UI Kits with Bootstrap
-  - Bootstrap Elements
-  - Pricing Table
-  - Chart.js
-  - Card Element
-  - Steps
-  - Form
-  - Datatable
-- With 2 Other Pages
-  - Login
-  - Landing Pages
-- Build with Coffeescript and SASS
-- Easy for Theming
+To update dependencies, run `bower update` and then run `gulp copy` to copy the updated dependencies into the `vendor` directory
 
-#### [Download V2.1.2](https://github.com/tui2tone/flat-admin-bootstrap-templates/archive/v2.1.2.zip)
+## Bugs and Issues
 
-## Screenshot
+Have a bug or an issue with this template? [Open a new issue](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](http://startbootstrap.com/template-overviews/sb-admin-2/).
 
-Dashboard
-![SS](https://tui2tone.github.io/flat-admin-bootstrap-templates/img/screenshots/dashboard.png)
+## Creator
 
-Theming
-![SS](https://tui2tone.github.io/flat-admin-bootstrap-templates/img/screenshots/theming.png)
+Start Bootstrap was created by and is maintained by **[David Miller](http://davidmiller.io/)**, Owner of [Blackrock Digital](http://blackrockdigital.io/).
 
-Login
-![SS](https://tui2tone.github.io/flat-admin-bootstrap-templates/img/screenshots/login.png)
+* https://twitter.com/davidmillerskt
+* https://github.com/davidtmiller
 
-Landing Pages
-![SS](https://tui2tone.github.io/flat-admin-bootstrap-templates/img/screenshots/landing.png)
+Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
 
-## License
+## Copyright and License
 
-Under MIT License. See [LICENSE](https://github.com/tui2tone/flat-admin-bootstrap-templates/blob/master/LICENSE).
-
-Made w/ Love<br>
-Tui2Tone
+Copyright 2013-2016 Blackrock Digital LLC. Code released under the [MIT](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2/blob/gh-pages/LICENSE) license.

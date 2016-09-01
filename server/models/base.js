@@ -238,9 +238,7 @@ exports.save = function(attr, table_name, callback) {
             }
             query_string = buildInsertIntoQuery(params, table_name);
 
-            console.log('-----------------------------------------');
-            console.log(query_string);
-            console.log(params);
+
 
             var query = client.query(query_string, params.values);
 
@@ -253,8 +251,7 @@ exports.save = function(attr, table_name, callback) {
 
             // After all data is returned, close connection and return results
             query.on('end', function() {
-                // console.log(params);
-                // console.log('saved');
+
                 done();
                 deferrer.resolve(entry);
             });
@@ -293,7 +290,7 @@ function parseForUpdate(table_name, regular_json, callback) {
 
     regular_json.updated_at = new Date();
 
-    console.log(regular_json);
+
 
     getColumnNames(table_name, function(err, columns) {
 
@@ -317,8 +314,7 @@ function parseForUpdate(table_name, regular_json, callback) {
                 }
             }
         }
-        console.log(params);
-        console.log("params");
+
         deferrer.resolve(params);
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
@@ -332,7 +328,6 @@ function sendUpdateRequest(id, attr, table_name, callback) {
 
     var deferrer = q.defer();
 
-    console.log("----------------------UPDATE");
     parseForUpdate(table_name, attr, function(err, params) {
         if (err) {
             done();

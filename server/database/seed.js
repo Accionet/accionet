@@ -69,114 +69,39 @@ User.new(function(err, newUser) {
                 return err;
             }
             newSurvey.user_id = savedUser.id;
-            newSurvey.title = "meneh";
+            newSurvey.title = "Rango Etario streetpark";
             newSurvey.questions = [];
 
             newSurvey.questions.push({
-                title: "titulo",
-                type: "short_answer",
-                number: 1
-            });
-
-            newSurvey.questions.push({
-                title: "titulo 2",
-                type: "multiple_choice",
-                number: 2,
+                title: '¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: "ya he respondido esta pregunta"',
+                type: "multiple_choicer",
+                number: 1,
                 options: [{
-                    statement: "opcion a",
+                    statement: "10 años o menor",
                     enumeration: "a"
                 }, {
-                    statement: "opcion b",
+                    statement: "Entre 10 y 15 años",
                     enumeration: "b"
                 }, {
-                    statement: "opcion c",
+                    statement: "entre 16 y 20 años",
                     enumeration: "c"
+                }, {
+                    statement: "entre 21 y 25 años",
+                    enumeration: "d"
+                }, {
+                    statement: "entre 26 y 30 años",
+                    enumeration: "e"
+                }, {
+                    statement: "entre 31 y 40 años",
+                    enumeration: "f"
+                }, {
+                    statement: "más de 40 años",
+                    enumeration: "g"
+                }, {
+                    statement: "Ya he respondido esta pregunta",
+                    enumeration: "h"
                 }]
             });
-
-
-            Surveys.save(newSurvey, function(err, savedSurvey) {
-                if (err) {
-                    console.log(err);
-                    return err;
-                }
-                console.log("survey" + savedSurvey.title + " " + 'saved');
-
-            });
-        });
-        Surveys.new(function(err, newSurvey) {
-            if (err) {
-                console.log(err);
-                return err;
-            }
-            newSurvey.user_id = 1;
-            newSurvey.title = "meneh survey";
-            newSurvey.questions = [];
-
-            newSurvey.questions.push({
-                title: "titulo",
-                type: "short_answer",
-                number: 1
-            });
-
-            newSurvey.questions.push({
-                title: "titulo 2",
-                type: "multiple_choice",
-                number: 2,
-                options: [{
-                    statement: "opcion a",
-                    enumeration: "a"
-                }, {
-                    statement: "opcion b",
-                    enumeration: "b"
-                }, {
-                    statement: "opcion c",
-                    enumeration: "c"
-                }]
-            });
-
-
-            Surveys.save(newSurvey, function(err, savedSurvey) {
-                if (err) {
-                    console.log(err);
-                    return err;
-                }
-                console.log("survey" + savedSurvey.title + " " + 'saved');
-
-            });
-        });
-
-        Surveys.new(function(err, newSurvey) {
-            if (err) {
-                console.log(err);
-                return err;
-            }
-            newSurvey.user_id = 1;
-            newSurvey.title = "masdfdsfh";
-            newSurvey.questions = [];
-
-            newSurvey.questions.push({
-                title: "titulo",
-                type: "short_answer",
-                number: 1
-            });
-
-            newSurvey.questions.push({
-                title: "titulo 2",
-                type: "multiple_choice",
-                number: 2,
-                options: [{
-                    statement: "opcion a",
-                    enumeration: "a"
-                }, {
-                    statement: "opcion b",
-                    enumeration: "b"
-                }, {
-                    statement: "opcion c",
-                    enumeration: "c"
-                }]
-            });
-
 
             Surveys.save(newSurvey, function(err, savedSurvey) {
                 if (err) {
@@ -189,7 +114,24 @@ User.new(function(err, newUser) {
         });
     });
 });
+Place.new(function(err, newPlace) {
+    if (err) {
+        console.log("ERROR: " + err);
+        return err;
+    }
 
+    newPlace.name = 'Streetpark Las Condes';
+    newPlace.description = 'El streetpark Las Condes es un parque público para hacer patinaje, skateboard, entre otros. Este parque reproduce los lugares más típicos de una ciudad que sean atractivos para los skaters. Este se encuentra ubicado en el parque araucano, colindando con Av. Manquehue Norte. Su cercanía con el Parque Arauco puede ser atractivos para marcas presentes en este mall ya que les puede servir para dirigir gente hacia sus tiendas.';
+    newPlace.daily_visits = 500;
+    newPlace.is_active = true;
+    Place.save(newPlace, function(err, savedPlace) {
+        if (err) {
+            console.log("ERROR: " + err);
+            return err;
+        }
+        console.log(newPlace.name + " saved");
+    });
+});
 
 Place.new(function(err, newPlace) {
     if (err) {
@@ -197,10 +139,10 @@ Place.new(function(err, newPlace) {
         return err;
     }
 
-    newPlace.name = 'streetpark Las Condes';
-    newPlace.description = 'El streetpark Las Condes es un parque público para hacer patinaje, skateboard, entre otros. Este parque reproduce los lugares más típicos de una ciudad que sean atractivos para los skaters. Este se encuentra ubicado en el parque araucano, colindando con Av. Manquehue Norte. Su cercanía con el Parque Arauco puede ser atractivos para marcas presentes en este mall ya que les puede servir para dirigir gente hacia sus tiendas.';
-    newPlace.daily_visits = 500;
-    newPlace.is_active = true;
+    newPlace.name = 'Barrio Franklin';
+    newPlace.description = '';
+    newPlace.daily_visits = 4500;
+    newPlace.is_active = false;
     Place.save(newPlace, function(err, savedPlace) {
         if (err) {
             console.log("ERROR: " + err);

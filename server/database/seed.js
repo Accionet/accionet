@@ -69,8 +69,133 @@ User.new(function(err, newUser) {
                 return err;
             }
             newSurvey.user_id = savedUser.id;
-            newSurvey.title = "Rango Etario streetpark";
+            newSurvey.title = "Rango Etario Streetpark";
+            newSurvey.is_active = true;
             newSurvey.questions = [];
+
+            newSurvey.questions.push({
+                title: "¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: ya he respondido esta pregunta",
+                type: "multiple_choice",
+                number: 1,
+                options: [{
+                    statement: "10 años o menor",
+                    enumeration: "a"
+                }, {
+                    statement: "Entre 10 y 15 años",
+                    enumeration: "b"
+                }, {
+                    statement: "entre 16 y 20 años",
+                    enumeration: "c"
+                }, {
+                    statement: "entre 21 y 25 años",
+                    enumeration: "d"
+                }, {
+                    statement: "entre 26 y 30 años",
+                    enumeration: "e"
+                }, {
+                    statement: "entre 31 y 40 años",
+                    enumeration: "f"
+                }, {
+                    statement: "más de 40 años",
+                    enumeration: "g"
+                }, {
+                    statement: "Ya he respondido esta pregunta",
+                    enumeration: "h"
+                }]
+            });
+
+            Surveys.save(newSurvey, function(err, savedSurvey) {
+                if (err) {
+                    console.log(err);
+                    return err;
+                }
+                console.log("survey" + savedSurvey.title + " " + 'saved');
+
+            });
+        });
+        Surveys.new(function(err, newSurvey) {
+            if (err) {
+                console.log(err);
+                return err;
+            }
+            newSurvey.user_id = savedUser.id;
+            newSurvey.title = "Encuesta 2";
+            newSurvey.is_active = true;
+            newSurvey.questions = [];
+
+            newSurvey.questions.push({
+                title: "¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: ya he respondido esta pregunta",
+                type: "short_answer",
+                number: 2
+            });
+
+            newSurvey.questions.push({
+                title: "¿que te parece?",
+                type: "long_answer",
+                number: 3
+            });
+
+            newSurvey.questions.push({
+                title: "¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: ya he respondido esta pregunta",
+                type: "multiple_choice",
+                number: 1,
+                options: [{
+                    statement: "10 años o menor",
+                    enumeration: "a"
+                }, {
+                    statement: "Entre 10 y 15 años",
+                    enumeration: "b"
+                }, {
+                    statement: "entre 16 y 20 años",
+                    enumeration: "c"
+                }, {
+                    statement: "entre 21 y 25 años",
+                    enumeration: "d"
+                }, {
+                    statement: "entre 26 y 30 años",
+                    enumeration: "e"
+                }, {
+                    statement: "entre 31 y 40 años",
+                    enumeration: "f"
+                }, {
+                    statement: "más de 40 años",
+                    enumeration: "g"
+                }, {
+                    statement: "Ya he respondido esta pregunta",
+                    enumeration: "h"
+                }]
+            });
+
+            Surveys.save(newSurvey, function(err, savedSurvey) {
+                if (err) {
+                    console.log(err);
+                    return err;
+                }
+                console.log("survey" + savedSurvey.title + " " + 'saved');
+
+            });
+        });
+        Surveys.new(function(err, newSurvey) {
+            if (err) {
+                console.log(err);
+                return err;
+            }
+            newSurvey.user_id = savedUser.id;
+            newSurvey.title = "Encuesta 3";
+            newSurvey.is_active = true;
+            newSurvey.questions = [];
+
+            newSurvey.questions.push({
+                title: "¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: ya he respondido esta pregunta",
+                type: "short_answer",
+                number: 2
+            });
+
+            newSurvey.questions.push({
+                title: "¿que te parece?",
+                type: "long_answer",
+                number: 3
+            });
 
             newSurvey.questions.push({
                 title: "¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: ya he respondido esta pregunta",
@@ -114,6 +239,7 @@ User.new(function(err, newUser) {
         });
     });
 });
+
 Place.new(function(err, newPlace) {
     if (err) {
         console.log("ERROR: " + err);

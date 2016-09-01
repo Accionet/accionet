@@ -100,7 +100,7 @@ function addOptionToQuestion(array, row) {
 
     var not_present = true;
     for (var i = 0; i < array.length; i++) {
-        for (var j = 0; j < array.length; j++) {
+        for (var j = 0; j < array[i].questions.length; j++) {
             if (arrayHasElementKey(array[i].questions[j].options, row, "o_id") >= 0) {
                 not_present = false;
                 break;
@@ -147,6 +147,7 @@ function buildQuestion(query) {
     question.title = query.q_title;
     question.number = query.number;
     question.type = query.type;
+
     question.options = [];
 
     return question;
@@ -160,6 +161,7 @@ function buildSurvey(query) {
     survey.description = query.description;
     survey.created_at = query.created_at;
     survey.updated_at = query.updated_at;
+    survey.is_active = query.is_active;
     survey.questions = [];
 
     return survey;

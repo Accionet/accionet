@@ -36,7 +36,7 @@ var path = require('path');
         closeConnection();
     });
 
-    queries.push(client.query('CREATE TABLE surveys(id SERIAL PRIMARY KEY, user_id SERIAL references users(id), title VARCHAR(80), description VARCHAR(800), created_at TIMESTAMP, updated_at TIMESTAMP)'));
+    queries.push(client.query('CREATE TABLE surveys(id SERIAL PRIMARY KEY, user_id SERIAL references users(id), title VARCHAR(80), description VARCHAR(800), created_at TIMESTAMP, updated_at TIMESTAMP, is_active BOOLEAN)'));
     queries[queries.length - 1].on('end', function() {
         // client.end();
         console.log("TABLA surveys creada");

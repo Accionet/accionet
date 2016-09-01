@@ -17,6 +17,32 @@ exports.all = function(callback) {
     var deferrer = q.defer();
     var results = [];
 
+    /*
+    result = [
+    {
+    id: ,
+    user_id: ,
+    tittle:,
+    description:,
+    created_at:,
+    updated_at:,
+    questions: [
+      {id: ,
+      title: ,
+      number:,
+      type:,
+      options: [{
+      id:,
+      statement:,
+      enumeration:
+    }
+    ]
+      },
+  ]
+  },
+  ]
+    */
+
     //get the amount of columns in options. This is to leave blank the spaces in the table of those who doesnt have options
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
@@ -41,14 +67,22 @@ exports.all = function(callback) {
 
 
             query_string = buildSelectAllQuery(amount);
-            console.log(query_string);
+            //console.log(query_string);
 
             var query = client.query(query_string);
 
             query.on('row', function(row) {
-                var str = "" + row;
+                //if array doesnt contain survey
+                if (arrayHasElementKey(results, row, "s_id") < 0) {
+                    var survey = buildSurvey(row);
+                    results.push(survey);
+                }
 
-                results.push(row);
+                addQuestionToSurvey(results, row);
+
+                addOptionToQuestion(results, row);
+
+                //results.push(row);
             });
             query.on('end', function() {
                 done();
@@ -62,15 +96,96 @@ exports.all = function(callback) {
     });
 };
 
+function addOptionToQuestion(array, row) {
 
+    var not_present = true;
+    for (var i = 0; i < array.length; i++) {
+        for (var j = 0; j < array.length; j++) {
+            if (arrayHasElementKey(array[i].questions[j].options, row, "o_id") >= 0) {
+                not_present = false;
+                break;
+            }
+        }
+    }
+
+
+    if (not_present && row["o_id"] != null) {
+        //get the index of the survey
+        var s_index = arrayHasElementKey(array, row, "s_id");
+        var q_index = arrayHasElementKey(array[s_index].questions, row, "q_id");
+        array[s_index].questions[q_index].options.push(buildOption(row));
+    }
+}
+
+function addQuestionToSurvey(array, row) {
+
+    var not_present = true;
+    for (var i = 0; i < array.length; i++) {
+        if (arrayHasElementKey(array[i].questions, row, "q_id") >= 0) {
+            not_present = false;
+            break;
+        }
+    }
+    if (not_present && row["q_id"] != null) {
+        //get the index of the survey
+        var index = arrayHasElementKey(array, row, "s_id");
+        array[index].questions.push(buildQuestion(row));
+    }
+}
+
+function buildOption(query) {
+    option = {};
+    option.id = query.o_id;
+    option.enumeration = query.enumeration;
+    option.statement = query.statement;
+    return option;
+}
+
+function buildQuestion(query) {
+    var question = {};
+    question.id = query.q_id;
+    question.title = query.q_title;
+    question.number = query.number;
+    question.type = query.type;
+    question.options = [];
+
+    return question;
+}
+
+function buildSurvey(query) {
+    var survey = {};
+    survey.id = query.s_id;
+    survey["user_id"] = query.user_id;
+    survey.title = query.s_title;
+    survey.description = query.description;
+    survey.created_at = query.created_at;
+    survey.updated_at = query.updated_at;
+    survey.questions = [];
+
+    return survey;
+}
+
+
+
+/* Checks if array contains an element with id element[key]*/
+function arrayHasElementKey(array, element, key) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i].id != undefined && element[key] != null &&  array[i].id == element[key])
+            return i;
+    }
+    return -1;
+}
+
+
+/*Builds the query geting the questions and options associated to each survey*/
 function buildSelectAllQuery(amount) {
     //include de options UNION the ones without options
 
     string = "SELECT * FROM( ";
     //build the inner query
-    string += "SELECT surveys.id as s_id, questions.id as q_id, options.id as o_id, * FROM surveys, questions, options WHERE surveys.id = questions.survey_id AND options.question_id = questions.id ";
+    string += "SELECT surveys.id as s_id, questions.id as q_id, options.id as o_id, surveys.title as s_title, questions.title as q_title,  * FROM surveys, questions, options WHERE surveys.id = questions.survey_id AND options.question_id = questions.id ";
     string += " UNION ";
-    string += " SELECT surveys.id as s_id, questions.id as q_id, null as o_id, *";
+    string += " SELECT surveys.id as s_id, questions.id as q_id, null as o_id, surveys.title as s_title, questions.title as q_title, *";
 
     for (var i = 0; i < amount; i++) {
         string += ", null";

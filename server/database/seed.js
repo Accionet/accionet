@@ -74,7 +74,7 @@ User.new(function(err, newUser) {
 
             newSurvey.questions.push({
                 title: "¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: ya he respondido esta pregunta",
-                type: "multiple_choicer",
+                type: "multiple_choice",
                 number: 1,
                 options: [{
                     statement: "10 años o menor",

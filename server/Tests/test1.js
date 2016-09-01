@@ -11,8 +11,7 @@ Surveys.all(function(err, surveys) {
   }
 console.log(("******************************************"));
    console.log(surveys);
-   var str = JSON.stringify(surveys)
-   console.log(str);
-   json = JSON.parse(str);
-   console.log(json);
+   console.log(surveys[0].questions[0]);
+   console.log();
+
 });

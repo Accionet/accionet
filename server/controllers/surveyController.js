@@ -12,6 +12,7 @@ const Places = require('../models/places');
 
 exports.index = function(req, res) {
     Surveys.all(function(err, result) {
+      console.log(result);
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
                 error: "ERROR: " + err,

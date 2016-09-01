@@ -17,32 +17,6 @@ exports.all = function(callback) {
     var deferrer = q.defer();
     var results = [];
 
-    /*
-    result = [
-    {
-    id: ,
-    user_id: ,
-    tittle:,
-    description:,
-    created_at:,
-    updated_at:,
-    questions: [
-      {id: ,
-      title: ,
-      number:,
-      type:,
-      options: [{
-      id:,
-      statement:,
-      enumeration:
-    }
-    ]
-      },
-  ]
-  },
-  ]
-    */
-
     //get the amount of columns in options. This is to leave blank the spaces in the table of those who doesnt have options
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
@@ -72,17 +46,7 @@ exports.all = function(callback) {
             var query = client.query(query_string);
 
             query.on('row', function(row) {
-                //if array doesnt contain survey
-                if (arrayHasElementKey(results, row, "s_id") < 0) {
-                    var survey = buildSurvey(row);
-                    results.push(survey);
-                }
-
-                addQuestionToSurvey(results, row);
-
-                addOptionToQuestion(results, row);
-
-                //results.push(row);
+              extractAndAddSurvey(results, row);
             });
             query.on('end', function() {
                 done();
@@ -167,12 +131,22 @@ function buildSurvey(query) {
     return survey;
 }
 
+function extractAndAddSurvey(results, row) {
+    if (arrayHasElementKey(results, row, "s_id") < 0) {
+        var survey = buildSurvey(row);
+        results.push(survey);
+    }
+
+    addQuestionToSurvey(results, row);
+
+    addOptionToQuestion(results, row);
+}
 
 
 /* Checks if array contains an element with id element[key]*/
 function arrayHasElementKey(array, element, key) {
     for (var i = 0; i < array.length; i++) {
-        if (array[i].id != undefined && element[key] != null &&  array[i].id == element[key])
+        if (array[i].id != undefined && element[key] != null && array[i].id == element[key])
             return i;
     }
     return -1;
@@ -198,6 +172,8 @@ function buildSelectAllQuery(amount) {
 
     return string;
 }
+
+
 //Creates a json representing an empty entry
 exports.new = function(callback) {
     base.new(table_name, callback);
@@ -233,8 +209,72 @@ exports.update = function(id, attr, callback) {
 };
 
 exports.findById = function(id, callback) {
-    base.findById(id, table_name, callback);
+    var deferrer = q.defer();
+    var results = [];
+
+    //get the amount of columns in options. This is to leave blank the spaces in the table of those who doesnt have options
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, function(err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            console.log(err);
+            deferrer.reject(err);
+        }
+
+        // SQL Query > Select Data
+        var query = client.query("select count(*) as amount from information_schema.columns where table_name='options';");
+
+
+        var amount = 0;
+        query.on('row', function(row) {
+            amount = row.amount;
+        });
+        // Stream results back one row at a time
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+
+
+            query_string = buildSelectByIdQuery(amount);
+            console.log(query_string);
+
+            var query = client.query(query_string, [id]);
+
+            query.on('row', function(row) {
+              extractAndAddSurvey(results, row);
+            });
+            query.on('end', function() {
+                done();
+
+                deferrer.resolve(results);
+            });
+
+        });
+        deferrer.promise.nodeify(callback);
+        return deferrer.promise;
+    });
 };
+
+/*Builds the query geting the questions and options associated to the survey with id = id*/
+function buildSelectByIdQuery(amount) {
+    //include de options UNION the ones without options
+
+    string = "SELECT * FROM( ";
+    //build the inner query
+    string += "SELECT surveys.id as s_id, questions.id as q_id, options.id as o_id, surveys.title as s_title, questions.title as q_title,  * FROM surveys, questions, options WHERE surveys.id = ($1) AND surveys.id = questions.survey_id AND options.question_id = questions.id ";
+    string += " UNION ";
+    string += " SELECT surveys.id as s_id, questions.id as q_id, null as o_id, surveys.title as s_title, questions.title as q_title, *";
+
+    for (var i = 0; i < amount; i++) {
+        string += ", null";
+    }
+    string += " FROM surveys, questions WHERE surveys.id = ($1) AND surveys.id = questions.survey_id";
+
+    string += " ) as pop_surveys ORDER BY s_id, q_id, enumeration;";
+
+    return string;
+}
+
 
 exports.findOne = function(id, attr, callback) {
     base.findOne(id, attr, table_name, callback);

@@ -109,7 +109,7 @@ exports.show = function(req, res) {
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: "ERROR:" + err,
-                places: []
+                place: []
             });
         }
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {

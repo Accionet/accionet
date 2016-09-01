@@ -14,35 +14,6 @@
             <%= include ../partials/navbar.ejs %>
 
                 <div id="page-wrapper" ng-init="initializePlaces(' <%= JSON.stringify(places) %>', null)">
-                    <!-- <div class="container" ng-init="initializePlaces(' <%= JSON.stringify(places) %>', null)">
-                        <div class="header">
-                            <h1>Índice de lugares</h1>
-                        </div>
-
-                        <br>
-                        <ul ng-repeat="place in places">
-                            <li>
-                                <h6> Nombre: {{ place.name }} </h6>
-                                <p> Descripción: {{place.description}} </p>
-                                <p> Status: {{place.status}} </p>
-                                <p> Admin. mail: {{place.email}} </p>
-                                <p> Mail fue confirmado: {{place.email_verified}} </p>
-                                <p> Descripción: {{place.description}} </p>
-                                <p> Activo: {{place.is_active}} </p>
-                                <p> Creado el: {{place.created_at}} </p>
-                                <p> Visitas diarias: {{place.daily_visits}} </p>
-
-                                <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}"> ver </a>
-                                <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}/edit"> editar </a>
-                                <a ng-if="place.is_active" ng-click="toggleIsActive(place)"> desactivar </a>
-                                <a ng-if="!place.is_active" ng-click="toggleIsActive(place)"> activar </a>
-                            </li>
-                            <hr>
-
-                        </ul>
-
-                        <a class="btn" ng-click="setSelectedPlace(null)" href="/places/new"> Crear nuevo lugar </a>
-                    </div> -->
                     <!-- /.row -->
                     <div class="header">
                         <h1>Índice de lugares</h1>

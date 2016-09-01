@@ -25,19 +25,23 @@ exports.index = function(req, res) {
         });
 
     });
-    // Places.all(function(err, result) {
-    //     if (err) {
-    //         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
-    //             error: "ERROR: " + err,
-    //             places: []
-    //         });
-    //     }
-    //     console.log(result);
-    //     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
-    //         places: result
-    //     });
-    //
-    // });
+
+};
+
+
+exports.show = function(req, res) {
+    Surveys.findById(req.params.id, function(err, survey) {
+        if (err) {
+            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+                error: "ERROR:" + err,
+                survey: []
+            });
+        }
+        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
+            survey: survey
+        });
+
+    });
 };
 
 

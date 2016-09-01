@@ -3,12 +3,13 @@ var Surveys = require('../models/surveys.js');
 var Questions = require('../models/questions.js');
 
 
-Surveys.all(function(err, surveys) {
+Surveys.findById(1, function(err, surveys) {
 
   if(err){
     console.log(err);
     return err;
   }
+  console.log(surveys.length);
 console.log(("******************************************"));
 
    for (var i = 0; i < surveys.length; i++) {
@@ -28,7 +29,5 @@ console.log(("******************************************"));
      }
      console.log('fin Questions');
    }
-   console.log(surveys[0].questions[0]);
-   console.log();
 
 });

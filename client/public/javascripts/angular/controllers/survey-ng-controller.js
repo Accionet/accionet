@@ -8,8 +8,6 @@ controllers
     // Get all surveys
     $scope.initializeSurveys = function(surveys, selectedSurvey) {
 
-      console.log(surveys);
-      console.log(JSON.parse(surveys));
         if (surveys)
             $scope.surveys = JSON.parse(surveys);
         if (selectedSurvey)

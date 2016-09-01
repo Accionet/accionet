@@ -89,6 +89,10 @@ router.get('/surveys/all', function(req, res, next) {
   surveyController.index(req,res,next);
 });
 
+router.get('/surveys/:id', function(req, res, next) {
+  surveyController.show(req,res,next);
+});
+
 
 router.post('/survey/:id/response', function(req, res, next) {
     surveyController.responseSurvey(req, res, next);

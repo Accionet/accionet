@@ -17,17 +17,20 @@
                 <div>
                     <h3> {{selectedSurvey.description}} </h3>
                     <h3> creada el: {{selectedSurvey.created_at}} </h3>
+                    <h3> ID de la encuesta: {{selectedSurvey.id}} </h3>
                 </div>
 
                 <div>
                     <h2> Preguntas </h2>
 
                     <div ng-repeat="question in selectedSurvey.questions">
-                        <h4>  {{question.number}}) {{question.title}} </h6>
+                        <h6> ID de la pregunta: {{question.id}} </h6>
+                        <h4>  {{question.number}}) {{question.title}} </h4>
                         <!--Multiple_choice  -->
                         <div ng-if="!'multiple_choice'.localeCompare(question.type)">
 
                           <div ng-repeat = "option in question.options">
+                             <h6> ID de la alternativa: {{option.id}} </h6>
                               <h6>{{option.enumeration}}) {{option.statement}} </h6>
                           </div>
 

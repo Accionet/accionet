@@ -55,7 +55,6 @@ controllers
 
     // updates a place
     $scope.updatePlace = function(place) {
-        console.log('update');
 
         if ($scope.validForm()) {
             $http.put('/places/' + $scope.selectedPlace.id + '/edit', $scope.selectedPlace)

@@ -102,7 +102,8 @@ router.get('/surveys/:id', function(req, res, next) {
 
 
 router.post('/survey/:id/response', function(req, res, next) {
-    surveyController.responseSurvey(req, res, next);
+
+     surveyController.responseSurvey(req, res, next);
 });
 
 

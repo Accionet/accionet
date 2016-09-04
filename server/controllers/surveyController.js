@@ -47,9 +47,11 @@ exports.show = function(req, res) {
 
 exports.responseSurvey = function(req, res) {
     //It has to have a survey_id and it must be equal to the one in the URL
-    // console.log(req.body);
-    if (req.body.survey_id && req.body.survey_id == req.params.id) {
-        Response.save(req.body, function(err, response) {
+
+    response = JSON.parse(req.body.string_json);
+    // console.log(req);
+    if (response.survey_id && response.survey_id == req.params.id) {
+        Response.save(response, function(err, response) {
             if (err) {
                 return res.status(400).send({
                     error: err

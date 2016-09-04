@@ -59,27 +59,21 @@ var path = require('path');
 
 //SURVEY ANSWERS
 
-queries.push(client.query('CREATE TABLE answer(id SERIAL PRIMARY KEY, question_id SERIAL references questions(id), answer_text VARCHAR(1800), answer_option_id INTEGER references questions, created_at TIMESTAMP, updated_at TIMESTAMP)'));
-queries[queries.length - 1].on('end', function() {
-    // client.end();
-    console.log("TABLA answers creada");
-    closeConnection();
-});
 
-queries.push(client.query('CREATE TABLE response(id SERIAL PRIMARY KEY, survey_id SERIAL references surveys(id), created_at TIMESTAMP, updated_at TIMESTAMP)'));
+queries.push(client.query('CREATE TABLE response(id SERIAL PRIMARY KEY, survey_id INTEGER references surveys(id), created_at TIMESTAMP, updated_at TIMESTAMP)'));
 queries[queries.length - 1].on('end', function() {
     // client.end();
     console.log("TABLA response creada");
     closeConnection();
 });
 
-
-queries.push(client.query('CREATE TABLE has_answer(id SERIAL PRIMARY KEY, answer_id SERIAL references answer(id), created_at TIMESTAMP, updated_at TIMESTAMP)'));
+queries.push(client.query('CREATE TABLE answer(id SERIAL PRIMARY KEY, response_id INTEGER references response(id), question_id SERIAL references questions(id), answer_text VARCHAR(1800), answer_option_id INTEGER references options, created_at TIMESTAMP, updated_at TIMESTAMP)'));
 queries[queries.length - 1].on('end', function() {
     // client.end();
-    console.log("TABLA response answers creada");
+    console.log("TABLA answers creada");
     closeConnection();
 });
+
 
 function closeConnection() {
   ended_queries += 1;

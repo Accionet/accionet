@@ -1,33 +1,23 @@
 var Places = require('../models/places.js');
 var Surveys = require('../models/surveys.js');
 var Questions = require('../models/questions.js');
+var Response = require('../models/response.js');
 
 
-Surveys.findById(1, function(err, surveys) {
+var response = {
+    survey_id: 2,
+    answers: [{
+        question_id: 3,
+        answer_option_id: 4
+    }]
+};
 
-  if(err){
-    console.log(err);
-    return err;
-  }
-  console.log(surveys.length);
-console.log(("******************************************"));
+Response.save(response, function(err, result) {
+    if (err) {
+        console.error(err);
+        return err;
+    }
+    console.log("-----------------");
+    console.log(result);
 
-   for (var i = 0; i < surveys.length; i++) {
-     console.log("------------------------------");
-     console.log(surveys[i]);
-     console.log();
-     console.log('Questions');
-     for (var j = 0; j < surveys[i].questions.length; j++) {
-       console.log(surveys[i].questions[j]);
-       console.log();
-       console.log('Opciones');
-       for (var k = 0; k < surveys[i].questions[j].options.length; k++) {
-         console.log(surveys[i].questions[j].options[k]);
-       }
-       console.log('fin Opciones');
-
-     }
-     console.log('fin Questions');
-   }
-
-});
+})

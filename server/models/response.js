@@ -28,7 +28,9 @@ exports.save = function(attr, callback) {
     base.save(attr, table_name, function(err, response) {
         if (err)
             deferrer.reject(err);
+        console.log(response);
         for (var i = 0; i < attr.answers.length; i++) {
+            attr.answers[i].response_id = response.id;
             console.log(attr.answers[i]);
             Answer.save(attr.answers[i], function(err, answer) {
                 if (err) {

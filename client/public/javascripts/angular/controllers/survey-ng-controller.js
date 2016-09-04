@@ -4,14 +4,17 @@ controllers
 
     $scope.surveys = {};
     $scope.selectedSurvey = null;
+    $scope.responses = {};
 
     // Get all surveys
-    $scope.initializeSurveys = function(surveys, selectedSurvey) {
+    $scope.initializeSurveys = function(surveys, selectedSurvey, responses) {
 
         if (surveys)
             $scope.surveys = JSON.parse(surveys);
         if (selectedSurvey)
             $scope.selectedSurvey = JSON.parse(selectedSurvey);
+        if (responses)
+            $scope.responses = JSON.parse(responses);
 
     };
 

@@ -28,10 +28,8 @@ exports.save = function(attr, callback) {
     base.save(attr, table_name, function(err, response) {
         if (err)
             deferrer.reject(err);
-        console.log(response);
         for (var i = 0; i < attr.answers.length; i++) {
             attr.answers[i].response_id = response.id;
-            console.log(attr.answers[i]);
             Answer.save(attr.answers[i], function(err, answer) {
                 if (err) {
                     deferrer.reject(err);
@@ -50,6 +48,37 @@ exports.update = function(id, attr, callback) {
 
 exports.findById = function(id, callback) {
     base.findById(id, table_name, callback);
+};
+
+exports.findOfSurvey = function(id, callback) {
+    var deferrer = q.defer();
+    var results = [];
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, function(err, client, done) {
+        // Handle connection errors
+        if (err) {
+            done();
+            deferrer.reject(err);
+        }
+
+
+        var query = client.query("SELECT * FROM " + table_name + " WHERE survey_id = $1", [id]);
+
+        query.on('row', function(row) {
+
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+            done();
+            deferrer.resolve(obj);
+        });
+        deferrer.promise.nodeify(callback);
+        return deferrer.promise;
+    });
+
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
 };
 
 exports.findOne = function(id, attr, callback) {

@@ -100,6 +100,10 @@ router.get('/surveys/:id', function(req, res, next) {
   surveyController.show(req,res,next);
 });
 
+router.get('/surveys/:id/metrics', function(req, res, next) {
+  surveyController.metrics(req,res,next);
+});
+
 
 router.post('/survey/:id/response', function(req, res, next) {
 

@@ -12,7 +12,7 @@ const Places = require('../models/places');
 
 exports.index = function(req, res) {
     Surveys.all(function(err, result) {
-      console.log(result);
+        console.log(result);
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
                 error: "ERROR: " + err,
@@ -41,6 +41,34 @@ exports.show = function(req, res) {
             survey: survey
         });
 
+    });
+};
+
+exports.metrics = function(req, res) {
+    Surveys.findById(req.params.id, function(err, survey) {
+        if (err) {
+            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
+                error: "ERROR: " + err,
+                survey: [],
+                responses: []
+            });
+            return;
+        }
+        Answer.findOfSurvey(req.params.id, function(err, responses) {
+            if (err) {
+                res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
+                    error: "ERROR: " + err,
+                    survey: [],
+                    responses: []
+                });
+                return;
+            }
+            console.log(responses);
+            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
+                survey: survey,
+                responses: responses
+            });
+        });
     });
 };
 

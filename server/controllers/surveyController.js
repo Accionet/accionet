@@ -52,16 +52,18 @@ exports.metrics = function(req, res) {
                 survey: [],
                 responses: []
             });
+            return;
         }
-        Answer.findOfSurvey(survey.id, function(err, responses) {
+        Answer.findOfSurvey(req.params.id, function(err, responses) {
             if (err) {
                 res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
                     error: "ERROR: " + err,
                     survey: [],
                     responses: []
                 });
+                return;
             }
-
+            console.log(responses);
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
                 survey: survey,
                 responses: responses

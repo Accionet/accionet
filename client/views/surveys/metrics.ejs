@@ -3,13 +3,14 @@
 <head>
     <title>Lugares - Accionet</title>
     <% include ../partials/head.ejs %>
+    <link rel="stylesheet" href="/stylesheets/table.css" media="screen" title="no title">
 </head>
 
 <body ng-controller="surveyController">
     <% include ../partials/message_log.ejs %>
         <%= include ../partials/navbar.ejs %>
 
-            <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey[0]) %>'); initializeResponses(null, ' <%= JSON.stringify(responses) %>') ">
+            <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey[0]) %>',' <%= JSON.stringify(responses) %>') ">
                 <div class="header">
                     <h1>{{selectedSurvey.title}}</h1>
                 </div>
@@ -17,34 +18,51 @@
                 <div>
                     <h3> {{selectedSurvey.description}} </h3>
                     <h3> creada el: {{selectedSurvey.created_at}} </h3>
-                    <h3> ID de la encuesta: {{selectedSurvey.id}} </h3>
                 </div>
 
                 <div>
                     <h2> Preguntas </h2>
 
                     <div ng-repeat="question in selectedSurvey.questions">
-                        <h6> ID de la pregunta: {{question.id}} </h6>
                         <h4>  {{question.number}}) {{question.title}} </h4>
                         <!--Multiple_choice  -->
                         <div ng-if="!'multiple_choice'.localeCompare(question.type)">
+                            <div ng-repeat="option in question.options">
+                                <h6>{{option.enumeration}}) {{option.statement}} </h6>
+                            </div>
+                            <h3> Respuestas: </h3>
+                            <table class="table-fill">
 
-                          <div ng-repeat = "option in question.options">
-                             <h6> ID de la alternativa: {{option.id}} </h6>
-                              <h6>{{option.enumeration}}) {{option.statement}} </h6>
-                          </div>
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th> Option ID </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="response in responses">
+                                        <td>
+                                            {{response.created_at}}
+                                        </td>
+                                        <td>
+                                            {{response["4"].answer_option_id}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
 
                         </div>
+
                     </div>
 
+                    <br>
+
+
                 </div>
-
-                <br>
-
-
-            </div>
-            <% include ../partials/scripts.ejs %>
-                <% include partials/surveys_scripts.ejs %>
+                <% include ../partials/scripts.ejs %>
+                    <% include partials/surveys_scripts.ejs %>
 
 </body>
 

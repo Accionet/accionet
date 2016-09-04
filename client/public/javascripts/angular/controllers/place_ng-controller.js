@@ -19,8 +19,6 @@ controllers
 
         $http.put('/places/' + place.id + '/toggleIsActive')
             .success(function(data) {
-
-                console.log();
                 locallyUpdatePlace(data.place);
             })
             .error(function(data) {

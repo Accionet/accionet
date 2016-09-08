@@ -1,26 +1,22 @@
-//server/models/places.js
+// server/models/places.js
 
-var path = require('path');
-var pg = require('pg');
-var connectionString = require(path.join(__dirname, '../', '../', 'config'));
-var q = require('q');
+const path = require('path');
+const pg = require('pg');
 
-
-
-//################################# SELECT OR FIND
+const connectionString = require(path.join(__dirname, '../', '../', 'config'));
+const q = require('q');
 
 
-exports.findById = findEntryById;
+// ################################# SELECT OR FIND
 
 
 function findEntryById(id, table_name, callback) {
-
-    var deferrer = q.defer();
-    var obj;
+    const deferrer = q.defer();
+    let obj;
 
 
     // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
+    pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
             done();
@@ -28,14 +24,14 @@ function findEntryById(id, table_name, callback) {
         }
 
 
-        var query = client.query("SELECT * FROM " + table_name + " WHERE places.id = $1", [id]);
+        const query = client.query(`SELECT * FROM ${table_name} WHERE places.id = $1`, [id]);
 
-        query.on('row', function(row) {
+        query.on('row', (row) => {
             obj = row;
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', () => {
             done();
             deferrer.resolve(obj);
         });
@@ -44,31 +40,44 @@ function findEntryById(id, table_name, callback) {
     });
 }
 
+exports.findById = findEntryById;
+
+// params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
+function buildSelectWithWhereQuery(params, table_name) {
+    let query = `SELECT  ${table_name}`;
+    for (let j = 0; j < params.keys.length; j++) {
+        query += ` WHERE ${params.keys[j]} = ($ ${j + 1}) AND`;
+    }
+    // delete the last "AND"
+    query = query.substring(0, query.length - 3);
+
+    return query;
+}
+
 exports.findOne = function functionName(params, table_name, callback) {
-    var deferrer = q.defer();
-    var result;
+    const deferrer = q.defer();
+    let result;
 
     // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
+    pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
             done();
-            console.log(err);
             deferrer.reject(err);
         }
 
-        string_query = buildSelectWithWhereQuery(params, table_name);
-        string_query += " LIMIT 1;";
+        let string_query = buildSelectWithWhereQuery(params, table_name);
+        string_query += ' LIMIT 1;';
         // SQL Query > Select Data
-        var query = client.query(string_query, params.values);
+        const query = client.query(string_query, params.values);
 
         // Stream results back one row at a time
-        query.on('row', function(row) {
+        query.on('row', (row) => {
             result = row;
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', () => {
             done();
             deferrer.resolve(result);
         });
@@ -78,45 +87,29 @@ exports.findOne = function functionName(params, table_name, callback) {
 };
 
 
-//params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
-function buildSelecWithWhereQuery(params, table_name) {
-    //UPDATE places SET name=($1), is_active=($2) WHERE id=($3)
-    query = "SELECT " + table_name;
-    for (var j = 0; j < params.keys.length; j++) {
-        query += " WHERE " + params.keys[j] + "=($" + (j + 1) + ") AND";
-    }
-    //delete the last "AND"
-    query = query.substring(0, query.length - 3);
-
-    return query;
-}
-
-
-//Return all
-exports.all = function(table_name, callback) {
-    var deferrer = q.defer();
-    var results = [];
+// Return all
+exports.all = function getAll(table_name, callback) {
+    const deferrer = q.defer();
+    const results = [];
 
     // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
+    pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
             done();
-            console.log(err);
             deferrer.reject(err);
         }
 
         // SQL Query > Select Data
-        var query = client.query("SELECT * FROM " + table_name + " ORDER BY id ASC;");
+        const query = client.query(`SELECT * FROM ${table_name} ORDER BY id ASC;`);
 
         // Stream results back one row at a time
-        query.on('row', function(row) {
-            console.log(row);
+        query.on('row', (row) => {
             results.push(row);
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', () => {
             done();
             deferrer.resolve(results);
         });
@@ -126,32 +119,30 @@ exports.all = function(table_name, callback) {
 };
 
 
+// ################################## save
 
-//################################## save
-
-//Creates a json representing an empty object of the table given
-exports.new = function(table_name, callback) {
-
-    var deferrer = q.defer();
-    var place = {};
+// Creates a json representing an empty object of the table given
+exports.new = function newEntry(table_name, callback) {
+    const deferrer = q.defer();
+    const place = {};
 
     // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
+    pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
             done();
             deferrer.reject(err);
         }
         // SQL Query > Select Data
-        var query = client.query("SELECT column_name FROM information_schema.columns WHERE table_name = '" + table_name + "';");
+        const query = client.query(`SELECT column_name FROM information_schema.columns WHERE table_name = '${table_name}';`);
 
         // Stream results back one row at a time
-        query.on('row', function(row) {
+        query.on('row', (row) => {
             place[row.column_name] = null;
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', () => {
             done();
             deferrer.resolve(place);
         });
@@ -160,55 +151,47 @@ exports.new = function(table_name, callback) {
     });
 };
 
-//params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
+// params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
 function buildInsertIntoQuery(params, table_name) {
-
-    query = "INSERT INTO " + table_name + "(";
-    for (var j = 0; j < params.keys.length; j++) {
-        query += " " + params.keys[j] + ",";
+    let query = `INSERT INTO  ${table_name} (`;
+    for (let j = 0; j < params.keys.length; j++) {
+        query += ` ${params.keys[j]},`;
     }
-    //delete the last ","
+    // delete the last ","
     query = query.substring(0, query.length - 1);
 
 
-    query += ") values(";
-    for (var i = 0; i < params.keys.length; i++) {
-        query += " $" + (i + 1) + ",";
+    query += ') values(';
+    for (let i = 0; i < params.keys.length; i++) {
+        query += ` $${(i + 1)},`;
     }
 
-    //delete the last ","
+    // delete the last ","
     query = query.substring(0, query.length - 1);
 
-    query += ") RETURNING *;";
+    query += ') RETURNING *;';
 
     return query;
 }
 
 
-
-
-//gets a regular json and convert it to a json of the form: params = { keys: [], values: []} including all the keys
+// gets a regular json and convert it to a json of the form: params = { keys: [], values: []} including all the keys
 function parseForSave(table_name, regular_json, callback) {
-
-    var deferrer = q.defer();
+    const deferrer = q.defer();
 
     regular_json.created_at = new Date();
     regular_json.updated_at = new Date();
 
-    getColumnNames(table_name, function(err, columns) {
-
-
+    getColumnNames(table_name, (err, columns) => {
         if (err) {
-            console.log(err);
             deferrer.reject(err);
         }
-        var params = {
+        const params = {
             keys: [],
-            values: []
+            values: [],
         };
-        for (var i = 0; i < columns.length; i++) {
-
-            //id cannot be set
+        for (let i = 0; i < columns.length; i++) {
+            // id cannot be set
             if (columns[i].localeCompare('id') !== 0) {
                 params.keys.push(columns[i]);
                 params.values.push(regular_json[columns[i]]);
@@ -219,40 +202,33 @@ function parseForSave(table_name, regular_json, callback) {
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
     });
-
 }
 
-//Creates a json with the attr in attr. return true if its saved
-exports.save = function(attr, table_name, callback) {
+// Creates a json with the attr in attr. return true if its saved
+exports.save = function saveEntry(attr, table_name, callback) {
+    const deferrer = q.defer();
 
-    var deferrer = q.defer();
-
-    var entry = null;
-    parseForSave(table_name, attr, function(err, params) {
-
+    let entry = null;
+    parseForSave(table_name, attr, (err, params) => {
         // Get a Postgres client from the connection pool
-        pg.connect(connectionString, function(err, client, done) {
+        pg.connect(connectionString, (err_connect, client, done) => {
             // Handle connection errors
-            if (err) {
+            if (err_connect) {
                 done();
                 deferrer.reject(err);
             }
-            query_string = buildInsertIntoQuery(params, table_name);
+            const query_string = buildInsertIntoQuery(params, table_name);
 
 
+            const query = client.query(query_string, params.values);
 
-            var query = client.query(query_string, params.values);
-
-            query.on('row', function(row) {
-
+            query.on('row', (row) => {
                 entry = row;
-
             });
 
 
             // After all data is returned, close connection and return results
-            query.on('end', function() {
-
+            query.on('end', () => {
                 done();
                 deferrer.resolve(entry);
             });
@@ -263,52 +239,48 @@ exports.save = function(attr, table_name, callback) {
 };
 
 
-//##################################
-//################################## update
-//##################################
+// ##################################
+// ################################## update
+// ##################################
 
 
-//params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
+// params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
 function buildUpdateQuery(id, params, table_name) {
-    //UPDATE places SET name=($1), is_active=($2) WHERE id=($3)
-    query = "UPDATE " + table_name + " SET";
-    for (var j = 0; j < params.keys.length; j++) {
-        query += " " + params.keys[j] + "=($" + (j + 1) + "),";
+    // UPDATE places SET name=($1), is_active=($2) WHERE id=($3)
+    let query = `UPDATE  ${table_name} SET`;
+    for (let j = 0; j < params.keys.length; j++) {
+        query += ` ${params.keys[j]} =($${(j + 1)}),`;
     }
-    //delete the last ","
+    // delete the last ","
     query = query.substring(0, query.length - 1);
 
-    query += " WHERE id=($" + (params.keys.length + 1);
-    query += ") RETURNING *;";
+    query += ` WHERE id=($${(params.keys.length + 1)}`;
+    query += ') RETURNING *;';
 
     return query;
 }
 
 
-//gets a regular json and convert it to a json of the form: params = { keys: [], values: []} including only the keys in the regular json
+// gets a regular json and convert it to a json of the form: params = { keys: [], values: []} including only the keys in the regular json
 function parseForUpdate(table_name, regular_json, callback) {
-    var deferrer = q.defer();
+    const deferrer = q.defer();
 
     regular_json.updated_at = new Date();
 
 
-
-    getColumnNames(table_name, function(err, columns) {
-
+    getColumnNames(table_name, (err, columns) => {
         if (err) {
-            console.log(err);
             deferrer.reject(err);
         }
-        var params = {
+        const params = {
             keys: [],
-            values: []
+            values: [],
         };
 
-        for (var i = 0; i < columns.length; i++) {
-
-            //id cannot be set nor created_at
+        for (let i = 0; i < columns.length; i++) {
+            // id cannot be set nor created_at
             if (columns[i].localeCompare('id') !== 0 && columns[i].localeCompare('created_at') !== 0) {
-                //only update existing things
+                // only update existing things
                 if (regular_json.hasOwnProperty(columns[i])) {
                     params.keys.push(columns[i]);
                     params.values.push(regular_json[columns[i]]);
@@ -320,53 +292,47 @@ function parseForUpdate(table_name, regular_json, callback) {
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
     });
-
 }
 
 
-
 function sendUpdateRequest(id, attr, table_name, callback) {
+    const deferrer = q.defer();
 
-    var deferrer = q.defer();
-
-    parseForUpdate(table_name, attr, function(err, params) {
+    parseForUpdate(table_name, attr, (err, params) => {
         if (err) {
-            done();
             deferrer.reject(err);
-        }
-        // Get a Postgres client from the connection pool
-        pg.connect(connectionString, function(err, client, done) {
-            // Handle connection errors
-            if (err) {
-                done();
-                deferrer.reject(err);
-            }
-
-            var query_string = buildUpdateQuery(id, params, table_name);
-
-            params.values.push(id);
-            var query = client.query(query_string, params.values);
-
-
-            // After all data is returned, close connection and return results
-            query.on('end', function() {
-                findEntryById(id, table_name, function(err, entry) {
-                    if (err)
-                        deferrer.reject(err);
-                    deferrer.resolve(entry);
+        } else {
+            // Get a Postgres client from the connection pool
+            pg.connect(connectionString, (err_connect, client, done) => {
+                // Handle connection errors
+                if (err_connect) {
                     done();
+                    deferrer.reject(err);
+                }
+
+                const query_string = buildUpdateQuery(id, params, table_name);
+
+                params.values.push(id);
+                const query = client.query(query_string, params.values);
+
+
+                // After all data is returned, close connection and return results
+                query.on('end', () => {
+                    findEntryById(id, table_name, (err_find, entry) => {
+                        if (err_find) {
+                            deferrer.reject(err);
+                        } else {
+                            deferrer.resolve(entry);
+                        }
+                        done();
+                    });
                 });
+
+                deferrer.promise.nodeify(callback);
+                return deferrer.promise;
             });
-
-            deferrer.promise.nodeify(callback);
-            return deferrer.promise;
-        });
-
+        }
     });
-
-
-
-
 }
 
 exports.update = sendUpdateRequest;
@@ -375,10 +341,10 @@ exports.update = sendUpdateRequest;
 exports.getParamsName = getColumnNames;
 
 function getColumnNames(table_name, callback) {
-    var deferrer = q.defer();
-    var names = [];
+    const deferrer = q.defer();
+    const names = [];
     // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
+    pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
             done();
@@ -386,14 +352,14 @@ function getColumnNames(table_name, callback) {
         }
 
         // SQL Query > Select Data
-        var query = client.query("SELECT column_name FROM information_schema.columns WHERE table_name = '" + table_name + "';");
+        const query = client.query(`SELECT column_name FROM information_schema.columns WHERE table_name = '${table_name}';`);
         // Stream results back one row at a time
-        query.on('row', function(row) {
+        query.on('row', (row) => {
             names.push(row.column_name);
         });
 
         // After all data is returned, close connection and return results
-        query.on('end', function() {
+        query.on('end', () => {
             done();
             deferrer.resolve(names);
         });

@@ -1,42 +1,42 @@
-//server/models/has_answer.js
+// server/models/has_answer.js
 
-var path = require('path');
-var pg = require('pg');
-var connectionString = require(path.join(__dirname, '../', '../', 'config'));
-var q = require('q');
-var base = require('../models/base.js');
+// const path = require('path');
+// const pg = require('pg');
 
-var table_name = "has_answer";
+// const connectionString = require(path.join(__dirname, '../', '../', 'config'));
+// const q = require('q');
+const base = require('../models/base');
+
+const table_name = 'has_answer';
 
 
-
-//Return all the entries active or not
-exports.all = function(callback) {
+// Return all the entries active or not
+exports.all = function allHasAnswer(callback) {
     base.all(table_name, callback);
 };
 
-//Creates a json representing an empty entry
-exports.new = function(callback) {
+// Creates a json representing an empty entry
+exports.new = function newEntry(callback) {
     base.new(table_name, callback);
 };
 
-//Creates a json with the attr in attr
-exports.save = function(attr, callback) {
+// Creates a json with the attr in attr
+exports.save = function saveEntry(attr, callback) {
     base.save(attr, table_name, callback);
 };
 
-exports.update = function(id, attr, callback) {
+exports.update = function updateEntry(id, attr, callback) {
     base.update(id, attr, table_name, callback);
 };
 
-exports.findById = function(id, callback) {
+exports.findById = function findById(id, callback) {
     base.findById(id, table_name, callback);
 };
 
-exports.findOne = function(id, attr, callback) {
+exports.findOne = function findOne(id, attr, callback) {
     base.findOne(id, attr, table_name, callback);
 };
 
-exports.columnNames = function(callback) {
+exports.columnNames = function getAttributes(callback) {
     base.columnNames(table_name, callback);
 };

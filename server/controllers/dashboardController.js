@@ -1,26 +1,21 @@
-//server/controllers/placeController
+// server/controllers/placeController
 
 
-var path = require('path');
-var Places = require('../models/places.js');
-var Survey = require('../models/surveys.js');
-var Response = require('../models/response.js');
+const path = require('path');
+const Places = require('../models/places');
 
 
+exports.index = function getAllPlaces(req, res) {
+  Places.all((err, places) => {
+    if (err) {
+      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'dashboard.ejs'), {
+        error: `ERROR: ${err}`,
+        places: [],
+      });
+    }
 
-
-exports.index = function(req, res) {
-    Places.all(function(err, places) {
-        if (err) {
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'dashboard.ejs'), {
-                error: "ERROR:" + err,
-                places: []
-            });
-        }
-
-        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'dashboard.ejs'), {
-            places: places
-        });
-
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'dashboard.ejs'), {
+      places,
     });
+  });
 };

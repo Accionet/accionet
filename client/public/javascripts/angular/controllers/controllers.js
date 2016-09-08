@@ -1,1 +1,1 @@
-var controllers = angular.module('app.controllers', []);
+const controllers = angular.module('app.controllers', []);

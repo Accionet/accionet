@@ -20,7 +20,7 @@
  /* GET  page. */
  router.get('/', (req, res, next) => {
      // userController.login(req,res);
-     placeController.index(req, res, next);
+     dashboardController.show(req, res, next);
      // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
  });
 
@@ -33,7 +33,7 @@
 
  /* GET home page. */
  router.get('/dashboard', (req, res, next) => {
-     dashboardController.index(req, res, next);
+     dashboardController.show(req, res, next);
      // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
  });
 
@@ -56,6 +56,10 @@
 
  router.get('/places/all', (req, res, next) => {
      placeController.index(req, res, next);
+ });
+
+ router.get('/places/count', (req, res, next) => {
+     placeController.count(req, res, next);
  });
 
  router.get('/places/:id/edit', (req, res, next) => {

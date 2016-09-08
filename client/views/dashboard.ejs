@@ -11,9 +11,9 @@
 
 </head>
 
-<body>
+<body ng-app = "accionet-web-app">
 
-    <div id="wrapper">
+    <div id="wrapper" ng-controller = "dashboardController">
 
         <%= include partials/navbar.ejs %>
 
@@ -25,6 +25,7 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
+
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-primary">
@@ -34,7 +35,9 @@
                                         <i class="fa fa-university fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">26</div>
+
+                                        <div ng-if = "places.loading" class="huge">?</div>
+                                        <div ng-if = "!places.loading" class="huge">A{{places.count}}</div>
                                         <div>Lugares</div>
                                     </div>
                                 </div>
@@ -125,6 +128,10 @@
     <!-- /#wrapper -->
 
     <%= include partials/scripts.ejs %>
+
+    <!-- Angular controllers -->
+    <script src="/javascripts/angular/controllers/controllers.js"></script>
+    <script src="/javascripts/angular/controllers/dashboard-controller.js"></script>
 
 </body>
 

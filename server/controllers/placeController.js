@@ -13,17 +13,32 @@ exports.index = function getAllPlaces(req, res) {
                 places: [],
             });
         }
-        console.log(result);
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
             places: result,
         });
     });
 };
 
-
-exports.activePlaces = function getActivePlaces(req, res) {
-
+exports.count = function getAmountOf(req, res) {
+    Places.count(req.params.id, req.body, (err, amount) => {
+        if (err) {
+            return res.status(500).send({
+                error: err,
+                count: '?',
+            });
+        }
+        const response = {
+            'success': 'Amount of places where counted successfully',
+            'amount': amount,
+        };
+        return res.status(200).send(response);
+    });
 };
+
+
+// exports.activePlaces = function getActivePlaces(req, res) {
+//
+// };
 
 /* Shows the view to create a new place */
 exports.new = function getNewPlace(req, res) {
@@ -67,16 +82,18 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
             });
         }
 
-        const json = { place: response };
+        const json = {
+            place: response,
+        };
         return res.status(200).send(json);
     });
 };
 
 
-/* sets the is_active to true */
-exports.activate = function setIsActiveToTure(req, res) {
-
-};
+// /* sets the is_active to true */
+// exports.activate = function setIsActiveToTure(req, res) {
+//
+// };
 
 exports.edit = function editPlace(req, res) {
     Places.findById(req.params.id, (err, place) => {

@@ -98,24 +98,54 @@ exports.all = function getAll(table_name, callback) {
         if (err) {
             done();
             deferrer.reject(err);
-        }
-
+        } else {
         // SQL Query > Select Data
-        const query = client.query(`SELECT * FROM ${table_name} ORDER BY id ASC;`);
+            const query = client.query(`SELECT * FROM ${table_name} ORDER BY id ASC;`);
 
         // Stream results back one row at a time
-        query.on('row', (row) => {
-            results.push(row);
-        });
+            query.on('row', (row) => {
+                results.push(row);
+            });
 
         // After all data is returned, close connection and return results
-        query.on('end', () => {
-            done();
-            deferrer.resolve(results);
-        });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
+            query.on('end', () => {
+                done();
+                deferrer.resolve(results);
+            });
+        }
     });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+};
+
+exports.count = function countAmountOf(table_name, callback) {
+    const deferrer = q.defer();
+    const results = [];
+
+  // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+      // Handle connection errors
+        if (err) {
+            done();
+            deferrer.reject(err);
+        } else {
+      // SQL Query > Select Data
+            const query = client.query(`COUNT(*) FROM ${table_name} ORDER BY id ASC;`);
+
+      // Stream results back one row at a time
+            query.on('row', (row) => {
+                results.push(row);
+            });
+
+      // After all data is returned, close connection and return results
+            query.on('end', () => {
+                done();
+                deferrer.resolve(results);
+            });
+        }
+    });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
 };
 
 

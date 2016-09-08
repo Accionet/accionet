@@ -14,6 +14,11 @@ exports.all = function getEntries(callback) {
     base.all(table_name, callback);
 };
 
+// Returns the amount of entries in such table
+exports.count = function countAmountOf(callback) {
+    base.all(table_name, callback);
+};
+
 // Creates a json representing an empty entry
 exports.new = function newEntry(callback) {
     base.new(table_name, callback);

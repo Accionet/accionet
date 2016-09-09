@@ -16,7 +16,7 @@ exports.all = function getAllPlaces(callback) {
 };
 
 exports.count = function countAmountOf(callback) {
-    base.all(table_name, callback);
+    base.count(table_name, callback);
 };
 
 // Creates a json representing an empty place

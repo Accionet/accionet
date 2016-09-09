@@ -59,6 +59,7 @@
  });
 
  router.get('/places/count', (req, res, next) => {
+     console.log('routes count');
      placeController.count(req, res, next);
  });
 

@@ -120,8 +120,7 @@ exports.all = function getAll(table_name, callback) {
 
 exports.count = function countAmountOf(table_name, callback) {
     const deferrer = q.defer();
-    const results = [];
-
+    let result;
   // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
       // Handle connection errors
@@ -130,17 +129,17 @@ exports.count = function countAmountOf(table_name, callback) {
             deferrer.reject(err);
         } else {
       // SQL Query > Select Data
-            const query = client.query(`COUNT(*) FROM ${table_name} ORDER BY id ASC;`);
+            const query = client.query(`SELECT COUNT(*) FROM ${table_name};`);
 
       // Stream results back one row at a time
             query.on('row', (row) => {
-                results.push(row);
+                result = row.count;
             });
 
       // After all data is returned, close connection and return results
             query.on('end', () => {
                 done();
-                deferrer.resolve(results);
+                deferrer.resolve(result);
             });
         }
     });

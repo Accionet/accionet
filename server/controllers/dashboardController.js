@@ -2,7 +2,6 @@
 
 
 const path = require('path');
-const Places = require('../models/places');
 
 
 exports.show = function showDashboard(req, res) {

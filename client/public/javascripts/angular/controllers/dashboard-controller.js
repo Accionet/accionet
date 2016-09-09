@@ -2,23 +2,35 @@
 
 controllers
 
-    .controller('dashboardController', ($scope, $http) => {
+    .controller('dashboardController', function ($scope, $http) {
         $scope.places = {
             loading: true,
             count: undefined,
         };
-        $scope.countPlaces = () => {
+        $scope.surveys = {
+            loading: true,
+            count: undefined,
+        };
+        $scope.countPlaces = function getAmountOfPlaces() {
             $scope.places.loading = true;
-            console.log('count');
             $http.get('/places/count')
-            .success((data) => {
-                console.log('meneeh');
-                console.log(data);
-                $scope.places.count = data.amount;
-                $scope.places.loading = false;
-            })
-            .error(() => {
+          .success(function setPlaces(data) {
+              $scope.places.count = data.amount;
+              $scope.places.loading = false;
+          })
+          .error(function error() {
+          });
+        };
 
-            });
+
+        $scope.countSurveys = function getAmountOfSurveys() {
+            $scope.surveys.loading = true;
+            $http.get('/surveys/count')
+          .success(function setSurveys(data) {
+              $scope.surveys.count = data.amount;
+              $scope.surveys.loading = false;
+          })
+          .error(function error() {
+          });
         };
     });

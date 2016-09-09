@@ -20,16 +20,16 @@ exports.index = function getAllPlaces(req, res) {
 };
 
 exports.count = function getAmountOf(req, res) {
-    Places.count(req.params.id, req.body, (err, amount) => {
+    Places.count((err, count) => {
         if (err) {
             return res.status(500).send({
                 error: err,
-                count: '?',
+                amount: '?',
             });
         }
         const response = {
-            'success': 'Amount of places where counted successfully',
-            'amount': amount,
+            success: 'Amount of places where counted successfully',
+            amount: count,
         };
         return res.status(200).send(response);
     });

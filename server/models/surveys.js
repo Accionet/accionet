@@ -56,6 +56,10 @@ exports.all = function getSurveys(callback) {
     return deferrer.promise;
 };
 
+exports.count = function countAmountOf(callback) {
+    base.count(table_name, callback);
+};
+
 function addOptionToQuestion(array, row) {
     let not_present = true;
     for (let i = 0; i < array.length; i++) {

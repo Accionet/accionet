@@ -1,5 +1,5 @@
 // public/javascripts/angular/controllers
-
+/* eslint-disable */
 controllers
 
     .controller('dashboardController', function ($scope, $http) {
@@ -11,26 +11,25 @@ controllers
             loading: true,
             count: undefined,
         };
-        $scope.countPlaces = function getAmountOfPlaces() {
-            $scope.places.loading = true;
-            $http.get('/places/count')
-          .success(function setPlaces(data) {
-              $scope.places.count = data.amount;
-              $scope.places.loading = false;
-          })
-          .error(function error() {
-          });
+
+        $scope.users = {
+            loading: true,
+            count: undefined,
+        };
+
+        $scope.responses = {
+            loading: true,
+            count: undefined,
         };
 
 
-        $scope.countSurveys = function getAmountOfSurveys() {
-            $scope.surveys.loading = true;
-            $http.get('/surveys/count')
-          .success(function setSurveys(data) {
-              $scope.surveys.count = data.amount;
-              $scope.surveys.loading = false;
-          })
-          .error(function error() {
-          });
+        $scope.count = function getAmountOf(entry) {
+            $scope[entry].loading = true;
+            $http.get(`/${entry}/count`)
+            .success(function success(data) {
+                $scope[entry].count = data.amount;
+                $scope[entry].loading = false;
+            })
+            .error(function error() { });
         };
     });

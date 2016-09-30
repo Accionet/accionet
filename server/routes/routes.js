@@ -6,7 +6,7 @@
  // var passport = require('passport');
 
  const placeController = require('../controllers/placeController');
- // const userController = require('../controllers/userController');
+ const userController = require('../controllers/userController');
  const surveyController = require('../controllers/surveyController');
  const dashboardController = require('../controllers/dashboardController');
 
@@ -97,6 +97,10 @@
      surveyController.index(req, res, next);
  });
 
+ router.get('/surveys/count', (req, res, next) => {
+     surveyController.count(req, res, next);
+ });
+
  router.get('/surveys/:id', (req, res, next) => {
      surveyController.show(req, res, next);
  });
@@ -111,6 +115,13 @@
  });
 
 
+ // //////////////////////////////////////////
+ // ///////// USERS  ////////////////////////
+ // ////////////////////////////////////////
+
+ router.get('/users/count', (req, res, next) => {
+     userController.count(req, res, next);
+ });
  //
  // ////////////////////////////////////////////
  // /////////// CHECK LOGIN  //////////////////

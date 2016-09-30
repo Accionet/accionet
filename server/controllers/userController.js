@@ -1,9 +1,22 @@
 
 const path = require('path');
-
+const Users = require('../models/users');
+const httpResponse = require('../services/httpResponse');
 
 exports.login = function renderLogin(req, res) {
-  res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'));
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'));
+};
+
+
+exports.count = function countUsers(req, res) {
+    Users.count((err, result) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+        const json = httpResponse.success('Usuarions contados exitosamente', 'amount', result);
+        return res.status(200).send(json);
+    });
 };
 
 // exports.logout = function (req, res) {

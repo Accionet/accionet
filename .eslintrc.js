@@ -5,6 +5,7 @@ module.exports = {
     "plugins": [
         "react",
         "jsx-a11y",
+        "angular",
         "import"
     ],
     "rules": {
@@ -16,5 +17,8 @@ module.exports = {
       "no-use-before-define": 0,
       "indent": ["error", 4],
       "no-prototype-builtins": 0
+    },
+    "globals":  {
+      "angular": true
     }
 };

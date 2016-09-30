@@ -1,0 +1,19 @@
+<input class="form-control" ng-model='question.questionName' placeholder="Pregunta de si o no">
+
+<label>Opciones</label>
+<div class="radio" ng-repeat= "option in question.choices">
+
+    <div class="form-group input-group">
+        <!-- Add the corresponding letter-->
+        <span class="input-group-addon"> {{ question.choices.indexOf(option) + 1 | character}})</span>
+        <!-- If there is no option, the placeholder will be of this format: opcion A -->
+        <input type="text" class="form-control" ng-model= "option.value" placeholder="opción {{ question.choices.indexOf(option) + 1 | character}}">
+        <span class="input-group-addon" ng-click = "deleteChoice(question, option)">X</span>
+    </div>
+
+</div>
+
+<h2 class= "empty-list" ng-if="question.choices.length == 0">
+    No hay posibles respuestas. Elija bajo en 'Agregar alternativa' para agregar una alternativa.
+</h2>
+<button class="btn btn-default" ng-click = "addChoice(question)">Agregar otra alternativa</button>

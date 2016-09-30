@@ -24,7 +24,7 @@
      // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
  });
 
- router.get('/login', (req, res, next) => {
+ router.get('/login', (req, res) => {
      // userController.login(req,res);
      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {});
      // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
@@ -59,7 +59,6 @@
  });
 
  router.get('/places/count', (req, res, next) => {
-     console.log('routes count');
      placeController.count(req, res, next);
  });
 
@@ -95,6 +94,11 @@
 
  router.get('/surveys/all', (req, res, next) => {
      surveyController.index(req, res, next);
+ });
+
+
+ router.get('/surveys/new', (req, res, next) => {
+     surveyController.new(req, res, next);
  });
 
  router.get('/surveys/count', (req, res, next) => {

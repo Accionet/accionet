@@ -50,6 +50,11 @@ exports.show = function showSurvey(req, res) {
     });
 };
 
+
+exports.new = function (req, res) {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'new.ejs'), {});
+};
+
 exports.metrics = function showMetrics(req, res) {
     Surveys.findById(req.params.id, (err, survey) => {
         if (err) {

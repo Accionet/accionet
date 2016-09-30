@@ -37,11 +37,12 @@ exports.all = function getSurveys(callback) {
             // After all data is returned, close connection and return results
             query.on('end', () => {
                 const query_string = buildSelectAllQuery(amount);
-                // console.log(query_string);
+                console.log(query_string);
 
                 const query_all_surveys = client.query(query_string);
 
                 query_all_surveys.on('row', (row) => {
+                  console.log(row);
                     extractAndAddSurvey(results, row);
                 });
                 query_all_surveys.on('end', () => {
@@ -187,13 +188,13 @@ exports.save = function saveSurvey(attr, callback) {
         } else {
             const questions = attr.questions;
 
-
             for (let i = 0; i < questions.length; i++) {
                 questions[i].survey_id = survey.id;
                 Questions.save(questions[i], (err_quest) => {
                     if (err_quest) {
                         deferrer.reject(err_quest);
                     }
+
                 });
             }
         }

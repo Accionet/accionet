@@ -1,6 +1,6 @@
 controllers
 
-    .controller('surveyController', function($scope, $http) {
+    .controller('surveyController', function($scope, $http, $window) {
 
     $scope.surveys = {};
     $scope.selectedSurvey = null;
@@ -13,11 +13,11 @@ controllers
     $scope.error = null;
     $scope.success = null;
 
-    $scope.MULTIPLE_CHOICE = 'multipleChoice';
-    $scope.YES_NO = "yesNo";
+    $scope.MULTIPLE_CHOICE = 'multiple_choice';
+    $scope.YES_NO = "yes_no";
     $scope.NUMERIC = "numeric";
-    $scope.SHORT_ANSWER = "shortAnswer";
-    $scope.LONG_ANSWER = "longAnswer";
+    $scope.SHORT_ANSWER = "short_answer";
+    $scope.LONG_ANSWER = "long_answer";
 
     // Get all surveys
     $scope.initializeSurveys = function(surveys, selectedSurvey, responses) {
@@ -55,19 +55,26 @@ controllers
     }
 
     // Create a new survey
-    $scope.createSurvey = function(survey) {
+    $scope.createSurvey = function() {
 
-      console.log($scope.questions);
-        // if ($scope.validForm()) {
-        //     $http.post('/surveys/new', $scope.selectedSurvey)
-        //         .success(function(data) {
-        //             $scope.formData = {};
-        //             $scope.surveys = data;
-        //         })
-        //         .error(function(error) {
-        //             console.log('Error: ' + error);
-        //         });
-        // }
+        addEnumerations();
+        let survey = {
+            user_id: 1,
+            title: $scope.title,
+            is_active: true,
+            questions: $scope.questions
+        };
+        if ($scope.validForm()) {
+          console.log('valido');
+            $http.post('/surveys/new', survey)
+                .success(function(data) {
+                  console.log("suc");
+                    $window.location.href = '/surveys/all';
+                })
+                .error(function(error) {
+                    console.log('Error: ' + error);
+                });
+        }
     };
 
     // updates a survey
@@ -85,7 +92,34 @@ controllers
     };
 
     $scope.validForm = function() {
-        return !($scope.form.$error.required || $scope.form.$error.maxlength || $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer);
+        let valid = true;
+        $scope.error = "";
+        if ($scope.title === "") {
+            $scope.error += "- La encuesta debe tener un nombre \n";
+            valid = false;
+        }
+        if($scope.questions.length == 0){
+          $scope.error += "- La encuesta debe tener al menos una pregunta \n";
+          valid = false;
+        }
+        for (var i = 0; i < $scope.questions.length; i++) {
+            if (!$scope.questions[i].title || $scope.questions[i].title == "") {
+                $scope.error += `- La pregunta ${i + 1} debe tener un nombre \n`;
+                valid = false;
+            }
+            if ($scope.questions[i].options) {
+                for (var j = 0; j < $scope.questions[i].options.length; j++) {
+                    if (!$scope.questions[i].options[j].statement || $scope.questions[i].options[j].statement == "") {
+                        $scope.error += `- La alternativa ${j + 1} de la pregunta ${i + 1} debe tener un nombre \n`;
+                        valid = false;
+                    }
+                }
+            }
+
+        }
+
+        return valid;
+
     };
 
 
@@ -103,19 +137,19 @@ controllers
         //Create the question depending on what type of question is
         switch (myType) {
             case $scope.MULTIPLE_CHOICE:
-                question = createMultipleChoiceQuestion();
+                question = createMultipleChoiceQuestion($scope.questions.length + 1);
                 break;
             case $scope.YES_NO:
-                question = createYesNoQuestion();
+                question = createYesNoQuestion($scope.questions.length + 1);
                 break;
             case $scope.NUMERIC:
-                question = createNumericQuestion();
+                question = createNumericQuestion(q$scope.uestions.length + 1);
                 break;
             case $scope.SHORT_ANSWER:
-                question = createShortAnswerQuestion();
+                question = createShortAnswerQuestion($scope.questions.length + 1);
                 break;
             case $scope.LONG_ANSWER:
-                question = createLongAnswerQuestion();
+                question = createLongAnswerQuestion($scope.questions.length + 1);
                 break;
         }
         //If the question is not null add it to questions
@@ -130,21 +164,21 @@ controllers
         $scope.questions.splice(i, 1);
     };
 
-    //add a new choice to 'choice'
-    $scope.addChoice = function(question) {
-        // push the new choice
-        question.choices.push({
+    //add a new option to 'option'
+    $scope.addOption = function(question) {
+        // push the new option
+        question.options.push({
             value: ""
         });
-        //questions[0].choices[0] = "ME";
+        //questions[0].options[0] = "ME";
     };
 
-    //Remove the choice 'choice' from question
-    $scope.deleteChoice = function(question, choice) {
+    //Remove the option 'option' from question
+    $scope.deleteOption = function(question, option) {
         //get the index to where to remove
-        var i = question.choices.indexOf(choice);
+        var i = question.options.indexOf(option);
         //remove from i only 1
-        question.choices.splice(i, 1);
+        question.options.splice(i, 1);
     };
 
     //########################################
@@ -152,28 +186,30 @@ controllers
     //########################################
 
 
-    createMultipleChoiceQuestion = function() {
+    createMultipleChoiceQuestion = function(number) {
         question = {
-            questionName: "",
+            title: "",
+            description: "",
+            number: number,
             type: $scope.MULTIPLE_CHOICE,
-            choices: [{
-                value: ""
+            options: [{
+                statement: ""
             }, {
-                value: ""
+                statement: ""
             }, {
-                value: ""
+                statement: ""
             }, {
-                value: ""
-            }]
+                statement: ""
+            }, ]
         };
         return question;
     };
 
-    createYesNoQuestion = function() {
+    createYesNoQuestion = function(number) {
         question = {
-            questionName: '',
+            title: '',
             type: $scope.YES_NO,
-            choices: [{
+            options: [{
                 value: "Si"
             }, {
                 value: "No"
@@ -182,40 +218,50 @@ controllers
         return question;
     };
 
-    createShortAnswerQuestion = function() {
+    createShortAnswerQuestion = function(number) {
         question = {
-            questionName: '',
+            title: '',
             type: $scope.SHORT_ANSWER,
-            choices: []
+            options: []
         };
         return question;
     };
 
-    createLongAnswerQuestion = function() {
+    createLongAnswerQuestion = function(number) {
         question = {
-            questionName: '',
+            title: '',
             type: $scope.LONG_ANSWER,
-            choices: []
+            options: []
         };
         return question;
     };
 
-    createNumericQuestion = function() {
+    createNumericQuestion = function(number) {
         question = {
-            questionName: '',
+            title: '',
             type: $scope.NUMERIC,
-            choices: []
+            options: []
         };
         return question;
     };
 
-    createExistingQuestion = function(name, type, choices) {
+    createExistingQuestion = function(name, type, options) {
         question = {
-            questionName: name,
+            title: name,
             type: type,
-            choices: choices
+            options: options
         };
         return question;
+    };
+
+    addEnumerations = function() {
+        for (var i = 0; i < $scope.questions.length; i++) {
+            if ($scope.questions[i].options) {
+                for (var j = 0; j < $scope.questions[i].options.length; j++) {
+                    $scope.questions[i].options[j].enumeration = String.fromCharCode(64 + parseInt(j + 1, 10));
+                }
+            }
+        }
     };
 })
 

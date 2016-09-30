@@ -30,6 +30,7 @@ exports.count = function countSurveys(req, res) {
             const json = httpResponse.error(err);
             return res.status(500).send(json);
         }
+
         const json = httpResponse.success('Encuestas contadas exitosamente', 'amount', result);
         return res.status(200).send(json);
     });
@@ -47,6 +48,23 @@ exports.show = function showSurvey(req, res) {
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
             survey,
         });
+    });
+};
+
+
+exports.create = function saveSurvey(req, res) {
+    let survey = req.body;
+    Surveys.save(survey, (err, result) => {
+      console.log("de vuelta");
+        if (err) {
+          console.log("erro");
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+        console.log(result);
+        console.log("retornar con estado 200");
+        const json = httpResponse.success('Encuesta guardada exitosamente', 'survey', result);
+        return res.status(200).send(json);
     });
 };
 

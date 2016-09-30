@@ -101,6 +101,10 @@
      surveyController.new(req, res, next);
  });
 
+ router.post('/surveys/new', (req, res, next) => {
+   surveyController.create(req,res, next);
+ });
+
  router.get('/surveys/count', (req, res, next) => {
      surveyController.count(req, res, next);
  });

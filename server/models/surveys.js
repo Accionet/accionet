@@ -42,7 +42,7 @@ exports.all = function getSurveys(callback) {
                 const query_all_surveys = client.query(query_string);
 
                 query_all_surveys.on('row', (row) => {
-                  console.log(row);
+                    console.log(row);
                     extractAndAddSurvey(results, row);
                 });
                 query_all_surveys.on('end', () => {
@@ -194,7 +194,6 @@ exports.save = function saveSurvey(attr, callback) {
                     if (err_quest) {
                         deferrer.reject(err_quest);
                     }
-
                 });
             }
         }
@@ -205,6 +204,11 @@ exports.save = function saveSurvey(attr, callback) {
 
 exports.update = function updateSurvey(id, attr, callback) {
     base.update(id, attr, table_name, callback);
+};
+
+
+exports.toggleIsActive = function toggleIsActive(id, callback) {
+    base.toggleIsActive(id, table_name, callback);
 };
 
 exports.findById = function findSurveyById(id, callback) {
@@ -275,4 +279,9 @@ exports.findOne = function findFirst(id, attr, callback) {
 
 exports.columnNames = function getAttributes(callback) {
     base.columnNames(table_name, callback);
+};
+
+
+exports.delete = function deleteEntry(id, callback) {
+    base.delete(id, table_name, callback);
 };

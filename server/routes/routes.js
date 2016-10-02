@@ -102,7 +102,7 @@
  });
 
  router.post('/surveys/new', (req, res, next) => {
-   surveyController.create(req,res, next);
+     surveyController.create(req, res, next);
  });
 
  router.get('/surveys/count', (req, res, next) => {
@@ -120,6 +120,14 @@
 
  router.post('/survey/:id/response', (req, res, next) => {
      surveyController.responseSurvey(req, res, next);
+ });
+
+ router.put('/surveys/:id/toggleIsActive', (req, res, next) => {
+     surveyController.toggleIsActive(req, res, next);
+ });
+
+ router.delete('/surveys/:id/delete', (req, res, next) => {
+     surveyController.delete(req, res, next);
  });
 
 

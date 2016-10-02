@@ -44,3 +44,7 @@ exports.findOne = function findOneEntry(id, attr, callback) {
 exports.columnNames = function getAttributes(callback) {
     base.columnNames(table_name, callback);
 };
+
+exports.delete = function deleteEntry(id, callback) {
+    base.delete(id, table_name, callback);
+};

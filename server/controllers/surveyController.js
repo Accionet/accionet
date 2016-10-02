@@ -53,23 +53,23 @@ exports.show = function showSurvey(req, res) {
 
 
 exports.create = function saveSurvey(req, res) {
-    let survey = req.body;
+    const survey = req.body;
     Surveys.save(survey, (err, result) => {
-      console.log("de vuelta");
+        console.log('de vuelta');
         if (err) {
-          console.log("erro");
+            console.log('erro');
             const json = httpResponse.error(err);
             return res.status(500).send(json);
         }
         console.log(result);
-        console.log("retornar con estado 200");
+        console.log('retornar con estado 200');
         const json = httpResponse.success('Encuesta guardada exitosamente', 'survey', result);
         return res.status(200).send(json);
     });
 };
 
 
-exports.new = function (req, res) {
+exports.new = function newSurvey(req, res) {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'new.ejs'), {});
 };
 
@@ -97,6 +97,31 @@ exports.metrics = function showMetrics(req, res) {
                 responses,
             });
         });
+    });
+};
+
+/* Equivalent to delete but sets the is_active to false*/
+exports.toggleIsActive = function toggleIsActive(req, res) {
+    Surveys.toggleIsActive(req.params.id, (err, response) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(200).send(json);
+        }
+
+        const json = httpResponse.success('', 'survey', response);
+        return res.status(200).send(json);
+    });
+};
+
+exports.delete = function deleteEntry(req, res) {
+    Surveys.delete(req.params.id, (err, response) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(200).send(json);
+        }
+
+        const json = httpResponse.success(`Encuesta ${response.title} eliminada exitosamente`, 'survey', response);
+        return res.status(200).send(json);
     });
 };
 

@@ -24,7 +24,7 @@ function findEntryById(id, table_name, callback) {
         }
 
 
-        const query = client.query(`SELECT * FROM ${table_name} WHERE places.id = $1`, [id]);
+        const query = client.query(`SELECT * FROM ${table_name} WHERE ${table_name}.id = $1`, [id]);
 
         query.on('row', (row) => {
             obj = row;
@@ -99,15 +99,15 @@ exports.all = function getAll(table_name, callback) {
             done();
             deferrer.reject(err);
         } else {
-        // SQL Query > Select Data
+            // SQL Query > Select Data
             const query = client.query(`SELECT * FROM ${table_name} ORDER BY id ASC;`);
 
-        // Stream results back one row at a time
+            // Stream results back one row at a time
             query.on('row', (row) => {
                 results.push(row);
             });
 
-        // After all data is returned, close connection and return results
+            // After all data is returned, close connection and return results
             query.on('end', () => {
                 done();
                 deferrer.resolve(results);
@@ -121,22 +121,22 @@ exports.all = function getAll(table_name, callback) {
 exports.count = function countAmountOf(table_name, callback) {
     const deferrer = q.defer();
     let result;
-  // Get a Postgres client from the connection pool
+    // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
-      // Handle connection errors
+        // Handle connection errors
         if (err) {
             done();
             deferrer.reject(err);
         } else {
-      // SQL Query > Select Data
+            // SQL Query > Select Data
             const query = client.query(`SELECT COUNT(*) FROM ${table_name};`);
 
-      // Stream results back one row at a time
+            // Stream results back one row at a time
             query.on('row', (row) => {
                 result = row.count;
             });
 
-      // After all data is returned, close connection and return results
+            // After all data is returned, close connection and return results
             query.on('end', () => {
                 done();
                 deferrer.resolve(result);
@@ -337,26 +337,27 @@ function sendUpdateRequest(id, attr, table_name, callback) {
                 if (err_connect) {
                     done();
                     deferrer.reject(err);
-                }
+                } else {
+                    const query_string = buildUpdateQuery(id, params, table_name);
+                    console.log(query_string);
+                    params.values.push(id);
+                    const query = client.query(query_string, params.values);
+                    console.log(query);
 
-                const query_string = buildUpdateQuery(id, params, table_name);
-
-                params.values.push(id);
-                const query = client.query(query_string, params.values);
-
-
-                // After all data is returned, close connection and return results
-                query.on('end', () => {
-                    findEntryById(id, table_name, (err_find, entry) => {
-                        if (err_find) {
-                            deferrer.reject(err);
-                        } else {
-                            deferrer.resolve(entry);
-                        }
-                        done();
+                    // After all data is returned, close connection and return results
+                    query.on('end', () => {
+                        console.log("fin updated");
+                        findEntryById(id, table_name, (err_find, entry) => {
+                            if (err_find) {
+                                deferrer.reject(err);
+                            } else {
+                                deferrer.resolve(entry);
+                            }
+                            console.log('updated');
+                            done();
+                        });
                     });
-                });
-
+                }
                 deferrer.promise.nodeify(callback);
                 return deferrer.promise;
             });
@@ -396,3 +397,65 @@ function getColumnNames(table_name, callback) {
         return deferrer.promise;
     });
 }
+
+exports.toggleIsActive = function toggleIsActive(id, table_name, callback) {
+    const deferrer = q.defer();
+    let is_active = null;
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            deferrer.reject(err);
+        } else {
+            const query = client.query(`SELECT is_active FROM ${table_name} WHERE id = ($1)`, [id]);
+            console.log(query);
+
+            query.on('row', (row) => {
+                console.log("---------------------------");
+                console.log(row);
+                is_active = row.is_active;
+                console.log(is_active);
+            });
+
+            // After all data is returned, close connection and return results
+            query.on('end', () => {
+                done();
+                const attr = {
+                    is_active: !is_active,
+                };
+                console.log("update");
+                sendUpdateRequest(id, attr, table_name, callback);
+            });
+        }
+    });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+};
+
+
+// delete
+
+exports.delete = function(id, table_name, callback) {
+    const deferrer = q.defer();
+
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            deferrer.reject(err);
+        } else {
+            const query = client.query(`delete FROM ${table_name} WHERE id = ($1) RETURNING *`, [id]);
+            console.log(query);
+
+
+
+            // After all data is returned, close connection and return results
+            query.on('end', (entry) => {
+              console.log(entry);
+              deferrer.resolve(entry);
+            });
+        }
+    });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+};

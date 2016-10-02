@@ -1,141 +1,145 @@
 controllers
 
-    .controller('surveyController', function($scope, $http, $window) {
+    .controller('surveyController', function ($scope, $http, $window) {
+        $scope.surveys = {};
+        $scope.selectedSurvey = null;
+        $scope.responses = {};
 
-    $scope.surveys = {};
-    $scope.selectedSurvey = null;
-    $scope.responses = {};
+    // For creating an survey
+        $scope.questions = [];
+        $scope.title = '';
 
-    //For creating an survey
-    $scope.questions = [];
-    $scope.title = "";
+        $scope.error = null;
+        $scope.success = null;
 
-    $scope.error = null;
-    $scope.success = null;
-
-    $scope.MULTIPLE_CHOICE = 'multiple_choice';
-    $scope.YES_NO = "yes_no";
-    $scope.NUMERIC = "numeric";
-    $scope.SHORT_ANSWER = "short_answer";
-    $scope.LONG_ANSWER = "long_answer";
+        $scope.MULTIPLE_CHOICE = 'multiple_choice';
+        $scope.YES_NO = 'yes_no';
+        $scope.NUMERIC = 'numeric';
+        $scope.SHORT_ANSWER = 'short_answer';
+        $scope.LONG_ANSWER = 'long_answer';
 
     // Get all surveys
-    $scope.initializeSurveys = function(surveys, selectedSurvey, responses) {
-
-        if (surveys)
-            $scope.surveys = JSON.parse(surveys);
-        if (selectedSurvey)
-            $scope.selectedSurvey = JSON.parse(selectedSurvey);
-        if (responses)
-            $scope.responses = JSON.parse(responses);
-
-    };
+        $scope.initializeSurveys = function (surveys, selectedSurvey, responses) {
+            if (surveys)
+                $scope.surveys = JSON.parse(surveys);
+            if (selectedSurvey)
+                $scope.selectedSurvey = JSON.parse(selectedSurvey);
+            if (responses)
+                $scope.responses = JSON.parse(responses);
+        };
 
 
-    // Delete a survey
-    $scope.toggleIsActive = function(survey) {
-
-        $http.put('/surveys/' + survey.id + '/toggleIsActive')
-            .success(function(data) {
+    // toggle active in survey
+        $scope.toggleIsActive = function (survey) {
+            $http.put('/surveys/' + survey.id + '/toggleIsActive')
+            .success(function (data) {
                 locallyUpdateSurvey(data.survey);
             })
-            .error(function(data) {
+            .error(function (data) {
                 console.log('Error: ' + data);
             });
-    };
+        };
 
-    function locallyUpdateSurvey(updated_survey) {
-        if ($scope.selectedSurvey && $scope.selectedSurvey.id == updated_survey.id)
-            $scope.selectedSurvey = updated_survey;
-        for (var i = 0; i < $scope.surveys.length; i++) {
-            if ($scope.surveys[i].id == updated_survey.id) {
-                $scope.surveys[i] = updated_survey;
+    // toggle active in survey
+        $scope.delete = function (survey) {
+            $http.delete('/surveys/' + survey.id + '/delete')
+            .success(function (data) {
+              console.log($scope.surveys);
+              //data.survey
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
+
+        function locallyUpdateSurvey(updated_survey) {
+            if ($scope.selectedSurvey && $scope.selectedSurvey.id == updated_survey.id)
+                $scope.selectedSurvey = updated_survey;
+            for (let i = 0; i < $scope.surveys.length; i++) {
+                if ($scope.surveys[i].id == updated_survey.id) {
+                    $scope.surveys[i] = updated_survey;
+                }
             }
         }
-    }
 
     // Create a new survey
-    $scope.createSurvey = function() {
-
-        addEnumerations();
-        let survey = {
-            user_id: 1,
-            title: $scope.title,
-            is_active: true,
-            questions: $scope.questions
-        };
-        if ($scope.validForm()) {
-          console.log('valido');
-            $http.post('/surveys/new', survey)
-                .success(function(data) {
-                  console.log("suc");
+        $scope.createSurvey = function () {
+            addEnumerations();
+            const survey = {
+                user_id: 1,
+                title: $scope.title,
+                is_active: true,
+                questions: $scope.questions,
+            };
+            if ($scope.validForm()) {
+                console.log('valido');
+                $http.post('/surveys/new', survey)
+                .success(function (data) {
+                    console.log('suc');
                     $window.location.href = '/surveys/all';
                 })
-                .error(function(error) {
+                .error(function (error) {
                     console.log('Error: ' + error);
                 });
-        }
-    };
+            }
+        };
 
     // updates a survey
-    $scope.updateSurvey = function(survey) {
-
-        if ($scope.validForm()) {
-            $http.put('/surveys/' + $scope.selectedSurvey.id + '/edit', $scope.selectedSurvey)
-                .success(function(data) {
+        $scope.updateSurvey = function (survey) {
+            if ($scope.validForm()) {
+                $http.put('/surveys/' + $scope.selectedSurvey.id + '/edit', $scope.selectedSurvey)
+                .success(function (data) {
                     survey = data.survey;
                 })
-                .error(function(error) {
+                .error(function (error) {
                     console.log('Error: ' + error);
                 });
-        }
-    };
+            }
+        };
 
-    $scope.validForm = function() {
-        let valid = true;
-        $scope.error = "";
-        if ($scope.title === "") {
-            $scope.error += "- La encuesta debe tener un nombre \n";
-            valid = false;
-        }
-        if($scope.questions.length == 0){
-          $scope.error += "- La encuesta debe tener al menos una pregunta \n";
-          valid = false;
-        }
-        for (var i = 0; i < $scope.questions.length; i++) {
-            if (!$scope.questions[i].title || $scope.questions[i].title == "") {
-                $scope.error += `- La pregunta ${i + 1} debe tener un nombre \n`;
+        $scope.validForm = function () {
+            let valid = true;
+            $scope.error = '';
+            if ($scope.title === '') {
+                $scope.error += '- La encuesta debe tener un nombre \n';
                 valid = false;
             }
-            if ($scope.questions[i].options) {
-                for (var j = 0; j < $scope.questions[i].options.length; j++) {
-                    if (!$scope.questions[i].options[j].statement || $scope.questions[i].options[j].statement == "") {
-                        $scope.error += `- La alternativa ${j + 1} de la pregunta ${i + 1} debe tener un nombre \n`;
-                        valid = false;
+            if ($scope.questions.length == 0) {
+                $scope.error += '- La encuesta debe tener al menos una pregunta \n';
+                valid = false;
+            }
+            for (let i = 0; i < $scope.questions.length; i++) {
+                if (!$scope.questions[i].title || $scope.questions[i].title == '') {
+                    $scope.error += `- La pregunta ${i + 1} debe tener un nombre \n`;
+                    valid = false;
+                }
+                if ($scope.questions[i].options) {
+                    for (let j = 0; j < $scope.questions[i].options.length; j++) {
+                        if (!$scope.questions[i].options[j].statement || $scope.questions[i].options[j].statement == '') {
+                            $scope.error += `- La alternativa ${j + 1} de la pregunta ${i + 1} debe tener un nombre \n`;
+                            valid = false;
+                        }
                     }
                 }
             }
 
-        }
-
-        return valid;
-
-    };
+            return valid;
+        };
 
 
-    $scope.setSelectedSurvey = function(survey) {
-        $scope.selectedSurvey = survey;
-    };
+        $scope.setSelectedSurvey = function (survey) {
+            $scope.selectedSurvey = survey;
+        };
 
 
-    //FOR CREATING NEW survey
+    // FOR CREATING NEW survey
 
-    //Add question to array. Recieves what type of question is
-    $scope.addQuestion = function(myType) {
-        //The question to be added
-        var question;
-        //Create the question depending on what type of question is
-        switch (myType) {
+    // Add question to array. Recieves what type of question is
+        $scope.addQuestion = function (myType) {
+        // The question to be added
+            let question;
+        // Create the question depending on what type of question is
+            switch (myType) {
             case $scope.MULTIPLE_CHOICE:
                 question = createMultipleChoiceQuestion($scope.questions.length + 1);
                 break;
@@ -151,124 +155,124 @@ controllers
             case $scope.LONG_ANSWER:
                 question = createLongAnswerQuestion($scope.questions.length + 1);
                 break;
-        }
-        //If the question is not null add it to questions
-        if (question) {
-            $scope.questions.push(question);
-        }
-    };
+            }
+        // If the question is not null add it to questions
+            if (question) {
+                $scope.questions.push(question);
+            }
+        };
 
-    $scope.deleteQuestion = function(question) {
-        var i = $scope.questions.indexOf(question);
-        //remove from i only 1
-        $scope.questions.splice(i, 1);
-    };
+        $scope.deleteQuestion = function (question) {
+            const i = $scope.questions.indexOf(question);
+        // remove from i only 1
+            $scope.questions.splice(i, 1);
+        };
 
-    //add a new option to 'option'
-    $scope.addOption = function(question) {
+    // add a new option to 'option'
+        $scope.addOption = function (question) {
         // push the new option
-        question.options.push({
-            value: ""
-        });
-        //questions[0].options[0] = "ME";
-    };
+            question.options.push({
+                value: '',
+            });
+        // questions[0].options[0] = "ME";
+        };
 
-    //Remove the option 'option' from question
-    $scope.deleteOption = function(question, option) {
-        //get the index to where to remove
-        var i = question.options.indexOf(option);
-        //remove from i only 1
-        question.options.splice(i, 1);
-    };
+    // Remove the option 'option' from question
+        $scope.deleteOption = function (question, option) {
+        // get the index to where to remove
+            const i = question.options.indexOf(option);
+        // remove from i only 1
+            question.options.splice(i, 1);
+        };
 
-    //########################################
+    // ########################################
     // NOT SCOPE FUNCTIONS ###################
-    //########################################
+    // ########################################
 
 
-    createMultipleChoiceQuestion = function(number) {
-        question = {
-            title: "",
-            description: "",
-            number: number,
-            type: $scope.MULTIPLE_CHOICE,
-            options: [{
-                statement: ""
-            }, {
-                statement: ""
-            }, {
-                statement: ""
-            }, {
-                statement: ""
-            }, ]
+        createMultipleChoiceQuestion = function (number) {
+            question = {
+                title: '',
+                description: '',
+                number,
+                type: $scope.MULTIPLE_CHOICE,
+                options: [{
+                    statement: '',
+                }, {
+                    statement: '',
+                }, {
+                    statement: '',
+                }, {
+                    statement: '',
+                }, ],
+            };
+            return question;
         };
-        return question;
-    };
 
-    createYesNoQuestion = function(number) {
-        question = {
-            title: '',
-            type: $scope.YES_NO,
-            options: [{
-                value: "Si"
-            }, {
-                value: "No"
-            }]
+        createYesNoQuestion = function (number) {
+            question = {
+                title: '',
+                type: $scope.YES_NO,
+                options: [{
+                    value: 'Si',
+                }, {
+                    value: 'No',
+                }],
+            };
+            return question;
         };
-        return question;
-    };
 
-    createShortAnswerQuestion = function(number) {
-        question = {
-            title: '',
-            type: $scope.SHORT_ANSWER,
-            options: []
+        createShortAnswerQuestion = function (number) {
+            question = {
+                title: '',
+                type: $scope.SHORT_ANSWER,
+                options: [],
+            };
+            return question;
         };
-        return question;
-    };
 
-    createLongAnswerQuestion = function(number) {
-        question = {
-            title: '',
-            type: $scope.LONG_ANSWER,
-            options: []
+        createLongAnswerQuestion = function (number) {
+            question = {
+                title: '',
+                type: $scope.LONG_ANSWER,
+                options: [],
+            };
+            return question;
         };
-        return question;
-    };
 
-    createNumericQuestion = function(number) {
-        question = {
-            title: '',
-            type: $scope.NUMERIC,
-            options: []
+        createNumericQuestion = function (number) {
+            question = {
+                title: '',
+                type: $scope.NUMERIC,
+                options: [],
+            };
+            return question;
         };
-        return question;
-    };
 
-    createExistingQuestion = function(name, type, options) {
-        question = {
-            title: name,
-            type: type,
-            options: options
+        createExistingQuestion = function (name, type, options) {
+            question = {
+                title: name,
+                type,
+                options,
+            };
+            return question;
         };
-        return question;
-    };
 
-    addEnumerations = function() {
-        for (var i = 0; i < $scope.questions.length; i++) {
-            if ($scope.questions[i].options) {
-                for (var j = 0; j < $scope.questions[i].options.length; j++) {
-                    $scope.questions[i].options[j].enumeration = String.fromCharCode(64 + parseInt(j + 1, 10));
+        addEnumerations = function () {
+            for (let i = 0; i < $scope.questions.length; i++) {
+                if ($scope.questions[i].options) {
+                    for (let j = 0; j < $scope.questions[i].options.length; j++) {
+                        $scope.questions[i].options[j].enumeration = String.fromCharCode(64 + parseInt(j + 1, 10));
+                    }
                 }
             }
-        }
-    };
-})
+        };
+    })
 
-//Filter for displaying the alternatives, it basically transform numbers to letter in this way: 0 = A, 1 = B and so on
-//Code taken from http://stackoverflow.com/questions/22786483/angularjs-show-index-as-char answer from: Engineer
-.filter('character', function() {
-    return function(input) {
+// Filter for displaying the alternatives, it basically transform numbers to letter in this way: 0 = A, 1 = B and so on
+// Code taken from http://stackoverflow.com/questions/22786483/angularjs-show-index-as-char answer from: Engineer
+.filter('character', function () {
+    return function (input) {
         return String.fromCharCode(64 + parseInt(input, 10));
     };
 });

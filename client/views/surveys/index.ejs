@@ -27,7 +27,7 @@
                                         <span class="glyphicon glyphicon-file"></span> {{survey.title}}
                                     </td>
                                     <td class="text-right text-nowrap">
-                                        <a class="pull-right red icon-list-holder"><i class="fa fa-trash"></i></a>
+                                        <a ng-click="delete(survey)" class="pull-right red icon-list-holder"><i class="fa fa-trash"></i></a>
                                         <a ng-click="toggleIsActive(survey)" class="pull-right dark-red icon-list-holder"  ng-if="survey.is_active" ><i class="fa fa-ban"></i></a>
                                         <a ng-click="toggleIsActive(survey)" class="pull-right dark-green icon-list-holder"  ng-if="!survey.is_active" ><i class="fa fa-check"></i></a>
                                         <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}/edit" class="pull-right orange icon-list-holder"><i class="fa fa-edit"></i></a>

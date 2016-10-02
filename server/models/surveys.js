@@ -186,13 +186,21 @@ exports.save = function saveSurvey(attr, callback) {
         if (err) {
             deferrer.reject(err);
         } else {
+            console.log('saved in survey');
             const questions = attr.questions;
+            let saved = 0;
 
             for (let i = 0; i < questions.length; i++) {
                 questions[i].survey_id = survey.id;
                 Questions.save(questions[i], (err_quest) => {
                     if (err_quest) {
                         deferrer.reject(err_quest);
+                    }
+                    saved += 1;
+                    console.log(saved);
+                    if (saved === questions.length) {
+                        console.log('fiin');
+                        deferrer.resolve('');
                     }
                 });
             }

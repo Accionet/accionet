@@ -16,7 +16,8 @@ module.exports = {
       "no-plusplus": 0,
       "no-use-before-define": 0,
       "indent": ["error", 4],
-      "no-prototype-builtins": 0
+      "no-prototype-builtins": 0,
+      "no-console": 0
     },
     "globals":  {
       "angular": true

@@ -1,6 +1,7 @@
 const User = require('../models/users');
 const Place = require('../models/places');
 const Surveys = require('../models/surveys');
+const Response = require('../models/response');
 
 
 // Admin
@@ -27,6 +28,7 @@ User.new((err, newUser) => {
                 console.log(err);
                 return err;
             }
+            console.log('survey new');
             newSurvey.user_id = savedUser.id;
             newSurvey.title = 'Rango Etario Streetpark';
             newSurvey.is_active = true;
@@ -62,13 +64,28 @@ User.new((err, newUser) => {
                     enumeration: 'h',
                 }],
             });
-
+            console.log('survey save');
             Surveys.save(newSurvey, (err_survey_save, savedSurvey) => {
                 if (err_survey_save) {
                     console.log(err);
                     return err;
                 }
                 console.log(`survey ${savedSurvey.title} saved`);
+                for (let i = 0; i < 100; i++) {
+                    const resp = {
+                        survey_id: 1,
+                        answers: [{
+                            question_id: 1,
+                            answer_option_id: Math.floor((Math.random() * 8) + 1),
+                        }],
+                    };
+                    Response.save(resp, (err_resp_save) => {
+                        if (err_resp_save) {
+                            console.log(err);
+                            return err;
+                        }
+                    });
+                }
             });
         });
     });

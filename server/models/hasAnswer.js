@@ -1,4 +1,6 @@
 // server/models/has_answer.js
+"use strict";
+
 
 // const path = require('path');
 // const pg = require('pg');

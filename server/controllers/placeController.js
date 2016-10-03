@@ -1,4 +1,6 @@
 // server/controllers/placeController
+"use strict";
+
 
 
 const path = require('path');

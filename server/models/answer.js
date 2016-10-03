@@ -1,4 +1,6 @@
 // server/models/answer.js
+"use strict";
+
 
 const path = require('path');
 const pg = require('pg');
@@ -98,6 +100,7 @@ exports.findOfSurvey = function findAnswersOfSurvey(survey_id, callback) {
 
 exports.columnNames = function getColumnNames(callback) {
     base.columnNames(table_name, callback);
+
 };
 
 

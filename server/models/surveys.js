@@ -1,4 +1,6 @@
 // server/models/surveys.js
+"use strict";
+
 
 const Answer = require('./answer');
 

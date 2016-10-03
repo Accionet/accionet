@@ -1,4 +1,5 @@
 // server/models/options.js
+"use strict";
 
 
 const base = require('../models/base');

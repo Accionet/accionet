@@ -1,4 +1,5 @@
 // server/models/questions.js
+"use strict";
 
 
 const q = require('q');

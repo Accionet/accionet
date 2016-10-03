@@ -1,4 +1,5 @@
 // server/models/users.js
+"use strict";
 
 const path = require('path');
 const pg = require('pg');

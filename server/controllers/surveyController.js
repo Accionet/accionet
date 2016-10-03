@@ -1,4 +1,6 @@
 // server/controllers/surveyController
+"use strict";
+
 
 
 const path = require('path');

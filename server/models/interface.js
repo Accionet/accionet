@@ -1,5 +1,7 @@
 // This is justa a basic example is in here for copy and paste when creating a new model.
 // Simulates inheritance
+"use strict";
+
 
 
 // server/models/interface.js

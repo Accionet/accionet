@@ -1,15 +1,10 @@
- const Places = require('../models/places.js');
- const Surveys = require('../models/surveys.js');
- const Questions = require('../models/questions.js');
- const Response = require('../models/response.js');
- const Answer = require('../models/answer.js');
+ const Places = require('../models/places');
+ const Surveys = require('../models/surveys');
+ const Questions = require('../models/questions');
+ const Response = require('../models/response');
+ const Answer = require('../models/answer');
 
 
- Answer.findOfSurvey(2, function (err, result) {
-   if (err) {
-     console.error(err);
-     return err;
-   }
-   console.log('-----------------');
-   console.log(result);
+ Surveys.getMetrics(1, (err_find_survey, populatedSurvey) => {
+     console.log(populatedSurvey);
  });

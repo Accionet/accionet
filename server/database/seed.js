@@ -28,7 +28,6 @@ User.new((err, newUser) => {
                 console.log(err);
                 return err;
             }
-            console.log('survey new');
             newSurvey.user_id = savedUser.id;
             newSurvey.title = 'Rango Etario Streetpark';
             newSurvey.is_active = true;
@@ -64,28 +63,64 @@ User.new((err, newUser) => {
                     enumeration: 'h',
                 }],
             });
-            console.log('survey save');
+            newSurvey.questions.push({
+                title: 'Eres hombre?',
+                type: 'multiple_choice',
+                number: 2,
+                options: [{
+                    statement: 'Si',
+                    enumeration: 'a',
+                }, {
+                    statement: 'No',
+                    enumeration: 'b',
+                }, {
+                    statement: 'No lo se',
+                    enumeration: 'c',
+                }],
+            });
+            newSurvey.questions.push({
+                title: 'Que numero te gusta mas?',
+                type: 'multiple_choice',
+                number: 3,
+                options: [{
+                    statement: '1',
+                    enumeration: 'a',
+                }, {
+                    statement: '2',
+                    enumeration: 'b',
+                }, {
+                    statement: '3',
+                    enumeration: 'c',
+                }],
+            });
             Surveys.save(newSurvey, (err_survey_save, savedSurvey) => {
                 if (err_survey_save) {
                     console.log(err);
                     return err;
                 }
                 console.log(`survey ${savedSurvey.title} saved`);
-                for (let i = 0; i < 100; i++) {
-                    const resp = {
-                        survey_id: 1,
-                        answers: [{
-                            question_id: 1,
-                            answer_option_id: Math.floor((Math.random() * 8) + 1),
-                        }],
-                    };
-                    Response.save(resp, (err_resp_save) => {
-                        if (err_resp_save) {
-                            console.log(err);
-                            return err;
+                Surveys.findById(savedSurvey.id, (err_find_survey, populatedSurvey) => {
+                    const RESPONSES = 200;
+                    for (let i = 0; i < RESPONSES; i++) {
+                        const resp = {
+                            survey_id: populatedSurvey[0].id,
+                            answers: [],
+                        };
+                        for (let j = 0; j < populatedSurvey[0].questions.length; j++) {
+                            const amount = populatedSurvey[0].questions[j].options.length;
+                            resp.answers.push({
+                                question_id: populatedSurvey[0].questions[j].id,
+                                answer_option_id: populatedSurvey[0].questions[j].options[Math.floor((Math.random() * amount))].id,
+                            });
                         }
-                    });
-                }
+                        Response.save(resp, (err_resp_save) => {
+                            if (err_resp_save) {
+                                console.log(err);
+                                return err;
+                            }
+                        });
+                    }
+                });
             });
         });
     });

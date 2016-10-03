@@ -25,6 +25,7 @@ exports.save = function saveQuestionAndOptions(attr, callback) {
     base.save(attr, table_name, (err, question) => {
         const options = attr.options;
 
+        let saved = 0;
 
         // console.log((options.length == boll));
         if (options && options.length && options.length > 0) {
@@ -34,11 +35,15 @@ exports.save = function saveQuestionAndOptions(attr, callback) {
                     if (err_opt) {
                         deferrer.reject(err_opt);
                     }
+                    saved += 1;
+                    if (saved === options.length) {
+                        deferrer.resolve(question);
+                    }
                 });
             }
+        } else {
+            deferrer.resolve(question);
         }
-
-        deferrer.resolve(question);
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
     });

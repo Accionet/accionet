@@ -1,5 +1,7 @@
 // server/models/surveys.js
 
+const Answer = require('./answer');
+
 const path = require('path');
 const pg = require('pg');
 
@@ -37,12 +39,10 @@ exports.all = function getSurveys(callback) {
             // After all data is returned, close connection and return results
             query.on('end', () => {
                 const query_string = buildSelectAllQuery(amount);
-                console.log(query_string);
 
                 const query_all_surveys = client.query(query_string);
 
                 query_all_surveys.on('row', (row) => {
-                    console.log(row);
                     extractAndAddSurvey(results, row);
                 });
                 query_all_surveys.on('end', () => {
@@ -186,7 +186,6 @@ exports.save = function saveSurvey(attr, callback) {
         if (err) {
             deferrer.reject(err);
         } else {
-            console.log('saved in survey');
             const questions = attr.questions;
             let saved = 0;
 
@@ -197,10 +196,8 @@ exports.save = function saveSurvey(attr, callback) {
                         deferrer.reject(err_quest);
                     }
                     saved += 1;
-                    console.log(saved);
                     if (saved === questions.length) {
-                        console.log('fiin');
-                        deferrer.resolve('');
+                        deferrer.resolve(survey);
                     }
                 });
             }
@@ -219,9 +216,12 @@ exports.toggleIsActive = function toggleIsActive(id, callback) {
     base.toggleIsActive(id, table_name, callback);
 };
 
-exports.findById = function findSurveyById(id, callback) {
+exports.findById = findSurveyById;
+
+function findSurveyById(id, callback) {
     const deferrer = q.defer();
     const results = [];
+
 
     // get the amount of columns in options. This is to leave blank the spaces in the table of those who doesnt have options
     // Get a Postgres client from the connection pool
@@ -258,7 +258,7 @@ exports.findById = function findSurveyById(id, callback) {
     });
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
-};
+}
 
 /* Builds the query geting the questions and options associated to the survey with id = id*/
 function buildSelectByIdQuery(amount) {
@@ -280,6 +280,30 @@ function buildSelectByIdQuery(amount) {
     return string;
 }
 
+
+exports.getMetrics = function getMetricsOfSurvey(id, callback) {
+    const deferrer = q.defer();
+    let survey_with_metrics;
+    findSurveyById(id, (err, survey) => {
+        survey_with_metrics = survey[0];
+        let finished = 0;
+        for (let i = 0; i < survey[0].questions.length; i++) {
+            Answer.getMetrics(survey[0].questions[i], (err_metrics, question_with_metrics) => {
+                if (err_metrics) {
+                    deferrer.reject(err_metrics);
+                } else {
+                    console.log(question_with_metrics);
+                    finished += 1;
+                    if (finished === survey[0].questions.length) {
+                        deferrer.resolve(survey_with_metrics);
+                    }
+                }
+            });
+        }
+    });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+};
 
 exports.findOne = function findFirst(id, attr, callback) {
     base.findOne(id, attr, table_name, callback);

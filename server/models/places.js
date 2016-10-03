@@ -1,5 +1,5 @@
 // server/models/places.js
-
+"use strict";
 const path = require('path');
 const pg = require('pg');
 
@@ -117,7 +117,7 @@ exports.update = function updatePlace(id, attr, callback) {
 
 exports.toggleIsActive = function toggleIsActive(id, callback) {
     const deferrer = q.defer();
-    let is_active;
+    let is_active = null;
     pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {

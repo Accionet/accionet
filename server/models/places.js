@@ -117,7 +117,7 @@ exports.update = function updatePlace(id, attr, callback) {
 
 exports.toggleIsActive = function toggleIsActive(id, callback) {
     const deferrer = q.defer();
-    let is_active = null;
+    let is_active;
     pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {

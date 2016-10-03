@@ -5,7 +5,7 @@ const path = require('path');
 const Surveys = require('../models/surveys');
 
 const Response = require('../models/response');
-const Answer = require('../models/answer');
+// const Answer = require('../models/answer');
 const httpResponse = require('../services/httpResponse');
 
 
@@ -83,18 +83,17 @@ exports.metrics = function showMetrics(req, res) {
             });
             return;
         }
-        Answer.findOfSurvey(req.params.id, (errFindSurvey, responses) => {
-            if (errFindSurvey) {
+        Surveys.getMetrics(survey[0].id, (err_find_survey, survey_with_metrics) => {
+            if (err_find_survey) {
                 res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
                     error: `ERROR: ${err}`,
                     survey: [],
-                    responses: [],
                 });
                 return;
             }
+
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
-                survey,
-                responses,
+                survey: survey_with_metrics,
             });
         });
     });

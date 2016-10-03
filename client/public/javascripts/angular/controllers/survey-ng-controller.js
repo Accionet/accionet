@@ -44,8 +44,8 @@ controllers
         $scope.delete = function (survey) {
             $http.delete('/surveys/' + survey.id + '/delete')
             .success(function (data) {
-              console.log($scope.surveys);
-              //data.survey
+                console.log($scope.surveys);
+              // data.survey
             })
             .error(function (data) {
                 console.log('Error: ' + data);

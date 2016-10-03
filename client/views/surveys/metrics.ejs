@@ -10,7 +10,7 @@
     <% include ../partials/message_log.ejs %>
         <%= include ../partials/navbar.ejs %>
 
-            <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey[0]) %>',' <%= JSON.stringify(responses) %>') ">
+            <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey) %>',' <%= null %>') ">
                 <div class="header">
                     <h1>{{selectedSurvey.title}}</h1>
                 </div>
@@ -35,17 +35,17 @@
 
                                 <thead>
                                     <tr>
-                                        <th>Fecha</th>
-                                        <th> Option ID </th>
+                                        <th>Opción</th>
+                                        <th> Cantidad </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="response in responses">
+                                    <tr ng-repeat="option in question.options">
                                         <td>
-                                            {{response.created_at}}
+                                            {{option.statement}}
                                         </td>
                                         <td>
-                                            {{response["1"].answer_option_id}}
+                                            {{question.metrics[option.enumeration].count}}
                                         </td>
                                     </tr>
                                 </tbody>

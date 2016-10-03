@@ -288,11 +288,13 @@ exports.getMetrics = function getMetricsOfSurvey(id, callback) {
         survey_with_metrics = survey[0];
         let finished = 0;
         for (let i = 0; i < survey[0].questions.length; i++) {
-            Answer.getMetrics(survey[0].questions[i], (err_metrics, question_with_metrics) => {
+            const question = survey[0].questions[i];
+
+
+            Answer.getMetrics(question, (err_metrics, question_with_metrics) => {
                 if (err_metrics) {
                     deferrer.reject(err_metrics);
                 } else {
-                    console.log(question_with_metrics);
                     finished += 1;
                     if (finished === survey[0].questions.length) {
                         deferrer.resolve(survey_with_metrics);

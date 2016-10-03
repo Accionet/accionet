@@ -101,12 +101,15 @@ exports.columnNames = function getColumnNames(callback) {
 };
 
 
-exports.getMetrics = function (question, callback) {
+exports.getMetrics = function(question, callback) {
+    console.log("in ansower");
+    console.log(question.title);
+    console.log("in ansower");
     switch (question.type) {
-    case 'multiple_choice':
-        getMetricsOfMulltipleChoice(question, callback);
-        break;
-    default:
+        case 'multiple_choice':
+            getMetricsOfMulltipleChoice(question, callback);
+            break;
+        default:
     }
 };
 
@@ -136,8 +139,6 @@ function getMetricsOfMulltipleChoice(question, callback) {
                 deferrer.resolve(question);
             });
         }
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
     });
 
     deferrer.promise.nodeify(callback);

@@ -131,8 +131,8 @@ exports.responseSurvey = function respondSurvey(req, res) {
     // It has to have a survey_id and it must be equal to the one in the URL
 
     const response = JSON.parse(req.body.string_json);
-    // console.log(req);
-    if (response.survey_id && response.survey_id === req.params.id) {
+
+    if (response.survey_id && response.survey_id == req.params.id) {
         Response.save(response, (err, result) => {
             if (err) {
                 const json = httpResponse.error(err);

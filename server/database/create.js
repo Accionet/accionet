@@ -50,7 +50,7 @@ queries[queries.length - 1].on('end', () => {
     closeConnection();
 });
 
-queries.push(client.query('CREATE TABLE questions(id SERIAL PRIMARY KEY, survey_id SERIAL references surveys(id) ON DELETE CASCADE, title VARCHAR(800), type VARCHAR(120), number INTEGER, created_at TIMESTAMP, updated_at TIMESTAMP)'));
+queries.push(client.query('CREATE TABLE questions(id SERIAL PRIMARY KEY, survey_id INTEGER references surveys(id) ON DELETE CASCADE, title VARCHAR(800), type VARCHAR(120), number INTEGER, created_at TIMESTAMP, updated_at TIMESTAMP)'));
 queries[queries.length - 1].on('end', () => {
         // client.end();
     console.log('TABLA questions creada');

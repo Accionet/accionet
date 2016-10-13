@@ -1,5 +1,5 @@
 // server/models/places.js
-"use strict";
+'use strict';
 
 
 const path = require('path');
@@ -201,7 +201,6 @@ function buildInsertIntoQuery(params, table_name) {
     query = query.substring(0, query.length - 1);
 
     query += ') RETURNING *;';
-
     return query;
 }
 
@@ -341,21 +340,17 @@ function sendUpdateRequest(id, attr, table_name, callback) {
                     deferrer.reject(err);
                 } else {
                     const query_string = buildUpdateQuery(id, params, table_name);
-                    console.log(query_string);
                     params.values.push(id);
                     const query = client.query(query_string, params.values);
-                    console.log(query);
 
                     // After all data is returned, close connection and return results
                     query.on('end', () => {
-                        console.log("fin updated");
                         findEntryById(id, table_name, (err_find, entry) => {
                             if (err_find) {
                                 deferrer.reject(err);
                             } else {
                                 deferrer.resolve(entry);
                             }
-                            console.log('updated');
                             done();
                         });
                     });
@@ -410,13 +405,9 @@ exports.toggleIsActive = function toggleIsActive(id, table_name, callback) {
             deferrer.reject(err);
         } else {
             const query = client.query(`SELECT is_active FROM ${table_name} WHERE id = ($1)`, [id]);
-            console.log(query);
 
             query.on('row', (row) => {
-                console.log("---------------------------");
-                console.log(row);
                 is_active = row.is_active;
-                console.log(is_active);
             });
 
             // After all data is returned, close connection and return results
@@ -425,7 +416,6 @@ exports.toggleIsActive = function toggleIsActive(id, table_name, callback) {
                 const attr = {
                     is_active: !is_active,
                 };
-                console.log("update");
                 sendUpdateRequest(id, attr, table_name, callback);
             });
         }
@@ -437,7 +427,7 @@ exports.toggleIsActive = function toggleIsActive(id, table_name, callback) {
 
 // delete
 
-exports.delete = function(id, table_name, callback) {
+exports.delete = function (id, table_name, callback) {
     const deferrer = q.defer();
 
     pg.connect(connectionString, (err, client, done) => {
@@ -447,14 +437,11 @@ exports.delete = function(id, table_name, callback) {
             deferrer.reject(err);
         } else {
             const query = client.query(`delete FROM ${table_name} WHERE id = ($1) RETURNING *`, [id]);
-            console.log(query);
-
 
 
             // After all data is returned, close connection and return results
             query.on('end', (entry) => {
-              console.log(entry);
-              deferrer.resolve(entry);
+                deferrer.resolve(entry);
             });
         }
     });

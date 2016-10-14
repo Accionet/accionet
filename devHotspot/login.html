@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ingresar</title>
+
+
+    <link rel="stylesheet" href="css/normalize.css">
+
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+
+
+
+
+</head>
+
+<body>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up Form</title>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+
+    <body>
+
+        <form id="#myForm">
+            <img class= "logo" src="img/antenasola.png">
+            <h1>Accionet</h1>
+            <p> Luego de responder esta breve encuesta podrá navegar gratis por una hora por wifi. </p>
+            <fieldset>
+                <legend><span class="number">1</span>Encuesta</legend>
+
+
+                <label>¿Cuál es tu edad?</label>
+                <input type="radio" id="a" value="1" name="user_age"><label for="a" class="light">10 años o menor</label><br>
+                <input type="radio" id="b" value="5" name="user_age"><label for="b" class="light">entre 11 años y 15 años</label>
+                <br>
+                <input type="radio" id="c" value="2" name="user_age"><label for="c" class="light">Entre 16 años y 20 años</label><br>
+                <input type="radio" id="d" value="3" name="user_age"><label for="d" class="light">Entre 21 años y 25 años</label><br>
+                <input type="radio" id="e" value="4" name="user_age"><label for="e" class="light">Entre 26 años y 30 años</label><br>
+                <input type="radio" id="f" value="7" name="user_age"><label for="f" class="light">Entre 31 años y 40 años</label><br>
+                <input type="radio" id="g" value="6" name="user_age"><label for="g" class="light">Más de 40 años</label><br>
+                <input type="radio" id="h" value="8" name="user_age"><label for="h" class="light">Ya he respondido esta pregunta</label>
+                <input type="hidden" id="macAddress" value="T-$(mac-esc)">
+                <input type="hidden" id="link" value="$(link-login-only)?dst=http://goo.gl/JiDICB&amp;username=T-$(mac-esc)">
+            </fieldset>
+
+
+            <fieldset>
+                <legend><span class="number">2</span>Aceptar términos y condiciones</legend>
+                <input type="checkbox" id="terms_and_conditions" value="" name="accept_terms"><label class="light" for="terms_and_conditions">He leído y aceptado los <a href="term_and_conditions.html" target="_blank">terminos y condiciones de uso </a></label><br>
+            </fieldset>
+            <a id="sendSurvey" class="boton submit"  href=""> Navegar </a>
+
+
+
+        </form>
+
+    </body>
+
+    <script type="text/javascript" src="js/ready_to_send.js"></script>
+    <script type="text/javascript" src="js/counter.js"></script>
+
+
+</html>
+
+</body>
+
+</html>

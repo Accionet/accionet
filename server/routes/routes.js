@@ -125,6 +125,7 @@ router.get('/surveys/:id/metrics', (req, res, next) => {
 
 
 router.post('/survey/:id/response', (req, res, next) => {
+    console.log('en routes');
     surveyController.responseSurvey(req, res, next);
 });
 

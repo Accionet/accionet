@@ -292,7 +292,6 @@ function buildInsertIntoQuery(params, table_name) {
 // gets a regular json and convert it to a json of the form: params = { keys: [], values: []} including all the keys
 function parseForSave(table_name, regular_json, callback) {
     const deferrer = q.defer();
-
     regular_json.created_at = new Date();
     regular_json.updated_at = new Date();
 
@@ -309,8 +308,10 @@ function parseForSave(table_name, regular_json, callback) {
             if (columns[i].localeCompare('id') !== 0) {
                 params.keys.push(columns[i]);
                 params.values.push(regular_json[columns[i]]);
+                console.log(`${columns[i]}: ${regular_json[columns[i]]}`);
             }
         }
+
 
         deferrer.resolve(params);
         deferrer.promise.nodeify(callback);
@@ -323,6 +324,8 @@ exports.save = function saveEntry(attr, table_name, callback) {
     const deferrer = q.defer();
 
     let entry = null;
+    console.log('En base save');
+    console.log(attr);
     parseForSave(table_name, attr, (err, params) => {
         // Get a Postgres client from the connection pool
         pg.connect(connectionString, (err_connect, client, done) => {

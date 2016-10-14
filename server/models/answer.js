@@ -1,6 +1,10 @@
 // server/models/answer.js
-"use strict";
+'use strict';
 
+
+const MULTIPLE_CHOICE = 'multiple_choice';
+
+exports.MULTIPLE_CHOICE = MULTIPLE_CHOICE;
 
 const path = require('path');
 const pg = require('pg');
@@ -100,23 +104,19 @@ exports.findOfSurvey = function findAnswersOfSurvey(survey_id, callback) {
 
 exports.columnNames = function getColumnNames(callback) {
     base.columnNames(table_name, callback);
-
 };
 
 
-exports.getMetrics = function(question, callback) {
-    console.log("in ansower");
-    console.log(question.title);
-    console.log("in ansower");
+exports.getMetrics = function (question, callback) {
     switch (question.type) {
-        case 'multiple_choice':
-            getMetricsOfMulltipleChoice(question, callback);
-            break;
-        default:
+    case MULTIPLE_CHOICE:
+        getMetricsOfMultipleChoice(question, callback);
+        break;
+    default:
     }
 };
 
-function getMetricsOfMulltipleChoice(question, callback) {
+function getMetricsOfMultipleChoice(question, callback) {
     const deferrer = q.defer();
     const metrics = {};
 

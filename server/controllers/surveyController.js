@@ -102,6 +102,9 @@ exports.metrics = function showMetrics(req, res) {
             return;
         }
         Surveys.getMetrics(survey[0].id, (err_find_survey, survey_with_metrics) => {
+            // console.log(survey_with_metrics.questions);
+            // console.log('-------------------------');
+            // console.log(survey_with_metrics.questions[0].metrics);
             if (err_find_survey) {
                 res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
                     error: `ERROR: ${err}`,
@@ -145,9 +148,7 @@ exports.delete = function deleteEntry(req, res) {
 
 exports.responseSurvey = function respondSurvey(req, res) {
     // It has to have a survey_id and it must be equal to the one in the URL
-
     const response = JSON.parse(req.body.string_json);
-
     if (response.survey_id && response.survey_id == req.params.id) {
         Response.save(response, (err, result) => {
             if (err) {

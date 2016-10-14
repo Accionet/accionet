@@ -91,6 +91,7 @@ function addOptionToQuestion(array, row) {
     }
 }
 
+
 function addQuestionToSurvey(array, row) {
     let not_present = true;
     for (let i = 0; i < array.length; i++) {
@@ -136,6 +137,7 @@ function buildSurvey(query) {
     survey.updated_at = query.updated_at;
     survey.is_active = query.is_active;
     survey.questions = [];
+    survey.count_responses = 0;
 
     return survey;
 }
@@ -160,28 +162,6 @@ function arrayHasElementKey(array, element, key) {
         }
     }
     return -1;
-}
-
-
-/* Builds the query geting the questions and options associated to each survey*/
-function buildSelectAllQuery(amount) {
-    // include de options UNION the ones without options
-
-    let string = 'SELECT * FROM( ';
-    // build the inner query
-    string += 'SELECT surveys.id as s_id, questions.id as q_id, options.id as o_id, surveys.title as s_title, questions.title as q_title,  * FROM surveys, questions, options WHERE surveys.id = questions.survey_id AND options.question_id = questions.id ';
-    string += ' UNION ';
-    string += ' SELECT surveys.id as s_id, questions.id as q_id, null as o_id, surveys.title as s_title, questions.title as q_title, *';
-
-    for (let i = 0; i < amount; i++) {
-        string += ', null';
-    }
-    string += ' FROM surveys, questions WHERE surveys.id = questions.survey_id';
-
-    string += ' ) as pop_surveys ORDER BY s_id, q_id, enumeration;';
-
-    console.log(string);
-    return string;
 }
 
 
@@ -235,26 +215,6 @@ exports.findById = function (id, callback) {
 };
 
 
-/* Builds the query geting the questions and options associated to the survey with id = id*/
-function buildSelectByIdQuery(amount) {
-    // include de options UNION the ones without options
-
-    let string = 'SELECT * FROM( ';
-    // build the inner query
-    string += 'SELECT surveys.id as s_id, questions.id as q_id, options.id as o_id, surveys.title as s_title, questions.title as q_title,  * FROM surveys, questions, options WHERE surveys.id = ($1) AND surveys.id = questions.survey_id AND options.question_id = questions.id ';
-    string += ' UNION ';
-    string += ' SELECT surveys.id as s_id, questions.id as q_id, null as o_id, surveys.title as s_title, questions.title as q_title, *';
-
-    for (let i = 0; i < amount; i++) {
-        string += ', null';
-    }
-    string += ' FROM surveys, questions WHERE surveys.id = ($1) AND surveys.id = questions.survey_id';
-
-    string += ' ) as pop_surveys ORDER BY s_id, q_id, enumeration;';
-    console.log(string);
-    return string;
-}
-
 function buildSelectQuery(json, amount) {
     const params = base.parseJsonToParams(json);
 
@@ -265,7 +225,6 @@ function buildSelectQuery(json, amount) {
     string += 'SELECT surveys.id as s_id, questions.id as q_id, options.id as o_id, surveys.title as s_title, questions.title as q_title,  * FROM surveys, questions, options ';
     string += ' WHERE ';
     for (let j = 0; j < params.keys.length; j++) {
-        console.log(`entro ${j}`);
         string += `surveys.${params.keys[j]} = ($${j + 1}) AND`;
     }
     string += ' surveys.id = questions.survey_id AND options.question_id = questions.id ';
@@ -282,7 +241,6 @@ function buildSelectQuery(json, amount) {
     }
     string += ' surveys.id = questions.survey_id ';
     string += ' ) as pop_surveys ORDER BY s_id, q_id, enumeration;';
-    console.log(string);
     return string;
 }
 
@@ -290,7 +248,10 @@ function buildSelectQuery(json, amount) {
 exports.getMetrics = function getMetricsOfSurvey(id, callback) {
     const deferrer = q.defer();
     let survey_with_metrics;
-    findSurveyById(id, (err, survey) => {
+    const attr = {
+        id,
+    };
+    find(attr, (err, survey) => {
         survey_with_metrics = survey[0];
         let finished = 0;
         for (let i = 0; i < survey[0].questions.length; i++) {
@@ -309,6 +270,28 @@ exports.getMetrics = function getMetricsOfSurvey(id, callback) {
             });
         }
     });
+
+//     SELECT * FROM(
+// SELECT surveys.id as s_id, response.id as r_id, questions.id as q_id, questions.number as q_number, options.statement as o_statement, options.enumeration as o_enumeration,  answer_text, answer_option_id as o_id, questions.type as type
+// FROM response, answer, surveys, questions, options
+// WHERE response.id = answer.response_id
+// AND answer.question_id = questions.id
+// AND answer.answer_option_id = options.id
+// AND options.question_id = questions.id
+// AND questions.survey_id = surveys.id
+// AND response.survey_id = surveys.id
+// AND questions.type = 'multiple_choice'
+// UNION
+// SELECT surveys.id as s_id, response.id as r_id, questions.id as q_id, questions.number as q_number, null as o_statement, null as o_enumeration,  answer_text, null as o_id, questions.type as type
+// FROM response, answer, surveys, questions
+// WHERE response.id = answer.response_id
+// AND answer.question_id = questions.id
+// AND questions.survey_id = surveys.id
+// AND response.survey_id = surveys.id
+// AND questions.type = 'written_answer'
+// ) as pop_responses
+// GROUP BY s_id, r_id, q_number, o_enumeration, o_statement, answer_text, q_id, o_id, type
+// ORDER BY s_id, r_id, q_id, o_statement;
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
 };
@@ -324,13 +307,4 @@ exports.columnNames = function getAttributes(callback) {
 
 exports.delete = function deleteEntry(id, callback) {
     base.delete(id, table_name, callback);
-};
-
-
-exports.getQueries = function () {
-    buildSelectQuery({
-        id: 1,
-    }, 6);
-    console.log('============================================================');
-    buildSelectByIdQuery(6);
 };

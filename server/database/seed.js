@@ -23,6 +23,8 @@ User.new((err, newUser) => {
         }
         console.log(`${newUser.username} saved`);
 
+
+        // Rango Entario Streetpark
         Surveys.new((err_surv, newSurvey) => {
             if (err_surv) {
                 console.log(err);
@@ -90,6 +92,209 @@ User.new((err, newUser) => {
                     enumeration: 'b',
                 }, {
                     statement: '3',
+                    enumeration: 'c',
+                }],
+            });
+            Surveys.save(newSurvey, (err_survey_save, savedSurvey) => {
+                if (err_survey_save) {
+                    console.log(err);
+                    return err;
+                }
+                console.log(`survey ${savedSurvey.title} saved`);
+                Surveys.findById(savedSurvey.id, (err_find_survey, populatedSurvey) => {
+                    const RESPONSES = 200;
+                    for (let i = 0; i < RESPONSES; i++) {
+                        const resp = {
+                            survey_id: populatedSurvey[0].id,
+                            answers: [],
+                        };
+                        for (let j = 0; j < populatedSurvey[0].questions.length; j++) {
+                            const amount = populatedSurvey[0].questions[j].options.length;
+                            resp.answers.push({
+                                question_id: populatedSurvey[0].questions[j].id,
+                                answer_option_id: populatedSurvey[0].questions[j].options[Math.floor((Math.random() * amount))].id,
+                            });
+                        }
+                        Response.save(resp, (err_resp_save) => {
+                            if (err_resp_save) {
+                                console.log(err);
+                                return err;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+        // Otro
+        Surveys.new((err_surv, newSurvey) => {
+            if (err_surv) {
+                console.log(err);
+                return err;
+            }
+            newSurvey.user_id = savedUser.id;
+            newSurvey.title = 'Encuesta 2';
+            newSurvey.is_active = true;
+            newSurvey.questions = [];
+
+            newSurvey.questions.push({
+                title: 'Pregunta 1',
+                type: 'multiple_choice',
+                number: 1,
+                options: [{
+                    statement: '10 años o menor',
+                    enumeration: 'a',
+                }, {
+                    statement: 'Entre 10 y 15 años',
+                    enumeration: 'b',
+                }, {
+                    statement: 'entre 16 y 20 años',
+                    enumeration: 'c',
+                }, {
+                    statement: 'entre 21 y 25 años',
+                    enumeration: 'd',
+                }, {
+                    statement: 'entre 26 y 30 años',
+                    enumeration: 'e',
+                }, {
+                    statement: 'entre 31 y 40 años',
+                    enumeration: 'f',
+                }, {
+                    statement: 'más de 40 años',
+                    enumeration: 'g',
+                }, {
+                    statement: 'Ya he respondido esta pregunta',
+                    enumeration: 'h',
+                }],
+            });
+            newSurvey.questions.push({
+                title: 'Eres hombre?',
+                type: 'multiple_choice',
+                number: 2,
+                options: [{
+                    statement: 'Si',
+                    enumeration: 'a',
+                }, {
+                    statement: 'No',
+                    enumeration: 'b',
+                }, {
+                    statement: 'No lo se',
+                    enumeration: 'c',
+                }],
+            });
+            newSurvey.questions.push({
+                title: 'Que nombre te gusta mas?',
+                type: 'multiple_choice',
+                number: 3,
+                options: [{
+                    statement: 'antonio',
+                    enumeration: 'a',
+                }, {
+                    statement: 'antoni',
+                    enumeration: 'b',
+                }, {
+                    statement: 'anton',
+                    enumeration: 'c',
+                }],
+            });
+            Surveys.save(newSurvey, (err_survey_save, savedSurvey) => {
+                if (err_survey_save) {
+                    console.log(err);
+                    return err;
+                }
+                console.log(`survey ${savedSurvey.title} saved`);
+                Surveys.findById(savedSurvey.id, (err_find_survey, populatedSurvey) => {
+                    const RESPONSES = 200;
+                    for (let i = 0; i < RESPONSES; i++) {
+                        const resp = {
+                            survey_id: populatedSurvey[0].id,
+                            answers: [],
+                        };
+                        for (let j = 0; j < populatedSurvey[0].questions.length; j++) {
+                            const amount = populatedSurvey[0].questions[j].options.length;
+                            resp.answers.push({
+                                question_id: populatedSurvey[0].questions[j].id,
+                                answer_option_id: populatedSurvey[0].questions[j].options[Math.floor((Math.random() * amount))].id,
+                            });
+                        }
+                        Response.save(resp, (err_resp_save) => {
+                            if (err_resp_save) {
+                                console.log(err);
+                                return err;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+        Surveys.new((err_surv, newSurvey) => {
+            if (err_surv) {
+                console.log(err);
+                return err;
+            }
+            newSurvey.user_id = savedUser.id;
+            newSurvey.title = 'Encuesta 3';
+            newSurvey.is_active = true;
+            newSurvey.questions = [];
+
+            newSurvey.questions.push({
+                title: '¿En qué rango etario te encuentras? Si ya has respondido esta pregunta selecciona la opción h: ya he respondido esta pregunta',
+                type: 'multiple_choice',
+                number: 1,
+                options: [{
+                    statement: '10 años o ',
+                    enumeration: 'a',
+                }, {
+                    statement: 'Entre 10 y 15 años',
+                    enumeration: 'b',
+                }, {
+                    statement: 'entre 16 y 20 años',
+                    enumeration: 'c',
+                }, {
+                    statement: 'entre 21 y 25 años',
+                    enumeration: 'd',
+                }, {
+                    statement: 'entre 26 y 30 años',
+                    enumeration: 'e',
+                }, {
+                    statement: 'entre 31 y 40 años',
+                    enumeration: 'f',
+                }, {
+                    statement: 'más de 40 años',
+                    enumeration: 'g',
+                }, {
+                    statement: 'Ya he respondido esta pregunta',
+                    enumeration: 'h',
+                }],
+            });
+            newSurvey.questions.push({
+                title: 'Eres hombre?',
+                type: 'multiple_choice',
+                number: 2,
+                options: [{
+                    statement: 'Si',
+                    enumeration: 'a',
+                }, {
+                    statement: 'No',
+                    enumeration: 'b',
+                }, {
+                    statement: 'No lo se',
+                    enumeration: 'c',
+                }],
+            });
+            newSurvey.questions.push({
+                title: 'Que numero te gusta mas?',
+                type: 'multiple_choice',
+                number: 3,
+                options: [{
+                    statement: '1qwer',
+                    enumeration: 'a',
+                }, {
+                    statement: '2qwer',
+                    enumeration: 'b',
+                }, {
+                    statement: '3qwer',
                     enumeration: 'c',
                 }],
             });

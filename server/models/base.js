@@ -9,6 +9,25 @@ const connectionString = require(path.join(__dirname, '../', '../', 'config'));
 const q = require('q');
 
 
+function parseJsonToParams(json) {
+    const params = {
+        keys: [],
+        values: [],
+    };
+    // try, it will fail if json is not a json
+    try {
+        for (let i = 0; i < Object.keys(json).length; i++) {
+            params.keys.push(Object.keys(json)[i]);
+            params.values.push(json[Object.keys(json)[i]]);
+        }
+    } catch (e) {
+        return params;
+    }
+    return params;
+}
+
+exports.parseJsonToParams = parseJsonToParams;
+
 // ################################# SELECT OR FIND
 
 
@@ -56,6 +75,40 @@ function buildSelectWithWhereQuery(params, table_name) {
     return query;
 }
 
+
+exports.find = function functionName(params, table_name, callback) {
+    const deferrer = q.defer();
+    let result;
+
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            deferrer.reject(err);
+        }
+
+        const string_query = buildSelectWithWhereQuery(params, table_name);
+
+        // SQL Query > Select Data
+        const query = client.query(string_query, params.values);
+
+        // Stream results back one row at a time
+        query.on('row', (row) => {
+            result = row;
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', () => {
+            done();
+            deferrer.resolve(result);
+        });
+        deferrer.promise.nodeify(callback);
+        return deferrer.promise;
+    });
+};
+
+
 exports.findOne = function functionName(params, table_name, callback) {
     const deferrer = q.defer();
     let result;
@@ -88,6 +141,37 @@ exports.findOne = function functionName(params, table_name, callback) {
     });
 };
 
+
+// Return all
+exports.active = function getAll(table_name, callback) {
+    const deferrer = q.defer();
+    const results = [];
+
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            deferrer.reject(err);
+        } else {
+            // SQL Query > Select Data
+            const query = client.query(`SELECT * FROM ${table_name} ORDER BY id ASC;`);
+
+            // Stream results back one row at a time
+            query.on('row', (row) => {
+                results.push(row);
+            });
+
+            // After all data is returned, close connection and return results
+            query.on('end', () => {
+                done();
+                deferrer.resolve(results);
+            });
+        }
+    });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+};
 
 // Return all
 exports.all = function getAll(table_name, callback) {

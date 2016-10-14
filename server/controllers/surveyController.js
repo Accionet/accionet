@@ -1,5 +1,5 @@
 // server/controllers/surveyController
-"use strict";
+'use strict';
 
 
 
@@ -57,14 +57,11 @@ exports.show = function showSurvey(req, res) {
 exports.create = function saveSurvey(req, res) {
     const survey = req.body;
     Surveys.save(survey, (err, result) => {
-        console.log('de vuelta');
         if (err) {
-            console.log('erro');
             const json = httpResponse.error(err);
             return res.status(500).send(json);
         }
-        console.log(result);
-        console.log('retornar con estado 200');
+
         const json = httpResponse.success('Encuesta guardada exitosamente', 'survey', result);
         return res.status(200).send(json);
     });

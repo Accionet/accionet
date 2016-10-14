@@ -1,5 +1,5 @@
 // server/models/surveys.js
-"use strict";
+'use strict';
 
 
 const Answer = require('./answer');
@@ -16,8 +16,7 @@ const Questions = require('../models/questions');
 const table_name = 'surveys';
 
 
-// Return all the entries active or not
-exports.all = function getSurveys(callback) {
+function find(attr, callback) {
     const deferrer = q.defer();
     const results = [];
 
@@ -40,7 +39,7 @@ exports.all = function getSurveys(callback) {
             // Stream results back one row at a time
             // After all data is returned, close connection and return results
             query.on('end', () => {
-                const query_string = buildSelectAllQuery(amount);
+                const query_string = buildSelectQuery(attr, amount);
 
                 const query_all_surveys = client.query(query_string);
 
@@ -57,7 +56,14 @@ exports.all = function getSurveys(callback) {
     });
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
+}
+
+
+// Return all the entries active or not
+exports.all = function (callback) {
+    find(null, callback);
 };
+
 
 exports.count = function countAmountOf(callback) {
     base.count(table_name, callback);
@@ -172,6 +178,7 @@ function buildSelectAllQuery(amount) {
 
     string += ' ) as pop_surveys ORDER BY s_id, q_id, enumeration;';
 
+    console.log(string);
     return string;
 }
 
@@ -244,9 +251,13 @@ function findSurveyById(id, callback) {
             // Stream results back one row at a time
             // After all data is returned, close connection and return results
             query.on('end', () => {
-                const query_string = buildSelectByIdQuery(amount);
+                const attr = {
+                    id,
+                };
+                const params = base.parseJsonToParams(attr);
+                const query_string = buildSelectQuery(attr, amount);
 
-                const query_get_survey = client.query(query_string, [id]);
+                const query_get_survey = client.query(query_string, params.values);
 
                 query_get_survey.on('row', (row) => {
                     extractAndAddSurvey(results, row);
@@ -278,7 +289,38 @@ function buildSelectByIdQuery(amount) {
     string += ' FROM surveys, questions WHERE surveys.id = ($1) AND surveys.id = questions.survey_id';
 
     string += ' ) as pop_surveys ORDER BY s_id, q_id, enumeration;';
+    console.log(string);
+    return string;
+}
 
+function buildSelectQuery(json, amount) {
+    const params = base.parseJsonToParams(json);
+
+    // include de options UNION the ones without options
+
+    let string = 'SELECT * FROM( ';
+    // build the inner query
+    string += 'SELECT surveys.id as s_id, questions.id as q_id, options.id as o_id, surveys.title as s_title, questions.title as q_title,  * FROM surveys, questions, options ';
+    string += ' WHERE ';
+    for (let j = 0; j < params.keys.length; j++) {
+        console.log(`entro ${j}`);
+        string += `surveys.${params.keys[j]} = ($${j + 1}) AND`;
+    }
+    string += ' surveys.id = questions.survey_id AND options.question_id = questions.id ';
+    string += ' UNION ';
+    string += ' SELECT surveys.id as s_id, questions.id as q_id, null as o_id, surveys.title as s_title, questions.title as q_title, *';
+
+    for (let i = 0; i < amount; i++) {
+        string += ', null';
+    }
+
+    string += ' FROM surveys, questions  WHERE  ';
+    for (let j = 0; j < params.keys.length; j++) {
+        string += `surveys.${params.keys[j]} = ($${j + 1}) AND`;
+    }
+    string += ' surveys.id = questions.survey_id ';
+    string += ' ) as pop_surveys ORDER BY s_id, q_id, enumeration;';
+    console.log(string);
     return string;
 }
 
@@ -320,4 +362,13 @@ exports.columnNames = function getAttributes(callback) {
 
 exports.delete = function deleteEntry(id, callback) {
     base.delete(id, table_name, callback);
+};
+
+
+exports.getQueries = function () {
+    buildSelectQuery({
+        id: 1,
+    }, 6);
+    console.log('============================================================');
+    buildSelectByIdQuery(6);
 };

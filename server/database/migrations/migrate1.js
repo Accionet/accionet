@@ -44,3 +44,10 @@ queries[queries.length - 1].on('end', () => {
     console.log('Se agrego columna hostpot_id a tabla places');
     closeConnection();
 });
+
+queries.push(client.query('ALTER TABLE response ADD COLUMN macaddres VARCHAR(200)'));
+queries[queries.length - 1].on('end', () => {
+        // client.end();
+    console.log('Se agrego columna macaddres a tabla response');
+    closeConnection();
+});

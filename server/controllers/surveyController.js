@@ -28,6 +28,23 @@ exports.index = function getAllSurveys(req, res) {
     });
 };
 
+exports.disabled = function getAllSurveys(req, res) {
+    Surveys.find({
+        is_active: false,
+    }, (err, result) => {
+        if (err) {
+            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+                error: `ERROR: ${err}`,
+                surveys: [],
+            });
+        }
+
+        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+            surveys: result,
+        });
+    });
+};
+
 exports.count = function countSurveys(req, res) {
     Surveys.count((err, result) => {
         if (err) {

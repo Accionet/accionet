@@ -65,6 +65,7 @@ exports.all = function (callback) {
     find(null, callback);
 };
 
+exports.find = find;
 
 exports.count = function countAmountOf(callback) {
     base.count(table_name, callback);
@@ -233,52 +234,6 @@ exports.findById = function (id, callback) {
     find(attr, callback);
 };
 
-
-function findSurveyById(id, callback) {
-    const deferrer = q.defer();
-    const results = [];
-
-
-    // get the amount of columns in options. This is to leave blank the spaces in the table of those who doesnt have options
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, (err, client, done) => {
-        // Handle connection errors
-        if (err) {
-            done();
-            deferrer.reject(err);
-        } else {
-            // SQL Query > Select Data
-            const query = client.query("select count(*) as amount from information_schema.columns where table_name='options';");
-
-
-            let amount = 0;
-            query.on('row', (row) => {
-                amount = row.amount;
-            });
-            // Stream results back one row at a time
-            // After all data is returned, close connection and return results
-            query.on('end', () => {
-                const attr = {
-                    id,
-                };
-                const params = base.parseJsonToParams(attr);
-                const query_string = buildSelectQuery(attr, amount);
-
-                const query_get_survey = client.query(query_string, params.values);
-
-                query_get_survey.on('row', (row) => {
-                    extractAndAddSurvey(results, row);
-                });
-                query_get_survey.on('end', () => {
-                    done();
-                    deferrer.resolve(results);
-                });
-            });
-        }
-    });
-    deferrer.promise.nodeify(callback);
-    return deferrer.promise;
-}
 
 /* Builds the query geting the questions and options associated to the survey with id = id*/
 function buildSelectByIdQuery(amount) {

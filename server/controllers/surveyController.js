@@ -12,7 +12,9 @@ const httpResponse = require('../services/httpResponse');
 
 
 exports.index = function getAllSurveys(req, res) {
-    Surveys.all((err, result) => {
+    Surveys.find({
+        is_active: true,
+    }, (err, result) => {
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
                 error: `ERROR: ${err}`,

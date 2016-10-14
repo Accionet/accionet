@@ -182,6 +182,23 @@ User.new((err, newUser) => {
                     enumeration: 'c',
                 }],
             });
+
+            newSurvey.questions.push({
+                title: 'Hola?',
+                type: 'multiple_choice',
+                number: 2,
+                options: [{
+                    statement: 'hola',
+                    enumeration: 'a',
+                }, {
+                    statement: 'Chao',
+                    enumeration: 'b',
+                }, {
+                    statement: 'No lo se',
+                    enumeration: 'c',
+                }],
+            });
+
             newSurvey.questions.push({
                 title: 'Que nombre te gusta mas?',
                 type: 'multiple_choice',
@@ -283,21 +300,8 @@ User.new((err, newUser) => {
                     enumeration: 'c',
                 }],
             });
-            newSurvey.questions.push({
-                title: 'Que numero te gusta mas?',
-                type: 'multiple_choice',
-                number: 3,
-                options: [{
-                    statement: '1qwer',
-                    enumeration: 'a',
-                }, {
-                    statement: '2qwer',
-                    enumeration: 'b',
-                }, {
-                    statement: '3qwer',
-                    enumeration: 'c',
-                }],
-            });
+
+
             Surveys.save(newSurvey, (err_survey_save, savedSurvey) => {
                 if (err_survey_save) {
                     console.log(err);

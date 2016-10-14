@@ -18,6 +18,10 @@ controllers
         $scope.SHORT_ANSWER = 'short_answer';
         $scope.LONG_ANSWER = 'long_answer';
 
+        // ORdering
+
+        $scope.myOrderBy = 'title';
+
     // Get all surveys
         $scope.initializeSurveys = function (surveys, selectedSurvey, responses) {
             if (surveys)
@@ -26,6 +30,7 @@ controllers
                 $scope.selectedSurvey = JSON.parse(selectedSurvey);
             if (responses)
                 $scope.responses = JSON.parse(responses);
+            console.log($scope.surveys);
         };
 
 
@@ -183,6 +188,13 @@ controllers
             const i = question.options.indexOf(option);
         // remove from i only 1
             question.options.splice(i, 1);
+        };
+
+
+        // Order function
+
+        $scope.orderByMe = function (x) {
+            $scope.myOrderBy = x;
         };
 
     // ########################################

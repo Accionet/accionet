@@ -18,20 +18,43 @@
                     <div class="header">
                         <h1>Índice de Encuestas</h1>
                     </div>
+                    <div class="panel panel-default">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Buscar..." ng-model = "myFilter.title">
+                            <span class="input-group-btn">
+                          <button class="btn btn-default" type="button">
+                            <i class="fa fa-search"></i>
+                          </button>
+                      </span>
+                        </div>
+                    </div>
 
                     <div class="panel panel-default">
+
                         <table class="table table-hover">
+                            <thead>
+                              <th ng-click = "orderByMe('create_at')"> Fecha </th>
+                              <th ng-click = "orderByMe('title')"> Nombre </th>
+                              <th ng-click = "orderByMe('questions')"> # Preguntas </th>
+                              <th class ="text-right" > Acciones </th>
+                            </thead>
                             <tbody>
-                                <tr ng-repeat="survey in surveys">
+                                <tr ng-repeat="survey in surveys | orderBy:myOrderBy | filter:  myFilter">
+                                  <td>
+                                      <span class="glyphicon glyphicon-calendar"></span> {{survey.created_at | date}}
+                                  </td>
                                     <td>
                                         <span class="glyphicon glyphicon-file"></span> {{survey.title}}
                                     </td>
+                                    <td>
+                                        {{survey.questions.length}}
+                                    </td>
                                     <td class="text-right text-nowrap">
                                         <a ng-click="delete(survey)" class="pull-right red icon-list-holder"><i class="fa fa-trash"></i></a>
-                                        <a ng-click="toggleIsActive(survey)" class="pull-right dark-red icon-list-holder"  ng-if="survey.is_active" ><i class="fa fa-ban"></i></a>
-                                        <a ng-click="toggleIsActive(survey)" class="pull-right dark-green icon-list-holder"  ng-if="!survey.is_active" ><i class="fa fa-check"></i></a>
+                                        <a ng-click="toggleIsActive(survey)" class="pull-right dark-red icon-list-holder" ng-if="survey.is_active"><i class="fa fa-ban"></i></a>
+                                        <a ng-click="toggleIsActive(survey)" class="pull-right dark-green icon-list-holder" ng-if="!survey.is_active"><i class="fa fa-check"></i></a>
                                         <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}/edit" class="pull-right orange icon-list-holder"><i class="fa fa-edit"></i></a>
-                                        <a ng-click="" class="pull-right blue icon-list-holder" href="/surveys/{{survey.id}}/metrics" ><i class="fa fa-line-chart"></i></a>
+                                        <a ng-click="" class="pull-right blue icon-list-holder" href="/surveys/{{survey.id}}/metrics"><i class="fa fa-line-chart"></i></a>
                                         <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}" ng-click="setSelectedSurvey(survey)" class="pull-right green icon-list-holder"><i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>

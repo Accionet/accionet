@@ -41,7 +41,8 @@ function find(attr, callback) {
             query.on('end', () => {
                 const query_string = buildSelectQuery(attr, amount);
 
-                const query_all_surveys = client.query(query_string);
+                const params = base.parseJsonToParams(attr);
+                const query_all_surveys = client.query(query_string, params.values);
 
                 query_all_surveys.on('row', (row) => {
                     extractAndAddSurvey(results, row);
@@ -225,7 +226,13 @@ exports.toggleIsActive = function toggleIsActive(id, callback) {
     base.toggleIsActive(id, table_name, callback);
 };
 
-exports.findById = findSurveyById;
+exports.findById = function (id, callback) {
+    const attr = {
+        id,
+    };
+    find(attr, callback);
+};
+
 
 function findSurveyById(id, callback) {
     const deferrer = q.defer();

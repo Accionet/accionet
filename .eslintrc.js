@@ -19,6 +19,7 @@ module.exports = {
       "no-prototype-builtins": 0,
       "no-console": 0,
       "func-names": 0,
+      "strict": 0,
     },
     "globals":  {
       "angular": true

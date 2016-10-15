@@ -34,7 +34,7 @@
 
                     <div class="panel panel-default">
 
-                        <table class="table table-hover">
+                        <table class="table table-hover" ng-init= "myFilter.is_active =  <%= show_active %>">
                             <thead>
                               <th ng-click = "orderByMe('create_at')"> Fecha </th>
                               <th ng-click = "orderByMe('title')"> Nombre </th>

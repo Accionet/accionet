@@ -12,35 +12,41 @@ const httpResponse = require('../services/httpResponse');
 
 
 exports.index = function getAllSurveys(req, res) {
+    const active = true;
     Surveys.find({
-        is_active: true,
+        is_active: active,
     }, (err, result) => {
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 surveys: [],
+                show_active: active,
             });
         }
 
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
             surveys: result,
+            show_active: active,
         });
     });
 };
 
 exports.disabled = function getAllSurveys(req, res) {
+    const active = false;
     Surveys.find({
-        is_active: false,
+        is_active: active,
     }, (err, result) => {
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 surveys: [],
+                show_active: active,
             });
         }
 
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
             surveys: result,
+            show_active: active,
         });
     });
 };

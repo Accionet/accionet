@@ -308,7 +308,6 @@ function parseForSave(table_name, regular_json, callback) {
             if (columns[i].localeCompare('id') !== 0) {
                 params.keys.push(columns[i]);
                 params.values.push(regular_json[columns[i]]);
-                console.log(`${columns[i]}: ${regular_json[columns[i]]}`);
             }
         }
 
@@ -324,8 +323,7 @@ exports.save = function saveEntry(attr, table_name, callback) {
     const deferrer = q.defer();
 
     let entry = null;
-    console.log('En base save');
-    console.log(attr);
+
     parseForSave(table_name, attr, (err, params) => {
         // Get a Postgres client from the connection pool
         pg.connect(connectionString, (err_connect, client, done) => {

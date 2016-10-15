@@ -25,8 +25,6 @@ exports.new = function newResponse(callback) {
 
 // Creates a json with the attr in attr
 exports.save = function saveResponse(attr, callback) {
-    console.log('en save');
-    console.log(attr);
     const deferrer = q.defer();
     base.save(attr, table_name, (err, response) => {
         if (err) {

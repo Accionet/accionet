@@ -1,5 +1,5 @@
 // server/models/questions.js
-"use strict";
+'use strict';
 
 
 const q = require('q');
@@ -28,7 +28,6 @@ exports.save = function saveQuestionAndOptions(attr, callback) {
 
         let saved = 0;
 
-        // console.log((options.length == boll));
         if (options && options.length && options.length > 0) {
             for (let i = 0; i < options.length; i++) {
                 options[i].question_id = question.id;

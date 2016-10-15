@@ -107,6 +107,7 @@ User.new((err, newUser) => {
                         const resp = {
                             survey_id: populatedSurvey[0].id,
                             answers: [],
+                            macaddress: Math.floor((Math.random() * 130)),
                         };
                         for (let j = 0; j < populatedSurvey[0].questions.length; j++) {
                             const amount = populatedSurvey[0].questions[j].options.length;
@@ -226,6 +227,8 @@ User.new((err, newUser) => {
                         const resp = {
                             survey_id: populatedSurvey[0].id,
                             answers: [],
+                            macaddress: Math.floor((Math.random() * 40)),
+
                         };
                         for (let j = 0; j < populatedSurvey[0].questions.length; j++) {
                             const amount = populatedSurvey[0].questions[j].options.length;
@@ -314,6 +317,8 @@ User.new((err, newUser) => {
                         const resp = {
                             survey_id: populatedSurvey[0].id,
                             answers: [],
+                            macaddress: Math.floor((Math.random() * 18)),
+
                         };
                         for (let j = 0; j < populatedSurvey[0].questions.length; j++) {
                             const amount = populatedSurvey[0].questions[j].options.length;

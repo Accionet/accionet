@@ -5,6 +5,7 @@ controllers
         $scope.selectedSurvey = null;
         $scope.responses = {};
 
+        $scope.data = [];
     // For creating an survey
         $scope.questions = [];
         $scope.title = '';
@@ -18,16 +19,18 @@ controllers
         $scope.SHORT_ANSWER = 'short_answer';
         $scope.LONG_ANSWER = 'long_answer';
 
-        // ORdering
+    // ORdering
 
         $scope.myOrderBy = 'title';
+
 
     // Get all surveys
         $scope.initializeSurveys = function (surveys, selectedSurvey, responses) {
             if (surveys)
                 $scope.surveys = JSON.parse(surveys);
-            if (selectedSurvey)
+            if (selectedSurvey) {
                 $scope.selectedSurvey = JSON.parse(selectedSurvey);
+            }
             if (responses)
                 $scope.responses = JSON.parse(responses);
             console.log($scope.surveys);
@@ -50,7 +53,7 @@ controllers
             $http.delete('/surveys/' + survey.id + '/delete')
             .success(function (data) {
                 console.log($scope.surveys);
-              // data.survey
+                // data.survey
             })
             .error(function (data) {
                 console.log('Error: ' + data);
@@ -191,10 +194,28 @@ controllers
         };
 
 
-        // Order function
+    // Order function
 
         $scope.orderByMe = function (x) {
             $scope.myOrderBy = x;
+        };
+
+        $scope.index = 0;
+        $scope.getData = function (question) {
+            console.log(question);
+            if (question.type == 'multiple_choice') {
+                $scope.index += 1;
+                const data = [];
+                const metrics = question.metrics;
+                for (let i = 0; i < Object.keys(metrics).length; i++) {
+                    const entry = {
+                        label: `${Object.keys(metrics)[i]}) ${metrics[Object.keys(metrics)[i]].statement}`,
+                        data: metrics[Object.keys(metrics)[i]].count,
+                    };
+                    data.push(entry);
+                }
+                return data;
+            }
         };
 
     // ########################################

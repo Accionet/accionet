@@ -3,7 +3,11 @@
 <head>
     <title>Lugares - Accionet</title>
     <% include ../partials/head.ejs %>
-    <link rel="stylesheet" href="/stylesheets/table.css" media="screen" title="no title">
+
+
+        <!-- Morris Charts CSS -->
+        <link href="/vendor/morrisjs/morris.css" rel="stylesheet">
+
 </head>
 
 <body ng-controller="surveyController">
@@ -23,15 +27,33 @@
                 <div>
                     <h2> Preguntas </h2>
 
+
+
+
+
                     <div ng-repeat="question in selectedSurvey.questions">
-                        <h4>  {{question.number}}) {{question.title}} </h4>
                         <!--Multiple_choice  -->
                         <div ng-if="!'multiple_choice'.localeCompare(question.type)">
-                            <div ng-repeat="option in question.options">
-                                <h6>{{option.enumeration}}) {{option.statement}} </h6>
+                            <div class="row">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        {{question.number}}) {{question.title}}
+                                    </div>
+                                    {{}}
+                                    <pie-chart ng-data = '{{getData(question)}}' ></pie-chart>
+
+                                    <!-- /.panel-heading -->
+                                    <!-- <div class="panel-body">
+                                        <div class="flot-chart">
+                                            <div class="flot-chart-content" id="flot-pie-chart"></div>
+                                        </div>
+                                    </div> -->
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
                             </div>
-                            <h3> Respuestas: </h3>
-                            <table class="table-fill">
+
+                            <table class="table table-hover ">
 
                                 <thead>
                                     <tr>
@@ -50,9 +72,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-
-
-
                         </div>
 
                     </div>
@@ -61,8 +80,23 @@
 
 
                 </div>
+
                 <% include ../partials/scripts.ejs %>
                     <% include partials/surveys_scripts.ejs %>
+
+                        <!-- Flot Charts JavaScript -->
+                        <script src="/vendor/flot/excanvas.min.js"></script>
+                        <script src="/vendor/flot/jquery.flot.js"></script>
+                        <script src="/vendor/flot/jquery.flot.pie.js"></script>
+                        <script src="/vendor/flot/jquery.flot.resize.js"></script>
+                        <script src="/vendor/flot/jquery.flot.time.js"></script>
+                        <script src="/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
+                        <!-- <script src="/data/flot-data.js"></script> -->
+                        <!-- <script src="/prueba.js"></script> -->
+
+
+
+
 
 </body>
 

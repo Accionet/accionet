@@ -1,4 +1,4 @@
-const app = angular.module('accionet-web-app', ['app.controllers']);
+const app = angular.module('accionet-web-app', ['app.controllers', 'app.directives']);
 
 
 const INTEGER_REGEXP = /^\-?\d+$/;

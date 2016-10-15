@@ -97,6 +97,7 @@ exports.new = function newSurvey(req, res) {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'new.ejs'), {});
 };
 
+
 exports.metrics = function showMetrics(req, res) {
     Surveys.findById(req.params.id, (err, survey) => {
         if (err) {
@@ -161,7 +162,7 @@ exports.responseSurvey = function respondSurvey(req, res) {
                 const json = httpResponse.error(err);
                 return res.status(400).send(json);
             }
-            const json = httpResponse.error('Respuesta enviada con exito', 'response', result);
+            const json = httpResponse.success('Respuesta enviada con exito', 'response', result);
             return res.status(200).send(json);
         });
     } else {
@@ -169,4 +170,67 @@ exports.responseSurvey = function respondSurvey(req, res) {
         const json = httpResponse.error('ID no coinciden');
         return res.status(400).send(json);
     }
+};
+
+// API
+
+exports.metricsByHour = function (req, res) {
+    console.log(req.params.id);
+    const id = req.params.id;
+    Response.metricsByHour({
+        survey_id: id,
+    }, (err, result) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+        const json = httpResponse.success('Metricas por hora enviada con exito', 'data', result);
+        return res.status(200).send(json);
+    });
+};
+
+exports.metricsByDay = function (req, res) {
+    console.log(req.params.id);
+    const id = req.params.id;
+    Response.metricsByDay({
+        survey_id: id,
+    }, (err, result) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+        console.log(result);
+        const json = httpResponse.success('Metricas por dia enviada con exito', 'data', result);
+        return res.status(200).send(json);
+    });
+};
+
+exports.countResponses = function (req, res) {
+    console.log(req.params.id);
+    const id = req.params.id;
+    Response.count({
+        survey_id: id,
+    }, (err, result) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+        const json = httpResponse.success('Cantidad de respuestas enviada con exito', 'data', result);
+        return res.status(200).send(json);
+    });
+};
+
+exports.countEndUser = function (req, res) {
+    console.log(req.params.id);
+    const id = req.params.id;
+    Response.countEndUser({
+        survey_id: id,
+    }, (err, result) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+        const json = httpResponse.success('Cantidad de usuarios finales enviada con éxito', 'data', result);
+        return res.status(200).send(json);
+    });
 };

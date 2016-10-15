@@ -5,7 +5,7 @@ const path = require('path');
 
 const router = express.Router();
 
- // var passport = require('passport');
+// var passport = require('passport');
 
 const placeController = require('../controllers/placeController');
 const userController = require('../controllers/userController');
@@ -19,41 +19,41 @@ router.use((req, res, next) => {
     next();
 });
 
- /* GET  page. */
+/* GET  page. */
 router.get('/', (req, res, next) => {
-     // userController.login(req,res);
+    // userController.login(req,res);
     dashboardController.show(req, res, next);
-     // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
+    // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 
 router.get('/login', (req, res) => {
-     // userController.login(req,res);
+    // userController.login(req,res);
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {});
-     // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
+    // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 
 
- /* GET home page. */
+/* GET home page. */
 router.get('/dashboard', (req, res, next) => {
     dashboardController.show(req, res, next);
-     // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
+    // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 
- // // process the login form
- // router.post('/login', passport.authenticate('local-login', {
- //     successRedirect : '/dashboard', // redirect to the secure profile section
- //     failureRedirect : '/', // redirect back to the signup page if there is an error
- //     failureFlash : true // allow flash messages
- // }));
+// // process the login form
+// router.post('/login', passport.authenticate('local-login', {
+//     successRedirect : '/dashboard', // redirect to the secure profile section
+//     failureRedirect : '/', // redirect back to the signup page if there is an error
+//     failureFlash : true // allow flash messages
+// }));
 
- // router.get('/logout', function (req, res) {
- //     req.logout();
- //     res.redirect('/');
- // });
+// router.get('/logout', function (req, res) {
+//     req.logout();
+//     res.redirect('/');
+// });
 
- // ////////////////////////////////////////////
- // /////////// PLACES ////////////////////////
- // //////////////////////////////////////////
+// ////////////////////////////////////////////
+// /////////// PLACES ////////////////////////
+// //////////////////////////////////////////
 
 
 router.get('/places/all', (req, res, next) => {
@@ -89,9 +89,9 @@ router.put('/places/:id/toggleIsActive', (req, res, next) => {
     placeController.toggleIsActive(req, res, next);
 });
 
- // ////////////////////////////////////////////
- // /////////// SURVEY ////////////////////////
- // //////////////////////////////////////////
+// ////////////////////////////////////////////
+// /////////// SURVEY ////////////////////////
+// //////////////////////////////////////////
 
 
 router.get('/surveys', (req, res, next) => {
@@ -125,7 +125,6 @@ router.get('/surveys/:id/metrics', (req, res, next) => {
 
 
 router.post('/survey/:id/response', (req, res, next) => {
-    console.log('en routes');
     surveyController.responseSurvey(req, res, next);
 });
 
@@ -138,28 +137,48 @@ router.delete('/surveys/:id/delete', (req, res, next) => {
 });
 
 
- // //////////////////////////////////////////
- // ///////// USERS  ////////////////////////
- // ////////////////////////////////////////
+// API
+
+router.get('/api/v1/surveys/:id/metrics/responses/byhour', (req, res, next) => {
+    console.log('lle');
+    surveyController.metricsByHour(req, res, next);
+});
+
+router.get('/api/v1/surveys/:id/metrics/responses/byday', (req, res, next) => {
+    surveyController.metricsByDay(req, res, next);
+});
+
+router.get('/api/v1/surveys/:id/metrics/responses/count', (req, res, next) => {
+    surveyController.countResponses(req, res, next);
+});
+
+router.get('/api/v1/surveys/:id/metrics/enduser/count', (req, res, next) => {
+    surveyController.countEndUser(req, res, next);
+});
+
+
+// //////////////////////////////////////////
+// ///////// USERS  ////////////////////////
+// ////////////////////////////////////////
 
 router.get('/users/count', (req, res, next) => {
     userController.count(req, res, next);
 });
- //
- // ////////////////////////////////////////////
- // /////////// CHECK LOGIN  //////////////////
- // //////////////////////////////////////////
- //
- //
- // // route middleware to make sure a user is logged in
- // function isLoggedIn(req, res, next) {
- //
- //     // if user is authenticated in the session, carry on
- //     if (req.isAuthenticated())
- //         return next();
- //
- //     // if they aren't redirect them to the home page
- //     res.redirect('/');
- // }
+//
+// ////////////////////////////////////////////
+// /////////// CHECK LOGIN  //////////////////
+// //////////////////////////////////////////
+//
+//
+// // route middleware to make sure a user is logged in
+// function isLoggedIn(req, res, next) {
+//
+//     // if user is authenticated in the session, carry on
+//     if (req.isAuthenticated())
+//         return next();
+//
+//     // if they aren't redirect them to the home page
+//     res.redirect('/');
+// }
 
 module.exports = router;

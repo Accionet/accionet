@@ -20,6 +20,7 @@ module.exports = {
       "func-names": 0,
       "strict": 0,
       "no-loop-func": 0,
+      "no-shadow": 0,
     },
     "globals":  {
       "angular": true

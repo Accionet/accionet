@@ -26,6 +26,26 @@ function parseJsonToParams(json) {
     return params;
 }
 
+// returns a string containing the where clause for the given params. addWhere specify if it should contain the 'WHERE or not'
+function getWhereFromParams(params, addWhere) {
+  // if params is empty just return
+    if (!params && !params.keys && params.keys.length === 0) {
+        return '';
+    }
+    let string = '';
+    if (addWhere) {
+        string += ' WHERE ';
+    }
+    for (let j = 0; j < params.keys.length; j++) {
+        string += ` ${params.keys[j]} = ($${j + 1}) AND `;
+    }
+    // delete the last "AND"
+    string = string.substring(0, string.length - 4);
+    return string;
+}
+
+exports.getWhereFromParams = getWhereFromParams;
+
 exports.parseJsonToParams = parseJsonToParams;
 
 // ################################# SELECT OR FIND

@@ -23,6 +23,15 @@ controllers
 
         $scope.myOrderBy = 'title';
 
+    // loading
+
+        $scope.loadingResponseByDayChart = true;
+        $scope.loadingResponseByHourChart = true;
+
+        $scope.loadingEndUserLineChart = true;
+        $scope.loadingResponseCount = true;
+        $scope.loadingEndUserCount = true;
+
 
     // Get all surveys
         $scope.initializeSurveys = function (surveys, selectedSurvey, responses) {
@@ -33,7 +42,6 @@ controllers
             }
             if (responses)
                 $scope.responses = JSON.parse(responses);
-            console.log($scope.surveys);
         };
 
 
@@ -52,7 +60,6 @@ controllers
         $scope.delete = function (survey) {
             $http.delete('/surveys/' + survey.id + '/delete')
             .success(function (data) {
-                console.log($scope.surveys);
                 // data.survey
             })
             .error(function (data) {
@@ -80,10 +87,8 @@ controllers
                 questions: $scope.questions,
             };
             if ($scope.validForm()) {
-                console.log('valido');
                 $http.post('/surveys/new', survey)
                 .success(function (data) {
-                    console.log('suc');
                     $window.location.href = '/surveys/all';
                 })
                 .error(function (error) {
@@ -215,6 +220,85 @@ controllers
                 }
                 return data;
             }
+        };
+
+    // metrics
+
+        const options = {
+            xaxis: {
+                mode: 'time',
+                minTickSize: [1, 'hour'],
+            },
+            series: {
+                lines: {
+                    show: true,
+                },
+                points: {
+                    show: true,
+                },
+            },
+            grid: {
+                hoverable: true, // IMPORTANT! this is needed for tooltip to work
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: '%y respuestas',
+                shifts: {
+                    x: -60,
+                    y: 25,
+                },
+            },
+
+        };
+        $scope.getResponsesByDay = function (survey) {
+            $http.get('/api/v1/surveys/' + survey.id + '/metrics/responses/byday')
+            .success(function (results) {
+                const data = results.data;
+                $scope.loadingResponseByDayChart = false;
+
+                const startDay = data[0][0];
+                const newData = [data[0]];
+
+                for (let i = 1; i < data.length; i++) {
+                    const d1 = data[i - 1][0];
+                    const d2 = data[i][0];
+                    const diff = Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+                    const startDate = new Date(data[i - 1][0]);
+                    if (diff > 1) {
+                        for (j = 0; j < diff - 1; j++) {
+                            const fillDate = new Date(startDate).setDate(startDate.getDate() + (j + 1));
+                            newData.push([fillDate, 0]);
+                        }
+                    }
+                    newData.push(data[i]);
+                }
+
+                const d = newData;
+
+
+                $.plot('#response-by-day-line-chart', [d], options);
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
+
+        $scope.getResponsesByHour = function (survey) {
+            $http.get('/api/v1/surveys/' + survey.id + '/metrics/responses/byhour')
+            .success(function (results) {
+                const d = results.data;
+                // get Offset
+                const offset = new Date().getTimezoneOffset();
+                console.log(offset);
+                for (let i = 0; i < d.length; i++) {
+                    d[i][0] -= (offset * 60 * 1000);
+                }
+                $scope.loadingResponseByHourChart = false;
+                $.plot('#response-by-hour-line-chart', [d], options);
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
         };
 
     // ########################################

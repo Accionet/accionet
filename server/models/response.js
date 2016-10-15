@@ -81,6 +81,101 @@ exports.findOfSurvey = function getResponsesOfSurvey(id, callback) {
     return deferrer.promise;
 };
 
+exports.metricsByDay = function (attr, callback) {
+    // SELECT date_trunc("day", created_at) AS "day", count(*) FROM response GROUP BY 1 ORDER BY 1;
+    // get the params
+    const params = base.parseJsonToParams(attr);
+    // build the query
+    let string_query = "SELECT date_trunc('day', created_at) AS day, count(*) FROM response";
+    // Include the attr
+    string_query += base.getWhereFromParams(params, true);
+    string_query += ' GROUP BY 1 ORDER BY 1;';
+    const results = [];
+
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            return callback(err);
+        }
+        const query = client.query(string_query, params.values);
+
+        query.on('error', (err) => {
+            console.log(err);
+            done();
+            return callback(err);
+        });
+
+        query.on('row', (row) => {
+            results.push([new Date(row.day).getTime(), row.count]);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', () => {
+            done();
+            callback(null, results);
+        });
+    });
+};
+
+exports.metricsByHour = function (attr, callback) {
+    // SELECT EXTRACT( hour from foo.day) as hour, avg (c) FROM (SELECT date_trunc('hour', created_at) AS day, count(*) as c FROM response GROUP BY 1 ORDER BY 1) as foo GROUP BY hour ORDER BY hour;
+    const params = base.parseJsonToParams(attr);
+    // build the query
+    let string_query = "SELECT EXTRACT( hour from foo.day) as hour, avg (c) FROM (SELECT date_trunc('hour', created_at) AS day, count(*) as c FROM response ";
+    // Include the attr
+    string_query += base.getWhereFromParams(params, true);
+    string_query += ' GROUP BY 1 ORDER BY 1) as foo GROUP BY hour ORDER BY hour';
+    const results = [];
+
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            return callback(err);
+        }
+        const query = client.query(string_query, params.values);
+
+        query.on('error', (err) => {
+            console.log(err);
+            done();
+            return callback(err);
+        });
+
+        query.on('row', (row) => {
+            results.push([new Date(null, null, null, row.hour).getTime(), row.avg]);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', () => {
+            done();
+            // fill with missing hours
+            for (let h = 0; h < 24; h++) {
+                let present = false;
+                for (let i = 0; i < results.length; i++) {
+                    if (new Date(results[i][0]).getHours() === h) {
+                        present = true;
+                        break;
+                    }
+                }
+                if (!present) {
+                    results.push([new Date(null, null, null, h).getTime(), 0]);
+                }
+            }
+            results.sort((a, b) => (a[0] - b[0]));
+            callback(null, results);
+        });
+    });
+};
+
+exports.count = function (attr, callback) {
+    // SELECT COUNT(*) FROM response WHERE survey_id = 2;
+};
+
+exports.countEndUser = function (attr, callback) {
+    // SELECT COUNT(*) FROM (SELECT DISTINCT macaddress FROM response WHERE survey_id = 2) AS temp;
+};
+
 exports.findOne = function findFirst(id, attr, callback) {
     base.findOne(id, attr, table_name, callback);
 };

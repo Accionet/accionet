@@ -8,7 +8,7 @@ directives
             link(scope, elem, attrs) {
                 const data = JSON.parse(attrs.ngData);
 
-
+                elem.css('width', '100%');
                 elem.css('height', 400);
                 $.plot(elem, data, {
                     series: {

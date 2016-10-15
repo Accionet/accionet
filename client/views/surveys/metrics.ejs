@@ -17,74 +17,108 @@
             <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey) %>',' <%= null %>') ">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Métricas: {{selectedSurvey.title}}</h1>
-                        <h3 class="page-header"></h3>
-                        <h6 class="page-header">{{selectedSurvey.description}}</h6>
+                        <h1 class="page-header">{{selectedSurvey.title}}</h1>
                     </div>
-
-                    <div>
-                        <h2> Preguntas </h2>
-
-                        <div ng-repeat="question in selectedSurvey.questions">
-                            <!--Multiple_choice  -->
-                            <div ng-if="!'multiple_choice'.localeCompare(question.type)">
-                                <div class="row">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            {{question.number}}) {{question.title}}
-                                        </div>
-                                        <div class="panel-body" ng-init = "question.showTable = false">
-                                            <pie-chart ng-data='{{getData(question)}}'></pie-chart>
-                                            <br>
-                                            <a ng-if= "!question.showTable" ng-click= "question.showTable = true" class="btn btn-default btn-block">Mostrar tabla</a>
-                                            <a ng-if= "question.showTable" ng-click= "question.showTable = false" class="btn btn-default btn-block">Ocultar tabla</a>
-                                            <br>
-                                            <table ng-if="question.showTable" class="table table-hover ">
-
-                                                <thead>
-                                                    <tr>
-                                                        <th>Alternativa</th>
-                                                        <th> Frecuencia </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr ng-repeat="option in question.options">
-                                                        <td>
-                                                            {{option.statement}}
-                                                        </td>
-                                                        <td>
-                                                            {{question.metrics[option.enumeration].count}}
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <!-- /.panel -->
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Métricas
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-pills">
+                            <li> <a href="#summary-pills" data-toggle="tab">Resumen</a>
+                            </li>
+                            <li class="active"><a href="#questions-pills" data-toggle="tab">Preguntas</a>
+                            </li>
+                        </ul>
                         <br>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane fade" id="summary-pills">
+                                <h4>Home Tab</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                    laborum.
+                                </p>
+                            </div>
+                            <div class="tab-pane fade in active" id="questions-pills">
+                                <div ng-repeat="question in selectedSurvey.questions">
+                                    <!--Multiple_choice  -->
+                                    <div ng-if="!'multiple_choice'.localeCompare(question.type)">
+                                        <div class="row">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    {{question.number}}) {{question.title}}
+                                                </div>
+                                                <div class="panel-body" ng-init="question.showTable = false">
+                                                    <pie-chart ng-data='{{getData(question)}}'></pie-chart>
+                                                    <br>
+                                                    <a ng-if="!question.showTable" ng-click="question.showTable = true" class="btn btn-default btn-block">Mostrar tabla</a>
+                                                    <a ng-if="question.showTable" ng-click="question.showTable = false" class="btn btn-default btn-block">Ocultar tabla</a>
+                                                    <br>
+                                                    <table ng-if="question.showTable" class="table table-hover ">
+
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Alternativa</th>
+                                                                <th> Frecuencia </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="option in question.options">
+                                                                <td>
+                                                                    {{option.statement}}
+                                                                </td>
+                                                                <td>
+                                                                    {{question.metrics[option.enumeration].count}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- /.panel -->
+                                        </div>
 
 
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="messages-pills">
+                                <h4>Messages Tab</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                    laborum.
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="settings-pills">
+                                <h4>Settings Tab</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                    laborum.
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
 
-                    <% include ../partials/scripts.ejs %>
-                        <% include partials/surveys_scripts.ejs %>
+            <% include ../partials/scripts.ejs %>
+                <% include partials/surveys_scripts.ejs %>
 
-                            <!-- Flot Charts JavaScript -->
-                            <script src="/vendor/flot/excanvas.min.js"></script>
-                            <script src="/vendor/flot/jquery.flot.js"></script>
-                            <script src="/vendor/flot/jquery.flot.pie.js"></script>
-                            <script src="/vendor/flot/jquery.flot.resize.js"></script>
-                            <script src="/vendor/flot/jquery.flot.time.js"></script>
-                            <script src="/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
-                            <!-- <script src="/data/flot-data.js"></script> -->
-                            <!-- <script src="/prueba.js"></script> -->
+                    <!-- Flot Charts JavaScript -->
+                    <script src="/vendor/flot/excanvas.min.js"></script>
+                    <script src="/vendor/flot/jquery.flot.js"></script>
+                    <script src="/vendor/flot/jquery.flot.pie.js"></script>
+                    <script src="/vendor/flot/jquery.flot.resize.js"></script>
+                    <script src="/vendor/flot/jquery.flot.time.js"></script>
+                    <script src="/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
+                    <!-- <script src="/data/flot-data.js"></script> -->
+                    <!-- <script src="/prueba.js"></script> -->
 
 
 

@@ -1,27 +1,27 @@
 $(function () {
     $('#easypiechart-teal').easyPieChart({
         scaleColor: false,
-        barColor: '#1ebfae',
+        barColor: '#5BB85D',
     });
 });
 
 $(function () {
     $('#easypiechart-orange').easyPieChart({
         scaleColor: false,
-        barColor: '#ffb53e',
+        barColor: '#EFAD4C',
     });
 });
 
 $(function () {
     $('#easypiechart-red').easyPieChart({
         scaleColor: false,
-        barColor: '#f9243f',
+        barColor: '#CF5353',
     });
 });
 
 $(function () {
     $('#easypiechart-blue').easyPieChart({
         scaleColor: false,
-        barColor: '#30a5ff',
+        barColor: '#347AB6',
     });
 });

@@ -15,84 +15,76 @@
         <%= include ../partials/navbar.ejs %>
 
             <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey) %>',' <%= null %>') ">
-                <div class="header">
-                    <h1>{{selectedSurvey.title}}</h1>
-                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Métricas: {{selectedSurvey.title}}</h1>
+                        <h3 class="page-header"></h3>
+                        <h6 class="page-header">{{selectedSurvey.description}}</h6>
+                    </div>
 
-                <div>
-                    <h3> {{selectedSurvey.description}} </h3>
-                    <h3> creada el: {{selectedSurvey.created_at}} </h3>
-                </div>
+                    <div>
+                        <h2> Preguntas </h2>
 
-                <div>
-                    <h2> Preguntas </h2>
-
-
-
-
-
-                    <div ng-repeat="question in selectedSurvey.questions">
-                        <!--Multiple_choice  -->
-                        <div ng-if="!'multiple_choice'.localeCompare(question.type)">
-                            <div class="row">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        {{question.number}}) {{question.title}}
-                                    </div>
-                                    {{}}
-                                    <pie-chart ng-data = '{{getData(question)}}' ></pie-chart>
-
-                                    <!-- /.panel-heading -->
-                                    <!-- <div class="panel-body">
-                                        <div class="flot-chart">
-                                            <div class="flot-chart-content" id="flot-pie-chart"></div>
+                        <div ng-repeat="question in selectedSurvey.questions">
+                            <!--Multiple_choice  -->
+                            <div ng-if="!'multiple_choice'.localeCompare(question.type)">
+                                <div class="row">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            {{question.number}}) {{question.title}}
                                         </div>
-                                    </div> -->
-                                    <!-- /.panel-body -->
+                                        <div class="panel-body" ng-init = "question.showTable = false">
+                                            <pie-chart ng-data='{{getData(question)}}'></pie-chart>
+                                            <br>
+                                            <a ng-if= "!question.showTable" ng-click= "question.showTable = true" class="btn btn-default btn-block">Mostrar tabla</a>
+                                            <a ng-if= "question.showTable" ng-click= "question.showTable = false" class="btn btn-default btn-block">Ocultar tabla</a>
+                                            <br>
+                                            <table ng-if="question.showTable" class="table table-hover ">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Alternativa</th>
+                                                        <th> Frecuencia </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="option in question.options">
+                                                        <td>
+                                                            {{option.statement}}
+                                                        </td>
+                                                        <td>
+                                                            {{question.metrics[option.enumeration].count}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- /.panel -->
                                 </div>
-                                <!-- /.panel -->
+
+
                             </div>
 
-                            <table class="table table-hover ">
-
-                                <thead>
-                                    <tr>
-                                        <th>Opción</th>
-                                        <th> Cantidad </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="option in question.options">
-                                        <td>
-                                            {{option.statement}}
-                                        </td>
-                                        <td>
-                                            {{question.metrics[option.enumeration].count}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
+
+                        <br>
+
 
                     </div>
 
-                    <br>
+                    <% include ../partials/scripts.ejs %>
+                        <% include partials/surveys_scripts.ejs %>
 
-
-                </div>
-
-                <% include ../partials/scripts.ejs %>
-                    <% include partials/surveys_scripts.ejs %>
-
-                        <!-- Flot Charts JavaScript -->
-                        <script src="/vendor/flot/excanvas.min.js"></script>
-                        <script src="/vendor/flot/jquery.flot.js"></script>
-                        <script src="/vendor/flot/jquery.flot.pie.js"></script>
-                        <script src="/vendor/flot/jquery.flot.resize.js"></script>
-                        <script src="/vendor/flot/jquery.flot.time.js"></script>
-                        <script src="/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
-                        <!-- <script src="/data/flot-data.js"></script> -->
-                        <!-- <script src="/prueba.js"></script> -->
+                            <!-- Flot Charts JavaScript -->
+                            <script src="/vendor/flot/excanvas.min.js"></script>
+                            <script src="/vendor/flot/jquery.flot.js"></script>
+                            <script src="/vendor/flot/jquery.flot.pie.js"></script>
+                            <script src="/vendor/flot/jquery.flot.resize.js"></script>
+                            <script src="/vendor/flot/jquery.flot.time.js"></script>
+                            <script src="/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
+                            <!-- <script src="/data/flot-data.js"></script> -->
+                            <!-- <script src="/prueba.js"></script> -->
 
 
 

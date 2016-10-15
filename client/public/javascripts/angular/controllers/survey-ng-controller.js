@@ -202,7 +202,6 @@ controllers
 
         $scope.index = 0;
         $scope.getData = function (question) {
-            console.log(question);
             if (question.type == 'multiple_choice') {
                 $scope.index += 1;
                 const data = [];

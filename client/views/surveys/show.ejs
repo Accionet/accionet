@@ -10,37 +10,66 @@
         <%= include ../partials/navbar.ejs %>
 
             <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey[0]) %>')">
-                <div class="header">
-                    <h1>{{selectedSurvey.title}}</h1>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">{{selectedSurvey.title}}</h1>
+                    </div>
                 </div>
 
-                <div>
-                    <h3> {{selectedSurvey.description}} </h3>
-                    <h3> creada el: {{selectedSurvey.created_at}} </h3>
-                    <h3> ID de la encuesta: {{selectedSurvey.id}} </h3>
-                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Información <small> (ID: {{selectedSurvey.id}}) </small>
 
-                <div>
-                    <h2> Preguntas </h2>
-
-                    <div ng-repeat="question in selectedSurvey.questions">
-                        <h6> ID de la pregunta: {{question.id}} </h6>
-                        <h4>  {{question.number}}) {{question.title}} </h4>
-                        <!--Multiple_choice  -->
-                        <div ng-if="!'multiple_choice'.localeCompare(question.type)">
-
-                          <div ng-repeat = "option in question.options">
-                             <h6> ID de la alternativa: {{option.id}} </h6>
-                              <h6>{{option.enumeration}}) {{option.statement}} </h6>
-                          </div>
-
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <h4>Encuesta creada el: {{selectedSurvey.created_at | date}}</h4>
+                                <h4>Última modificación: {{selectedSurvey.updated_at | date}}</h4>
+                                <h4 ng-if="selectedSurvey.description">Descripcion de Encuesta: </h4>
+                                <p> {{selectedSurvey.description}}</p>
+                            </div>
                         </div>
                     </div>
-
                 </div>
 
-                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Preguntas
+                            </div>
+                            <!-- .panel-heading -->
+                            <div class="panel-body">
+                                <div class="panel-group">
+                                    <div ng-repeat="question in selectedSurvey.questions | orderBy: 'question.number'" class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{question.id}}"> {{question.number}})  {{question.title}} <small>(ID: {{question.id}}) </small> </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse{{question.id}}" class="panel-collapse collapse in">
+                                            <div class="panel-body">
+                                                <ul ng-if="!'multiple_choice'.localeCompare(question.type)">
 
+                                                    <li ng-repeat="option in question.options">
+                                                        {{option.enumeration}}) {{option.statement}} <small> (ID: {{option.id}}) </small>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- .panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
 
             </div>
             <% include ../partials/scripts.ejs %>

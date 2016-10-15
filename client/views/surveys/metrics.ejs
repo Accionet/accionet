@@ -42,7 +42,7 @@
                         <div class="tab-content">
                             <div class="tab-pane fade in active" id="summary-pills">
                                 <h4>Encuesta creada el: {{selectedSurvey.created_at | date}}</h4>
-                                <h4>Descripcion de Encuesta: </h4>
+                                <h4 ng-if ="selectedSurvey.description">Descripcion de Encuesta: </h4>
                                 <p> {{selectedSurvey.description}}</p>
                                 <div class="row">
                                     <div class="col-xs-6 col-md-3">
@@ -63,7 +63,7 @@
                                                   <span ng-if ="selectedSurvey.totalEndUsers" class="percent">{{selectedSurvey.totalEndUsers}}</span>
                                                   <span ng-if ="!selectedSurvey.totalEndUsers" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
                                                 </div>
-                                                <h4 class="text-center">Personas</h4>
+                                                <h4 class="text-center">Alcance (personas)</h4>
                                             </div>
                                         </div>
                                     </div>

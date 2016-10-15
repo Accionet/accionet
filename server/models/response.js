@@ -170,10 +170,75 @@ exports.metricsByHour = function (attr, callback) {
 
 exports.count = function (attr, callback) {
     // SELECT COUNT(*) FROM response WHERE survey_id = 2;
+    const params = base.parseJsonToParams(attr);
+    // build the query
+    let string_query = 'SELECT COUNT(*) FROM response ';
+    // Include the attr
+    string_query += base.getWhereFromParams(params, true);
+    let result;
+
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            return callback(err);
+        }
+        const query = client.query(string_query, params.values);
+
+        query.on('error', (err) => {
+            console.log(err);
+            done();
+            return callback(err);
+        });
+
+        query.on('row', (row) => {
+            result = row.count;
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', () => {
+            done();
+
+            callback(null, result);
+        });
+    });
 };
 
 exports.countEndUser = function (attr, callback) {
     // SELECT COUNT(*) FROM (SELECT DISTINCT macaddress FROM response WHERE survey_id = 2) AS temp;
+    const params = base.parseJsonToParams(attr);
+    // build the query
+    let string_query = 'SELECT COUNT(*) FROM (SELECT DISTINCT macaddress FROM response ';
+    // Include the attr
+    string_query += base.getWhereFromParams(params, true);
+    string_query += ') AS temp';
+    let result;
+
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            return callback(err);
+        }
+        const query = client.query(string_query, params.values);
+
+        query.on('error', (err) => {
+            console.log(err);
+            done();
+            return callback(err);
+        });
+
+        query.on('row', (row) => {
+            result = row.count;
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', () => {
+            done();
+
+            callback(null, result);
+        });
+    });
 };
 
 exports.findOne = function findFirst(id, attr, callback) {

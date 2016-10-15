@@ -1,0 +1,45 @@
+.easypiechart-panel {
+    text-align: center;
+    padding: 1px 0;
+    margin-bottom: 20px;
+}
+
+.placeholder h2 {
+    margin-bottom: 0px;
+}
+
+.donut {
+    width: 100%;
+}
+
+.easypiechart {
+    position: relative;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    margin: 20px auto 10px auto;
+}
+
+.easypiechart .percent {
+    display: block;
+    position: absolute;
+    font-size: 26px;
+    top: 38px;
+    width: 120px;
+}
+
+#easypiechart-blue .percent {
+    color: #30a5ff;
+}
+
+#easypiechart-teal .percent {
+    color: #1ebfae;
+}
+
+#easypiechart-orange .percent {
+    color: #ffb53e;
+}
+
+#easypiechart-red .percent {
+    color: #ef4040;
+}

@@ -289,13 +289,38 @@ controllers
                 const d = results.data;
                 // get Offset
                 const offset = new Date().getTimezoneOffset();
-                console.log(offset);
                 for (let i = 0; i < d.length; i++) {
                     d[i][0] -= (offset * 60 * 1000);
                 }
                 $scope.loadingResponseByHourChart = false;
                 $.plot('#response-by-hour-line-chart', [d], options);
             })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
+
+        $scope.getTotalResponses = function (survey) {
+            console.log('RE');
+            $http.get('/api/v1/surveys/' + survey.id + '/metrics/responses/count')
+
+        .success(function (results) {
+            console.log(results);
+            survey.totalResponses = results.data;
+        })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
+
+        $scope.getTotalEndUsers = function (survey) {
+            console.log('RE');
+            $http.get('/api/v1/surveys/' + survey.id + '/metrics/enduser/count')
+
+        .success(function (results) {
+            console.log(results);
+            survey.totalEndUsers = results.data;
+        })
             .error(function (data) {
                 console.log('Error: ' + data);
             });

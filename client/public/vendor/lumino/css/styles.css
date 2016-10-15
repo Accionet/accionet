@@ -327,7 +327,7 @@ a.bg-danger:hover {
 	margin: 0 -5px;
 }
 
-.panel-footer .input-group-btn:last-child>.btn,
+.panel-footer .input-group-btn:last-child>.btn, 
 .panel-footer .input-group-btn:last-child>.btn-group {
 	margin: 0;
 }
@@ -349,8 +349,8 @@ a.bg-danger:hover {
 .panel-blue .panel-body p,
 .panel-teal .panel-body p,
 .panel-orange .panel-body p,
-.panel-red .panel-body p {
-	color: #fff;
+.panel-red .panel-body p { 
+	color: #fff; 
 	color: rgba(255, 255, 255, .8);
 }
 
@@ -364,8 +364,8 @@ a.bg-danger:hover {
 .panel-blue .text-muted,
 .panel-teal .text-muted,
 .panel-orange .text-muted,
-.panel-red .text-muted {
-	color: rgba(255, 255, 255, .5);
+.panel-red .text-muted { 
+	color: rgba(255, 255, 255, .5); 
 }
 
 .dark-overlay {
@@ -550,7 +550,7 @@ a.bg-danger:hover {
 		margin: 0;
 		padding: 0;
 		overflow-x: hidden;
-		overflow-y: auto;
+		overflow-y: auto; 
 		background-color: #fff;
 		box-shadow: 1px 0px 10px rgba(0, 0, 0, .05);
 	}
@@ -559,7 +559,7 @@ a.bg-danger:hover {
 	}
 }
 
-.sidebar ul.nav a:hover,
+.sidebar ul.nav a:hover, 
 .sidebar ul.nav li.parent ul li a:hover {
 	text-decoration: none;
 	background-color: #e9ecf2;
@@ -644,11 +644,11 @@ h1.page-header {
 	background: #fff;
 }
 
-/*.easypiechart-panel {
+.easypiechart-panel {
 	text-align: center;
 	padding: 1px 0;
 	margin-bottom: 20px;
-}*/
+}
 
 .placeholder h2 {
 	margin-bottom: 0px;
@@ -658,15 +658,15 @@ h1.page-header {
 	width: 100%;
 }
 
-/*.easypiechart {
+.easypiechart {
 	position: relative;
 	text-align: center;
 	width: 120px;
 	height: 120px;
 	margin: 20px auto 10px auto;
-}*/
+}
 
-/*.easypiechart .percent {
+.easypiechart .percent {
 	display: block;
 	position: absolute;
 	font-size: 26px;
@@ -677,7 +677,7 @@ h1.page-header {
 #easypiechart-blue .percent { color: #30a5ff;}
 #easypiechart-teal .percent { color: #1ebfae;}
 #easypiechart-orange .percent { color: #ffb53e;}
-#easypiechart-red .percent { color: #ef4040;}*/
+#easypiechart-red .percent { color: #ef4040;}
 
 /*Calendar Widget*/
 
@@ -737,17 +737,17 @@ h1.page-header {
 
 /*Todo List Widget*/
 
-.todo-list-item .glyphicon {
-	margin-right:5px;
-	color: #9fadbb;
+.todo-list-item .glyphicon { 
+	margin-right:5px; 
+	color: #9fadbb; 
 }
 
-.todo-list-item .glyphicon:hover {
-	margin-right:5px;
-	color: #1b3548;
+.todo-list-item .glyphicon:hover { 
+	margin-right:5px; 
+	color: #1b3548; 
 }
 
-.todo-list {
+.todo-list { 
 	padding: 0;
 	margin: -15px;
 	background: #fff;
@@ -758,14 +758,14 @@ h1.page-header {
 	margin: 0;
 }
 
-.todo-list .checkbox {
-	display:inline-block;
+.todo-list .checkbox { 
+	display:inline-block; 
 	margin: 0px;
 }
 
-.panel-body input[type=checkbox]:checked + label {
+.panel-body input[type=checkbox]:checked + label { 
 	text-decoration: line-through;
-	color: #777;
+	color: #777; 
 }
 
 .todo-list-item {
@@ -928,3 +928,12 @@ h1.page-header {
 	height: 65px;
 	overflow: scroll;
 }
+
+
+
+
+
+
+
+
+

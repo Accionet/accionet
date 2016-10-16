@@ -2,6 +2,24 @@ const User = require('../models/users');
 const Place = require('../models/places');
 const Surveys = require('../models/surveys');
 const Response = require('../models/response');
+const pg = require('pg');
+const path = require('path');
+
+
+const connectionString = require(path.join(__dirname, '../', '../', 'config'));
+
+const client = new pg.Client(connectionString);
+client.connect();
+let ended_queries = 0;
+
+const queries = [];
+
+function closeConnection() {
+    ended_queries += 1;
+    if (ended_queries >= queries.length) {
+        client.end();
+    }
+}
 
 
 // Admin
@@ -335,6 +353,23 @@ User.new((err, newUser) => {
                         });
                     }
                 });
+
+                // Force populate for other days rather than now
+
+
+                for (let i = 0; i < 300; i++) {
+                    queries.push(client.query(`INSERT INTO response(survey_id, created_at, macaddress) VALUES(1, NOW() - INTERVAL '${Math.floor(Math.random() * 20)} days' - INTERVAL '${Math.floor(Math.random() * 20)} hour', 'hola');`));
+                    queries[queries.length - 1].on('end', () => {
+                        closeConnection();
+                    });
+                }
+
+                for (let i = 0; i < 300; i++) {
+                    queries.push(client.query(`INSERT INTO displayed(place_id, created_at, macaddress) VALUES(1, NOW() - INTERVAL '${Math.floor(Math.random() * 20)} days' - INTERVAL '${Math.floor(Math.random() * 20)} hour', 'hola');`));
+                    queries[queries.length - 1].on('end', () => {
+                        closeConnection();
+                    });
+                }
             });
         });
     });

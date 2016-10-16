@@ -8,27 +8,35 @@
                 <!-- /.panel-heading -->
 
                 <div class="panel-body">
-
-                    <div>
+                    <div class="form-group">
                         <label for="name"> Nombre: </label>
-                        <input name="name" type="text" placeholder="Nombre" ng-model="selectedPlace.name" required ng-maxlength="80" />
-                        <p ng-show="form.name.$error.required"> No puede ser vacio </p>
-                        <p ng-show="form.name.$error.maxlength"> No puede tener más de 80 caracteres </p>
+                        <input class="form-control" name="name" type="text" placeholder="Nombre" ng-model="selectedPlace.name" required ng-maxlength="80" />
+                        <div ng-show="form.name.$error.required" class="alert alert-danger">
+                            No puede ser vacio
+                        </div>
+                        <div ng-show="form.name.$error.maxlength" class="alert alert-danger">
+                            No puede tener más de 80 caracteres
+                        </div>
                     </div>
-                    <div>
-                        <label for="active"> Activo: </label>
-                        <input name="active" type="checkbox" ng-model="selectedPlace.is_active" />
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                              <input name="active" type="checkbox" ng-model="selectedPlace.is_active"/>
+                            Se encuentra activo
+                          </label>
+                        </div>
                     </div>
 
-                    <div>
+                    <div class="form-group">
                         <label for="visits"> Visitas diarias: </label>
-                        <input type="number" ng-model="selectedPlace.daily_visits" name="visits" min="0" integer />
-                        <p ng-show="form.visits.$error.integer">No es número entero </p>
+                        <input class="form-control" name="visits" type="number" placeholder="0" ng-model="selectedPlace.phone" integer />
+                        <div ng-show="form.visits.$error.integer" class="alert alert-danger">
+                            No es un número entero
+                        </div>
                     </div>
-
-                    <div>
+                    <div class="form-group">
                         <label for="status"> Status: </label>
-                        <input name="status" type="number" ng-model="selectedPlace.status" />
+                        <input class="form-control" name="status" type="number" ng-model="selectedPlace.status" />
                     </div>
                 </div>
             </div>
@@ -43,10 +51,12 @@
                 <!-- /.panel-heading -->
 
                 <div class="panel-body">
-                    <div>
-                        <label for="description"> Descripción: </label>
-                        <textarea name="description" rows="5" placeholder="Descripción" ng-model="selectedPlace.description" ng-maxlength="800"></textarea>
-                        <p ng-show="form.description.$error.maxlength"> No puede tener más de 800 caracteres </p>
+                    <div class="form-group">
+                        <label for="description">Descripción: </label>
+                        <textarea class="form-control" name="description" rows="5" placeholder="Descripción" ng-model="selectedPlace.description" ng-maxlength="800"></textarea>
+                        <div ng-show="form.description.$error.maxlength" class="alert alert-danger">
+                            La descripción no puede tener más de 800 caracteres
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,11 +72,35 @@
 
                 <div class="panel-body">
                     <div>
-                        <label for="email"> Email: </label>
-                        <input name="email" type="email" placeholder="email" ng-model="selectedPlace.email" required />
-                        <p ng-show="form.email.$error.required"> No puede ser vacio </p>
-                        <p ng-show="form.email.$error.email"> email no válido </p>
-                        {{form.email.$error.email}}
+                        <div class="form-group">
+                            <label for="email"> Email: </label>
+                            <input class="form-control" name="email" type="email" placeholder="email" ng-model="selectedPlace.email" required />
+                            <div ng-show="form.email.$error.required" class="alert alert-danger">
+                                No puede ser vacio
+                            </div>
+                            <div ng-show="form.email.$error.email" class="alert alert-danger">
+                                Email no válido
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone_number"> Teléfono: </label>
+                            <input class="form-control" name="phone_number" type="number" placeholder="569 1234 5678" ng-model="selectedPlace.phone_number" ng-maxlength="11" ng-minlength='11' integer />
+                            <p class="help-block">Debe ser ingresado en este formato: 569 1234 5678</p>
+                        </div>
+                        <div ng-show="form.phone_number.$error.integer || form.phone_number.$error.maxlength || form.phone_number.$error.minlength" class="alert alert-danger">
+                            No es un teléfono válido
+                        </div>
+                        <div ng-show="form.phone_number.$error.maxlenght" class="alert alert-danger">
+                            No es un teléfono válido
+                        </div>
+                        <div class="form-group">
+                            <label for="contact_name"> Nombre de contacto: </label>
+                            <input class="form-control" name="contact_name" type="text" placeholder="Nombre" ng-model="selectedPlace.contact_name" required ng-maxlength="80" />
+                            <div ng-show="form.contact_name.$error.maxlength" class="alert alert-danger">
+                                No puede tener más de 80 caracteres
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

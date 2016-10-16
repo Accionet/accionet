@@ -51,3 +51,10 @@ queries[queries.length - 1].on('end', () => {
     console.log('Se agrego columna macaddress a tabla response');
     closeConnection();
 });
+
+queries.push(client.query('ALTER TABLE places ADD COLUMN contact_name VARCHAR(200)'));
+queries[queries.length - 1].on('end', () => {
+        // client.end();
+    console.log('Se agrego columna contact_name a tabla places');
+    closeConnection();
+});

@@ -10,13 +10,62 @@
         <%= include ../partials/navbar.ejs %>
 
             <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
-                <div class="header">
-                    <h1> editar:  {{selectedPlace.name}}</h1>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">{{selectedPlace.name}}</h1>
+                    </div>
                 </div>
 
-                <br>
-
-                <% include partials/form.ejs %>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                  <a data-toggle="collapse" data-parent="#accordion" href="#information"> Información <small> (ID: {{selectedPlace.id}}) </small> </a>
+                                </h4>
+                                </div>
+                                <!-- /.panel-heading -->
+                                <div id="information" class="panel-collapse collapse in">
+                                    <ul>
+                                        <li>Encuesta creada el: {{selectedPlace.created_at | date}}</li>
+                                        <li>Última modificación: {{selectedPlace.updated_at | date}}</li>
+                                        <li>Visitas diara: {{selectedPlace.daily_visits}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                  <a data-toggle="collapse" data-parent="#accordion" href="#description"> Descripción </a>
+                                </h4>
+                                </div>
+                                <!-- /.panel-heading -->
+                                <div id="description" class="panel-collapse collapse in">
+                                  <ul>
+                                    <li ng-if="selectedPlace.description"> {{selectedPlace.description}} </li>
+                                    <li ng-if="!selectedPlace.description"> No hay descripción disponible </li>
+                                  </ul>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                  <a data-toggle="collapse" data-parent="#accordion" href="#contact"> Contacto </a>
+                                </h4>
+                                </div>
+                                <!-- /.panel-heading -->
+                                <div id="contact" class="panel-collapse collapse in">
+                                  <ul>
+                                      <li>Mail: {{selectedPlace.mail}}</li>
+                                      <li>Teléfono: {{selectedPlace.phone_number}}</li>
+                                      <li>Nombre del contacto: {{selectedPlace.contact_name}}</li>
+                                  </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
             <% include ../partials/scripts.ejs %>

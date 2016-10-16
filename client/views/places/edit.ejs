@@ -10,10 +10,11 @@
         <%= include ../partials/navbar.ejs %>
 
             <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
-                <div class="header">
-                    <h1> editar:  {{selectedPlace.name}}</h1>
-                </div>
-
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1 class="page-header">{{selectedPlace.name}}</h1>
+                  </div>
+              </div>
                 <br>
 
                 <% include partials/form.ejs %>

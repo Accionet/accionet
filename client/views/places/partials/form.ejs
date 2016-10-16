@@ -1,39 +1,75 @@
 <form name="form">
-    <div>
-        <label for="name"> Nombre: </label>
-        <input name="name" type="text" placeholder="Nombre"  ng-model="selectedPlace.name" required  ng-maxlength="80"/>
-        <p ng-show="form.name.$error.required"> No puede ser vacio </p>
-        <p ng-show="form.name.$error.maxlength"> No puede tener más de 80 caracteres </p>
-    </div>
-    <div>
-        <label for="description"> Descripción: </label>
-        <textarea name="description" rows="5" placeholder="Descripción" ng-model="selectedPlace.description" ng-maxlength="800"></textarea>
-        <p ng-show="form.description.$error.maxlength"> No puede tener más de 800 caracteres </p>
-    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">General </h4>
+                </div>
+                <!-- /.panel-heading -->
 
-    <div>
-        <label for="email"> Email: </label>
-        <input name="email" type="email" placeholder="email" ng-model="selectedPlace.email" required />
-        <p ng-show="form.email.$error.required"> No puede ser vacio </p>
-        <p ng-show="form.email.$error.email"> email no válido </p>
-        {{form.email.$error.email}}
-    </div>
-    <div>
-        <label for="active"> Activo: </label>
-        <input name="active" type="checkbox" ng-model="selectedPlace.is_active" />
-    </div>
+                <div class="panel-body">
 
-    <div>
-      <label for="visits"> Visitas diarias: </label>
-      <input type="number" ng-model="selectedPlace.daily_visits" name="visits"
-             min="0" integer />
-      <p ng-show="form.visits.$error.integer">No es número entero </p>
+                    <div>
+                        <label for="name"> Nombre: </label>
+                        <input name="name" type="text" placeholder="Nombre" ng-model="selectedPlace.name" required ng-maxlength="80" />
+                        <p ng-show="form.name.$error.required"> No puede ser vacio </p>
+                        <p ng-show="form.name.$error.maxlength"> No puede tener más de 80 caracteres </p>
+                    </div>
+                    <div>
+                        <label for="active"> Activo: </label>
+                        <input name="active" type="checkbox" ng-model="selectedPlace.is_active" />
+                    </div>
+
+                    <div>
+                        <label for="visits"> Visitas diarias: </label>
+                        <input type="number" ng-model="selectedPlace.daily_visits" name="visits" min="0" integer />
+                        <p ng-show="form.visits.$error.integer">No es número entero </p>
+                    </div>
+
+                    <div>
+                        <label for="status"> Status: </label>
+                        <input name="status" type="number" ng-model="selectedPlace.status" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Descripción </h4>
+                </div>
+                <!-- /.panel-heading -->
 
-    <div>
-        <label for="status"> Status: </label>
-        <input name="status" type="number" ng-model="selectedPlace.status" />
+                <div class="panel-body">
+                    <div>
+                        <label for="description"> Descripción: </label>
+                        <textarea name="description" rows="5" placeholder="Descripción" ng-model="selectedPlace.description" ng-maxlength="800"></textarea>
+                        <p ng-show="form.description.$error.maxlength"> No puede tener más de 800 caracteres </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Contacto </h4>
+                </div>
+                <!-- /.panel-heading -->
 
-
+                <div class="panel-body">
+                    <div>
+                        <label for="email"> Email: </label>
+                        <input name="email" type="email" placeholder="email" ng-model="selectedPlace.email" required />
+                        <p ng-show="form.email.$error.required"> No puede ser vacio </p>
+                        <p ng-show="form.email.$error.email"> email no válido </p>
+                        {{form.email.$error.email}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>

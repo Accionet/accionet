@@ -31,6 +31,9 @@
                                         <li>Encuesta creada el: {{selectedPlace.created_at | date}}</li>
                                         <li>Última modificación: {{selectedPlace.updated_at | date}}</li>
                                         <li>Visitas diara: {{selectedPlace.daily_visits}}</li>
+                                        <li ng-if="selectedPlace.is_active"> El lugar está activo </li>
+                                        <li ng-if="!selectedPlace.is_active"> El lugar no está activo </li>
+                                        <li> Status: {{selectedPlace.status}} </li>
                                     </ul>
                                 </div>
                             </div>

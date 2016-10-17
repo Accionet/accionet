@@ -1,14 +1,16 @@
 $(function () {
     const url = 'http://localhost:3000/';
 
-
     const macaddress = $('#macAddress').val();
-    console.log(macAddress);
+    $.post(url + 'displayed/new', {
+        macaddress,
+        place_id: 1,
+    });
+
+
     const destination = '/makeLogin.html';
-    console.log(destination);
 
 
-    console.log('cargado');
     const $sendSurvey = $('#sendSurvey');
 
 

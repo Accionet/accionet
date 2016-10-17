@@ -274,18 +274,24 @@ exports.save = function saveEntry(attr, table_name, callback) {
     let entry = null;
 
     parseForSave(table_name, attr, (err, params) => {
+        if (err) {
+            deferrer.reject(err);
+        }
         // Get a Postgres client from the connection pool
-        pg.connect(connectionString, (err_connect, client, done) => {
+        pg.connect(connectionString, (err, client, done) => {
             // Handle connection errors
-            if (err_connect) {
+            if (err) {
                 done();
                 deferrer.reject(err);
             }
             const query_string = buildInsertIntoQuery(params, table_name);
-
+            console.log(query_string);
 
             const query = client.query(query_string, params.values);
 
+            query.on('error', (err) => {
+                return deferrer.reject(err);
+            });
             query.on('row', (row) => {
                 entry = row;
             });

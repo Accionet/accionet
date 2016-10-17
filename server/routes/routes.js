@@ -11,6 +11,7 @@ const placeController = require('../controllers/placeController');
 const userController = require('../controllers/userController');
 const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
+const displayedController = require('../controllers/displayedController');
 
 
 router.use((req, res, next) => {
@@ -162,6 +163,16 @@ router.get('/api/v1/surveys/:id/metrics/responses/count', (req, res, next) => {
 
 router.get('/api/v1/surveys/:id/metrics/enduser/count', (req, res, next) => {
     surveyController.countEndUser(req, res, next);
+});
+
+
+// //////////////////////////////////////////
+// ///////// Displayed  ////////////////////
+// ////////////////////////////////////////
+
+router.post('/displayed/new', (req, res, next) => {
+    console.log('displayed');
+    displayedController.create(req, res, next);
 });
 
 

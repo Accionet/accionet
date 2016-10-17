@@ -142,6 +142,10 @@ exports.toggleIsActive = function toggleIsActive(id, callback) {
     return deferrer.promise;
 };
 
+exports.find = function (attr, callback) {
+    base.find(attr, table_name, callback);
+};
+
 exports.findById = function getById(id, callback) {
     base.findById(id, table_name, callback);
 };

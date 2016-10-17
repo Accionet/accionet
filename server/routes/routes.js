@@ -61,6 +61,7 @@ router.get('/places', (req, res, next) => {
 });
 
 router.get('/places/disabled', (req, res, next) => {
+    placeController.disabled(req, res, next);
 });
 
 router.get('/places/count', (req, res, next) => {

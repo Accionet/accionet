@@ -8,16 +8,40 @@ const Places = require('../models/places');
 const httpResponse = require('../services/httpResponse');
 
 
-exports.index = function getAllPlaces(req, res) {
-    Places.all((err, result) => {
+exports.index = function (req, res) {
+    const active = true;
+    Places.find({
+        is_active: active,
+    }, (err, result) => {
         if (err) {
             res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 places: [],
+                show_active: active,
             });
         }
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
             places: result,
+            show_active: active,
+        });
+    });
+};
+
+exports.disabled = function (req, res) {
+    const active = false;
+    Places.find({
+        is_active: active,
+    }, (err, result) => {
+        if (err) {
+            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+                error: `ERROR: ${err}`,
+                places: [],
+                show_active: active,
+            });
+        }
+        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+            places: result,
+            show_active: active,
         });
     });
 };

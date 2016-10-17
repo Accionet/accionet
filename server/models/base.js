@@ -28,8 +28,8 @@ function parseJsonToParams(json) {
 
 // returns a string containing the where clause for the given params. addWhere specify if it should contain the 'WHERE or not'
 function getWhereFromParams(params, addWhere) {
-  // if params is empty just return
-    if (!params && !params.keys && params.keys.length === 0) {
+    // if params is empty just return
+    if (!params || !params.keys || params.keys.length === 0) {
         return '';
     }
     let string = '';
@@ -50,38 +50,31 @@ exports.parseJsonToParams = parseJsonToParams;
 
 // ################################# SELECT OR FIND
 
-
-function findEntryById(id, table_name, callback) {
-    const deferrer = q.defer();
-    let obj;
-
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, (err, client, done) => {
-        // Handle connection errors
+function findById(id, table_name, callback) {
+    const attr = {
+        id,
+    };
+    find(attr, table_name, (err, results) => {
         if (err) {
-            done();
-            deferrer.reject(err);
+            return callback(err);
         }
-
-
-        const query = client.query(`SELECT * FROM ${table_name} WHERE ${table_name}.id = $1`, [id]);
-
-        query.on('row', (row) => {
-            obj = row;
-        });
-
-        // After all data is returned, close connection and return results
-        query.on('end', () => {
-            done();
-            deferrer.resolve(obj);
-        });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
+        callback(null, results[0]);
     });
 }
 
-exports.findById = findEntryById;
+exports.findById = findById;
+
+
+// build select query
+
+function buildSelectQuery(json, table_name) {
+    const params = parseJsonToParams(json);
+
+    // include de options UNION the ones without options
+    let string = `SELECT * FROM ${table_name}`;
+    string += getWhereFromParams(params, true);
+    return string;
+}
 
 // params has to be a json containing two arrays, keys and values. It should look like these params = { keys: [], values: []}
 function buildSelectWithWhereQuery(params, table_name) {
@@ -95,38 +88,31 @@ function buildSelectWithWhereQuery(params, table_name) {
     return query;
 }
 
-
-exports.find = function functionName(params, table_name, callback) {
-    const deferrer = q.defer();
-    let result;
-
-    // Get a Postgres client from the connection pool
+function find(attr, table_name, callback) {
+    const results = [];
     pg.connect(connectionString, (err, client, done) => {
-        // Handle connection errors
         if (err) {
-            done();
-            deferrer.reject(err);
+            return callback(err);
         }
+        const query_string = buildSelectQuery(attr, table_name);
+        const params = parseJsonToParams(attr);
+        const query_all_surveys = client.query(query_string, params.values);
 
-        const string_query = buildSelectWithWhereQuery(params, table_name);
-
-        // SQL Query > Select Data
-        const query = client.query(string_query, params.values);
-
-        // Stream results back one row at a time
-        query.on('row', (row) => {
-            result = row;
+        query_all_surveys.on('error', (err) => {
+            callback(err);
         });
-
-        // After all data is returned, close connection and return results
-        query.on('end', () => {
+        query_all_surveys.on('row', (row) => {
+            results.push(row);
+        });
+        query_all_surveys.on('end', () => {
             done();
-            deferrer.resolve(result);
+            return callback(null, results);
         });
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
     });
-};
+}
+
+
+exports.find = find;
 
 
 exports.findOne = function functionName(params, table_name, callback) {
@@ -163,65 +149,8 @@ exports.findOne = function functionName(params, table_name, callback) {
 
 
 // Return all
-exports.active = function getAll(table_name, callback) {
-    const deferrer = q.defer();
-    const results = [];
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, (err, client, done) => {
-        // Handle connection errors
-        if (err) {
-            done();
-            deferrer.reject(err);
-        } else {
-            // SQL Query > Select Data
-            const query = client.query(`SELECT * FROM ${table_name} ORDER BY id ASC;`);
-
-            // Stream results back one row at a time
-            query.on('row', (row) => {
-                results.push(row);
-            });
-
-            // After all data is returned, close connection and return results
-            query.on('end', () => {
-                done();
-                deferrer.resolve(results);
-            });
-        }
-    });
-    deferrer.promise.nodeify(callback);
-    return deferrer.promise;
-};
-
-// Return all
-exports.all = function getAll(table_name, callback) {
-    const deferrer = q.defer();
-    const results = [];
-
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, (err, client, done) => {
-        // Handle connection errors
-        if (err) {
-            done();
-            deferrer.reject(err);
-        } else {
-            // SQL Query > Select Data
-            const query = client.query(`SELECT * FROM ${table_name} ORDER BY id ASC;`);
-
-            // Stream results back one row at a time
-            query.on('row', (row) => {
-                results.push(row);
-            });
-
-            // After all data is returned, close connection and return results
-            query.on('end', () => {
-                done();
-                deferrer.resolve(results);
-            });
-        }
-    });
-    deferrer.promise.nodeify(callback);
-    return deferrer.promise;
+exports.all = function (table_name, callback) {
+    find(null, table_name, callback);
 };
 
 exports.count = function countAmountOf(table_name, callback) {
@@ -444,18 +373,13 @@ function sendUpdateRequest(id, attr, table_name, callback) {
                     done();
                     deferrer.reject(err);
                 } else {
-                    console.log(attr);
-                    console.log('param:>');
-                    console.log(params);
                     const query_string = buildUpdateQuery(id, params, table_name);
-                    console.log('query');
-                    console.log(query_string);
                     params.values.push(id);
                     const query = client.query(query_string, params.values);
 
                     // After all data is returned, close connection and return results
                     query.on('end', () => {
-                        findEntryById(id, table_name, (err_find, entry) => {
+                        findById(id, table_name, (err_find, entry) => {
                             if (err_find) {
                                 deferrer.reject(err);
                             } else {

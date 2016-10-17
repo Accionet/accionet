@@ -175,7 +175,6 @@ exports.responseSurvey = function respondSurvey(req, res) {
 // API
 
 exports.metricsByHour = function (req, res) {
-    console.log(req.params.id);
     const id = req.params.id;
     Response.metricsByHour({
         survey_id: id,
@@ -190,7 +189,6 @@ exports.metricsByHour = function (req, res) {
 };
 
 exports.metricsByDay = function (req, res) {
-    console.log(req.params.id);
     const id = req.params.id;
     Response.metricsByDay({
         survey_id: id,
@@ -199,14 +197,12 @@ exports.metricsByDay = function (req, res) {
             const json = httpResponse.error(err);
             return res.status(500).send(json);
         }
-        console.log(result);
         const json = httpResponse.success('Metricas por dia enviada con exito', 'data', result);
         return res.status(200).send(json);
     });
 };
 
 exports.countResponses = function (req, res) {
-    console.log(req.params.id);
     const id = req.params.id;
     Response.count({
         survey_id: id,
@@ -221,7 +217,6 @@ exports.countResponses = function (req, res) {
 };
 
 exports.countEndUser = function (req, res) {
-    console.log(req.params.id);
     const id = req.params.id;
     Response.countEndUser({
         survey_id: id,

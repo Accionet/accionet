@@ -93,6 +93,11 @@ router.put('/places/:id/toggleIsActive', (req, res, next) => {
     placeController.toggleIsActive(req, res, next);
 });
 
+router.get('/places/:id/metrics', (req, res, next) => {
+    placeController.metrics(req, res, next);
+});
+
+
 // ////////////////////////////////////////////
 // /////////// SURVEY ////////////////////////
 // //////////////////////////////////////////

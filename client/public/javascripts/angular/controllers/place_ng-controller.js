@@ -3,6 +3,7 @@ controllers
     .controller('placeController', function ($scope, $http, $window) {
         $scope.places = {};
         $scope.selectedPlace = null;
+        $scope.metrics = {};
 
     // Get all places
         $scope.initializePlaces = function (places, selectedPlace) {
@@ -10,6 +11,21 @@ controllers
                 $scope.places = JSON.parse(places);
             if (selectedPlace)
                 $scope.selectedPlace = JSON.parse(selectedPlace);
+        };
+
+        $scope.initializeMetrics = function (metrics) {
+            if (metrics) {
+                $scope.metrics = JSON.parse(metrics);
+            }
+        };
+
+        $scope.get = function (d) {
+            console.log(d);
+            console.log($scope.metrics.table[d]);
+        };
+
+        $scope.getKeys = function (json) {
+            return Object.keys(json);
         };
 
 
@@ -22,6 +38,10 @@ controllers
             .error(function (data) {
                 console.log('Error: ' + data);
             });
+        };
+
+        $scope.log = function (thing) {
+            console.log(thing);
         };
 
         function locallyUpdatePlace(updated_place) {
@@ -67,7 +87,7 @@ controllers
 
         $scope.validForm = function () {
             return !($scope.form.$error.required || $scope.form.$error.maxlength ||
-              $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer);
+            $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer);
         };
 
 

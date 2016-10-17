@@ -14,14 +14,14 @@
 
 </head>
 
-<body ng-controller="surveyController">
+<body ng-controller="placeController">
     <% include ../partials/message_log.ejs %>
         <%= include ../partials/navbar.ejs %>
 
-            <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey) %>',' <%= null %>') ">
+            <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>',' <%= null %>') ">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">{{selectedSurvey.title}}</h1>
+                        <h1 class="page-header">{{selectedPlace.name}}</h1>
                     </div>
                 </div>
                 <div class="row">
@@ -37,23 +37,23 @@
                                 <ul class="nav nav-pills">
                                     <li class="active"> <a href="#summary-pills" data-toggle="tab">Resumen</a>
                                     </li>
-                                    <li><a href="#questions-pills" data-toggle="tab">Preguntas</a>
+                                    <li><a href="#table-pills" data-toggle="tab">Tablas</a>
                                     </li>
                                 </ul>
                                 <br>
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <div class="tab-pane fade in active" id="summary-pills">
-                                        <h4>Encuesta creada el: {{selectedSurvey.created_at | date}}</h4>
-                                        <h4 ng-if="selectedSurvey.description">Descripcion de Encuesta: </h4>
-                                        <p> {{selectedSurvey.description}}</p>
+                                        <h4>Encuesta creada el: {{selectedPlace.created_at | date}}</h4>
+                                        <h4 ng-if="selectedPlace.description">Descripcion del Lugar: </h4>
+                                        <p> {{selectedPlace.description}}</p>
                                         <div class="row">
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="panel panel-default">
-                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalResponses(selectedSurvey)">
+                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalResponses(selectedPlace)">
                                                         <div class="easypiechart" id="easypiechart-orange" data-percent="100">
-                                                            <span ng-if="selectedSurvey.totalResponses" class="percent">{{selectedSurvey.totalResponses}}</span>
-                                                            <span ng-if="!selectedSurvey.totalResponses" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                                            <span ng-if="selectedPlace.totalResponses" class="percent">{{selectedPlace.totalResponses}}</span>
+                                                            <span ng-if="!selectedPlace.totalResponses" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
                                                         </div>
                                                         <h4 class="text-center">Respuestas</h4>
                                                    </div>
@@ -61,10 +61,10 @@
                                             </div>
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="panel panel-default">
-                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalEndUsers(selectedSurvey)">
+                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalEndUsers(selectedPlace)">
                                                         <div class="easypiechart" id="easypiechart-teal" data-percent="100">
-                                                          <span ng-if ="selectedSurvey.totalEndUsers" class="percent">{{selectedSurvey.totalEndUsers}}</span>
-                                                            <span ng-if="!selectedSurvey.totalEndUsers" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                                          <span ng-if ="selectedPlace.totalEndUsers" class="percent">{{selectedPlace.totalEndUsers}}</span>
+                                                            <span ng-if="!selectedPlace.totalEndUsers" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
                                                         </div>
                                                         <h4 class="text-center">Alcance (personas)</h4>
                                                     </div>
@@ -88,7 +88,7 @@
                                                     </h4>
                                                 </div>
                                                 <!-- /.panel-heading -->
-                                                <div id="day-panel" class="panel-collapse collapse in" ng-init='getResponsesByDay(selectedSurvey)'>
+                                                <div id="day-panel" class="panel-collapse collapse in" ng-init='getResponsesByDay(selectedPlace)'>
                                                     <div class="flot-chart">
                                                         <div ng-if="loadingResponseByDayChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
                                                         <div class="flot-chart-content" id="response-by-day-line-chart"></div>
@@ -103,7 +103,7 @@
                                                     </h4>
                                                 </div>
                                                 <!-- /.panel-heading -->
-                                                <div id="hour-panel" class="panel-collapse collapse in" ng-init='getResponsesByHour(selectedSurvey)'>
+                                                <div id="hour-panel" class="panel-collapse collapse in" ng-init='getResponsesByHour(selectedPlace)'>
                                                     <div class="flot-chart">
                                                         <div ng-if="loadingResponseByHourChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
                                                         <div class="flot-chart-content" id="response-by-hour-line-chart"></div>
@@ -113,43 +113,95 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade " id="questions-pills">
+                                    <div class="tab-pane fade " id="table-pills" ng-init="initializeMetrics(' <%= JSON.stringify(metrics) %>')">
                                         <div class="panel-group">
-                                            <div ng-repeat="question in selectedSurvey.questions| orderBy: 'number'" class="panel panel-default">
+                                            <div class="panel panel-default">
+
                                                 <div class="panel-heading">
                                                     <h4 class="panel-title">
-                                                      <a data-toggle="collapse" data-parent="#accordion" href="#question{{question.id}}"> {{question.number}}) {{question.title}} </a>
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#dailytable"> Tabla por dia </a>
                                                     </h4>
                                                 </div>
-                                                <div id="question{{question.id}}" class="panel-collapse collapse in" ng-init="question.showTable = false">
-                                                    <pie-chart ng-data='{{getData(question)}}'></pie-chart>
-                                                    <br>
-                                                    <a ng-if="!question.showTable" ng-click="question.showTable = true" class="btn btn-default btn-block">Mostrar tabla</a>
-                                                    <a ng-if="question.showTable" ng-click="question.showTable = false" class="btn btn-default btn-block">Ocultar tabla</a>
-                                                    <br>
-                                                    <table ng-if="question.showTable" class="table table-hover ">
+                                                <div id="dailytable" class="panel-collapse collapse in">
 
+                                                    <table class="table table-hover ">
                                                         <thead>
                                                             <tr>
-                                                                <th>Alternativa</th>
-                                                                <th> Frecuencia </th>
+                                                                <th>Día</th>
+                                                                <th> Número de visitas </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="option in question.options">
+                                                            <tr ng-repeat="visit in metrics.daily">
                                                                 <td>
-                                                                    {{option.statement}}
+                                                                    {{visit.date | date}}
                                                                 </td>
                                                                 <td>
-                                                                    {{question.metrics[option.enumeration].count}}
+                                                                    {{visit.amount}}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <!-- /.panel -->
+                                            </div>
+                                            <div class="panel panel-default">
 
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#hourlytable"> Tabla por hora </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="hourlytable" class="panel-collapse collapse in">
 
+                                                    <table class="table table-hover ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Hora</th>
+                                                                <th> Número de visitas </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="visit in metrics.hourly">
+                                                                <td>
+                                                                    {{visit.hour}}:00
+                                                                </td>
+                                                                <td>
+                                                                    {{visit.amount}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default">
+
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#houranddaytable"> Tabla por dia y hora </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="houranddaytable" class="panel-collapse collapse in">
+
+                                                    <table class="table table-hover" >
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Día/hora</th>
+                                                                <th ng-repeat="h in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">  {{h}}:00 </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="date in getKeys(metrics.table)">
+                                                                <td>
+                                                                    {{date}}
+                                                                </td>
+                                                                <td ng-repeat="h in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">
+                                                                    {{metrics.table[date][h]}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -162,7 +214,7 @@
             </div>
 
             <% include ../partials/scripts.ejs %>
-                <% include partials/surveys_scripts.ejs %>
+                <% include partials/places_scripts.ejs %>
 
                     <!-- Flot Charts JavaScript -->
                     <script src="/vendor/flot/excanvas.min.js"></script>

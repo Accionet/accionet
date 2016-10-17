@@ -6,6 +6,7 @@ const pg = require('pg');
 const connectionString = require(path.join(__dirname, '../', '../', 'config'));
 const q = require('q');
 const base = require('../models/base');
+const Displayed = require('../models/displayed');
 
 const table_name = 'places';
 
@@ -101,7 +102,6 @@ exports.update = function updatePlace(id, attr, callback) {
         if (err) {
             deferrer.reject(err);
         } else {
-            console.log(place);
             deferrer.resolve(place);
         }
     });
@@ -141,6 +141,38 @@ exports.toggleIsActive = function toggleIsActive(id, callback) {
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
 };
+
+
+exports.metrics = function (id, callback) {
+    Displayed.amountByDay({
+        place_id: id,
+    }, (err, daily) => {
+        if (err) {
+            return callback(err);
+        }
+        Displayed.amountByHour({
+            place_id: id,
+        }, (err, hourly) => {
+            if (err) {
+                return callback(err);
+            }
+            Displayed.tableDateAndHour({
+                place_id: id,
+            }, (err, table) => {
+                if (err) {
+                    return callback(err);
+                }
+                const metrics = {
+                    daily,
+                    hourly,
+                    table,
+                };
+                callback(null, metrics);
+            });
+        });
+    });
+};
+
 
 exports.find = function (attr, callback) {
     base.find(attr, table_name, callback);

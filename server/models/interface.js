@@ -1,7 +1,6 @@
 // This is justa a basic example is in here for copy and paste when creating a new model.
 // Simulates inheritance
-"use strict";
-
+'use strict';
 
 
 // server/models/interface.js
@@ -33,6 +32,10 @@ exports.save = function saveEntry(attr, callback) {
 
 exports.update = function updateEntry(id, attr, callback) {
     base.update(id, attr, table_name, callback);
+};
+
+exports.find = function findEntry(attr, callback) {
+    base.find(attr, table_name, callback);
 };
 
 exports.findById = function findEntry(id, callback) {

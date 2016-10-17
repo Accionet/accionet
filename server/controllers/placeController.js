@@ -116,6 +116,21 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
 };
 
 
+exports.metrics = function showMetrics(req, res) {
+    Places.findById(req.params.id, (err, place) => {
+        Places.metrics(place.id, (err, metrics) => {
+            // const json = httpResponse.success(`Metricas de ${place.id}`, 'metrics', metrics);
+            const json = {
+                message: `Metricas de ${place.id}`,
+                place,
+                metrics,
+            };
+            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
+        });
+    });
+};
+
+
 // /* sets the is_active to true */
 // exports.activate = function setIsActiveToTure(req, res) {
 //

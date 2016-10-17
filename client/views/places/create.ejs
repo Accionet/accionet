@@ -19,7 +19,9 @@
 
         <% include partials/form.ejs %>
 
-        <button class="btn" ng-click="createPlace(selectedPlace)"> Crear </button>
+        <button ng-if="!validForm()" ng-click="createPlace(selectedPlace)" type="button" class="btn btn-block btn-success" disabled>  Guardar</button>
+        <button ng-if="validForm()" ng-click="createPlace(selectedPlace)" type="button" class="btn btn-block btn-success" >Guardar </button>
+        <br>
     </div>
     <% include ../partials/scripts.ejs %>
     <% include partials/places_scripts.ejs %>

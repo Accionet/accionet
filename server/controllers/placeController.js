@@ -1,10 +1,11 @@
 // server/controllers/placeController
-"use strict";
+'use strict';
 
 
 
 const path = require('path');
 const Places = require('../models/places');
+const httpResponse = require('../services/httpResponse');
 
 
 exports.index = function getAllPlaces(req, res) {
@@ -60,15 +61,14 @@ exports.new = function getNewPlace(req, res) {
 
 exports.create = function savePlace(req, res) {
     if (req.body.name && req.body.email) {
-        Places.save(req.body, (err, message) => {
+        Places.save(req.body, (err, place) => {
             if (err) {
                 return res.status(400).send({
                     error: err,
                 });
             }
-            return res.status(200).send({
-                success: message,
-            });
+            const json = httpResponse.success('Lugar creado exitosamente', 'place', place);
+            return res.status(200).send(json);
         });
     } else {
         // Responder con attributos mal hechos
@@ -126,15 +126,13 @@ exports.show = function showPlace(req, res) {
 };
 
 exports.update = function updatePlace(req, res) {
-    Places.update(req.params.id, req.body, (err, response) => {
+    Places.update(req.params.id, req.body, (err, place) => {
         if (err) {
             return res.status(400).send({
                 error: err,
             });
         }
-        return res.status(200).send({
-            success: response.message,
-            place: response.place,
-        });
+        const json = httpResponse.success(`Cambios a  + ${place.name} agregados exitosamente.`, 'place', place);
+        return res.status(200).send(json);
     });
 };

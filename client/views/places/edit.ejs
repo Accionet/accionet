@@ -10,18 +10,23 @@
         <%= include ../partials/navbar.ejs %>
 
             <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
-              <div class="row">
-                  <div class="col-lg-12">
-                      <h1 class="page-header">{{selectedPlace.name}}</h1>
-                  </div>
-              </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">{{selectedPlace.name}}</h1>
+                    </div>
+                </div>
                 <br>
 
                 <% include partials/form.ejs %>
-
-                    <button class="btn" ng-click="updatePlace(selectedPlace)"> Guardar cambios </button>
-
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button ng-if="!validForm()" ng-click="updatePlace(selectedPlace)" type="button" class="btn btn-block btn-success" disabled> Guardar Cambios</button>
+                            <button ng-if="validForm()" ng-click="updatePlace(selectedPlace)" type="button" class="btn btn-block btn-success" >Guardar Cambios</button>
+                        </div>
+                    </div>
+                    <br>
             </div>
+
             <% include ../partials/scripts.ejs %>
                 <% include partials/places_scripts.ejs %>
 

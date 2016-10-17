@@ -444,7 +444,12 @@ function sendUpdateRequest(id, attr, table_name, callback) {
                     done();
                     deferrer.reject(err);
                 } else {
+                    console.log(attr);
+                    console.log('param:>');
+                    console.log(params);
                     const query_string = buildUpdateQuery(id, params, table_name);
+                    console.log('query');
+                    console.log(query_string);
                     params.values.push(id);
                     const query = client.query(query_string, params.values);
 

@@ -56,8 +56,11 @@ router.get('/dashboard', (req, res, next) => {
 // //////////////////////////////////////////
 
 
-router.get('/places/all', (req, res, next) => {
+router.get('/places', (req, res, next) => {
     placeController.index(req, res, next);
+});
+
+router.get('/places/disabled', (req, res, next) => {
 });
 
 router.get('/places/count', (req, res, next) => {
@@ -140,7 +143,6 @@ router.delete('/surveys/:id/delete', (req, res, next) => {
 // API
 
 router.get('/api/v1/surveys/:id/metrics/responses/byhour', (req, res, next) => {
-    console.log('lle');
     surveyController.metricsByHour(req, res, next);
 });
 

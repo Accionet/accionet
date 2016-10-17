@@ -120,12 +120,13 @@ exports.metricsByDay = function (attr, callback) {
 
 exports.metricsByHour = function (attr, callback) {
     // SELECT EXTRACT( hour from foo.day) as hour, avg (c) FROM (SELECT date_trunc('hour', created_at) AS day, count(*) as c FROM response GROUP BY 1 ORDER BY 1) as foo GROUP BY hour ORDER BY hour;
+    // SELECT EXTRACT ('hour' FROM created_at) AS hour, count(*) as c FROM response GROUP BY 1 ORDER BY 1
     const params = base.parseJsonToParams(attr);
     // build the query
-    let string_query = "SELECT EXTRACT( hour from foo.day) as hour, avg (c) FROM (SELECT date_trunc('hour', created_at) AS day, count(*) as c FROM response ";
+    let string_query = "SELECT EXTRACT( 'hour' FROM created_at) AS hour, count(*) as c FROM response ";
     // Include the attr
     string_query += base.getWhereFromParams(params, true);
-    string_query += ' GROUP BY 1 ORDER BY 1) as foo GROUP BY hour ORDER BY hour';
+    string_query += ' GROUP BY hour ORDER BY hour';
     const results = [];
 
     pg.connect(connectionString, (err, client, done) => {
@@ -143,11 +144,12 @@ exports.metricsByHour = function (attr, callback) {
         });
 
         query.on('row', (row) => {
-            results.push([new Date(null, null, null, row.hour).getTime(), row.avg]);
+            results.push([new Date(null, null, null, row.hour).getTime(), row.c]);
         });
 
         // After all data is returned, close connection and return results
         query.on('end', () => {
+            console.log(results);
             done();
             // fill with missing hours
             for (let h = 0; h < 24; h++) {

@@ -1,5 +1,5 @@
 // server/models/places.js
-"use strict";
+'use strict';
 const path = require('path');
 const pg = require('pg');
 
@@ -31,12 +31,12 @@ exports.save = function savePlace(attr, callback) {
 
     setDefaultAttributes(attr);
 
-    base.save(attr, table_name, (err, success) => {
+    base.save(attr, table_name, (err, place) => {
         if (err) {
             deferrer.reject(err);
         } else {
-            if (success) {
-                deferrer.resolve(`${attr.name} agregado exitósamente.`);
+            if (place) {
+                deferrer.resolve(place);
             }
             // It should never get to here
             deferrer.reject('ERROR');
@@ -101,11 +101,8 @@ exports.update = function updatePlace(id, attr, callback) {
         if (err) {
             deferrer.reject(err);
         } else {
-            const response = {
-                message: `Cambios a  + ${place.name} agregados exitosamente.`,
-                place,
-            };
-            deferrer.resolve(response);
+            console.log(place);
+            deferrer.resolve(place);
         }
     });
     deferrer.promise.nodeify(callback);

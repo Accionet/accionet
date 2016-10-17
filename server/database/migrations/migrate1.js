@@ -58,3 +58,10 @@ queries[queries.length - 1].on('end', () => {
     console.log('Se agrego columna contact_name a tabla places');
     closeConnection();
 });
+
+queries.push(client.query('ALTER TABLE places ALTER COLUMN phone_number VARCHAR(20)'));
+queries[queries.length - 1].on('end', () => {
+        // client.end();
+    console.log('Columna phone_number modificada en tabla places');
+    closeConnection();
+});

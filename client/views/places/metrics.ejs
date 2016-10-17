@@ -1,0 +1,187 @@
+<html ng-app="accionet-web-app">
+
+<head>
+    <title>Lugares - Accionet</title>
+    <% include ../partials/head.ejs %>
+
+
+        <!-- Morris Charts CSS -->
+        <link href="/vendor/morrisjs/morris.css" rel="stylesheet">
+
+        <!--  -->
+        <link href="/stylesheets/easypiechart.css" rel="stylesheet">
+
+
+</head>
+
+<body ng-controller="surveyController">
+    <% include ../partials/message_log.ejs %>
+        <%= include ../partials/navbar.ejs %>
+
+            <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey) %>',' <%= null %>') ">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">{{selectedSurvey.title}}</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Métricas</h4>
+                            </div>
+                            <!-- /.panel-heading -->
+
+                            <div class="panel-body">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-pills">
+                                    <li class="active"> <a href="#summary-pills" data-toggle="tab">Resumen</a>
+                                    </li>
+                                    <li><a href="#questions-pills" data-toggle="tab">Preguntas</a>
+                                    </li>
+                                </ul>
+                                <br>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane fade in active" id="summary-pills">
+                                        <h4>Encuesta creada el: {{selectedSurvey.created_at | date}}</h4>
+                                        <h4 ng-if="selectedSurvey.description">Descripcion de Encuesta: </h4>
+                                        <p> {{selectedSurvey.description}}</p>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalResponses(selectedSurvey)">
+                                                        <div class="easypiechart" id="easypiechart-orange" data-percent="100">
+                                                            <span ng-if="selectedSurvey.totalResponses" class="percent">{{selectedSurvey.totalResponses}}</span>
+                                                            <span ng-if="!selectedSurvey.totalResponses" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                                        </div>
+                                                        <h4 class="text-center">Respuestas</h4>
+                                                   </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalEndUsers(selectedSurvey)">
+                                                        <div class="easypiechart" id="easypiechart-teal" data-percent="100">
+                                                          <span ng-if ="selectedSurvey.totalEndUsers" class="percent">{{selectedSurvey.totalEndUsers}}</span>
+                                                            <span ng-if="!selectedSurvey.totalEndUsers" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                                        </div>
+                                                        <h4 class="text-center">Alcance (personas)</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body easypiechart-panel">
+                                                        <div class="easypiechart" id="easypiechart-red" data-percent="100"><span class="percent">-</span>
+                                                        </div>
+                                                        <h4 class="text-center">Visitas</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-group">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#day-panel"> Evolución de respuestas por día  </a>
+                                                    </h4>
+                                                </div>
+                                                <!-- /.panel-heading -->
+                                                <div id="day-panel" class="panel-collapse collapse in" ng-init='getResponsesByDay(selectedSurvey)'>
+                                                    <div class="flot-chart">
+                                                        <div ng-if="loadingResponseByDayChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
+                                                        <div class="flot-chart-content" id="response-by-day-line-chart"></div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.panel-body -->
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#hour-panel"> Cantidad de respuestas por hora </a>
+                                                    </h4>
+                                                </div>
+                                                <!-- /.panel-heading -->
+                                                <div id="hour-panel" class="panel-collapse collapse in" ng-init='getResponsesByHour(selectedSurvey)'>
+                                                    <div class="flot-chart">
+                                                        <div ng-if="loadingResponseByHourChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
+                                                        <div class="flot-chart-content" id="response-by-hour-line-chart"></div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.panel-body -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade " id="questions-pills">
+                                        <div class="panel-group">
+                                            <div ng-repeat="question in selectedSurvey.questions| orderBy: 'number'" class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#question{{question.id}}"> {{question.number}}) {{question.title}} </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="question{{question.id}}" class="panel-collapse collapse in" ng-init="question.showTable = false">
+                                                    <pie-chart ng-data='{{getData(question)}}'></pie-chart>
+                                                    <br>
+                                                    <a ng-if="!question.showTable" ng-click="question.showTable = true" class="btn btn-default btn-block">Mostrar tabla</a>
+                                                    <a ng-if="question.showTable" ng-click="question.showTable = false" class="btn btn-default btn-block">Ocultar tabla</a>
+                                                    <br>
+                                                    <table ng-if="question.showTable" class="table table-hover ">
+
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Alternativa</th>
+                                                                <th> Frecuencia </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="option in question.options">
+                                                                <td>
+                                                                    {{option.statement}}
+                                                                </td>
+                                                                <td>
+                                                                    {{question.metrics[option.enumeration].count}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- /.panel -->
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+
+            <% include ../partials/scripts.ejs %>
+                <% include partials/surveys_scripts.ejs %>
+
+                    <!-- Flot Charts JavaScript -->
+                    <script src="/vendor/flot/excanvas.min.js"></script>
+                    <script src="/vendor/flot/jquery.flot.js"></script>
+                    <script src="/vendor/flot/jquery.flot.pie.js"></script>
+                    <script src="/vendor/flot/jquery.flot.resize.js"></script>
+                    <script src="/vendor/flot/jquery.flot.time.js"></script>
+                    <script src="/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
+                    <!-- <script src="/data/flot-data.js"></script> -->
+                    <!-- <script src="/prueba.js"></script> -->
+
+                    <script src="/vendor/lumino/js/easypiechart.js"></script>
+                    <!-- Here the colours are determined -->
+                    <script src="/vendor/lumino/js/easypiechart-data.js"></script>
+
+
+
+
+
+</body>
+
+</html>

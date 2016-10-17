@@ -31,6 +31,7 @@
                                         <a ng-click="toggleIsActive(place)" class="pull-right dark-red icon-list-holder"  ng-if="place.is_active" ><i class="fa fa-ban"></i></a>
                                         <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder"  ng-if="!place.is_active" ><i class="fa fa-check"></i></a>
                                         <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder"><i class="fa fa-edit"></i></a>
+                                        <a ng-click="" class="pull-right blue icon-list-holder" href="/places/{{place.id}}/metrics"><i class="fa fa-line-chart"></i></a>
                                         <a ng-click="setSelectedPlace(place)" href="/places/{{place.id}}" ng-click="setSelectedPlace(place)" class="pull-right green icon-list-holder"><i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>

@@ -50,6 +50,10 @@ exports.columnNames = function getAttributes(callback) {
     base.columnNames(table_name, callback);
 };
 
+exports.getFirstDate = function (attr, callback) {
+    base.getFirstDate(attr, table_name, callback);
+};
+
 exports.delete = function deleteEntry(id, callback) {
     base.delete(id, table_name, callback);
 };

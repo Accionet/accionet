@@ -1,11 +1,18 @@
 // server/services/jsonBuilder.js
 
 
-exports.success = function buldSuccessJSON(text, key, value) {
+exports.success = function (text, keys, values) {
     const json = {
         message: text,
     };
-    json[key] = value;
+
+    if (Object.prototype.toString.call(keys) === '[object Array]') {
+        for (let i = 0; i < keys.length; i++) {
+            json[keys[i]] = values[i];
+        }
+    } else {
+        json[keys] = values;
+    }
     return json;
 };
 

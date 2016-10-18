@@ -118,6 +118,10 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
 
 exports.metrics = function showMetrics(req, res) {
     Places.findById(req.params.id, (err, place) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
+        }
         Places.metrics(place.id, (err, metrics) => {
             // const json = httpResponse.success(`Metricas de ${place.id}`, 'metrics', metrics);
             const json = {

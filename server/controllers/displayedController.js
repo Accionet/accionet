@@ -3,31 +3,13 @@
 
 
 const Displayed = require('../models/displayed');
+const httpResponse = require('../services/httpResponse');
 
 
-exports.create = function (req, res) {
-    const visit = req.body;
-    addRequestParams(visit, req);
-    console.log(visit);
-    Displayed.save(visit, (err) => {
-        if (err) {
-            console.log(err);
-            return res.status(400).send({
-                error: err,
-            });
-        }
-
-        return res.status(200).send({
-            success: 'success',
-        });
-    });
-};
-
+// Functions to do add Parameters to create
 
 function addRequestParams(visit, req) {
     const userAgent = req.headers['user-agent'];
-
-    console.log(visit);
     // add ip
 
     visit.ip = req.connection.remoteAddress;
@@ -78,15 +60,12 @@ function getOS(userAgent) {
 }
 
 function getBrowser(ua) {
-    console.log(ua);
     let tem;
-    console.log('despues de M');
 
     let M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    console.log('despues de M');
     if (/trident/i.test(M[1])) {
         tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-        return 'IE ' + (tem[1] || '');
+        return `IE ${(tem[1] || '')}`;
     }
     if (M[1] === 'Chrome') {
         tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
@@ -96,3 +75,108 @@ function getBrowser(ua) {
     if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
     return M.join(' ');
 }
+
+
+//
+
+exports.create = function (req, res) {
+    const visit = req.body;
+    addRequestParams(visit, req);
+    Displayed.save(visit, (err) => {
+        if (err) {
+            return res.status(400).send({
+                error: err,
+            });
+        }
+
+        return res.status(200).send({
+            success: 'success',
+        });
+    });
+};
+
+// ////////////////////////////////////////
+// API
+// ///////////////////////////////////////
+
+exports.dailyTable = function (req, res) {
+    const id = req.params.id;
+    Displayed.amountByDay({
+        place_id: id,
+    }, (err, daily) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(400).send(json);
+        }
+        const json = httpResponse.success('Tabla por día', 'data', daily);
+        return res.status(200).send(json);
+    });
+};
+
+exports.hourlyTable = function (req, res) {
+    const id = req.params.id;
+    Displayed.amountByHour({
+        place_id: id,
+    }, (err, hourly) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(400).send(json);
+        }
+        const json = httpResponse.success('Tabla por hora', 'data', hourly);
+        return res.status(200).send(json);
+    });
+};
+
+exports.dayAndHourTable = function (req, res) {
+    const id = req.params.id;
+    Displayed.tableDateAndHour({
+        place_id: id,
+    }, (err, table) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(400).send(json);
+        }
+
+        const json = httpResponse.success('Tabla por hora', 'data', table);
+        return res.status(200).send(json);
+    });
+};
+
+/**
+This method also return the first date of a displayed to count the daily average.
+**/
+exports.countOfPlace = function (req, res) {
+    const id = req.params.id;
+    const attr = {
+        place_id: id,
+    };
+    Displayed.count(attr, (err, data) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(400).send(json);
+        }
+        Displayed.getFirstDate(attr, (err, date) => {
+            if (err) {
+                const json = httpResponse.error(err);
+                return res.status(400).send(json);
+            }
+            const json = httpResponse.success('Visitas por lugar', ['data', 'date'], [data, date]);
+            return res.status(200).send(json);
+        });
+    });
+};
+
+exports.countEndUsersOfPlace = function (req, res) {
+    const id = req.params.id;
+    const attr = {
+        place_id: id,
+    };
+    Displayed.countEndUser(attr, (err, data) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(400).send(json);
+        }
+        const json = httpResponse.success('Usuarios finales', ['data'], [data]);
+        return res.status(200).send(json);
+    });
+};

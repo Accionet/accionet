@@ -265,7 +265,7 @@ controllers
                     const diff = Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
                     const startDate = new Date(data[i - 1][0]);
                     if (diff > 1) {
-                        for (j = 0; j < diff - 1; j++) {
+                        for (let j = 0; j < diff - 1; j++) {
                             const fillDate = new Date(startDate).setDate(startDate.getDate() + (j + 1));
                             newData.push([fillDate, 0]);
                         }

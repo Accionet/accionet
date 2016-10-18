@@ -54,46 +54,6 @@ function setDefaultAttributes(attr) {
     }
 }
 
-// /* Similar idea tu parseToPlace method, but it doesn't include all the attributes, only the existing ones*/
-// function parseToPlaceForUpdate(attr) {
-//     const place = {
-//         keys: [],
-//         values: [],
-//     };
-//
-//     // Add keys
-//     place.keys.push('updated_at');
-//
-//     if (attr.hasOwnProperty('name'))
-//         place.keys.push('name');
-//     if (attr.hasOwnProperty('description'))
-//         place.keys.push('description');
-//     if (attr.hasOwnProperty('is_active'))
-//         place.keys.push('is_active');
-//     if (attr.hasOwnProperty('daily_visits'))
-//         place.keys.push('daily_visits');
-//     if (attr.hasOwnProperty('email'))
-//         place.keys.push('email');
-//     if (attr.hasOwnProperty('email_verified'))
-//         place.keys.push('email_verified');
-//     if (attr.hasOwnProperty('status'))
-//         place.keys.push('status');
-//     if (attr.hasOwnProperty('password'))
-//         place.keys.push('password');
-//     // Add attributes
-//     // Updated_at
-//     place.values.push(new Date());
-//     if (attr.hasOwnProperty('name')) place.values.push(attr.name);
-//     if (attr.hasOwnProperty('description')) place.values.push(attr.description);
-//     if (attr.hasOwnProperty('is_active')) place.values.push(attr.is_active);
-//     if (attr.hasOwnProperty('daily_visits')) place.values.push(attr.daily_visits);
-//     if (attr.hasOwnProperty('email')) place.values.push(attr.email);
-//     if (attr.hasOwnProperty('email_verified')) place.values.push(attr.email_verified);
-//     if (attr.hasOwnProperty('status')) place.values.push(attr.status);
-//     if (attr.hasOwnProperty('password')) place.values.push(attr.password);
-//     return place;
-// }
-
 exports.update = function updatePlace(id, attr, callback) {
     const deferrer = q.defer();
 

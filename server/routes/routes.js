@@ -171,8 +171,31 @@ router.get('/api/v1/surveys/:id/metrics/enduser/count', (req, res, next) => {
 // ////////////////////////////////////////
 
 router.post('/displayed/new', (req, res, next) => {
-    console.log('displayed');
     displayedController.create(req, res, next);
+});
+
+router.get('/api/v1/places/:id/metrics/displayed/daily', (req, res, next) => {
+    displayedController.dailyTable(req, res, next);
+});
+
+router.get('/api/v1/places/:id/metrics/displayed/hourly', (req, res, next) => {
+    displayedController.hourlyTable(req, res, next);
+});
+
+router.get('/api/v1/places/:id/metrics/displayed/dayandhour', (req, res, next) => {
+    displayedController.dayAndHourTable(req, res, next);
+});
+
+router.get('/api/v1/places/:id/metrics/displayed/count', (req, res, next) => {
+    displayedController.countOfPlace(req, res, next);
+});
+
+router.get('/api/v1/surveys/:id/metrics/displayed/count', (req, res, next) => {
+    displayedController.countOfSurvey(req, res, next);
+});
+
+router.get('/api/v1/places/:id/metrics/endusers/count', (req, res, next) => {
+    displayedController.countEndUsersOfPlace(req, res, next);
 });
 
 

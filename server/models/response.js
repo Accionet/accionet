@@ -101,7 +101,6 @@ exports.metricsByDay = function (attr, callback) {
         const query = client.query(string_query, params.values);
 
         query.on('error', (err) => {
-            console.log(err);
             done();
             return callback(err);
         });
@@ -138,7 +137,6 @@ exports.metricsByHour = function (attr, callback) {
         const query = client.query(string_query, params.values);
 
         query.on('error', (err) => {
-            console.log(err);
             done();
             return callback(err);
         });
@@ -149,7 +147,6 @@ exports.metricsByHour = function (attr, callback) {
 
         // After all data is returned, close connection and return results
         query.on('end', () => {
-            console.log(results);
             done();
             // fill with missing hours
             for (let h = 0; h < 24; h++) {
@@ -188,7 +185,6 @@ exports.count = function (attr, callback) {
         const query = client.query(string_query, params.values);
 
         query.on('error', (err) => {
-            console.log(err);
             done();
             return callback(err);
         });
@@ -225,7 +221,6 @@ exports.countEndUser = function (attr, callback) {
         const query = client.query(string_query, params.values);
 
         query.on('error', (err) => {
-            console.log(err);
             done();
             return callback(err);
         });

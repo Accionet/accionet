@@ -1,4 +1,5 @@
 // server/models/places.js
+
 'use strict';
 
 
@@ -153,19 +154,24 @@ exports.all = function (table_name, callback) {
     find(null, table_name, callback);
 };
 
-exports.count = function countAmountOf(table_name, callback) {
-    const deferrer = q.defer();
+exports.count = function countAmountOf(attr, table_name, callback) {
     let result;
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
             done();
-            deferrer.reject(err);
+            callback(err);
         } else {
             // SQL Query > Select Data
-            const query = client.query(`SELECT COUNT(*) FROM ${table_name};`);
+            const params = parseJsonToParams(attr);
+            let query_string = `SELECT COUNT(*) FROM ${table_name}`;
+            query_string += getWhereFromParams(params, true);
+            const query = client.query(query_string, params.values);
 
+            query.on('error', (err) => {
+                callback(err);
+            });
             // Stream results back one row at a time
             query.on('row', (row) => {
                 result = row.count;
@@ -174,12 +180,45 @@ exports.count = function countAmountOf(table_name, callback) {
             // After all data is returned, close connection and return results
             query.on('end', () => {
                 done();
-                deferrer.resolve(result);
+                callback(null, result);
             });
         }
     });
-    deferrer.promise.nodeify(callback);
-    return deferrer.promise;
+};
+
+exports.getFirstDate = function (attr, table_name, callback) {
+    let result;
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            callback(err);
+        } else {
+            // SQL Query > Select Data
+            const params = parseJsonToParams(attr);
+            let query_string = `SELECT created_at FROM ${table_name} `;
+            query_string += getWhereFromParams(params, true);
+            query_string += ' ORDER BY created_at ASC LIMIT 1 ; ';
+            console.log(query_string);
+            console.log(params.values);
+            const query = client.query(query_string, params.values);
+
+            query.on('error', (err) => {
+                callback(err);
+            });
+            // Stream results back one row at a time
+            query.on('row', (row) => {
+                result = row.created_at;
+            });
+
+            // After all data is returned, close connection and return results
+            query.on('end', () => {
+                done();
+                callback(null, result);
+            });
+        }
+    });
 };
 
 
@@ -285,13 +324,10 @@ exports.save = function saveEntry(attr, table_name, callback) {
                 deferrer.reject(err);
             }
             const query_string = buildInsertIntoQuery(params, table_name);
-            console.log(query_string);
 
             const query = client.query(query_string, params.values);
 
-            query.on('error', (err) => {
-                return deferrer.reject(err);
-            });
+            query.on('error', (err) => (deferrer.reject(err)));
             query.on('row', (row) => {
                 entry = row;
             });

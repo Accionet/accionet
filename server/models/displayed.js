@@ -16,8 +16,8 @@ exports.all = function getEntries(callback) {
 };
 
 // Returns the amount of entries in such table
-exports.count = function countAmountOf(callback) {
-    base.all(table_name, callback);
+exports.count = function countAmountOf(attr, callback) {
+    base.count(attr, table_name, callback);
 };
 
 // Creates a json representing an empty entry
@@ -82,8 +82,8 @@ exports.amountByDay = function (attr, callback) {
         query.on('error', (err) => (callback(err)));
         // Stream results back one row at a time
         query.on('row', (row) => {
-            row.date = dateFromDay(2016, row.doy);
-            results.push(row);
+            const date = dateFromDay(2016, row.doy).getTime();
+            results.push([date, row.amount]);
         });
 
         // After all data is returned, close connection and return results
@@ -98,6 +98,46 @@ function dateFromDay(year, day) {
     const date = new Date(year, 0); // initialize a date in `year-01-01`
     return new Date(date.setDate(day)); // add the number of days
 }
+
+exports.getFirstDate = function (attr, callback) {
+    base.getFirstDate(attr, table_name, callback);
+};
+
+exports.countEndUser = function (attr, callback) {
+    // SELECT COUNT(*) FROM (SELECT DISTINCT macaddress FROM response WHERE survey_id = 2) AS temp;
+    const params = base.parseJsonToParams(attr);
+    // build the query
+    let string_query = `SELECT COUNT(*) FROM (SELECT DISTINCT macaddress FROM ${table_name} `;
+    // Include the attr
+    string_query += base.getWhereFromParams(params, true);
+    string_query += ') AS temp';
+    let result;
+
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if (err) {
+            done();
+            return callback(err);
+        }
+        const query = client.query(string_query, params.values);
+
+        query.on('error', (err) => {
+            done();
+            return callback(err);
+        });
+
+        query.on('row', (row) => {
+            result = row.count;
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', () => {
+            done();
+
+            callback(null, result);
+        });
+    });
+};
 
 exports.amountByHour = function (attr, callback) {
     let results = [];
@@ -126,12 +166,26 @@ exports.amountByHour = function (attr, callback) {
 
         // Stream results back one row at a time
         query.on('row', (row) => {
-            results.push(row);
+            results.push([new Date(null, null, null, row.hour).getTime(), row.amount]);
         });
 
         // After all data is returned, close connection and return results
         query.on('end', () => {
             done();
+            // fill with missing hours
+            for (let h = 0; h < 24; h++) {
+                let present = false;
+                for (let i = 0; i < results.length; i++) {
+                    if (new Date(results[i][0]).getHours() === h) {
+                        present = true;
+                        break;
+                    }
+                }
+                if (!present) {
+                    results.push([new Date(null, null, null, h).getTime(), 0]);
+                }
+            }
+            results.sort((a, b) => (a[0] - b[0]));
             return callback(null, results);
         });
     });
@@ -139,6 +193,7 @@ exports.amountByHour = function (attr, callback) {
 
 exports.tableDateAndHour = function (attr, callback) {
     const results = {};
+    const data = [];
     pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
         if (err) {
@@ -158,7 +213,6 @@ exports.tableDateAndHour = function (attr, callback) {
 
         // Stream results back one row at a time
         query.on('row', (row) => {
-            // results.push(row);
             const date = dateFromDay(2016, row.doy).toString().substring(0, 15);
             if (!results[date]) {
                 results[date] = new Array(24);
@@ -170,7 +224,26 @@ exports.tableDateAndHour = function (attr, callback) {
         // After all data is returned, close connection and return results
         query.on('end', () => {
             done();
-            return callback(null, results);
+            for (let i = 0; i < Object.keys(results).length; i++) {
+                const date = Object.keys(results)[i];
+                const dataFromDate = [];
+                for (let j = 0; j < 24; j++) {
+                    const hours = new Date(null, null, null, j).getTime();
+                    let amount;
+                    if (results[Object.keys(results)[i]][j]) {
+                        amount = results[Object.keys(results)[i]][j];
+                        // dataFromDate.push([new Date(null, null, null, h).getTime(), results[Object.keys(results)[i]][j]);
+                    } else {
+                        amount = 0;
+                    }
+                    dataFromDate.push([hours, amount]);
+                }
+                data.push({
+                    label: date,
+                    data: dataFromDate,
+                });
+            }
+            return callback(null, data);
         });
     });
 };

@@ -4,6 +4,10 @@ controllers
         $scope.places = {};
         $scope.selectedPlace = null;
         $scope.metrics = {};
+        $scope.loadingDisplayedByDayChart = true;
+        $scope.loadingDisplayedByHourChart = true;
+        $scope.loadingDisplayedByDayAndHourChart = true;
+
 
     // Get all places
         $scope.initializePlaces = function (places, selectedPlace) {
@@ -19,10 +23,6 @@ controllers
             }
         };
 
-        $scope.get = function (d) {
-            console.log(d);
-            console.log($scope.metrics.table[d]);
-        };
 
         $scope.getKeys = function (json) {
             return Object.keys(json);
@@ -40,9 +40,6 @@ controllers
             });
         };
 
-        $scope.log = function (thing) {
-            console.log(thing);
-        };
 
         function locallyUpdatePlace(updated_place) {
             if ($scope.selectedPlace && $scope.selectedPlace.id == updated_place.id)
@@ -93,5 +90,129 @@ controllers
 
         $scope.setSelectedPlace = function (place) {
             $scope.selectedPlace = place;
+        };
+
+
+    // metrics
+
+        const options = {
+            xaxis: {
+                mode: 'time',
+                minTickSize: [1, 'hour'],
+            },
+            series: {
+                lines: {
+                    show: true,
+                },
+                points: {
+                    show: true,
+                },
+            },
+            grid: {
+                hoverable: true, // IMPORTANT! this is needed for tooltip to work
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: '%y respuestas',
+                shifts: {
+                    x: -60,
+                    y: 25,
+                },
+            },
+
+        };
+
+        $scope.getDisplayedByDay = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/daily')
+            .success(function (results) {
+                const data = results.data;
+                $scope.loadingDisplayedByDayChart = false;
+
+                const newData = [data[0]];
+
+                for (let i = 1; i < data.length; i++) {
+                    const d1 = data[i - 1][0];
+                    const d2 = data[i][0];
+                    const diff = Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+                    const startDate = new Date(data[i - 1][0]);
+                    if (diff > 1) {
+                        for (let j = 0; j < diff - 1; j++) {
+                            const fillDate = new Date(startDate).setDate(startDate.getDate() + (j + 1));
+                            newData.push([fillDate, 0]);
+                        }
+                    }
+                    newData.push(data[i]);
+                }
+
+                const d = newData;
+
+
+                $.plot('#displayed-by-day-line-chart', [d], options);
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
+
+        $scope.getDisplayedByHour = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/hourly')
+            .success(function (results) {
+                const d = results.data;
+                // get Offset
+                const offset = new Date().getTimezoneOffset();
+                for (let i = 0; i < d.length; i++) {
+                    d[i][0] -= (offset * 60 * 1000);
+                }
+                $scope.loadingDisplayedByHourChart = false;
+                $.plot('#displayed-by-hour-line-chart', [d], options);
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
+        $scope.getDisplayedByDayAndHour = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/dayandhour')
+            .success(function (results) {
+                const d = results.data;
+                // get Offset
+                const offset = new Date().getTimezoneOffset();
+                for (let i = 0; i < d.length; i++) {
+                    d[i].data[0] -= (offset * 60 * 1000);
+                }
+                $scope.loadingDisplayedByDayAndHourChart = false;
+                $.plot('#displayed-by-day-and-hour-line-chart', d, options);
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+        };
+
+
+        $scope.getTotalDisplayed = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/count')
+
+        .success(function (results) {
+            place.totalDisplayed = results.data;
+            const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+            const firstDate = new Date(results.date);
+            const secondDate = new Date();
+
+
+            const diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+            place.totalDays = diffDays;
+        })
+            .error(function (data) {
+            });
+        };
+
+        $scope.getTotalEndUsers = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/endusers/count')
+
+        .success(function (results) {
+            place.totalEndUsers = results.data;
+            console.log(place.totalEndUsers);
+        })
+            .error(function (data) {
+            });
         };
     });

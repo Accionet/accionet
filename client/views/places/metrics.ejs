@@ -63,8 +63,8 @@
                                                 <div class="panel panel-default">
                                                     <div class="panel-body easypiechart-panel">
                                                         <div class="easypiechart" id="easypiechart-teal" data-percent="100">
-                                                          <span ng-if ="selectedPlace.totalDisplayed" class="percent">{{selectedPlace.totalDisplayed/ selectedPlace.totalDays | number:2}}</span>
-                                                            <span ng-if="!selectedPlace.totalDisplayed" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                                                          <span ng-if ="selectedPlace.totalVisits" class="percent">{{selectedPlace.totalVisits/ selectedPlace.totalDays | number:2}}</span>
+                                                            <span ng-if="!selectedPlace.totalVisits" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                                                         </div>
                                                         <h4 class="text-center"> Visitas diarias promedio </h4>
                                                     </div>
@@ -72,10 +72,10 @@
                                             </div>
                                             <div class="col-xs-12 col-md-4">
                                                 <div class="panel panel-default">
-                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalDisplayed(selectedPlace)">
+                                                    <div class="panel-body easypiechart-panel" ng-init="getTotalVisits(selectedPlace)">
                                                         <div class="easypiechart" id="easypiechart-red" data-percent="100">
-                                                          <span ng-if ="selectedPlace.totalDisplayed" class="percent">{{selectedPlace.totalDisplayed}}</span>
-                                                            <span ng-if="!selectedPlace.totalDisplayed" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                                                          <span ng-if ="selectedPlace.totalVisits" class="percent">{{selectedPlace.totalVisits}}</span>
+                                                            <span ng-if="!selectedPlace.totalVisits" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                                                         </div>
                                                         <h4 class="text-center">Visitas</h4>
                                                     </div>
@@ -90,10 +90,10 @@
                                                     </h4>
                                                 </div>
                                                 <!-- /.panel-heading -->
-                                                <div id="day-panel" class="panel-collapse collapse in" ng-init='getDisplayedByDay(selectedPlace)'>
+                                                <div id="day-panel" class="panel-collapse collapse in" ng-init='getVisitsByDay(selectedPlace)'>
                                                     <div class="flot-chart">
-                                                        <div ng-if="loadingDisplayedByDayChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
-                                                        <div class="flot-chart-content" id="displayed-by-day-line-chart"></div>
+                                                        <div ng-if="loadingVisitsByDayChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
+                                                        <div class="flot-chart-content" id="visits-by-day-line-chart"></div>
                                                     </div>
                                                 </div>
                                                 <!-- /.panel-body -->
@@ -105,10 +105,10 @@
                                                     </h4>
                                                 </div>
                                                 <!-- /.panel-heading -->
-                                                <div id="hour-panel" class="panel-collapse collapse in" ng-init='getDisplayedByHour(selectedPlace)'>
+                                                <div id="hour-panel" class="panel-collapse collapse in" ng-init='getVisitsByHour(selectedPlace)'>
                                                     <div class="flot-chart">
-                                                        <div ng-if="loadingDisplayedByHourChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
-                                                        <div class="flot-chart-content" id="displayed-by-hour-line-chart"></div>
+                                                        <div ng-if="loadingVisitsByHourChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
+                                                        <div class="flot-chart-content" id="visits-by-hour-line-chart"></div>
                                                     </div>
                                                 </div>
                                                 <!-- /.panel-body -->
@@ -120,10 +120,10 @@
                                                     </h4>
                                                 </div>
                                                 <!-- /.panel-heading -->
-                                                <div id="day-hour-panel" class="panel-collapse collapse in" ng-init='getDisplayedByDayAndHour(selectedPlace)'>
+                                                <div id="day-hour-panel" class="panel-collapse collapse in" ng-init='getVisitsByDayAndHour(selectedPlace)'>
                                                     <div class="flot-chart">
-                                                        <div ng-if="loadingDisplayedByDayAndHourChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
-                                                        <div class="flot-chart-content" id="displayed-by-day-and-hour-line-chart"></div>
+                                                        <div ng-if="loadingVisitsByDayAndHourChart" class="huge text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
+                                                        <div class="flot-chart-content" id="visits-by-day-and-hour-line-chart"></div>
                                                     </div>
                                                 </div>
                                                 <!-- /.panel-body -->

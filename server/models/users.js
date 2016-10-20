@@ -1,5 +1,5 @@
 // server/models/users.js
-"use strict";
+'use strict';
 
 const path = require('path');
 const pg = require('pg');
@@ -16,8 +16,8 @@ exports.all = function getUsers(callback) {
     base.all(table_name, callback);
 };
 
-exports.count = function countUsers(callback) {
-    base.count(table_name, callback);
+exports.count = function countUsers(attr, callback) {
+    base.count(attr, table_name, callback);
 };
 
 // Creates a json representing an empty entry

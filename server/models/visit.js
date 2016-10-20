@@ -1,12 +1,12 @@
 'use strict';
 
 
-// server/models/displayed.js
+// server/models/visit.js
 const path = require('path');
 const pg = require('pg');
 const base = require('../models/base');
 
-const table_name = 'displayed';
+const table_name = 'visits';
 const connectionString = require(path.join(__dirname, '../', '../', 'config'));
 
 
@@ -69,7 +69,7 @@ exports.amountByDay = function (attr, callback) {
 
         // SQL Query > Delete Data
         const params = base.parseJsonToParams(attr);
-        let string_query = 'SELECT EXTRACT(DOY from created_at) as doy, count(*) as amount FROM displayed';
+        let string_query = 'SELECT EXTRACT(DOY from created_at) as doy, count(*) as amount FROM visits';
         string_query += base.getWhereFromParams(params, true);
         string_query += ' GROUP BY doy ORDER BY doy';
 
@@ -141,7 +141,7 @@ exports.countEndUser = function (attr, callback) {
 
 exports.amountByHour = function (attr, callback) {
     let results = [];
-    // "SELECT EXTRACT(HOUR from created_at) AS hour, count(*) AS amount FROM displayed GROUP BY hour ORDER BY hour"
+    // "SELECT EXTRACT(HOUR from created_at) AS hour, count(*) AS amount FROM visits GROUP BY hour ORDER BY hour"
 
     pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
@@ -152,7 +152,7 @@ exports.amountByHour = function (attr, callback) {
 
 
         const params = base.parseJsonToParams(attr);
-        let string_query = 'SELECT EXTRACT(HOUR from created_at) AS hour, count(*) AS amount FROM displayed ';
+        let string_query = `SELECT EXTRACT(HOUR from created_at) AS hour, count(*) AS amount FROM ${table_name} `;
         string_query += base.getWhereFromParams(params, true);
         string_query += ' GROUP BY hour ORDER BY hour ';
 
@@ -203,7 +203,7 @@ exports.tableDateAndHour = function (attr, callback) {
 
         // SQL Query > Delete Data
         const params = base.parseJsonToParams(attr);
-        let string_query = 'SELECT EXTRACT(doy FROM created_at) as doy, EXTRACT(hour FROM created_at) as hour, count(*) as amount FROM displayed ';
+        let string_query = `SELECT EXTRACT(doy FROM created_at) as doy, EXTRACT(hour FROM created_at) as hour, count(*) as amount FROM ${table_name} `;
         string_query += base.getWhereFromParams(params, true);
         string_query += '  GROUP BY doy, hour ORDER BY doy,hour ';
         const query = client.query(string_query, params.values);

@@ -5,10 +5,10 @@ const Surveys = require('../models/surveys');
 const Questions = require('../models/questions');
 const Response = require('../models/response');
 const Answer = require('../models/answer');
-const Displayed = require('../models/displayed');
+const Visits = require('../models/visit');
 
 
-Displayed.tableDateAndHour({
+Visits.tableDateAndHour({
     place_id: 1,
 }, (err, daily) => {
     if (err) {

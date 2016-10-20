@@ -4,9 +4,9 @@ controllers
         $scope.places = {};
         $scope.selectedPlace = null;
         $scope.metrics = {};
-        $scope.loadingDisplayedByDayChart = true;
-        $scope.loadingDisplayedByHourChart = true;
-        $scope.loadingDisplayedByDayAndHourChart = true;
+        $scope.loadingVisitsByDayChart = true;
+        $scope.loadingVisitsByHourChart = true;
+        $scope.loadingVisitsByDayAndHourChart = true;
 
 
     // Get all places
@@ -122,11 +122,11 @@ controllers
 
         };
 
-        $scope.getDisplayedByDay = function (place) {
-            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/daily')
+        $scope.getVisitsByDay = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/visits/daily')
             .success(function (results) {
                 const data = results.data;
-                $scope.loadingDisplayedByDayChart = false;
+                $scope.loadingVisitsByDayChart = false;
 
                 const newData = [data[0]];
 
@@ -147,15 +147,15 @@ controllers
                 const d = newData;
 
 
-                $.plot('#displayed-by-day-line-chart', [d], options);
+                $.plot('#visits-by-day-line-chart', [d], options);
             })
             .error(function (data) {
                 console.log('Error: ' + data);
             });
         };
 
-        $scope.getDisplayedByHour = function (place) {
-            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/hourly')
+        $scope.getVisitsByHour = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/visits/hourly')
             .success(function (results) {
                 const d = results.data;
                 // get Offset
@@ -163,15 +163,15 @@ controllers
                 for (let i = 0; i < d.length; i++) {
                     d[i][0] -= (offset * 60 * 1000);
                 }
-                $scope.loadingDisplayedByHourChart = false;
-                $.plot('#displayed-by-hour-line-chart', [d], options);
+                $scope.loadingVisitsByHourChart = false;
+                $.plot('#visits-by-hour-line-chart', [d], options);
             })
             .error(function (data) {
                 console.log('Error: ' + data);
             });
         };
-        $scope.getDisplayedByDayAndHour = function (place) {
-            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/dayandhour')
+        $scope.getVisitsByDayAndHour = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/visits/dayandhour')
             .success(function (results) {
                 const d = results.data;
                 // get Offset
@@ -179,8 +179,8 @@ controllers
                 for (let i = 0; i < d.length; i++) {
                     d[i].data[0] -= (offset * 60 * 1000);
                 }
-                $scope.loadingDisplayedByDayAndHourChart = false;
-                $.plot('#displayed-by-day-and-hour-line-chart', d, options);
+                $scope.loadingVisitsByDayAndHourChart = false;
+                $.plot('#visits-by-day-and-hour-line-chart', d, options);
             })
             .error(function (data) {
                 console.log('Error: ' + data);
@@ -188,11 +188,11 @@ controllers
         };
 
 
-        $scope.getTotalDisplayed = function (place) {
-            $http.get('/api/v1/places/' + place.id + '/metrics/displayed/count')
+        $scope.getTotalVisits = function (place) {
+            $http.get('/api/v1/places/' + place.id + '/metrics/visits/count')
 
         .success(function (results) {
-            place.totalDisplayed = results.data;
+            place.totalVisits = results.data;
             const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
             const firstDate = new Date(results.date);
             const secondDate = new Date();

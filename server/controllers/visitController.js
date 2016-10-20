@@ -1,8 +1,8 @@
-// server/controllers/displayedController
+// server/controllers/visitsController
 'use strict';
 
 
-const Displayed = require('../models/displayed');
+const Visits = require('../models/visit');
 const httpResponse = require('../services/httpResponse');
 
 
@@ -82,7 +82,7 @@ function getBrowser(ua) {
 exports.create = function (req, res) {
     const visit = req.body;
     addRequestParams(visit, req);
-    Displayed.save(visit, (err) => {
+    Visits.save(visit, (err) => {
         if (err) {
             return res.status(400).send({
                 error: err,
@@ -101,7 +101,7 @@ exports.create = function (req, res) {
 
 exports.dailyTable = function (req, res) {
     const id = req.params.id;
-    Displayed.amountByDay({
+    Visits.amountByDay({
         place_id: id,
     }, (err, daily) => {
         if (err) {
@@ -115,7 +115,7 @@ exports.dailyTable = function (req, res) {
 
 exports.hourlyTable = function (req, res) {
     const id = req.params.id;
-    Displayed.amountByHour({
+    Visits.amountByHour({
         place_id: id,
     }, (err, hourly) => {
         if (err) {
@@ -129,7 +129,7 @@ exports.hourlyTable = function (req, res) {
 
 exports.dayAndHourTable = function (req, res) {
     const id = req.params.id;
-    Displayed.tableDateAndHour({
+    Visits.tableDateAndHour({
         place_id: id,
     }, (err, table) => {
         if (err) {
@@ -143,19 +143,19 @@ exports.dayAndHourTable = function (req, res) {
 };
 
 /**
-This method also return the first date of a displayed to count the daily average.
+This method also return the first date of a visits to count the daily average.
 **/
 exports.countOfPlace = function (req, res) {
     const id = req.params.id;
     const attr = {
         place_id: id,
     };
-    Displayed.count(attr, (err, data) => {
+    Visits.count(attr, (err, data) => {
         if (err) {
             const json = httpResponse.error(err);
             return res.status(400).send(json);
         }
-        Displayed.getFirstDate(attr, (err, date) => {
+        Visits.getFirstDate(attr, (err, date) => {
             if (err) {
                 const json = httpResponse.error(err);
                 return res.status(400).send(json);
@@ -171,7 +171,7 @@ exports.countEndUsersOfPlace = function (req, res) {
     const attr = {
         place_id: id,
     };
-    Displayed.countEndUser(attr, (err, data) => {
+    Visits.countEndUser(attr, (err, data) => {
         if (err) {
             const json = httpResponse.error(err);
             return res.status(400).send(json);

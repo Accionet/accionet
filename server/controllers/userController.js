@@ -9,12 +9,12 @@ exports.login = function renderLogin(req, res) {
 
 
 exports.count = function countUsers(req, res) {
-    Users.count((err, result) => {
+    Users.count({}, (err, result) => {
         if (err) {
             const json = httpResponse.error(err);
             return res.status(500).send(json);
         }
-        const success_json = httpResponse.success('Usuarions contados exitosamente', 'amount', result);
+        const success_json = httpResponse.success('Usuarios contados exitosamente', 'amount', result);
         return res.status(200).send(success_json);
     });
 };

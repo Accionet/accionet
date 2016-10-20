@@ -67,8 +67,10 @@ exports.all = function (callback) {
 
 exports.find = find;
 
-exports.count = function countAmountOf(callback) {
-    base.count(table_name, callback);
+exports.count = function countAmountOf(attr, callback) {
+    console.log('llegaron att');
+    console.log(attr);
+    base.count(attr, table_name, callback);
 };
 
 function addOptionToQuestion(array, row) {

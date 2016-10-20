@@ -52,7 +52,9 @@ exports.disabled = function getAllSurveys(req, res) {
 };
 
 exports.count = function countSurveys(req, res) {
-    Surveys.count((err, result) => {
+    console.log('vamooos');
+    Surveys.count({}, (err, result) => {
+        console.log('llegoo');
         if (err) {
             const json = httpResponse.error(err);
             return res.status(500).send(json);

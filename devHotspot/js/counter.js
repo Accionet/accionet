@@ -2,7 +2,7 @@ $(function () {
     const url = 'http://localhost:3000/';
 
     const macaddress = $('#macAddress').val();
-    $.post(url + 'displayed/new', {
+    $.post(url + 'visits/new', {
         macaddress,
         place_id: 1,
     });

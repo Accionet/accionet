@@ -11,7 +11,7 @@ const placeController = require('../controllers/placeController');
 const userController = require('../controllers/userController');
 const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
-const displayedController = require('../controllers/displayedController');
+const visitController = require('../controllers/visitController');
 
 
 router.use((req, res, next) => {
@@ -167,35 +167,35 @@ router.get('/api/v1/surveys/:id/metrics/enduser/count', (req, res, next) => {
 
 
 // //////////////////////////////////////////
-// ///////// Displayed  ////////////////////
+// ///////// Visits  ////////////////////
 // ////////////////////////////////////////
 
-router.post('/displayed/new', (req, res, next) => {
-    displayedController.create(req, res, next);
+router.post('/visits/new', (req, res, next) => {
+    visitController.create(req, res, next);
 });
 
-router.get('/api/v1/places/:id/metrics/displayed/daily', (req, res, next) => {
-    displayedController.dailyTable(req, res, next);
+router.get('/api/v1/places/:id/metrics/visits/daily', (req, res, next) => {
+    visitController.dailyTable(req, res, next);
 });
 
-router.get('/api/v1/places/:id/metrics/displayed/hourly', (req, res, next) => {
-    displayedController.hourlyTable(req, res, next);
+router.get('/api/v1/places/:id/metrics/visits/hourly', (req, res, next) => {
+    visitController.hourlyTable(req, res, next);
 });
 
-router.get('/api/v1/places/:id/metrics/displayed/dayandhour', (req, res, next) => {
-    displayedController.dayAndHourTable(req, res, next);
+router.get('/api/v1/places/:id/metrics/visits/dayandhour', (req, res, next) => {
+    visitController.dayAndHourTable(req, res, next);
 });
 
-router.get('/api/v1/places/:id/metrics/displayed/count', (req, res, next) => {
-    displayedController.countOfPlace(req, res, next);
+router.get('/api/v1/places/:id/metrics/visits/count', (req, res, next) => {
+    visitController.countOfPlace(req, res, next);
 });
 
-router.get('/api/v1/surveys/:id/metrics/displayed/count', (req, res, next) => {
-    displayedController.countOfSurvey(req, res, next);
+router.get('/api/v1/surveys/:id/metrics/visits/count', (req, res, next) => {
+    visitController.countOfSurvey(req, res, next);
 });
 
 router.get('/api/v1/places/:id/metrics/endusers/count', (req, res, next) => {
-    displayedController.countEndUsersOfPlace(req, res, next);
+    visitController.countEndUsersOfPlace(req, res, next);
 });
 
 

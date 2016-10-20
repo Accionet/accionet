@@ -6,7 +6,7 @@ const pg = require('pg');
 const connectionString = require(path.join(__dirname, '../', '../', 'config'));
 const q = require('q');
 const base = require('../models/base');
-const Displayed = require('../models/displayed');
+const Visit = require('../models/visit');
 
 const table_name = 'places';
 
@@ -16,8 +16,8 @@ exports.all = function getAllPlaces(callback) {
     base.all(table_name, callback);
 };
 
-exports.count = function countAmountOf(callback) {
-    base.count(table_name, callback);
+exports.count = function countAmountOf(attr, callback) {
+    base.count(attr, table_name, callback);
 };
 
 // Creates a json representing an empty place
@@ -104,19 +104,19 @@ exports.toggleIsActive = function toggleIsActive(id, callback) {
 
 
 exports.metrics = function (id, callback) {
-    Displayed.amountByDay({
+    Visit.amountByDay({
         place_id: id,
     }, (err, daily) => {
         if (err) {
             return callback(err);
         }
-        Displayed.amountByHour({
+        Visit.amountByHour({
             place_id: id,
         }, (err, hourly) => {
             if (err) {
                 return callback(err);
             }
-            Displayed.tableDateAndHour({
+            Visit.tableDateAndHour({
                 place_id: id,
             }, (err, table) => {
                 if (err) {

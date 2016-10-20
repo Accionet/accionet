@@ -365,7 +365,7 @@ User.new((err, newUser) => {
                 }
 
                 for (let i = 0; i < 300; i++) {
-                    queries.push(client.query(`INSERT INTO displayed(place_id, created_at, macaddress) VALUES(1, NOW() - INTERVAL '${Math.floor(Math.random() * 20)} days' - INTERVAL '${Math.floor(Math.random() * 20)} hour', 'hola');`));
+                    queries.push(client.query(`INSERT INTO visits(place_id, created_at, macaddress) VALUES(1, NOW() - INTERVAL '${Math.floor(Math.random() * 20)} days' - INTERVAL '${Math.floor(Math.random() * 20)} hour', 'hola');`));
                     queries[queries.length - 1].on('end', () => {
                         closeConnection();
                     });

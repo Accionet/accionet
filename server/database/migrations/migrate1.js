@@ -28,10 +28,10 @@ queries[queries.length - 1].on('end', () => {
 });
 
 
-queries.push(client.query('CREATE TABLE displayed(id SERIAL PRIMARY KEY, created_at TIMESTAMP, updated_at TIMESTAMP, os VARCHAR(200), browser VARCHAR(200), ip VARCHAR(200), macaddress VARCHAR(200), other VARCHAR(800), place_id INTEGER references places(id) ON DELETE CASCADE, hotspot_id INTEGER references hotspot(id) ON DELETE CASCADE)'));
+queries.push(client.query('CREATE TABLE visits(id SERIAL PRIMARY KEY, created_at TIMESTAMP, updated_at TIMESTAMP, os VARCHAR(200), browser VARCHAR(200), ip VARCHAR(200), macaddress VARCHAR(200), other VARCHAR(800), place_id INTEGER references places(id) ON DELETE CASCADE, hotspot_id INTEGER references hotspot(id) ON DELETE CASCADE)'));
 queries[queries.length - 1].on('end', () => {
         // client.end();
-    console.log('Tabla displayed creada');
+    console.log('Tabla visits creada');
     closeConnection();
 });
 

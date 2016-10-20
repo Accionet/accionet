@@ -47,7 +47,7 @@ exports.disabled = function (req, res) {
 };
 
 exports.count = function getAmountOf(req, res) {
-    Places.count((err, count) => {
+    Places.count({}, (err, count) => {
         if (err) {
             return res.status(500).send({
                 error: err,

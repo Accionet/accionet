@@ -156,6 +156,7 @@ exports.all = function (table_name, callback) {
 
 exports.count = function countAmountOf(attr, table_name, callback) {
     let result;
+    console.log(attr);
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, (err, client, done) => {
         // Handle connection errors
@@ -165,12 +166,27 @@ exports.count = function countAmountOf(attr, table_name, callback) {
         } else {
             // SQL Query > Select Data
             const params = parseJsonToParams(attr);
+
             let query_string = `SELECT COUNT(*) FROM ${table_name}`;
+            console.log('paaa');
+            console.log(query_string);
             query_string += getWhereFromParams(params, true);
+            console.log('querryyy');
+            console.log(query_string);
+            console.log('-----------------------');
             const query = client.query(query_string, params.values);
 
             query.on('error', (err) => {
+                console.log('Error');
+                console.log(err);
+                console.log('attr');
+                console.log(attr);
+                console.log('table_name');
+                console.log(table_name);
+                console.log('callback');
+                console.log(callback);
                 callback(err);
+                console.log('after callbakc');
             });
             // Stream results back one row at a time
             query.on('row', (row) => {

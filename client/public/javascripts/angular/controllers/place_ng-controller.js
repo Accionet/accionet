@@ -36,7 +36,7 @@ controllers
                 locallyUpdatePlace(data.place);
             })
             .error(function (data) {
-                console.log('Error: ' + data);
+                console.log(data);
             });
         };
 
@@ -62,7 +62,7 @@ controllers
                     $window.location.href = '/places/' + data.place.id;
                 })
                 .error(function (error) {
-                    console.log('Error: ' + error);
+                    console.log(error);
                 });
             }
         };
@@ -77,7 +77,7 @@ controllers
                     $window.location.href = '/places/' + place.id;
                 })
                 .error(function (error) {
-                    console.log('Error: ' + error);
+                    console.log(error);
                 });
             }
         };
@@ -150,7 +150,7 @@ controllers
                 $.plot('#visits-by-day-line-chart', [d], options);
             })
             .error(function (data) {
-                console.log('Error: ' + data);
+                console.log(data);
             });
         };
 
@@ -167,7 +167,7 @@ controllers
                 $.plot('#visits-by-hour-line-chart', [d], options);
             })
             .error(function (data) {
-                console.log('Error: ' + data);
+                console.log(data);
             });
         };
         $scope.getVisitsByDayAndHour = function (place) {
@@ -183,7 +183,7 @@ controllers
                 $.plot('#visits-by-day-and-hour-line-chart', d, options);
             })
             .error(function (data) {
-                console.log('Error: ' + data);
+                console.log(data);
             });
         };
 

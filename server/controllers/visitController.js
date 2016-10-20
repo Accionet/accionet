@@ -100,6 +100,7 @@ exports.create = function (req, res) {
 // ///////////////////////////////////////
 
 exports.dailyTable = function (req, res) {
+    console.log('daily');
     const id = req.params.id;
     Visits.amountByDay({
         place_id: id,
@@ -114,6 +115,8 @@ exports.dailyTable = function (req, res) {
 };
 
 exports.hourlyTable = function (req, res) {
+    console.log('hourly');
+
     const id = req.params.id;
     Visits.amountByHour({
         place_id: id,
@@ -128,6 +131,8 @@ exports.hourlyTable = function (req, res) {
 };
 
 exports.dayAndHourTable = function (req, res) {
+    console.log('daily and hour');
+
     const id = req.params.id;
     Visits.tableDateAndHour({
         place_id: id,
@@ -146,6 +151,8 @@ exports.dayAndHourTable = function (req, res) {
 This method also return the first date of a visits to count the daily average.
 **/
 exports.countOfPlace = function (req, res) {
+    console.log('fromaa placee');
+
     const id = req.params.id;
     const attr = {
         place_id: id,
@@ -167,6 +174,7 @@ exports.countOfPlace = function (req, res) {
 };
 
 exports.countEndUsersOfPlace = function (req, res) {
+    console.log('enddd users');
     const id = req.params.id;
     const attr = {
         place_id: id,

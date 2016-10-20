@@ -14,7 +14,7 @@ exports.index = function (req, res) {
         is_active: active,
     }, (err, result) => {
         if (err) {
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+            return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 places: [],
                 show_active: active,
@@ -33,7 +33,7 @@ exports.disabled = function (req, res) {
         is_active: active,
     }, (err, result) => {
         if (err) {
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+            return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 places: [],
                 show_active: active,
@@ -71,7 +71,7 @@ exports.count = function getAmountOf(req, res) {
 exports.new = function getNewPlace(req, res) {
     Places.new((err, result) => {
         if (err) {
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+            return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 places: [],
             });
@@ -118,11 +118,16 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
 
 exports.metrics = function showMetrics(req, res) {
     Places.findById(req.params.id, (err, place) => {
-        if (err) {
+        if (err || !place) {
             const json = httpResponse.error(err);
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
+            console.log('Ubo un errors');
+            return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
         }
         Places.metrics(place.id, (err, metrics) => {
+            if (err) {
+                const json = httpResponse.error(err);
+                return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
+            }
             // const json = httpResponse.success(`Metricas de ${place.id}`, 'metrics', metrics);
             const json = {
                 message: `Metricas de ${place.id}`,
@@ -143,7 +148,7 @@ exports.metrics = function showMetrics(req, res) {
 exports.edit = function editPlace(req, res) {
     Places.findById(req.params.id, (err, place) => {
         if (err) {
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+            return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 places: [],
             });
@@ -157,7 +162,7 @@ exports.edit = function editPlace(req, res) {
 exports.show = function showPlace(req, res) {
     Places.findById(req.params.id, (err, place) => {
         if (err) {
-            res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+            return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 place: [],
             });

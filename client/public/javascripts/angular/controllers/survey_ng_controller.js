@@ -187,9 +187,9 @@ controllers
         };
 
         $scope.deleteQuestion = function (question) {
-            const i = $scope.questions.indexOf(question);
+            const i = $scope.selectedSurvey.questions.indexOf(question);
         // remove from i only 1
-            $scope.questions.splice(i, 1);
+            $scope.selectedSurvey.questions.splice(i, 1);
         };
 
     // add a new option to 'option'

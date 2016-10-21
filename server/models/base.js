@@ -368,14 +368,11 @@ function buildUpdateQuery(id, params, table_name) {
 
 // gets a regular json and convert it to a json of the form: params = { keys: [], values: []} including only the keys in the regular json
 function parseForUpdate(table_name, regular_json, callback) {
-    const deferrer = q.defer();
-
     regular_json.updated_at = new Date();
-
 
     getColumnNames(table_name, (err, columns) => {
         if (err) {
-            deferrer.reject(err);
+            callback(err);
         }
         const params = {
             keys: [],
@@ -392,46 +389,39 @@ function parseForUpdate(table_name, regular_json, callback) {
                 }
             }
         }
-
-        deferrer.resolve(params);
-        deferrer.promise.nodeify(callback);
-        return deferrer.promise;
+        return callback(null, params);
     });
 }
 
 
 function sendUpdateRequest(id, attr, table_name, callback) {
-    const deferrer = q.defer();
-
+    let result;
     parseForUpdate(table_name, attr, (err, params) => {
         if (err) {
-            deferrer.reject(err);
+            callback(err);
         } else {
             // Get a Postgres client from the connection pool
             pg.connect(connectionString, (err_connect, client, done) => {
                 // Handle connection errors
                 if (err_connect) {
                     done();
-                    deferrer.reject(err);
+                    callback(err_connect);
                 } else {
                     const query_string = buildUpdateQuery(id, params, table_name);
                     params.values.push(id);
                     const query = client.query(query_string, params.values);
 
+                    query.on('error', (err) => (callback(err)));
+
+                    query.on('row', (entry) => {
+                        result = entry;
+                    });
                     // After all data is returned, close connection and return results
                     query.on('end', () => {
-                        findById(id, table_name, (err_find, entry) => {
-                            if (err_find) {
-                                deferrer.reject(err);
-                            } else {
-                                deferrer.resolve(entry);
-                            }
-                            done();
-                        });
+                        done();
+                        callback(null, result);
                     });
                 }
-                deferrer.promise.nodeify(callback);
-                return deferrer.promise;
             });
         }
     });

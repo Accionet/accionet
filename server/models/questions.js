@@ -53,6 +53,44 @@ exports.update = function updateQuestion(id, attr, callback) {
     base.update(id, attr, table_name, callback);
 };
 
+exports.updateQuestionsOfSurvey = function (survey, callback) {
+    const attr = {
+        survey_id: survey.id,
+    };
+
+    base.find(attr, table_name, (err, questions) => {
+        if (err) {
+            return callback(err);
+        }
+
+        const totalQueries = questions.length;
+        let finishedQueries = 0;
+        for (let i = 0; i < questions.length; i++) {
+            let indexOfUpdate = -1;
+            for (let j = 0; j < survey.questions.length; j++) {
+                if (questions[i].id === survey.questions[j]) {
+                    indexOfUpdate = j;
+                    break;
+                }
+            }
+
+            // if it doesnt have an update then it has to be deleted
+            if (indexOfUpdate === -1) {
+                base.delete(questions.id, table_name, (err) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    finishedQueries++;
+                    if (finishedQueries === totalQueries) {
+                        return callback(null, survey.questions);
+                    }
+                });
+            }
+        }
+        callback(null, questions);
+    });
+};
+
 exports.findById = function findQuestionById(id, callback) {
     base.findById(id, table_name, callback);
 };

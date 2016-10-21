@@ -93,15 +93,22 @@ exports.edit = function showSurvey(req, res) {
 
 exports.update = function saveSurvey(req, res) {
     const survey = req.body;
-    Surveys.update(survey, (err, result) => {
-        if (err) {
-            const json = httpResponse.error(err);
-            return res.status(500).send(json);
-        }
 
-        const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
-        return res.status(200).send(json);
-    });
+    if (survey.id === req.params.id) {
+        Surveys.update(survey.id, survey, (err, result) => {
+            if (err) {
+                console.log('errror');
+                const json = httpResponse.error(err);
+                return res.status(500).send(json);
+            }
+            console.log('no error');
+            const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
+            return res.status(200).send(json);
+        });
+    } else {
+        const json = httpResponse.error('IDs no coinciden');
+        return res.status(500).send(json);
+    }
 };
 
 
@@ -193,7 +200,7 @@ exports.responseSurvey = function (req, res) {
         });
     } else {
         // Responder con attributos mal hechos
-        const json = httpResponse.error('ID no coinciden');
+        const json = httpResponse.error('IDs no coinciden');
         return res.status(400).send(json);
     }
 };

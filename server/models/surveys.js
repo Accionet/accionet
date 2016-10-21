@@ -33,6 +33,9 @@ function find(attr, callback) {
 
 
             let amount = 0;
+
+            query.on('error', (err) => (deferrer.reject(err)));
+
             query.on('row', (row) => {
                 amount = row.amount;
             });
@@ -43,6 +46,8 @@ function find(attr, callback) {
 
                 const params = base.parseJsonToParams(attr);
                 const query_all_surveys = client.query(query_string, params.values);
+
+                query_all_surveys.on('error', (err) => (deferrer.reject(err)));
 
                 query_all_surveys.on('row', (row) => {
                     extractAndAddSurvey(results, row);
@@ -68,8 +73,6 @@ exports.all = function (callback) {
 exports.find = find;
 
 exports.count = function countAmountOf(attr, callback) {
-    console.log('llegaron att');
-    console.log(attr);
     base.count(attr, table_name, callback);
 };
 
@@ -201,7 +204,18 @@ exports.save = function saveSurvey(attr, callback) {
 };
 
 exports.update = function updateSurvey(id, attr, callback) {
-    base.update(id, attr, table_name, callback);
+    base.update(id, attr, table_name, (err, survey) => {
+        if (err || !survey) {
+            return callback(err);
+        }
+        Questions.updateQuestionsOfSurvey(attr, (err, questions) => {
+            if (err) {
+                return callback(err);
+            }
+            survey.questions = questions;
+            return callback(null, survey);
+        });
+    });
 };
 
 
@@ -260,7 +274,7 @@ exports.getMetrics = function getMetricsOfSurvey(id, callback) {
             const question = survey[0].questions[i];
 
 
-            Answer.getMetrics(question, (err_metrics, question_with_metrics) => {
+            Answer.getMetrics(question, (err_metrics) => {
                 if (err_metrics) {
                     deferrer.reject(err_metrics);
                 } else {
@@ -273,27 +287,27 @@ exports.getMetrics = function getMetricsOfSurvey(id, callback) {
         }
     });
 
-//     SELECT * FROM(
-// SELECT surveys.id as s_id, response.id as r_id, questions.id as q_id, questions.number as q_number, options.statement as o_statement, options.enumeration as o_enumeration,  answer_text, answer_option_id as o_id, questions.type as type
-// FROM response, answer, surveys, questions, options
-// WHERE response.id = answer.response_id
-// AND answer.question_id = questions.id
-// AND answer.answer_option_id = options.id
-// AND options.question_id = questions.id
-// AND questions.survey_id = surveys.id
-// AND response.survey_id = surveys.id
-// AND questions.type = 'multiple_choice'
-// UNION
-// SELECT surveys.id as s_id, response.id as r_id, questions.id as q_id, questions.number as q_number, null as o_statement, null as o_enumeration,  answer_text, null as o_id, questions.type as type
-// FROM response, answer, surveys, questions
-// WHERE response.id = answer.response_id
-// AND answer.question_id = questions.id
-// AND questions.survey_id = surveys.id
-// AND response.survey_id = surveys.id
-// AND questions.type = 'written_answer'
-// ) as pop_responses
-// GROUP BY s_id, r_id, q_number, o_enumeration, o_statement, answer_text, q_id, o_id, type
-// ORDER BY s_id, r_id, q_id, o_statement;
+    //     SELECT * FROM(
+    // SELECT surveys.id as s_id, response.id as r_id, questions.id as q_id, questions.number as q_number, options.statement as o_statement, options.enumeration as o_enumeration,  answer_text, answer_option_id as o_id, questions.type as type
+    // FROM response, answer, surveys, questions, options
+    // WHERE response.id = answer.response_id
+    // AND answer.question_id = questions.id
+    // AND answer.answer_option_id = options.id
+    // AND options.question_id = questions.id
+    // AND questions.survey_id = surveys.id
+    // AND response.survey_id = surveys.id
+    // AND questions.type = 'multiple_choice'
+    // UNION
+    // SELECT surveys.id as s_id, response.id as r_id, questions.id as q_id, questions.number as q_number, null as o_statement, null as o_enumeration,  answer_text, null as o_id, questions.type as type
+    // FROM response, answer, surveys, questions
+    // WHERE response.id = answer.response_id
+    // AND answer.question_id = questions.id
+    // AND questions.survey_id = surveys.id
+    // AND response.survey_id = surveys.id
+    // AND questions.type = 'written_answer'
+    // ) as pop_responses
+    // GROUP BY s_id, r_id, q_number, o_enumeration, o_statement, answer_text, q_id, o_id, type
+    // ORDER BY s_id, r_id, q_id, o_statement;
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
 };

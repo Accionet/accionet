@@ -1,0 +1,113 @@
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="col-lg-6">
+                    <form role="form">
+                        <div class="form-group">
+                            <input class="form-control" id="titulo" ng-model="selectedSurvey.title" placeholder="Ingrese el título de la encuesta">
+                        </div>
+                    </form>
+                </div>
+                <div class="pull-right">
+                    <!-- <button class="btn btn-success" ng-click = "createTemplate()">Guardar Planilla</button> -->
+                    <% if(locals.save) { %>  <button class="btn btn-primary" ng-click="createSurvey()"> Guardar Encuesta </button> <% }%>
+                    <% if(locals.edit) { %>  <button class="btn btn-primary" ng-click="updateSurvey()">Guardar Cambios</button> <% }%>
+
+                </div>
+                <h6 ng-if="error" class="error">{{ error}}</h6>
+                <h6 ng-if="success" class="success">{{ success}}</h6>
+            </div>
+            <!-- .panel-heading -->
+            <div class="panel-body">
+                <div class="panel-group">
+                    <div class="panel panel-default" ng-repeat="question in selectedSurvey.questions">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{selectedSurvey.questions.indexOf(question) + 1}}">Pregunta {{selectedSurvey.questions.indexOf(question) + 1}}</a>
+                                <i class="fa fa-times fa-fw pull-right" ng-click="deleteQuestion(question)"></i>
+                            </h4>
+                        </div>
+                        <div id="collapse{{selectedSurvey.questions.indexOf(question) + 1}}" class="panel-collapse collapse in">
+                            <div class="panel-body" ng-if="question.type == MULTIPLE_CHOICE || question.type == MULTIPLE_ANSWER ">
+                                <% include ../question/create-multiple-choice.ejs %>
+                            </div>
+                            <!-- display the question if it is a short answer question -->
+                            <div class="panel-body" ng-if="question.type == SHORT_ANSWER">
+                                <% include ../question/create-short-answer.ejs %>
+                            </div>
+                            <!-- display the question if it is a long answer question -->
+                            <div class="panel-body" ng-if="question.type == LONG_ANSWER">
+                                <% include ../question/create-long-answer.ejs %>
+                            </div>
+                            <!-- display the question if it is a numeric question -->
+                            <div class="panel-body" ng-if="question.type == NUMERIC">
+                                <% include ../question/create-numeric.ejs %>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- show the 'no questions' whe there is no questions in the activity -->
+                    <h6 class="empty-list" ng-if="questions.length == 0">
+                    No hay preguntas. Elija bajo 'Agregar Pregunta' que tipo de pregunta desea agregar.
+                    </h6>
+                </div>
+            </div>
+            <!-- .panel-body -->
+            <div class="panel-footer clearfix">
+                <div class="pull-right">
+                  <% if(locals.save) { %>  <button class="btn btn-primary" ng-click="createSurvey()">Guardar Encuesta</button> <% }%>
+                  <% if(locals.edit) { %>  <button class="btn btn-primary" ng-click="updateSurvey()">Guardar Cambios</button> <% }%>
+
+                </div>
+                <h6 ng-if="error" class="error">{{ error}}</h6>
+                <h6 ng-if="success" class="success">{{ success}}</h6>
+            </div>
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-question fa-fw"></i> Agregar Pregunta
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item pressable" ng-click="addQuestion(MULTIPLE_CHOICE)">
+                        <i class="fa fa-asterisk fa-fw"></i> Pregunta de Alternativas (Una sola respuesta)
+                    </li>
+                    <li class="list-group-item pressable" ng-click="addQuestion(MULTIPLE_ANSWER)">
+                        <i class="fa fa-asterisk fa-fw"></i> Pregunta de Alternativas (multiple respuestas)
+                    </li>
+                    <li class="list-group-item pressable" ng-click="addQuestion(YES_NO)">
+                        <i class="fa fa-asterisk fa-fw"></i> Si o No
+                    </li>
+                    <li class="list-group-item pressable" ng-click="addQuestion(TRUE_FALSE)">
+                        <i class="fa fa-asterisk fa-fw"></i> Verdadero o Falso
+                    </li>
+                    <li class="list-group-item pressable" ng-click="addQuestion(LIKERT)">
+                        <i class="fa fa-asterisk fa-fw"></i> Escala Likert
+                    </li>
+                    <li class="list-group-item pressable" ng-click="addQuestion(NUMERIC)">
+                        <i class="fa fa-asterisk fa-fw"></i> Numerica
+                    </li>
+                    <li class="list-group-item pressable" ng-click="addQuestion(SHORT_ANSWER)">
+                        <i class="fa fa-asterisk fa-fw"></i> Respuesta Corta
+                    </li>
+                    <li class="list-group-item pressable" ng-click="addQuestion(LONG_ANSWER)">
+                        <i class="fa fa-asterisk fa-fw"></i> Comentario
+                    </li>
+                </ul>
+            </div>
+            <!-- /.panel-body -->
+
+        </div>
+
+    </div>
+</div>

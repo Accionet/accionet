@@ -1,5 +1,6 @@
 // server/services/jsonBuilder.js
 
+const path = require('path');
 
 exports.success = function (text, keys, values) {
     const json = {
@@ -22,4 +23,11 @@ exports.error = function buildErrorJSON(err) {
     };
 
     return json;
+};
+
+exports.errorPath = function () {
+    if (process.env.PRODUCTION) {
+    // Do something to return page not found or invalid input
+    }
+    return path.join(__dirname, '../', '../', 'client', 'views', 'error.ejs');
 };

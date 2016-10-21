@@ -2,7 +2,9 @@ controllers
 
     .controller('surveyController', function ($scope, $http, $window) {
         $scope.surveys = {};
-        $scope.selectedSurvey = null;
+        $scope.selectedSurvey = {
+            questions: [],
+        };
         $scope.responses = {};
 
         $scope.data = [];
@@ -39,46 +41,39 @@ controllers
 
 
     // Get all surveys
-        $scope.initializeSurveys = function (surveys, selectedSurvey, responses) {
-            if (surveys)
-                $scope.surveys = JSON.parse(surveys);
+        $scope.initializeSurveys = function (surveys, selectedSurvey) {
             if (selectedSurvey) {
                 $scope.selectedSurvey = JSON.parse(selectedSurvey);
-            }
-            if (responses) {
-                $scope.responses = JSON.parse(responses);
             }
         };
 
 
     // toggle active in survey
         $scope.toggleIsActive = function (survey) {
-            $http.put('/surveys/' + survey.id + '/toggleIsActive')
+            $http.put(`/surveys/${survey.id}/toggleIsActive`)
             .success(function (data) {
                 locallyUpdateSurvey(data.survey);
             })
-            .error(function (data) {
-                console.error(data);
+            .error(function () {
             });
         };
 
     // toggle active in survey
         $scope.delete = function (survey) {
             $http.delete(`/surveys/${survey.id}/delete`)
-            .success(function (data) {
+            .success(function () {
                 // data.survey
             })
-            .error(function (data) {
-                console.log('Error: ' + data);
+            .error(function () {
             });
         };
 
         function locallyUpdateSurvey(updated_survey) {
-            if ($scope.selectedSurvey && $scope.selectedSurvey.id == updated_survey.id) {
+            if ($scope.selectedSurvey && $scope.selectedSurvey.id === updated_survey.id) {
                 $scope.selectedSurvey = updated_survey;
             }
             for (let i = 0; i < $scope.surveys.length; i++) {
-                if ($scope.surveys[i].id == updated_survey.id) {
+                if ($scope.surveys[i].id === updated_survey.id) {
                     $scope.surveys[i] = updated_survey;
                 }
             }
@@ -87,19 +82,16 @@ controllers
     // Create a new survey
         $scope.createSurvey = function () {
             addEnumerations();
-            const survey = {
-                user_id: 1,
-                title: $scope.title,
-                is_active: true,
-                questions: $scope.questions,
-            };
+            const survey = $scope.selectedSurvey;
+            survey.is_active = true;
+            survey.user_id = 1;
             if ($scope.validForm()) {
                 $http.post('/surveys/new', survey)
                 .success(function (data) {
                     $window.location.href = '/surveys';
                 })
                 .error(function (error) {
-                    console.log('Error: ' + error);
+                    console.log(error);
                 });
             }
         };
@@ -107,8 +99,9 @@ controllers
     // updates a survey
         $scope.updateSurvey = function (survey) {
             if ($scope.validForm()) {
-                $http.put('/surveys/' + $scope.selectedSurvey.id + '/edit', $scope.selectedSurvey)
+                $http.put('/surveys/' + $scope.selectedSurvey.id + '/update', $scope.selectedSurvey)
                 .success(function (data) {
+                    console.log(data);
                     survey = data.survey;
                 })
                 .error(function (error) {
@@ -120,22 +113,22 @@ controllers
         $scope.validForm = function () {
             let valid = true;
             $scope.error = '';
-            if ($scope.title === '') {
+            if (!$scope.selectedSurvey.title || $scope.selectedSurvey.title === '') {
                 $scope.error += '- La encuesta debe tener un nombre \n';
                 valid = false;
             }
-            if ($scope.questions.length == 0) {
+            if ($scope.selectedSurvey.questions.length === 0) {
                 $scope.error += '- La encuesta debe tener al menos una pregunta \n';
                 valid = false;
             }
-            for (let i = 0; i < $scope.questions.length; i++) {
-                if (!$scope.questions[i].title || $scope.questions[i].title == '') {
+            for (let i = 0; i < $scope.selectedSurvey.questions.length; i++) {
+                if (!$scope.selectedSurvey.questions[i].title || $scope.selectedSurvey.questions[i].title === '') {
                     $scope.error += `- La pregunta ${i + 1} debe tener un nombre \n`;
                     valid = false;
                 }
-                if ($scope.questions[i].options) {
-                    for (let j = 0; j < $scope.questions[i].options.length; j++) {
-                        if (!$scope.questions[i].options[j].statement || $scope.questions[i].options[j].statement == '') {
+                if ($scope.selectedSurvey.questions[i].options) {
+                    for (let j = 0; j < $scope.selectedSurvey.questions[i].options.length; j++) {
+                        if (!$scope.selectedSurvey.questions[i].options[j].statement || $scope.selectedSurvey.questions[i].options[j].statement === '') {
                             $scope.error += `- La alternativa ${j + 1} de la pregunta ${i + 1} debe tener un nombre \n`;
                             valid = false;
                         }
@@ -161,33 +154,35 @@ controllers
         // Create the question depending on what type of question is
             switch (myType) {
             case $scope.MULTIPLE_CHOICE:
-                question = createMultipleChoiceQuestion($scope.questions.length + 1);
+                question = createMultipleChoiceQuestion($scope.selectedSurvey.questions.length + 1);
                 break;
             case $scope.MULTIPLE_ANSWER:
-                question = createMultipleAnswerQuestion($scope.questions.length + 1);
+                question = createMultipleAnswerQuestion($scope.selectedSurvey.questions.length + 1);
                 break;
             case $scope.YES_NO:
-                question = createYesNoQuestion($scope.questions.length + 1);
+                question = createYesNoQuestion($scope.selectedSurvey.questions.length + 1);
                 break;
             case $scope.TRUE_FALSE:
-                question = createTrueFalseQuestion($scope.questions.length + 1);
+                question = createTrueFalseQuestion($scope.selectedSurvey.questions.length + 1);
                 break;
             case $scope.LIKERT:
-                question = createLikertQuestion($scope.questions.length + 1);
+                question = createLikertQuestion($scope.selectedSurvey.questions.length + 1);
                 break;
             case $scope.NUMERIC:
-                question = createNumericQuestion($scope.questions.length + 1);
+                question = createNumericQuestion($scope.selectedSurvey.questions.length + 1);
                 break;
             case $scope.SHORT_ANSWER:
-                question = createShortAnswerQuestion($scope.questions.length + 1);
+                question = createShortAnswerQuestion($scope.selectedSurvey.questions.length + 1);
                 break;
             case $scope.LONG_ANSWER:
-                question = createLongAnswerQuestion($scope.questions.length + 1);
+                question = createLongAnswerQuestion($scope.selectedSurvey.questions.length + 1);
+                break;
+            default:
                 break;
             }
         // If the question is not null add it to questions
             if (question) {
-                $scope.questions.push(question);
+                $scope.selectedSurvey.questions.push(question);
             }
         };
 

@@ -129,6 +129,10 @@ router.get('/surveys/:id', (req, res, next) => {
     surveyController.show(req, res, next);
 });
 
+router.get('/surveys/:id/edit', (req, res, next) => {
+    surveyController.edit(req, res, next);
+});
+
 router.get('/surveys/:id/metrics', (req, res, next) => {
     surveyController.metrics(req, res, next);
 });
@@ -140,6 +144,10 @@ router.post('/survey/:id/response', (req, res, next) => {
 
 router.put('/surveys/:id/toggleIsActive', (req, res, next) => {
     surveyController.toggleIsActive(req, res, next);
+});
+
+router.put('/surveys/:id/update', (req, res, next) => {
+    surveyController.update(req, res, next);
 });
 
 router.delete('/surveys/:id/delete', (req, res, next) => {

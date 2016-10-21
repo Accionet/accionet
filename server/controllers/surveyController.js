@@ -52,9 +52,7 @@ exports.disabled = function getAllSurveys(req, res) {
 };
 
 exports.count = function countSurveys(req, res) {
-    console.log('vamooos');
     Surveys.count({}, (err, result) => {
-        console.log('llegoo');
         if (err) {
             const json = httpResponse.error(err);
             return res.status(500).send(json);
@@ -77,6 +75,32 @@ exports.show = function showSurvey(req, res) {
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
             survey,
         });
+    });
+};
+
+exports.edit = function showSurvey(req, res) {
+    Surveys.findById(req.params.id, (err, survey) => {
+        if (err || !survey) {
+            const json = httpResponse.error(err);
+            const view_path = httpResponse.errorPath();
+            return res.render(view_path, json);
+        }
+        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'edit.ejs'), {
+            survey,
+        });
+    });
+};
+
+exports.update = function saveSurvey(req, res) {
+    const survey = req.body;
+    Surveys.update(survey, (err, result) => {
+        if (err) {
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+
+        const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
+        return res.status(200).send(json);
     });
 };
 
@@ -155,7 +179,7 @@ exports.delete = function deleteEntry(req, res) {
 };
 
 
-exports.responseSurvey = function respondSurvey(req, res) {
+exports.responseSurvey = function (req, res) {
     // It has to have a survey_id and it must be equal to the one in the URL
     const response = JSON.parse(req.body.string_json);
     if (response.survey_id && response.survey_id == req.params.id) {

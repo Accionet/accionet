@@ -38,9 +38,11 @@
 
                         <table class="table table-hover" ng-init="myFilter.is_active =  <%= show_active %>">
                             <thead>
-                                <th ng-click="orderByMe('create_at')"> Fecha </th>
+                                <th ng-click="orderByMe('created_at')"> Fecha </th>
                                 <th ng-click="orderByMe('title')"> Nombre </th>
                                 <th ng-click="orderByMe('questions')"> # Preguntas </th>
+                                <th ng-click="orderByMe('totalResponses')"> # Respuestas </th>
+
                                 <th class="text-right"> Acciones </th>
                             </thead>
                             <tbody>
@@ -51,8 +53,12 @@
                                     <td>
                                         <span class="glyphicon glyphicon-file"></span> {{survey.title}}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{survey.questions.length}}
+                                    </td>
+                                    <td class="text-center" ng-init="getTotalResponses(survey)">
+                                      <span ng-if="survey.totalResponses" class="percent">{{survey.totalResponses}}</span>
+                                      <span ng-if="!survey.totalResponses" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i>
                                     </td>
                                     <td class="text-right text-nowrap">
                                         <a ng-click="delete(survey)" class="pull-right red icon-list-holder"><i class="fa fa-trash"></i></a>

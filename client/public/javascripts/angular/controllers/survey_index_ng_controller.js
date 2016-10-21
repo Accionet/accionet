@@ -337,75 +337,7 @@ controllers
     // ########################################
 
 
-        createMultipleChoiceQuestion = function (number) {
-            question = {
-                title: '',
-                description: '',
-                number,
-                type: $scope.MULTIPLE_CHOICE,
-                options: [{
-                    statement: '',
-                }, {
-                    statement: '',
-                }, {
-                    statement: '',
-                }, {
-                    statement: '',
-                }, ],
-            };
-            return question;
-        };
-
-        createYesNoQuestion = function (number) {
-            question = {
-                title: '',
-                type: $scope.YES_NO,
-                options: [{
-                    value: 'Si',
-                }, {
-                    value: 'No',
-                }],
-            };
-            return question;
-        };
-
-        createShortAnswerQuestion = function (number) {
-            question = {
-                title: '',
-                type: $scope.SHORT_ANSWER,
-                options: [],
-            };
-            return question;
-        };
-
-        createLongAnswerQuestion = function (number) {
-            question = {
-                title: '',
-                type: $scope.LONG_ANSWER,
-                options: [],
-            };
-            return question;
-        };
-
-        createNumericQuestion = function (number) {
-            question = {
-                title: '',
-                type: $scope.NUMERIC,
-                options: [],
-            };
-            return question;
-        };
-
-        createExistingQuestion = function (name, type, options) {
-            question = {
-                title: name,
-                type,
-                options,
-            };
-            return question;
-        };
-
-        addEnumerations = function () {
+        function addEnumerations() {
             for (let i = 0; i < $scope.questions.length; i++) {
                 if ($scope.questions[i].options) {
                     for (let j = 0; j < $scope.questions[i].options.length; j++) {
@@ -413,7 +345,7 @@ controllers
                     }
                 }
             }
-        };
+        }
     })
 
 // Filter for displaying the alternatives, it basically transform numbers to letter in this way: 0 = A, 1 = B and so on

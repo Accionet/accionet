@@ -14,7 +14,12 @@ controllers
         $scope.success = null;
 
         $scope.MULTIPLE_CHOICE = 'multiple_choice';
+        $scope.MULTIPLE_ANSWER = 'multiple_answer';
+
         $scope.YES_NO = 'yes_no';
+        $scope.TRUE_FALSE = 'true_false';
+        $scope.LIKERT = 'likert';
+
         $scope.NUMERIC = 'numeric';
         $scope.SHORT_ANSWER = 'short_answer';
         $scope.LONG_ANSWER = 'long_answer';
@@ -40,8 +45,9 @@ controllers
             if (selectedSurvey) {
                 $scope.selectedSurvey = JSON.parse(selectedSurvey);
             }
-            if (responses)
+            if (responses) {
                 $scope.responses = JSON.parse(responses);
+            }
         };
 
 
@@ -52,13 +58,13 @@ controllers
                 locallyUpdateSurvey(data.survey);
             })
             .error(function (data) {
-                console.log('Error: ' + data);
+                console.error(data);
             });
         };
 
     // toggle active in survey
         $scope.delete = function (survey) {
-            $http.delete('/surveys/' + survey.id + '/delete')
+            $http.delete(`/surveys/${survey.id}/delete`)
             .success(function (data) {
                 // data.survey
             })
@@ -68,8 +74,9 @@ controllers
         };
 
         function locallyUpdateSurvey(updated_survey) {
-            if ($scope.selectedSurvey && $scope.selectedSurvey.id == updated_survey.id)
+            if ($scope.selectedSurvey && $scope.selectedSurvey.id == updated_survey.id) {
                 $scope.selectedSurvey = updated_survey;
+            }
             for (let i = 0; i < $scope.surveys.length; i++) {
                 if ($scope.surveys[i].id == updated_survey.id) {
                     $scope.surveys[i] = updated_survey;
@@ -89,7 +96,7 @@ controllers
             if ($scope.validForm()) {
                 $http.post('/surveys/new', survey)
                 .success(function (data) {
-                    $window.location.href = '/surveys/all';
+                    $window.location.href = '/surveys';
                 })
                 .error(function (error) {
                     console.log('Error: ' + error);
@@ -156,11 +163,20 @@ controllers
             case $scope.MULTIPLE_CHOICE:
                 question = createMultipleChoiceQuestion($scope.questions.length + 1);
                 break;
+            case $scope.MULTIPLE_ANSWER:
+                question = createMultipleAnswerQuestion($scope.questions.length + 1);
+                break;
             case $scope.YES_NO:
                 question = createYesNoQuestion($scope.questions.length + 1);
                 break;
+            case $scope.TRUE_FALSE:
+                question = createTrueFalseQuestion($scope.questions.length + 1);
+                break;
+            case $scope.LIKERT:
+                question = createLikertQuestion($scope.questions.length + 1);
+                break;
             case $scope.NUMERIC:
-                question = createNumericQuestion(q$scope.uestions.length + 1);
+                question = createNumericQuestion($scope.questions.length + 1);
                 break;
             case $scope.SHORT_ANSWER:
                 question = createShortAnswerQuestion($scope.questions.length + 1);
@@ -204,10 +220,10 @@ controllers
         $scope.orderByMe = function (key) {
             if ($scope.myOrderBy === key) {
                 $scope.myOrderBy = `-${key}`;
-            }
-            else {
+            } else {
                 $scope.myOrderBy = key;
-            } };
+            }
+        };
 
         $scope.index = 0;
         $scope.getData = function (question) {
@@ -335,8 +351,8 @@ controllers
     // ########################################
 
 
-        createMultipleChoiceQuestion = function (number) {
-            question = {
+        function createMultipleChoiceQuestion(number) {
+            const question = {
                 title: '',
                 description: '',
                 number,
@@ -349,23 +365,77 @@ controllers
                     statement: '',
                 }, {
                     statement: '',
-                }, ],
-            };
-            return question;
-        };
-
-        createYesNoQuestion = function (number) {
-            question = {
-                title: '',
-                type: $scope.YES_NO,
-                options: [{
-                    value: 'Si',
-                }, {
-                    value: 'No',
                 }],
             };
             return question;
-        };
+        }
+
+        function createMultipleAnswerQuestion(number) {
+            const question = {
+                title: '',
+                description: '',
+                number,
+                type: $scope.MULTIPLE_CHOICE,
+                options: [{
+                    statement: '',
+                }, {
+                    statement: '',
+                }, {
+                    statement: '',
+                }, {
+                    statement: '',
+                }],
+            };
+            return question;
+        }
+
+        function createYesNoQuestion(number) {
+            const question = {
+                title: '',
+                number,
+                type: $scope.MULTIPLE_CHOICE,
+                options: [{
+                    statement: 'Si',
+                }, {
+                    statement: 'No',
+                }],
+            };
+            return question;
+        }
+
+        function createTrueFalseQuestion(number) {
+            const question = {
+                title: '',
+                number,
+                type: $scope.MULTIPLE_CHOICE,
+                options: [{
+                    statement: 'Verdadero',
+                }, {
+                    statement: 'Falso',
+                }],
+            };
+            return question;
+        }
+
+        function createLikertQuestion(number) {
+            const question = {
+                title: '',
+                number,
+                type: $scope.MULTIPLE_CHOICE,
+                options: [{
+                    statement: 'Muy de acuerdo',
+                }, {
+                    statement: 'De acuerdo',
+                }, {
+                    statement: 'Neutro',
+                }, {
+                    statement: 'En desacuerdo',
+                }, {
+                    statement: 'Muy en desacuerdo',
+                }],
+            };
+            return question;
+        }
 
         createShortAnswerQuestion = function (number) {
             question = {

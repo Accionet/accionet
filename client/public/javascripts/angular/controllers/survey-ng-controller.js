@@ -201,9 +201,13 @@ controllers
 
     // Order function
 
-        $scope.orderByMe = function (x) {
-            $scope.myOrderBy = x;
-        };
+        $scope.orderByMe = function (key) {
+            if ($scope.myOrderBy === key) {
+                $scope.myOrderBy = `-${key}`;
+            }
+            else {
+                $scope.myOrderBy = key;
+            } };
 
         $scope.index = 0;
         $scope.getData = function (question) {

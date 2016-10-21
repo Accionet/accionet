@@ -11,10 +11,12 @@ controllers
 
     // Get all places
         $scope.initializePlaces = function (places, selectedPlace) {
-            if (places)
+            if (places) {
                 $scope.places = JSON.parse(places);
-            if (selectedPlace)
+            }
+            if (selectedPlace) {
                 $scope.selectedPlace = JSON.parse(selectedPlace);
+            }
         };
 
         $scope.initializeMetrics = function (metrics) {
@@ -29,10 +31,11 @@ controllers
         };
 
 
-    // Delete a place
         $scope.toggleIsActive = function (place) {
-            $http.put('/places/' + place.id + '/toggleIsActive')
+            console.log('meeeeeeneneee');
+            $http.put(`/places/${place.id}/toggleIsActive`)
             .success(function (data) {
+                console.log(data);
                 locallyUpdatePlace(data.place);
             })
             .error(function (data) {
@@ -42,13 +45,13 @@ controllers
 
 
         function locallyUpdatePlace(updated_place) {
-            if ($scope.selectedPlace && $scope.selectedPlace.id == updated_place.id)
-                $scope.selectedPlace = updated_place;
+            console.log(updated_place);
             for (let i = 0; i < $scope.places.length; i++) {
                 if ($scope.places[i].id == updated_place.id) {
                     $scope.places[i] = updated_place;
                 }
             }
+            console.log($scope.places);
         }
 
     // Create a new place
@@ -201,8 +204,7 @@ controllers
             const diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
             place.totalDays = diffDays;
         })
-            .error(function (data) {
-            });
+            .error(function (data) {});
         };
 
         $scope.getTotalEndUsers = function (place) {
@@ -212,7 +214,6 @@ controllers
             place.totalEndUsers = results.data;
             console.log(place.totalEndUsers);
         })
-            .error(function (data) {
-            });
+            .error(function (data) {});
         };
     });

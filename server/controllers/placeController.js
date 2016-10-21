@@ -147,7 +147,7 @@ exports.metrics = function showMetrics(req, res) {
 
 exports.edit = function editPlace(req, res) {
     Places.findById(req.params.id, (err, place) => {
-        if (err) {
+        if (err || !place) {
             return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 places: [],
@@ -161,7 +161,7 @@ exports.edit = function editPlace(req, res) {
 
 exports.show = function showPlace(req, res) {
     Places.findById(req.params.id, (err, place) => {
-        if (err) {
+        if (err || !place) {
             return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
                 error: `ERROR: ${err}`,
                 place: [],
@@ -175,7 +175,7 @@ exports.show = function showPlace(req, res) {
 
 exports.update = function updatePlace(req, res) {
     Places.update(req.params.id, req.body, (err, place) => {
-        if (err) {
+        if (err || !place) {
             return res.status(400).send({
                 error: err,
             });

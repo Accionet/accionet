@@ -93,15 +93,13 @@ exports.edit = function showSurvey(req, res) {
 
 exports.update = function saveSurvey(req, res) {
     const survey = req.body;
-
-    if (survey.id === req.params.id) {
+    const url_id = parseInt(req.params.id, 10);
+    if (survey.id === url_id) {
         Surveys.update(survey.id, survey, (err, result) => {
             if (err) {
-                console.log('errror');
                 const json = httpResponse.error(err);
                 return res.status(500).send(json);
             }
-            console.log('no error');
             const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
             return res.status(200).send(json);
         });

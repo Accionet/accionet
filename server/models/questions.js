@@ -21,7 +21,7 @@ exports.new = function newQuestion(callback) {
 };
 
 // Creates a json with the attr in attr
-exports.save = function saveQuestionAndOptions(attr, callback) {
+function saveQuestionAndOptions(attr, callback) {
     const deferrer = q.defer();
     base.save(attr, table_name, (err, question) => {
         const options = attr.options;
@@ -47,47 +47,128 @@ exports.save = function saveQuestionAndOptions(attr, callback) {
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
     });
-};
+}
 
-exports.update = function updateQuestion(id, attr, callback) {
+exports.save = saveQuestionAndOptions;
+
+function updateQuestion(id, attr, callback) {
     base.update(id, attr, table_name, callback);
-};
+}
+
+exports.update = updateQuestion;
 
 exports.updateQuestionsOfSurvey = function (survey, callback) {
     const attr = {
         survey_id: survey.id,
     };
 
+    const newQuestions = survey.questions;
+
     base.find(attr, table_name, (err, questions) => {
         if (err) {
             return callback(err);
         }
 
-        const totalQueries = questions.length;
-        let finishedQueries = 0;
+        const questionsToCreate = [];
+        const questionsToDelete = [];
+        const questionsToUpdate = [];
+        // Delete and update the ones that actually exists
         for (let i = 0; i < questions.length; i++) {
-            let indexOfUpdate = -1;
-            for (let j = 0; j < survey.questions.length; j++) {
-                if (questions[i].id === survey.questions[j]) {
-                    indexOfUpdate = j;
+            let survives = false;
+            for (let j = 0; j < newQuestions.length; j++) {
+                if (questions[i].id === newQuestions[j].id) {
+                    survives = true;
+                    questionsToUpdate.push(newQuestions[j]);
                     break;
                 }
             }
 
-            // if it doesnt have an update then it has to be deleted
-            if (indexOfUpdate === -1) {
-                base.delete(questions.id, table_name, (err) => {
-                    if (err) {
-                        return callback(err);
-                    }
-                    finishedQueries++;
-                    if (finishedQueries === totalQueries) {
-                        return callback(null, survey.questions);
-                    }
-                });
+            if (!survives) {
+                questionsToDelete.push(questions[i]);
             }
         }
-        callback(null, questions);
+
+        for (let j = 0; j < newQuestions.length; j++) {
+            let create = true;
+            for (let i = 0; i < questions.length; i++) {
+                if (questions[i].id === newQuestions[j].id) {
+                    create = false;
+                    break;
+                }
+            }
+            if (create) {
+                questionsToCreate.push(newQuestions[j]);
+            }
+        }
+        let finishedQueries = 0;
+
+        const totalQueries = questionsToCreate.length + questionsToDelete.length + questionsToUpdate.length;
+
+        for (let i = 0; i < questionsToDelete.length; i++) {
+            const question = questionsToDelete[i];
+            base.delete(question.id, table_name, (err) => {
+                finishedQueries++;
+                if (err) {
+                    return callback(err);
+                }
+                if (finishedQueries === totalQueries) {
+                    return callback(null, newQuestions);
+                }
+            });
+        }
+
+        for (let i = 0; i < questionsToUpdate.length; i++) {
+            const question = questionsToUpdate[i];
+            updateQuestion(question.id, question, (err) => {
+                finishedQueries++;
+                if (err) {
+                    return callback(err);
+                }
+                if (finishedQueries === totalQueries) {
+                    return callback(null, newQuestions);
+                }
+            });
+        }
+
+        for (let i = 0; i < questionsToCreate.length; i++) {
+            const question = questionsToCreate[i];
+            question.survey_id = survey.id;
+            saveQuestionAndOptions(question, (err) => {
+                finishedQueries++;
+                if (err) {
+                    return callback(err);
+                }
+                if (finishedQueries === totalQueries) {
+                    return callback(null, newQuestions);
+                }
+            });
+        }
+
+
+        // // if it doesnt have an update then it has to be deleted
+        // if (indexOfUpdate === -1) {
+        //     base.delete(questions[i].id, table_name, (err) => {
+        //         finishedQueries++;
+        //
+        //         if (err) {
+        //             return callback(err);
+        //         }
+        //         if (finishedQueries === totalQueries) {
+        //             return callback(null, newQuestions);
+        //         }
+        //     });
+        // } else {
+        //     base.update(questions[i].id, newQuestions[indexOfUpdate], table_name, (err) => {
+        //         finishedQueries++;
+        //
+        //         if (err) {
+        //             return callback(err);
+        //         }
+        //
+        //         if (finishedQueries === totalQueries) {
+        //             return callback(null, newQuestions);
+        //         }
+        //     });
     });
 };
 

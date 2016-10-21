@@ -97,7 +97,7 @@ controllers
         };
 
     // updates a survey
-        $scope.updateSurvey = function (survey) {
+        $scope.updateSurvey = function () {
             if ($scope.validForm()) {
                 $http.put('/surveys/' + $scope.selectedSurvey.id + '/update', $scope.selectedSurvey)
                 .success(function (data) {

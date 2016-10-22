@@ -196,7 +196,9 @@
                                         <br>
                                         <div class="row">
                                             <div class='col-lg-12'>
-                                                <button type="button" class="btn btn-block btn-success"> <h4 class='heading'> Generar </h4> </button>
+                                                <a type="button" target='_blank' href='/surveys/{{selectedSurvey.id}}/excel' class="btn btn-block btn-success">
+                                                    <h4 ng-if="!downloadingExcelFile" class='heading'> Generar </h4>
+                                                 </a>
                                             </div>
                                         </div>
                                     </div>

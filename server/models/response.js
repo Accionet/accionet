@@ -249,3 +249,53 @@ exports.findOne = function findFirst(id, attr, callback) {
 exports.columnNames = function getAttributes(callback) {
     base.getParamsName(table_name, callback);
 };
+
+
+function buildSelectQueryForExcel(params) {
+    // parse the params for this particular query
+    for (let i = 0; i < params.keys.length; i++) {
+        params.keys[i] = `r.${params.keys[i]}`;
+    }
+    // SELECT
+    let string = 'SELECT r.id as contestacion, r.created_at as "ingresada", r.updated_at as "ultima actualizacion", r.macaddress';
+    string += ', q.number as "N. de la pregunta", q.title as "pregunta", o.statement as "respuesta"';
+    // FROM
+    string += ' FROM response as r, questions as q, options as o, answer as a ';
+    // WHERE
+    string += ' WHERE ';
+    string += ' q.survey_id = r.survey_id ';
+    string += ' AND o.question_id = q.id ';
+    string += " AND q.type = 'multiple_choice' ";
+    string += ' AND a.response_id = r.id ';
+    string += ' AND a.answer_option_id = o.id ';
+    const whereFromParams = base.getWhereFromParams(params, false);
+    if (whereFromParams !== '') {
+        string += ' AND ';
+        string += whereFromParams;
+    }
+    // ORDER BY
+    string += ' ORDER BY q.number, o.enumeration, "ingresada" ';
+    return string;
+}
+
+exports.dataForExcel = function (attr, callback) {
+    const results = [];
+    pg.connect(connectionString, (err, client, done) => {
+        if (err) {
+            return callback(err);
+        }
+        const params = base.parseJsonToParams(attr);
+        const query_string = buildSelectQueryForExcel(params);
+        const query = client.query(query_string, params.values);
+
+        query.on('error', (err) => (callback(err)));
+
+        query.on('row', (row) => {
+            results.push(row);
+        });
+        query.on('end', () => {
+            done();
+            return callback(null, results);
+        });
+    });
+};

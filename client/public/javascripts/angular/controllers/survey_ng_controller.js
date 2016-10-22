@@ -315,10 +315,9 @@ controllers
 
         $scope.getTotalEndUsers = function (survey) {
             $http.get(`/api/v1/surveys/${survey.id}/metrics/enduser/count`)
-
-        .success(function (results) {
-            survey.totalEndUsers = results.data;
-        })
+            .success(function (results) {
+                survey.totalEndUsers = results.data;
+            })
             .error(function () {});
         };
 

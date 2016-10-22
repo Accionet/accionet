@@ -8,11 +8,8 @@ const Answer = require('../models/answer');
 const Visits = require('../models/visit');
 
 
-Visits.tableDateAndHour({
-    place_id: 1,
-}, (err, daily) => {
-    if (err) {
-        return console.error(err);
-    }
-    console.log(daily);
-});
+const array = [];
+
+console.log(Object.keys('asdfasdf'));
+console.log(Object.keys(null));
+// console.log(array[0]);

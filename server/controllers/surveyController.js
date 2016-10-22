@@ -6,9 +6,8 @@
 const path = require('path');
 const Surveys = require('../models/surveys');
 const excelbuilder = require('msexcel-builder-protobi');
-const mime = require('mime');
-const fs = require('fs');
-
+const ExcelGenerator = require('../services/excelGenerator');
+const Utils = require('../services/utils');
 const Response = require('../models/response');
 // const Answer = require('../models/answer');
 const httpResponse = require('../services/httpResponse');
@@ -267,53 +266,38 @@ exports.countEndUser = function (req, res) {
 
 exports.generateExcel = function (req, res) {
     const id = req.params.id;
-    Response.columnNames((err, columnNames) => {
-        const workbook = excelbuilder.createWorkbook('./', 'sample.xlsx');
-        Response.find({
-            survey_id: id,
-        }, (err, results) => {
-            const responses = workbook.createSheet('respuestas', columnNames.length, (results.length + 1));
-
-            // set the headers
-            for (let col = 1; col <= columnNames.length; col++) {
-                responses.set(col, 1, columnNames[col - 1]);
+    Response.dataForExcel({
+        survey_id: id,
+    }, (err, data) => {
+        if (err || !data) {
+            const json = httpResponse.error(err);
+            return res.status(500).send(json);
+        }
+        // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
+        let filepath = path.join(__dirname, '../', 'uploads');
+        const filename = `/${(new Date()).getTime()}.xlsx`;
+        const workbook = excelbuilder.createWorkbook(filepath, filename);
+        filepath += filename;
+        // headers of the excel sheet
+        let firstRow;
+        try {
+            firstRow = Object.keys(data[0]);
+        } catch (e) {
+            firstRow = [];
+        }
+        const sheet = {
+            name: 'Respuestas',
+            firstRow,
+            data,
+        };
+        ExcelGenerator.addSheetToWorkbook(sheet, workbook);
+        // Save it
+        workbook.save((err) => {
+            if (err) {
+                throw err;
+            } else {
+                Utils.sendFile(filepath, `Metricas de Encuesta: ${id}`, 'xlsx', res);
             }
-            for (let j = 2; j < results.length + 2; j++) {
-                for (let i = 1; i <= columnNames.length; i++) {
-                    let cell = results[j - 2][columnNames[i - 1]];
-                    responses.set(i, j, cell);
-                    // see if it is a number
-                    if (!isNaN(parseFloat(cell))) {
-                        cell = parseFloat(cell);
-                        responses.numberFormat(i, j, 'General');
-                    }
-                }
-            }
-
-            // fill the data
-
-            // Save it
-            workbook.save((err) => {
-                if (err) {
-                    throw err;
-                } else {
-                    const file = './sample.xlsx';
-
-                    const filename = path.basename(file);
-                    const mimetype = mime.lookup(file);
-
-                    res.setHeader('Content-disposition', `attachment; filename=${filename}`);
-                    res.setHeader('Content-type', mimetype);
-
-                    const filestream = fs.createReadStream(file);
-                    filestream.pipe(res);
-
-                    filestream.on('close', (err) => {
-                        if (err) return res.send(500);
-                        fs.unlink('./sample.xlsx');
-                    });
-                }
-            });
         });
     });
 };

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html ng-app="accionet-web-app">
 
 <head>
@@ -10,6 +11,11 @@
 
         <!--  -->
         <link href="/stylesheets/easypiechart.css" rel="stylesheet">
+
+        <!-- Calendar -->
+
+        <link rel="stylesheet" href="/vendor/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+
 
 
 </head>
@@ -35,10 +41,9 @@
                             <div class="panel-body">
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-pills">
-                                    <li class="active"> <a href="#summary-pills" data-toggle="tab">Resumen</a>
-                                    </li>
-                                    <li><a href="#questions-pills" data-toggle="tab">Preguntas</a>
-                                    </li>
+                                    <li class="active"> <a href="#summary-pills" data-toggle="tab">Resumen</a></li>
+                                    <li><a href="#questions-pills" data-toggle="tab">Preguntas</a></li>
+                                    <li><a href="#excel-pills" data-toggle="tab">Generar Excel</a></li>
                                 </ul>
                                 <br>
                                 <!-- Tab panes -->
@@ -153,6 +158,40 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="tab-pane fade" id="excel-pills">
+                                        <div class="row">
+                                            <h3 class="heading"> Desde </h3>
+                                            <div class='col-lg-12'>
+                                                <div class="form-group">
+                                                    <div class='input-group date' id='datetimepicker6'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <h3 class="heading"> Hasta </h3>
+                                            <div class='col-lg-12'>
+                                                <div class="form-group">
+                                                    <div class='input-group date' id='datetimepicker7'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class='col-lg-12'>
+                                                <button type="button" class="btn btn-block btn-success"> <h4 class='heading'> Generar </h4> </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -160,6 +199,8 @@
                     <!-- /.panel-body -->
                 </div>
             </div>
+
+
 
             <% include ../partials/scripts.ejs %>
                 <% include partials/surveys_scripts.ejs %>
@@ -177,6 +218,21 @@
                     <script src="/vendor/lumino/js/easypiechart.js"></script>
                     <!-- Here the colours are determined -->
                     <script src="/vendor/lumino/js/easypiechart-data.js"></script>
+
+                    <!--  Calendar -->
+                    <script type="text/javascript" src="/vendor/bower_components/moment/min/moment.min.js"></script>
+                    <script type="text/javascript" src="/vendor/bower_components/moment/min/locales.min.js"></script>
+                    <script type="text/javascript" src="/vendor/bower_components/moment/min/moment-with-locales.min.js"></script>
+
+                    <script type="text/javascript" src="/vendor/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+                    <script type="text/javascript" src="/vendor/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+                    <script type="text/javascript" src="/javascripts/js/calendar.js"></script>
+
+
+
+
+
 
 
 

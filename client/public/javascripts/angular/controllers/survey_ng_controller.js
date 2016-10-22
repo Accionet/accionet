@@ -54,8 +54,7 @@ controllers
             .success(function (data) {
                 locallyUpdateSurvey(data.survey);
             })
-            .error(function () {
-            });
+            .error(function () {});
         };
 
     // toggle active in survey
@@ -64,8 +63,7 @@ controllers
             .success(function () {
                 // data.survey
             })
-            .error(function () {
-            });
+            .error(function () {});
         };
 
         function locallyUpdateSurvey(updated_survey) {
@@ -102,10 +100,10 @@ controllers
                 $http.put('/surveys/' + $scope.selectedSurvey.id + '/update', $scope.selectedSurvey)
                 .success(function (data) {
                     console.log(data);
-                    survey = data.survey;
+                    $window.location.href = `/surveys/${data.survey.id}`;
                 })
-                .error(function (error) {
-                    console.log('Error: ' + error);
+                .error(function () {
+                    console.log('error');
                 });
             }
         };
@@ -390,8 +388,10 @@ controllers
                 number,
                 type: $scope.MULTIPLE_CHOICE,
                 options: [{
+                    enumeration: 'a',
                     statement: 'Si',
                 }, {
+                    enumeration: 'b',
                     statement: 'No',
                 }],
             };
@@ -404,8 +404,10 @@ controllers
                 number,
                 type: $scope.MULTIPLE_CHOICE,
                 options: [{
+                    enumeration: 'a',
                     statement: 'Verdadero',
                 }, {
+                    enumeration: 'b',
                     statement: 'Falso',
                 }],
             };
@@ -418,14 +420,19 @@ controllers
                 number,
                 type: $scope.MULTIPLE_CHOICE,
                 options: [{
+                    enumeration: 'a',
                     statement: 'Muy de acuerdo',
                 }, {
+                    enumeration: 'b',
                     statement: 'De acuerdo',
                 }, {
+                    enumeration: 'c',
                     statement: 'Neutro',
                 }, {
+                    enumeration: 'd',
                     statement: 'En desacuerdo',
                 }, {
+                    enumeration: 'e',
                     statement: 'Muy en desacuerdo',
                 }],
             };
@@ -469,10 +476,10 @@ controllers
         };
 
         addEnumerations = function () {
-            for (let i = 0; i < $scope.questions.length; i++) {
-                if ($scope.questions[i].options) {
-                    for (let j = 0; j < $scope.questions[i].options.length; j++) {
-                        $scope.questions[i].options[j].enumeration = String.fromCharCode(64 + parseInt(j + 1, 10));
+            for (let i = 0; i < $scope.selectedSurvey.questions.length; i++) {
+                if ($scope.selectedSurvey.questions[i].options) {
+                    for (let j = 0; j < $scope.selectedSurvey.questions[i].options.length; j++) {
+                        $scope.selectedSurvey.questions[i].options[j].enumeration = String.fromCharCode(64 + parseInt(j + 1, 10));
                     }
                 }
             }

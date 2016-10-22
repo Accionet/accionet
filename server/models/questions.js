@@ -52,7 +52,18 @@ function saveQuestionAndOptions(attr, callback) {
 exports.save = saveQuestionAndOptions;
 
 function updateQuestion(id, attr, callback) {
-    base.update(id, attr, table_name, callback);
+    base.update(id, attr, table_name, (err, question) => {
+        if (err || !question) {
+            return callback(err);
+        }
+        Options.updateOptionsOfQuestion(attr, (err, options) => {
+            if (err) {
+                return callback(err);
+            }
+            question.options = options;
+            return callback(null, options);
+        });
+    });
 }
 
 exports.update = updateQuestion;
@@ -134,6 +145,7 @@ exports.updateQuestionsOfSurvey = function (survey, callback) {
             const question = questionsToCreate[i];
             question.survey_id = survey.id;
             saveQuestionAndOptions(question, (err) => {
+                console.log('se salvo las opciones?');
                 finishedQueries++;
                 if (err) {
                     return callback(err);
@@ -143,32 +155,6 @@ exports.updateQuestionsOfSurvey = function (survey, callback) {
                 }
             });
         }
-
-
-        // // if it doesnt have an update then it has to be deleted
-        // if (indexOfUpdate === -1) {
-        //     base.delete(questions[i].id, table_name, (err) => {
-        //         finishedQueries++;
-        //
-        //         if (err) {
-        //             return callback(err);
-        //         }
-        //         if (finishedQueries === totalQueries) {
-        //             return callback(null, newQuestions);
-        //         }
-        //     });
-        // } else {
-        //     base.update(questions[i].id, newQuestions[indexOfUpdate], table_name, (err) => {
-        //         finishedQueries++;
-        //
-        //         if (err) {
-        //             return callback(err);
-        //         }
-        //
-        //         if (finishedQueries === totalQueries) {
-        //             return callback(null, newQuestions);
-        //         }
-        //     });
     });
 };
 

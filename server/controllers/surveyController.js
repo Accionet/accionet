@@ -5,6 +5,9 @@
 
 const path = require('path');
 const Surveys = require('../models/surveys');
+const excelbuilder = require('msexcel-builder-protobi');
+const mime = require('mime');
+const fs = require('fs');
 
 const Response = require('../models/response');
 // const Answer = require('../models/answer');
@@ -93,16 +96,13 @@ exports.edit = function showSurvey(req, res) {
 
 exports.update = function saveSurvey(req, res) {
     const survey = req.body;
-    console.log('ir a buscar');
     const url_id = parseInt(req.params.id, 10);
     if (!isNaN(req.params.id) && survey.id === url_id) {
-        console.log('paso el if');
         Surveys.update(survey.id, survey, (err, result) => {
             if (err) {
                 const json = httpResponse.error(err);
                 return res.status(500).send(json);
             }
-            console.log('volvio todo ok');
             const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
             return res.status(200).send(json);
         });
@@ -262,5 +262,58 @@ exports.countEndUser = function (req, res) {
         }
         const json = httpResponse.success('Cantidad de usuarios finales enviada con éxito', 'data', result);
         return res.status(200).send(json);
+    });
+};
+
+exports.generateExcel = function (req, res) {
+    const id = req.params.id;
+    Response.columnNames((err, columnNames) => {
+        const workbook = excelbuilder.createWorkbook('./', 'sample.xlsx');
+        Response.find({
+            survey_id: id,
+        }, (err, results) => {
+            const responses = workbook.createSheet('respuestas', columnNames.length, (results.length + 1));
+
+            // set the headers
+            for (let col = 1; col <= columnNames.length; col++) {
+                responses.set(col, 1, columnNames[col - 1]);
+            }
+            for (let j = 2; j < results.length + 2; j++) {
+                for (let i = 1; i <= columnNames.length; i++) {
+                    let cell = results[j - 2][columnNames[i - 1]];
+                    responses.set(i, j, cell);
+                    // see if it is a number
+                    if (!isNaN(parseFloat(cell))) {
+                        cell = parseFloat(cell);
+                        responses.numberFormat(i, j, 'General');
+                    }
+                }
+            }
+
+            // fill the data
+
+            // Save it
+            workbook.save((err) => {
+                if (err) {
+                    throw err;
+                } else {
+                    const file = './sample.xlsx';
+
+                    const filename = path.basename(file);
+                    const mimetype = mime.lookup(file);
+
+                    res.setHeader('Content-disposition', `attachment; filename=${filename}`);
+                    res.setHeader('Content-type', mimetype);
+
+                    const filestream = fs.createReadStream(file);
+                    filestream.pipe(res);
+
+                    filestream.on('close', (err) => {
+                        if (err) return res.send(500);
+                        fs.unlink('./sample.xlsx');
+                    });
+                }
+            });
+        });
     });
 };

@@ -137,6 +137,10 @@ router.get('/surveys/:id/metrics', (req, res, next) => {
     surveyController.metrics(req, res, next);
 });
 
+router.get('/surveys/:id/excel', (req, res, next) => {
+    console.log('GENEREATE EXCEL');
+    surveyController.generateExcel(req, res, next);
+});
 
 router.post('/survey/:id/response', (req, res, next) => {
     surveyController.responseSurvey(req, res, next);

@@ -18,6 +18,10 @@ exports.all = function allResponses(callback) {
     base.all(table_name, callback);
 };
 
+exports.find = function (attr, callback) {
+    base.find(attr, table_name, callback);
+};
+
 // Creates a json representing an empty entry
 exports.new = function newResponse(callback) {
     base.new(table_name, callback);
@@ -243,5 +247,5 @@ exports.findOne = function findFirst(id, attr, callback) {
 };
 
 exports.columnNames = function getAttributes(callback) {
-    base.columnNames(table_name, callback);
+    base.getParamsName(table_name, callback);
 };

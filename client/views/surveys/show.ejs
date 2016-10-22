@@ -49,7 +49,7 @@
                                     <div ng-repeat="question in selectedSurvey.questions | orderBy: 'question.number'" class="panel panel-default">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{question.id}}"> {{question.number}})  {{question.title}} <small>(ID: {{question.id}}) </small> </a>
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{question.id}}"> {{$index + 1}})  {{question.title}} <small>(ID: {{question.id}}) </small> </a>
                                             </h4>
                                         </div>
                                         <div id="collapse{{question.id}}" class="panel-collapse collapse in">

@@ -79,32 +79,28 @@ controllers
 
     // Create a new survey
         $scope.createSurvey = function () {
-            addEnumerations();
+            setEnumerationAndNumbers();
             const survey = $scope.selectedSurvey;
             survey.is_active = true;
             survey.user_id = 1;
             if ($scope.validForm()) {
                 $http.post('/surveys/new', survey)
-                .success(function (data) {
+                .success(function () {
                     $window.location.href = '/surveys';
                 })
-                .error(function (error) {
-                    console.log(error);
-                });
+                .error(function () {});
             }
         };
 
     // updates a survey
         $scope.updateSurvey = function () {
             if ($scope.validForm()) {
-                $http.put('/surveys/' + $scope.selectedSurvey.id + '/update', $scope.selectedSurvey)
+                setEnumerationAndNumbers();
+                $http.put(`/surveys/${$scope.selectedSurvey.id}/update`, $scope.selectedSurvey)
                 .success(function (data) {
-                    console.log(data);
                     $window.location.href = `/surveys/${data.survey.id}`;
                 })
-                .error(function () {
-                    console.log('error');
-                });
+                .error(function () {});
             }
         };
 
@@ -220,7 +216,7 @@ controllers
 
         $scope.index = 0;
         $scope.getData = function (question) {
-            if (question.type == 'multiple_choice') {
+            if (question.type === 'multiple_choice') {
                 $scope.index += 1;
                 const data = [];
                 const metrics = question.metrics;
@@ -264,12 +260,11 @@ controllers
 
         };
         $scope.getResponsesByDay = function (survey) {
-            $http.get('/api/v1/surveys/' + survey.id + '/metrics/responses/byday')
+            $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/byday`)
             .success(function (results) {
                 const data = results.data;
                 $scope.loadingResponseByDayChart = false;
 
-                const startDay = data[0][0];
                 const newData = [data[0]];
 
                 for (let i = 1; i < data.length; i++) {
@@ -291,13 +286,11 @@ controllers
 
                 $.plot('#response-by-day-line-chart', [d], options);
             })
-            .error(function (data) {
-                console.log('Error: ' + data);
-            });
+            .error(function () {});
         };
 
         $scope.getResponsesByHour = function (survey) {
-            $http.get('/api/v1/surveys/' + survey.id + '/metrics/responses/byhour')
+            $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/byhour`)
             .success(function (results) {
                 const d = results.data;
                 // get Offset
@@ -308,35 +301,25 @@ controllers
                 $scope.loadingResponseByHourChart = false;
                 $.plot('#response-by-hour-line-chart', [d], options);
             })
-            .error(function (data) {
-                console.log('Error: ' + data);
-            });
+            .error(function (data) {});
         };
 
         $scope.getTotalResponses = function (survey) {
-            console.log('RE');
-            $http.get('/api/v1/surveys/' + survey.id + '/metrics/responses/count')
+            $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/count`)
 
         .success(function (results) {
-            console.log(results);
             survey.totalResponses = results.data;
         })
-            .error(function (data) {
-                console.log('Error: ' + data);
-            });
+            .error(function () {});
         };
 
         $scope.getTotalEndUsers = function (survey) {
-            console.log('RE');
-            $http.get('/api/v1/surveys/' + survey.id + '/metrics/enduser/count')
+            $http.get(`/api/v1/surveys/${survey.id}/metrics/enduser/count`)
 
         .success(function (results) {
-            console.log(results);
             survey.totalEndUsers = results.data;
         })
-            .error(function (data) {
-                console.log('Error: ' + data);
-            });
+            .error(function () {});
         };
 
     // ########################################
@@ -439,51 +422,46 @@ controllers
             return question;
         }
 
-        createShortAnswerQuestion = function (number) {
-            question = {
+        function createShortAnswerQuestion(number) {
+            const question = {
                 title: '',
+                number,
                 type: $scope.SHORT_ANSWER,
                 options: [],
             };
             return question;
-        };
+        }
 
-        createLongAnswerQuestion = function (number) {
-            question = {
+        function createLongAnswerQuestion(number) {
+            const question = {
                 title: '',
+                number,
                 type: $scope.LONG_ANSWER,
                 options: [],
             };
             return question;
-        };
+        }
 
-        createNumericQuestion = function (number) {
-            question = {
+        function createNumericQuestion(number) {
+            const question = {
                 title: '',
+                number,
                 type: $scope.NUMERIC,
                 options: [],
             };
             return question;
-        };
+        }
 
-        createExistingQuestion = function (name, type, options) {
-            question = {
-                title: name,
-                type,
-                options,
-            };
-            return question;
-        };
-
-        addEnumerations = function () {
+        function setEnumerationAndNumbers() {
             for (let i = 0; i < $scope.selectedSurvey.questions.length; i++) {
+                $scope.selectedSurvey.questions[i].number = (i + 1);
                 if ($scope.selectedSurvey.questions[i].options) {
                     for (let j = 0; j < $scope.selectedSurvey.questions[i].options.length; j++) {
                         $scope.selectedSurvey.questions[i].options[j].enumeration = String.fromCharCode(64 + parseInt(j + 1, 10));
                     }
                 }
             }
-        };
+        }
     })
 
 // Filter for displaying the alternatives, it basically transform numbers to letter in this way: 0 = A, 1 = B and so on

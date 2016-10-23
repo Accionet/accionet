@@ -15,7 +15,7 @@ module.exports = {
       "consistent-return": 0,
       "no-plusplus": 0,
       "no-use-before-define": 0,
-      "indent": ["error", 4],
+      "indent": ["error", 2],
       "no-prototype-builtins": 0,
       "func-names": 0,
       "strict": 0,

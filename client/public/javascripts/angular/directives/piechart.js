@@ -26,7 +26,6 @@ directives
                             x: 20,
                             y: 0,
                         },
-                        defaultTheme: false,
                     },
                 });
             },

@@ -108,20 +108,20 @@ controllers
                     show: true,
                 },
                 points: {
-                    show: true,
+                    show: false,
                 },
             },
             grid: {
                 hoverable: true, // IMPORTANT! this is needed for tooltip to work
             },
             tooltip: true,
-            tooltipOpts: {
-                content: '%y respuestas',
-                shifts: {
-                    x: -60,
-                    y: 25,
-                },
-            },
+            // tooltipOpts: {
+            //     content: '%y respuestas',
+            //     shifts: {
+            //         x: -60,
+            //         y: 25,
+            //     },
+            // },
 
         };
 

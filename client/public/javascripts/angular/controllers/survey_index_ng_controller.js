@@ -240,7 +240,7 @@ controllers
                     show: true,
                 },
                 points: {
-                    show: true,
+                    show: false,
                 },
             },
             grid: {

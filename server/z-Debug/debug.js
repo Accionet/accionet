@@ -1,10 +1,13 @@
 'use strict';
 
-const Table = require('../models/table');
+const Table = require('../newModels/table');
 
 
-const fuad = new Table('fuad');
+const surveys = new Table('surveys');
 
-console.log((fuad));
-console.log('-----');
-console.log(fuad.toString());
+
+surveys.getAttributesNames().then((count) => {
+  console.log(count);
+}).catch((err) => {
+  console.log(err);
+});

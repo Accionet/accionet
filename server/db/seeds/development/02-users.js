@@ -1,23 +1,20 @@
-const rangoEtario = require('./surveys/rangoEtario');
-const encuesta1 = require('./surveys/encuesta1');
-const encuesta2 = require('./surveys/encuesta2');
 
+'use strict';
+const users = require('./users/samples');
+const surveys = require('./surveys/generate');
 
-exports.seed = function (knex) {
-  return knex('users').insert({
-    username: 'accionet',
-    password: 'accionet159',
-    email: 'antonio@accionet.cl',
-    is_admin: true,
-    is_active: true,
-  }).returning('*')
-    .then((user) => {
-      return rangoEtario.seed(knex, user[0])
-        .then(() => {
-          return encuesta1.seed(knex, user[0]);
-        })
-        .then(() => {
-          return encuesta2.seed(knex, user[0]);
-        });
-    });
+exports.seed = function (knex, Promise) {
+  const userPromises = [];
+  users.forEach((user) => {
+    userPromises.push(createUser(knex, user));
+  });
+  return Promise.all(userPromises);
 };
+
+function createUser(knex, user) {
+  return knex.table('users')
+    .returning('*')
+    .insert(user).then((user) => {
+      return surveys.seed(knex, user[0]);
+    });
+}

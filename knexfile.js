@@ -8,6 +8,7 @@ module.exports = {
     seeds: {
       directory: __dirname + '/server/db/seeds/test',
     },
+    acquireConnectionTimeout: 10000,
   },
   development: {
     client: 'pg',
@@ -18,6 +19,7 @@ module.exports = {
     seeds: {
       directory: __dirname + '/server/db/seeds/development',
     },
+    acquireConnectionTimeout: 10000,
   },
   production: {
     client: 'pg',
@@ -27,6 +29,7 @@ module.exports = {
     },
     seeds: {
       directory: __dirname + '/server/db/seeds/production',
+      acquireConnectionTimeout: 10000,
     },
   },
 };

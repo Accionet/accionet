@@ -5,6 +5,8 @@ const Response = require('../models/response');
 const pg = require('pg');
 const path = require('path');
 
+var User = require('../models/users.js');
+
 
 const connectionString = require(path.join(__dirname, '../', '../', 'config'));
 
@@ -412,3 +414,17 @@ Place.new((err, newPlace) => {
     console.log(`${newPlace.name} saved`);
   });
 });
+
+
+//Insert users
+
+// var user1 = User.new();
+// user1.firstName = 'Antonio';
+// user1.lastName = 'Fontaine';
+// user1.description = 'Encargado del mantenimiento y desarrollo de esta aplicación';
+// user1.isActive = true;
+// user1.email = 'antonio@accionet.cl';
+// user1.password = '1234';
+// user1.is_super_user = true;
+//
+// User.save(user1);

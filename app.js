@@ -6,9 +6,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 
-// var passport = require('passport');
-// const flash = require('connect-flash');
-
 require('./server/passport/config');
 
 const routes = require('./server/routes/routes');
@@ -33,15 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './client', 'public')));
 
 app.use('/', routes);
-// app.use('/users', users);
 
-
-// required for passport
-// app.use(session({ secret: 'freewififoreveryone' })); // session secret
-// app.use(passport.initialize());
-// app.use(passport.session()); // persistent login sessions
-
-// app.use(flash()); // use connect-flash for flash messages stored in session
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

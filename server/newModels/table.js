@@ -70,6 +70,7 @@ class Table {
           if (!entry || entry.length === 0) {
             reject('Hubo un error modificando la entrada');
           }
+          console.log(`${entry[0].is_active} despues en table`);
           resolve(entry[0]);
         })
         .catch((err) => {

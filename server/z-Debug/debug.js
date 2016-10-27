@@ -1,12 +1,13 @@
 'use strict';
 
 const Table = require('../newModels/table');
+const options = require('../newModels/options');
 
 
-const surveys = new Table('surveys');
+// const surveys = new Activatable('surveys');
 
 
-surveys.getAttributesNames().then((count) => {
+options.all().then((count) => {
   console.log(count);
 }).catch((err) => {
   console.log(err);

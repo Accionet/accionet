@@ -46,6 +46,7 @@ class Table {
   }
 
   save(entry) {
+    this.addTimestamps(entry, true);
     return new Promise((resolve, reject) => {
       this.table().insert(entry).returning('*').then((entry) => {
           // check if attributes is an array
@@ -61,6 +62,7 @@ class Table {
   }
 
   update(id, attr) {
+    this.addTimestamps(attr, false);
     return new Promise((resolve, reject) => {
       this.table().where({
         id,
@@ -70,7 +72,6 @@ class Table {
           if (!entry || entry.length === 0) {
             reject('Hubo un error modificando la entrada');
           }
-          console.log(`${entry[0].is_active} despues en table`);
           resolve(entry[0]);
         })
         .catch((err) => {
@@ -94,6 +95,14 @@ class Table {
           reject(err);
         });
     });
+  }
+
+  // eslint-disable-next-line
+  addTimestamps(attr, isNew) {
+    if (isNew) {
+      attr.created_at = new Date();
+    }
+    attr.updated_at = new Date();
   }
 
   // ################################################
@@ -131,7 +140,7 @@ class Table {
     return new Promise((resolve, reject) => {
       this.table().select('created_at').orderBy('created_at', 'asc').first()
         .then((results) => {
-          if (results.created_at) {
+          if (results && results.created_at) {
             resolve(results.created_at);
           }
           reject('No se encontró una respuesta válida');

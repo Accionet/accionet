@@ -13,25 +13,25 @@ chai.use(chaiHttp);
 // eslint-disable-next-line no-undef
 describe('API Routes', () => {
   // eslint-disable-next-line no-undef
-  beforeEach((done) => {
-    knex.migrate.rollback()
-      .then(() => {
-        knex.migrate.latest()
-          .then(() => {
-            return knex.seed.run()
-              .then(() => {
-                done();
-              });
-          });
-      });
-  });
-  // eslint-disable-next-line no-undef
-  afterEach((done) => {
-    knex.migrate.rollback()
-      .then(() => {
-        done();
-      });
-  });
+  // beforeEach((done) => {
+  //   knex.migrate.rollback()
+  //     .then(() => {
+  //       knex.migrate.latest()
+  //         .then(() => {
+  //           return knex.seed.run()
+  //             .then(() => {
+  //               done();
+  //             });
+  //         });
+  //     });
+  // });
+  // // eslint-disable-next-line no-undef
+  // afterEach((done) => {
+  //   knex.migrate.rollback()
+  //     .then(() => {
+  //       done();
+  //     });
+  // });
 });
 
 // eslint-disable-next-line no-undef

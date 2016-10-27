@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const dateChai = require('chai-datetime');
-const knex = require('../../../../server/db/knex');
+// const knex = require('../../../../server/db/knex');
 const Option = require('../../../../server/newModels/options');
 
 // eslint-disable-next-line no-unused-vars
@@ -13,27 +13,26 @@ const should = chai.should();
 chai.use(dateChai);
 
 
+const defaultErrorMessage = 'Find parameter was not defined correctly';
+
+
 // eslint-disable-next-line no-undef
 describe('Options: Malicious find', () => {
   // eslint-disable-next-line no-undef
-  before((done) => {
-    knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
+
 
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is not a json', (done) => {
+    const unvalidJSON = 'Find parameter should be a valid json';
     Option.find(3).then(() => {
-      done('Error, it should return something valid');
+      done('Error, it should not return something valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(unvalidJSON, err);
+      done();
     });
   });
 
+  const nonExistantAttibute = 'Find parameter contains attributes that cannot be searched for';
   // eslint-disable-next-line no-undef
   it('Search for a non-existant attribute', (done) => {
     Option.find({
@@ -41,9 +40,11 @@ describe('Options: Malicious find', () => {
     }).then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(nonExistantAttibute, err);
+      done();
     });
   });
+
   // eslint-disable-next-line no-undef
   it('Search attribute does not map with type', (done) => {
     Option.find({
@@ -51,7 +52,8 @@ describe('Options: Malicious find', () => {
     }).then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(defaultErrorMessage, err);
+      done();
     });
   });
 });
@@ -59,15 +61,6 @@ describe('Options: Malicious find', () => {
 // eslint-disable-next-line no-undef
 describe('Options: Malicious findById', () => {
   const notFoundMessage = 'No se encontró una entrada con id = ';
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
 
   // eslint-disable-next-line no-undef
   it('Pass as parameter a negative value', (done) => {
@@ -86,7 +79,8 @@ describe('Options: Malicious findById', () => {
     Option.findById(NaN).then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(defaultErrorMessage, err);
+      done();
     });
   });
   // eslint-disable-next-line no-undef
@@ -94,7 +88,8 @@ describe('Options: Malicious findById', () => {
     Option.findById(Infinity).then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(defaultErrorMessage, err);
+      done();
     });
   });
   // eslint-disable-next-line no-undef
@@ -102,7 +97,8 @@ describe('Options: Malicious findById', () => {
     Option.findById(2.3).then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(defaultErrorMessage, err);
+      done();
     });
   });
   // eslint-disable-next-line no-undef
@@ -121,7 +117,8 @@ describe('Options: Malicious findById', () => {
     Option.findById('a').then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(defaultErrorMessage, err);
+      done();
     });
   });
 });

@@ -144,7 +144,7 @@ describe('Options: Methods that dont modify the db. (Count, find, all, new, getF
     });
   });
 });
-
+//
 // eslint-disable-next-line no-undef
 describe('Options: See what happens with empty table. (Count, find, all, new, getFirstDate, getAttributesNames)', () => {
   // eslint-disable-next-line no-undef

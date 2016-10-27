@@ -1,14 +1,12 @@
 'use strict';
+process.env.NODE_ENV = 'test';
 
 const Table = require('../newModels/table');
 const options = require('../newModels/options');
 
+const utils = require('../services/utils');
 
-// const surveys = new Activatable('surveys');
 
-
-options.all().then((count) => {
-  console.log(count);
-}).catch((err) => {
-  console.log(err);
+options.all().then((a) => {
+  console.log(a);
 });

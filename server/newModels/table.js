@@ -47,37 +47,53 @@ class Table {
   }
 
   save(entry) {
-    Table.addTimestamps(entry, true);
+    const errorString = 'Something went wrong';
     return new Promise((resolve, reject) => {
-      this.table().insert(entry).returning('*').then((entry) => {
-          // check if attributes is an array
-        if (!entry || entry.length === 0) {
-          return reject('Hubo un error creando un la entrada');
-        }
-        resolve(entry[0]);
-      })
-        .catch((err) => {
+      this.parseAttributesForUpsert(entry, true)
+        .then((attributes) => {
+          this.table().insert(attributes).returning('*').then((entry) => {
+              // check if attributes is an array
+            if (!entry || entry.length === 0) {
+              return reject(errorString);
+            }
+            resolve(entry[0]);
+          })
+            .catch(() => {
+              reject(errorString);
+            });
+        }).catch((err) => {
           reject(err);
         });
     });
   }
 
   update(id, attr) {
-    Table.addTimestamps(attr, false);
+    const errorString = 'Something went wrong';
     return new Promise((resolve, reject) => {
-      this.table().where({
-        id,
-      }).update(attr).returning('*')
-        .then((entry) => {
-          // check if attributes is an array
-          if (!entry || entry.length === 0) {
-            return reject('Hubo un error modificando la entrada');
-          }
-          resolve(entry[0]);
-        })
-        .catch((err) => {
+      this.findById(id).then((oldEntry) => {
+        if (attr && attr.id && id !== attr.id) {
+          return reject('Given IDs differ');
+        }
+        this.parseAttributesForUpsert(attr, false).then((attributes) => {
+          this.table().where({
+            id,
+          }).update(attributes).returning('*')
+            .then((entry) => {
+              // check if attributes is an array
+              if (!entry || entry.length === 0) {
+                return reject(errorString);
+              }
+              resolve(entry[0]);
+            })
+            .catch(() => {
+              reject(errorString);
+            });
+        }).catch((err) => {
           reject(err);
         });
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
   delete(id) {
@@ -108,7 +124,7 @@ class Table {
 
   find(attributes) {
     return new Promise((resolve, reject) => {
-      this.filterSearchAttributes(attributes)
+      this.filterAttributes(attributes)
         .then((filteredAttributes) => {
           this.table().select().where(filteredAttributes).then((results) => {
             return resolve(results);
@@ -210,10 +226,10 @@ class Table {
   }
 
   // Makes sure not to go searching for wierd stuff
-  filterSearchAttributes(attributes) {
+  filterAttributes(attributes) {
     return new Promise((resolve, reject) => {
       if (!utils.isJSON(attributes)) {
-        return reject('Find parameter should be a valid json');
+        return reject('Parameter should be a valid json');
       }
 
       this.getAttributesNames().then((attributeNames) => {
@@ -227,12 +243,37 @@ class Table {
           }
         }
         if (counter !== Object.keys(attributes).length) {
-          return reject('Find parameter contains attributes that cannot be searched for');
+          return reject('Parameter contains invalid attributes');
         }
         return resolve(filteredAttributes);
       })
         .catch((err) => {
           return reject(err);
+        });
+    });
+  }
+
+  static removeUnSetableAttributes(attributes) {
+    delete attributes.id;
+    delete attributes.created_at;
+    delete attributes.updated_at;
+  }
+
+  parseAttributesForUpsert(attributes, isNew) {
+    return new Promise((resolve, reject) => {
+      Table.removeUnSetableAttributes(attributes);
+      this.filterAttributes(attributes).then((filteredAttributes) => {
+        Table.removeUnSetableAttributes(filteredAttributes);
+
+        if (utils.isEmptyJSON(filteredAttributes)) {
+          return reject('Paremeter should not be empty');
+        }
+
+        Table.addTimestamps(filteredAttributes, isNew);
+        resolve(filteredAttributes);
+      })
+        .catch((err) => {
+          reject(err);
         });
     });
   }

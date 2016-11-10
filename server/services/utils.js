@@ -7,7 +7,7 @@ const mime = require('mime');
 //
 // }
 function isJson(x) {
-    // check if its null
+  // check if its null
   if (!x) {
     return false;
   }
@@ -26,12 +26,23 @@ exports.isEmptyJSON = function (x) {
 
 exports.cloneObject = function (obj) {
   if (obj === null || typeof obj !== 'object') return obj;
-  const copy = obj.constructor();
+  let copy;
+  try {
+    copy = obj.constructor();
+  } catch (err) {
+    copy = {};
+  }
   //eslint-disable-next-line
   for (const attr in obj) {
-    if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    if (obj.hasOwnProperty(attr)) {
+      copy[attr] = obj[attr];
+    }
   }
   return copy;
+};
+
+exports.randomInteger = function (min, max) {
+  return min + Math.floor(Math.random() * ((max + 1) - min));
 };
 
 exports.sendFile = function (filepath, filename, fileExtension, res) {

@@ -34,11 +34,7 @@ class Questions extends Table {
           }
           const saveOption = Promise.all(promises);
           saveOption.then(() => {
-            this.findById(question.id).then((question) => {
-              resolve(question);
-            }).catch((err) => {
-              reject(err);
-            });
+            resolve(this.findById(question.id));
           }).catch((err) => {
             reject(err);
           });
@@ -50,34 +46,34 @@ class Questions extends Table {
       });
     });
   }
-    // // Creates a json with the attr in attr
-    // function saveQuestionAndOptions(attr, callback) {
-    //   const deferrer = q.defer();
-    //   base.save(attr, table_name, (err, question) => {
-    //     const options = attr.options;
-    //
-    //     let saved = 0;
-    //
-    //     if (options && options.length && options.length > 0) {
-    //       for (let i = 0; i < options.length; i++) {
-    //         options[i].question_id = question.id;
-    //         Options.save(options[i], (err_opt) => {
-    //           if (err_opt) {
-    //             deferrer.reject(err_opt);
-    //           }
-    //           saved += 1;
-    //           if (saved === options.length) {
-    //             deferrer.resolve(question);
-    //           }
-    //         });
-    //       }
-    //     } else {
-    //       deferrer.resolve(question);
-    //     }
-    //     deferrer.promise.nodeify(callback);
-    //     return deferrer.promise;
-    //   });
-    // }
+
+  update(id, attr) {
+    const Option = require('./options'); // eslint-disable-line
+    return new Promise((resolve, reject) => {
+      const question = utils.cloneObject(attr);
+      const options = question.options;
+      // if it has valid options it shoul be an array
+      if (options && !(options instanceof Array)) {
+        reject('Options should be an array');
+      }
+        // delete question options so it does not complain that it has attributes it shoulnt
+      delete question.options;
+      super.update(id, question).then((question) => {
+        if (options && options.length > 0) {
+          question.options = options;
+          Option.updateOptionsOfQuestion(question).then(() => {
+            resolve(this.findById(question.id));
+          }).catch((err) => {
+            reject(err);
+          });
+        } else {
+          resolve(question);
+        }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 
   parseToSend(question) {
     const Option = require('./options'); // eslint-disable-line

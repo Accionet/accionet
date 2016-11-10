@@ -11,7 +11,7 @@ class Options extends Table {
   }
 
   updateOptionsOfQuestion(question) {
-    const Question = require('./questions'); // eslint-disabled-this-line global-require
+    const Question = require('./questions'); // eslint-disable-line global-require
 
     return new Promise((resolve, reject) => {
       // Check for valid parameters

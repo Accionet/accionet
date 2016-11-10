@@ -1,5 +1,5 @@
 'use strict';
-const Table = require('./table'); // eslint-disabled-this-line no-unused-vars
+const Table = require('./table');
 const utils = require('../services/utils');
 // const Option = new Options();
 
@@ -15,14 +15,18 @@ class Questions extends Table {
 
 
   save(attr) {
-    const Option = require('./options'); // eslint-disabled-this-line
+    const Option = require('./options'); // eslint-disable-line
     const question = utils.cloneObject(attr);
     return new Promise((resolve, reject) => {
       const options = question.options;
+      // if it has valid options it shoul be an array
+      if (options && !(options instanceof Array)) {
+        reject('Options should be an array');
+      }
         // delete question options so it does not complain that it has attributes it shoulnt
       delete question.options;
       super.save(question).then((question) => {
-        if (options && options.length && options.length > 0) {
+        if (options && options.length > 0) {
           const promises = [];
           for (let i = 0; i < options.length; i++) {
             options[i].question_id = question.id;
@@ -76,7 +80,7 @@ class Questions extends Table {
     // }
 
   parseToSend(question) {
-    const Option = require('./options'); // eslint-disabled-this-line
+    const Option = require('./options'); // eslint-disable-line
 
     return new Promise((resolve, reject) => {
       Option.find({

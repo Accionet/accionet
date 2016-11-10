@@ -1,170 +1,170 @@
-// server/models/questions.js
 'use strict';
+const Table = require('./table');
+const utils = require('../services/utils');
+// const Option = new Options();
+
+// const Place = require('./places');
 
 
-const q = require('q');
-const base = require('../models/base');
+class Questions extends Table {
 
-const Options = require('../models/options');
+  constructor() {
+    const table_name = 'questions';
+    super(table_name);
+  }
 
-const table_name = 'questions';
 
-
-// Return all the entries active or not
-exports.all = function getAllQuestions(callback) {
-  base.all(table_name, callback);
-};
-
-// Creates a json representing an empty entry
-exports.new = function newQuestion(callback) {
-  base.new(table_name, callback);
-};
-
-// Creates a json with the attr in attr
-function saveQuestionAndOptions(attr, callback) {
-  const deferrer = q.defer();
-  base.save(attr, table_name, (err, question) => {
-    const options = attr.options;
-
-    let saved = 0;
-
-    if (options && options.length && options.length > 0) {
-      for (let i = 0; i < options.length; i++) {
-        options[i].question_id = question.id;
-        Options.save(options[i], (err_opt) => {
-          if (err_opt) {
-            deferrer.reject(err_opt);
-          }
-          saved += 1;
-          if (saved === options.length) {
-            deferrer.resolve(question);
-          }
-        });
+  save(attr) {
+    const Option = require('./options'); // eslint-disable-line
+    const question = utils.cloneObject(attr);
+    return new Promise((resolve, reject) => {
+      const options = question.options;
+      // if it has valid options it shoul be an array
+      if (options && !(options instanceof Array)) {
+        reject('Options should be an array');
       }
-    } else {
-      deferrer.resolve(question);
-    }
-    deferrer.promise.nodeify(callback);
-    return deferrer.promise;
-  });
-}
-
-exports.save = saveQuestionAndOptions;
-
-function updateQuestion(id, attr, callback) {
-  base.update(id, attr, table_name, (err, question) => {
-    if (err || !question) {
-      return callback(err);
-    }
-    Options.updateOptionsOfQuestion(attr, (err, options) => {
-      if (err) {
-        return callback(err);
-      }
-      question.options = options;
-      return callback(null, options);
+      // delete question options so it does not complain that it has attributes it shoulnt
+      delete question.options;
+      super.save(question).then((question) => {
+        if (options && options.length > 0) {
+          const promises = [];
+          for (let i = 0; i < options.length; i++) {
+            options[i].question_id = question.id;
+            promises.push(Option.save(options[i]));
+          }
+          const saveOption = Promise.all(promises);
+          saveOption.then(() => {
+            resolve(this.findById(question.id));
+          }).catch((err) => {
+            reject(err);
+          });
+        } else {
+          resolve(question);
+        }
+      }).catch((err) => {
+        reject(err);
+      });
     });
-  });
+  }
+
+  update(id, attr) {
+    const Option = require('./options'); // eslint-disable-line
+    return new Promise((resolve, reject) => {
+      const question = utils.cloneObject(attr);
+      const options = question.options;
+      // if it has valid options it shoul be an array
+      if (options && !(options instanceof Array)) {
+        reject('Options should be an array');
+      }
+      // delete question options so it does not complain that it has attributes it shoulnt
+      delete question.options;
+      super.update(id, question).then((question) => {
+        if (options && options.length > 0) {
+          question.options = options;
+          Option.updateOptionsOfQuestion(question).then(() => {
+            resolve(this.findById(question.id));
+          }).catch((err) => {
+            reject(err);
+          });
+        } else {
+          resolve(question);
+        }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  updateQuestionsOfSurvey(survey) {
+    const Survey = require('./surveys'); // eslint-disable-line global-require
+
+    return new Promise((resolve, reject) => {
+      // Check for valid parameters
+      if (!survey || !survey.id) {
+        reject('La pregunta es inválida. No tiene el atributo id');
+      }
+      const newQuestions = survey.questions;
+      if (!newQuestions || !(newQuestions instanceof Array)) {
+        reject('La pregunta es inválida. Las opciones no están definidas correctamente');
+      }
+      //
+      Survey.findById(survey.id).then((beforeSurvey) => {
+        if (!survey) {
+          return reject('La pregunta no existe');
+        }
+
+        const beforeQuestions = beforeSurvey.questions;
+        const questionsToCreate = [];
+        const questionsToDelete = [];
+        const questionsToUpdate = [];
+
+        // Delete and update the ones that actually exists
+        for (let i = 0; i < beforeQuestions.length; i++) {
+          let survives = false;
+          for (let j = 0; j < newQuestions.length; j++) {
+            if (beforeQuestions[i].id === newQuestions[j].id) {
+              survives = true;
+              questionsToUpdate.push(this.update(newQuestions[j].id, newQuestions[j]));
+              break;
+            }
+          }
+
+          if (!survives) {
+            questionsToDelete.push(this.delete(beforeQuestions[i].id));
+          }
+        }
+        const updatesPromise = Promise.all(questionsToUpdate);
+        const deletePromise = Promise.all(questionsToDelete);
+        const updateDeletePromise = Promise.all([updatesPromise, deletePromise]);
+        for (let j = 0; j < newQuestions.length; j++) {
+          let create = true;
+          for (let i = 0; i < beforeQuestions.length; i++) {
+            if (newQuestions[j].id === beforeQuestions[i].id) {
+              create = false;
+              break;
+            }
+          }
+          if (create) {
+            newQuestions[j].survey_id = beforeSurvey.id;
+
+            questionsToCreate.push(this.save(newQuestions[j]));
+          }
+        }
+        const newPromise = Promise.all(questionsToCreate);
+        const allPromises = Promise.all([newPromise, updateDeletePromise]);
+
+        allPromises.then(() => {
+          // Return all the questions of the survey
+          Survey.findById(beforeSurvey.id).then((modifiedSurvey) => {
+            resolve(modifiedSurvey);
+          }).catch((err) => {
+            reject(err);
+          });
+        }).catch((err) => {
+          reject(err);
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  parseToSend(question) {
+    const Option = require('./options'); // eslint-disable-line
+
+    return new Promise((resolve, reject) => {
+      Option.find({
+        question_id: question.id,
+      }).then((options) => {
+        question.options = options;
+        resolve(question);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 }
 
-exports.update = updateQuestion;
+const instance = new Questions();
 
-exports.updateQuestionsOfSurvey = function (survey, callback) {
-  const attr = {
-    survey_id: survey.id,
-  };
-
-  const newQuestions = survey.questions;
-
-  base.find(attr, table_name, (err, questions) => {
-    if (err) {
-      return callback(err);
-    }
-
-    const questionsToCreate = [];
-    const questionsToDelete = [];
-    const questionsToUpdate = [];
-        // Delete and update the ones that actually exists
-    for (let i = 0; i < questions.length; i++) {
-      let survives = false;
-      for (let j = 0; j < newQuestions.length; j++) {
-        if (questions[i].id === newQuestions[j].id) {
-          survives = true;
-          questionsToUpdate.push(newQuestions[j]);
-          break;
-        }
-      }
-
-      if (!survives) {
-        questionsToDelete.push(questions[i]);
-      }
-    }
-
-    for (let j = 0; j < newQuestions.length; j++) {
-      let create = true;
-      for (let i = 0; i < questions.length; i++) {
-        if (questions[i].id === newQuestions[j].id) {
-          create = false;
-          break;
-        }
-      }
-      if (create) {
-        questionsToCreate.push(newQuestions[j]);
-      }
-    }
-    let finishedQueries = 0;
-
-    const totalQueries = questionsToCreate.length + questionsToDelete.length + questionsToUpdate.length;
-
-    for (let i = 0; i < questionsToDelete.length; i++) {
-      const question = questionsToDelete[i];
-      base.delete(question.id, table_name, (err) => {
-        finishedQueries++;
-        if (err) {
-          return callback(err);
-        }
-        if (finishedQueries === totalQueries) {
-          return callback(null, newQuestions);
-        }
-      });
-    }
-
-    for (let i = 0; i < questionsToUpdate.length; i++) {
-      const question = questionsToUpdate[i];
-      updateQuestion(question.id, question, (err) => {
-        finishedQueries++;
-        if (err) {
-          return callback(err);
-        }
-        if (finishedQueries === totalQueries) {
-          return callback(null, newQuestions);
-        }
-      });
-    }
-
-    for (let i = 0; i < questionsToCreate.length; i++) {
-      const question = questionsToCreate[i];
-      question.survey_id = survey.id;
-      saveQuestionAndOptions(question, (err) => {
-        finishedQueries++;
-        if (err) {
-          return callback(err);
-        }
-        if (finishedQueries === totalQueries) {
-          return callback(null, newQuestions);
-        }
-      });
-    }
-  });
-};
-
-exports.findById = function findQuestionById(id, callback) {
-  base.findById(id, table_name, callback);
-};
-
-exports.findOne = function findFirstQuestion(id, attr, callback) {
-  base.findOne(id, attr, table_name, callback);
-};
-
-exports.columnNames = function getAttributes(callback) {
-  base.columnNames(table_name, callback);
-};
+module.exports = instance;

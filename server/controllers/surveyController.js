@@ -11,13 +11,19 @@ const Utils = require('../services/utils');
 const Response = require('../models/response');
 // const Answer = require('../models/answer');
 const httpResponse = require('../services/httpResponse');
+const debug = require('debug')('Survey Controller');
 
 
 exports.index = function getAllSurveys(req, res) {
   const active = true;
   Surveys.find({
     is_active: active,
-  }, (err, result) => {
+  }).then((result) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+      surveys: result,
+      show_active: active,
+    });
+  }).catch((err) => {
     if (err) {
       res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
         error: `ERROR: ${err}`,
@@ -25,11 +31,6 @@ exports.index = function getAllSurveys(req, res) {
         show_active: active,
       });
     }
-
-    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
-      surveys: result,
-      show_active: active,
-    });
   });
 };
 
@@ -37,59 +38,70 @@ exports.disabled = function getAllSurveys(req, res) {
   const active = false;
   Surveys.find({
     is_active: active,
-  }, (err, result) => {
-    if (err) {
-      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
-        error: `ERROR: ${err}`,
-        surveys: [],
-        show_active: active,
-      });
-    }
-
+  }).then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
       surveys: result,
+      show_active: active,
+    });
+  }).catch((err) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+      error: `ERROR: ${err}`,
+      surveys: [],
       show_active: active,
     });
   });
 };
 
 exports.count = function countSurveys(req, res) {
-  Surveys.count({}, (err, result) => {
+  Surveys.count({}).then((result) => {
+    const json = httpResponse.success('Encuestas contadas exitosamente', 'amount', result);
+    return res.status(200).send(json);
+  }).catch((err) => {
     if (err) {
       const json = httpResponse.error(err);
       return res.status(500).send(json);
     }
-
-    const json = httpResponse.success('Encuestas contadas exitosamente', 'amount', result);
-    return res.status(200).send(json);
   });
 };
 
 
 exports.show = function showSurvey(req, res) {
-  Surveys.findById(req.params.id, (err, survey) => {
+  Surveys.findById(req.params.id).then((survey) => {
+    debug('========================================================');
+    console.log(survey);
+    debug('========================================================');
+
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
+      survey,
+    });
+  }).catch((err) => {
+    debug(err);
     if (err) {
       res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
         error: `ERROR: ${err}`,
         survey: [],
       });
     }
-    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
-      survey,
-    });
   });
 };
 
 exports.edit = function showSurvey(req, res) {
-  Surveys.findById(req.params.id, (err, survey) => {
-    if (err || !survey) {
-      const json = httpResponse.error(err);
+  Surveys.findById(req.params.id).then((survey) => {
+    if (!survey) {
+      const json = httpResponse.error(`No survey found with id ${req.params.id}`);
       const view_path = httpResponse.errorPath();
       return res.render(view_path, json);
     }
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'edit.ejs'), {
       survey,
     });
+  }).catch((err) => {
+    if (err) {
+      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+        error: `ERROR: ${err}`,
+        survey: [],
+      });
+    }
   });
 };
 
@@ -97,13 +109,14 @@ exports.update = function saveSurvey(req, res) {
   const survey = req.body;
   const url_id = parseInt(req.params.id, 10);
   if (!isNaN(req.params.id) && survey.id === url_id) {
-    Surveys.update(survey.id, survey, (err, result) => {
+    Surveys.update(survey.id, survey).then((result) => {
+      const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
+      return res.status(200).send(json);
+    }).catch((err) => {
       if (err) {
         const json = httpResponse.error(err);
         return res.status(500).send(json);
       }
-      const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
-      return res.status(200).send(json);
     });
   } else {
     const json = httpResponse.error('IDs no coinciden');
@@ -114,14 +127,14 @@ exports.update = function saveSurvey(req, res) {
 
 exports.create = function saveSurvey(req, res) {
   const survey = req.body;
-  Surveys.save(survey, (err, result) => {
+  Surveys.save(survey).then((result) => {
+    const json = httpResponse.success('Encuesta guardada exitosamente', 'survey', result);
+    return res.status(200).send(json);
+  }).catch((err) => {
     if (err) {
       const json = httpResponse.error(err);
       return res.status(500).send(json);
     }
-
-    const json = httpResponse.success('Encuesta guardada exitosamente', 'survey', result);
-    return res.status(200).send(json);
   });
 };
 
@@ -132,22 +145,14 @@ exports.new = function newSurvey(req, res) {
 
 
 exports.metrics = function showMetrics(req, res) {
-  Surveys.findById(req.params.id, (err, survey) => {
-    if (err) {
-      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
-        error: `ERROR: ${err}`,
-        survey: [],
-        responses: [],
-      });
-      return;
-    }
+  Surveys.findById(req.params.id).then((survey) => {
     Surveys.getMetrics(survey[0].id, (err_find_survey, survey_with_metrics) => {
-            // console.log(survey_with_metrics.questions);
-            // console.log('-------------------------');
-            // console.log(survey_with_metrics.questions[0].metrics);
+      // console.log(survey_with_metrics.questions);
+      // console.log('-------------------------');
+      // console.log(survey_with_metrics.questions[0].metrics);
       if (err_find_survey) {
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
-          error: `ERROR: ${err}`,
+          error: `ERROR: ${err_find_survey}`,
           survey: [],
         });
         return;
@@ -157,37 +162,46 @@ exports.metrics = function showMetrics(req, res) {
         survey: survey_with_metrics,
       });
     });
+  }).catch((err) => {
+    if (err) {
+      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
+        error: `ERROR: ${err}`,
+        survey: [],
+        responses: [],
+      });
+      return;
+    }
   });
 };
 
 /* Equivalent to delete but sets the is_active to false*/
 exports.toggleIsActive = function toggleIsActive(req, res) {
-  Surveys.toggleIsActive(req.params.id, (err, response) => {
+  Surveys.toggleIsActive(req.params.id).then((response) => {
+    const json = httpResponse.success('', 'survey', response);
+    return res.status(200).send(json);
+  }).catch((err) => {
     if (err) {
       const json = httpResponse.error(err);
       return res.status(200).send(json);
     }
-
-    const json = httpResponse.success('', 'survey', response);
-    return res.status(200).send(json);
   });
 };
 
 exports.delete = function deleteEntry(req, res) {
-  Surveys.delete(req.params.id, (err, response) => {
+  Surveys.delete(req.params.id).then((response) => {
+    const json = httpResponse.success(`Encuesta ${response.title} eliminada exitosamente`, 'survey', response);
+    return res.status(200).send(json);
+  }).catch((err) => {
     if (err) {
       const json = httpResponse.error(err);
       return res.status(200).send(json);
     }
-
-    const json = httpResponse.success(`Encuesta ${response.title} eliminada exitosamente`, 'survey', response);
-    return res.status(200).send(json);
   });
 };
 
 
 exports.responseSurvey = function (req, res) {
-    // It has to have a survey_id and it must be equal to the one in the URL
+  // It has to have a survey_id and it must be equal to the one in the URL
   const response = JSON.parse(req.body.string_json);
   const url_id = parseInt(req.params.id, 10);
   if (!isNaN(req.params.id) && response.survey_id && response.survey_id === url_id) {
@@ -200,7 +214,7 @@ exports.responseSurvey = function (req, res) {
       return res.status(200).send(json);
     });
   } else {
-        // Responder con attributos mal hechos
+    // Responder con attributos mal hechos
     const json = httpResponse.error('IDs no coinciden');
     return res.status(400).send(json);
   }
@@ -273,12 +287,12 @@ exports.generateExcel = function (req, res) {
       const json = httpResponse.error(err);
       return res.status(500).send(json);
     }
-        // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
+    // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
     let filepath = path.join(__dirname, '../', 'uploads');
     const filename = `/${(new Date()).getTime()}.xlsx`;
     const workbook = excelbuilder.createWorkbook(filepath, filename);
     filepath += filename;
-        // headers of the excel sheet
+    // headers of the excel sheet
     let firstRow;
     try {
       firstRow = Object.keys(data[0]);
@@ -291,7 +305,7 @@ exports.generateExcel = function (req, res) {
       data,
     };
     ExcelGenerator.addSheetToWorkbook(sheet, workbook);
-        // Save it
+    // Save it
     workbook.save((err) => {
       if (err) {
         throw err;

@@ -24,6 +24,16 @@ exports.isEmptyJSON = function (x) {
   return Object.keys(x).length === 0;
 };
 
+exports.cloneObject = function (obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  const copy = obj.constructor();
+  //eslint-disable-next-line
+  for (const attr in obj) {
+    if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+  }
+  return copy;
+};
+
 exports.sendFile = function (filepath, filename, fileExtension, res) {
   try {
     const mimetype = mime.lookup(filepath);

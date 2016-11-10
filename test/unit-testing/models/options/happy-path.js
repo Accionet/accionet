@@ -1,29 +1,29 @@
-process.env.NODE_ENV = 'test';
-
-const chai = require('chai');
-const dateChai = require('chai-datetime');
-const knex = require('../../../../server/db/knex');
-const Option = require('../../../../server/newModels/options');
-
-// eslint-disable-next-line no-unused-vars
-const assert = chai.assert;
-// eslint-disable-next-line no-unused-vars
-const should = chai.should();
-
-chai.use(dateChai);
-
-
+// process.env.NODE_ENV = 'test';
+//
+// const chai = require('chai');
+// const dateChai = require('chai-datetime');
+// const knex = require('../../../../server/db/knex');
+// const Option = require('../../../../server/newModels/options');
+//
+// // eslint-disable-next-line no-unused-vars
+// const assert = chai.assert;
+// // eslint-disable-next-line no-unused-vars
+// const should = chai.should();
+//
+// chai.use(dateChai);
+//
+//
 // // eslint-disable-next-line no-undef
 // describe('Options: Methods that dont modify the db. (Count, find, all, new, getFirstDate, getAttributesNames)', () => {
 //   // eslint-disable-next-line no-undef
-//   before((done) => {
-//     return knex.seed.run()
-//       .then(() => {
-//         done();
-//       }).catch((err) => {
-//         done(err);
-//       });
-//   });
+//   // before((done) => {
+//   //   return knex.seed.run()
+//   //     .then(() => {
+//   //       done();
+//   //     }).catch((err) => {
+//   //       done(err);
+//   //     });
+//   // });
 //
 //   // eslint-disable-next-line no-undef
 //   it('Count amount of options', (done) => {
@@ -224,14 +224,14 @@ chai.use(dateChai);
 // // eslint-disable-next-line no-undef
 // describe('Options: CUD of CRUD', () => {
 //   // eslint-disable-next-line no-undef
-//   before((done) => {
-//     return knex.seed.run()
-//       .then(() => {
-//         done();
-//       }).catch((err) => {
-//         done(err);
-//       });
-//   });
+//   // before((done) => {
+//   //   return knex.seed.run()
+//   //     .then(() => {
+//   //       done();
+//   //     }).catch((err) => {
+//   //       done(err);
+//   //     });
+//   // });
 //
 //   // eslint-disable-next-line no-undef
 //   it('Create new Option', (done) => {
@@ -256,35 +256,35 @@ chai.use(dateChai);
 //       done(err);
 //     });
 //   });
-  // // eslint-disable-next-line no-undef
-  // it('Update option', (done) => {
-  //   return Option.all().then((options) => {
-  //     const i = Math.floor(Math.random() * options.length);
-  //     const beforeUpdate = options[i];
-  //     const updateAttr = {
-  //       statement: 'new statement',
-  //     };
-  //     Option.update(beforeUpdate.id, updateAttr)
-  //     .then((option) => {
-  //       option.should.have.property('id');
-  //       assert.equal(beforeUpdate.id, option.id);
-  //       option.should.have.property('created_at');
-  //       assert.equalDate(option.created_at, beforeUpdate.created_at);
-  //       option.should.have.property('updated_at');
-  //       assert.afterTime(option.updated_at, beforeUpdate.updated_at);
-  //       option.should.have.property('statement');
-  //       assert.equal(option.statement, updateAttr.statement);
-  //       option.should.have.property('enumeration');
-  //       assert.equal(option.enumeration, beforeUpdate.enumeration);
-  //       option.should.have.property('question_id');
-  //       assert.equal(option.question_id, beforeUpdate.question_id);
-  //       done();
-  //     })
-  //     .catch((err) => {
-  //       done(err);
-  //     });
-  //   }).catch((err) => {
-  //     done(err);
-  //   });
-  // });
+//   // eslint-disable-next-line no-undef
+//   it('Update option', (done) => {
+//     return Option.all().then((options) => {
+//       const i = Math.floor(Math.random() * options.length);
+//       const beforeUpdate = options[i];
+//       const updateAttr = {
+//         statement: 'new statement',
+//       };
+//       Option.update(beforeUpdate.id, updateAttr)
+//       .then((option) => {
+//         option.should.have.property('id');
+//         assert.equal(beforeUpdate.id, option.id);
+//         option.should.have.property('created_at');
+//         assert.equalDate(option.created_at, beforeUpdate.created_at);
+//         option.should.have.property('updated_at');
+//         assert.afterTime(option.updated_at, beforeUpdate.updated_at);
+//         option.should.have.property('statement');
+//         assert.equal(option.statement, updateAttr.statement);
+//         option.should.have.property('enumeration');
+//         assert.equal(option.enumeration, beforeUpdate.enumeration);
+//         option.should.have.property('question_id');
+//         assert.equal(option.question_id, beforeUpdate.question_id);
+//         done();
+//       })
+//       .catch((err) => {
+//         done(err);
+//       });
+//     }).catch((err) => {
+//       done(err);
+//     });
+//   });
 // });

@@ -42,6 +42,34 @@ class Surveys extends Activatable {
     });
   }
 
+  update(id, attr) {
+    const Question = require('./questions'); // eslint-disable-line
+    return new Promise((resolve, reject) => {
+      const survey = utils.cloneObject(attr);
+      const questions = survey.questions;
+      // if it has valid questions it shoul be an array
+      if (questions && !(questions instanceof Array)) {
+        reject('Questions should be an array');
+      }
+      // delete survey questions so it does not complain that it has attributes it shoulnt
+      delete survey.questions;
+      super.update(id, survey).then((survey) => {
+        if (questions && questions.length > 0) {
+          survey.questions = questions;
+          Question.updateQuestionsOfSurvey(survey).then(() => {
+            resolve(this.findById(survey.id));
+          }).catch((err) => {
+            reject(err);
+          });
+        } else {
+          resolve(survey);
+        }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
   parseToSend(survey) {
     const Question = require('./questions'); // eslint-disable-line
 

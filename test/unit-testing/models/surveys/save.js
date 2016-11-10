@@ -12,7 +12,6 @@ const assert = chai.assert;
 const should = chai.should();
 
 const QUESTION_NOT_ARRAY = 'Questions should be an array';
-const DEFAULT_ERROR = 'Something went wrong';
 const WRONG_PARAMETER = 'Parameter contains invalid attributes';
 
 

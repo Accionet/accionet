@@ -31,7 +31,6 @@ describe('Surveys: check that the questions and options come with', () => {
   // eslint-disable-next-line no-undef
   it('for: all', (done) => {
     return Survey.all().then((surveys) => {
-      console.log('no llego para aca o si?');
       const survey = surveys[utils.randomInteger(0, surveys.length - 1)];
       survey.questions.should.be.a('array');
       for (let i = 0; i < survey.questions.length; i++) {

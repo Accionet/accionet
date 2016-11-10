@@ -23,7 +23,7 @@ class Questions extends Table {
       if (options && !(options instanceof Array)) {
         reject('Options should be an array');
       }
-        // delete question options so it does not complain that it has attributes it shoulnt
+      // delete question options so it does not complain that it has attributes it shoulnt
       delete question.options;
       super.save(question).then((question) => {
         if (options && options.length > 0) {
@@ -56,7 +56,7 @@ class Questions extends Table {
       if (options && !(options instanceof Array)) {
         reject('Options should be an array');
       }
-        // delete question options so it does not complain that it has attributes it shoulnt
+      // delete question options so it does not complain that it has attributes it shoulnt
       delete question.options;
       super.update(id, question).then((question) => {
         if (options && options.length > 0) {
@@ -69,6 +69,80 @@ class Questions extends Table {
         } else {
           resolve(question);
         }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  updateQuestionsOfSurvey(survey) {
+    const Survey = require('./surveys'); // eslint-disable-line global-require
+
+    return new Promise((resolve, reject) => {
+      // Check for valid parameters
+      if (!survey || !survey.id) {
+        reject('La pregunta es inválida. No tiene el atributo id');
+      }
+      const newQuestions = survey.questions;
+      if (!newQuestions || !(newQuestions instanceof Array)) {
+        reject('La pregunta es inválida. Las opciones no están definidas correctamente');
+      }
+      //
+      Survey.findById(survey.id).then((beforeSurvey) => {
+        if (!survey) {
+          return reject('La pregunta no existe');
+        }
+
+        const beforeQuestions = beforeSurvey.questions;
+        const questionsToCreate = [];
+        const questionsToDelete = [];
+        const questionsToUpdate = [];
+
+        // Delete and update the ones that actually exists
+        for (let i = 0; i < beforeQuestions.length; i++) {
+          let survives = false;
+          for (let j = 0; j < newQuestions.length; j++) {
+            if (beforeQuestions[i].id === newQuestions[j].id) {
+              survives = true;
+              questionsToUpdate.push(this.update(newQuestions[j].id, newQuestions[j]));
+              break;
+            }
+          }
+
+          if (!survives) {
+            questionsToDelete.push(this.delete(beforeQuestions[i].id));
+          }
+        }
+        const updatesPromise = Promise.all(questionsToUpdate);
+        const deletePromise = Promise.all(questionsToDelete);
+        const updateDeletePromise = Promise.all([updatesPromise, deletePromise]);
+        for (let j = 0; j < newQuestions.length; j++) {
+          let create = true;
+          for (let i = 0; i < beforeQuestions.length; i++) {
+            if (newQuestions[j].id === beforeQuestions[i].id) {
+              create = false;
+              break;
+            }
+          }
+          if (create) {
+            newQuestions[j].survey_id = beforeSurvey.id;
+
+            questionsToCreate.push(this.save(newQuestions[j]));
+          }
+        }
+        const newPromise = Promise.all(questionsToCreate);
+        const allPromises = Promise.all([newPromise, updateDeletePromise]);
+
+        allPromises.then(() => {
+          // Return all the questions of the survey
+          Survey.findById(beforeSurvey.id).then((modifiedSurvey) => {
+            resolve(modifiedSurvey);
+          }).catch((err) => {
+            reject(err);
+          });
+        }).catch((err) => {
+          reject(err);
+        });
       }).catch((err) => {
         reject(err);
       });

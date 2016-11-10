@@ -105,6 +105,11 @@ describe('Options: Malicious update options of question', () => {
       done(err);
     });
   });
+});
+
+
+//eslint-disable-next-line
+describe('Options: Update options of question', () => {
 
   // eslint-disable-next-line no-undef
   it('Delete questions, add new, and modify existing', (done) => {
@@ -116,17 +121,17 @@ describe('Options: Malicious update options of question', () => {
       if (n > 2) {
         cut = 2;
       }
-        // delete
+      // delete
       const question = {
         options: questions[i].options.slice().splice(cut),
         id: questions[i].id,
       };
 
-        // modify
+      // modify
       question.options[0].statement = 'statement modified';
 
 
-        // add new
+      // add new
       question.options.push({
         statement: 'new option',
         enumeration: 'z',
@@ -139,7 +144,7 @@ describe('Options: Malicious update options of question', () => {
         let modifiedDone = false;
         let addedDone = false;
         for (let j = 0; j < modifiedQuestion.options.length; j++) {
-            // register if the modified statement was register
+          // register if the modified statement was register
           if (modifiedQuestion.options[j].statement === question.options[0].statement) {
             modifiedDone = true;
             assert.equal(modifiedQuestion.options[j].enumeration, question.options[0].enumeration);

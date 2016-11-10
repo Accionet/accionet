@@ -305,7 +305,11 @@ describe('Options: Malicious update', () => {
         option.should.have.property('id');
         assert.equal(option.id, beforeUpdate.id);
         option.should.have.property('created_at');
-        assert.equalTime(option.created_at, beforeUpdate.created_at);
+        if (beforeUpdate.created_at) {
+          assert.equalTime(option.created_at, beforeUpdate.created_at);
+        } else {
+          assert.equal(option.created_at, beforeUpdate.created_at);
+        }
         option.should.have.property('updated_at');
         assert.afterTime(option.updated_at, updated_at);
         option.should.have.property('statement');

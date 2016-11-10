@@ -16,14 +16,14 @@ chai.use(dateChai);
 // eslint-disable-next-line no-undef
 describe('Options: Methods that dont modify the db. (Count, find, all, new, getFirstDate, getAttributesNames)', () => {
   // eslint-disable-next-line no-undef
-  // before((done) => {
-  //   return knex.seed.run()
-  //     .then(() => {
-  //       done();
-  //     }).catch((err) => {
-  //       done(err);
-  //     });
-  // });
+  before((done) => {
+    return knex.seed.run()
+      .then(() => {
+        done();
+      }).catch((err) => {
+        done(err);
+      });
+  });
 
   // eslint-disable-next-line no-undef
   it('Count amount of options', (done) => {

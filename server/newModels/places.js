@@ -10,5 +10,6 @@ class Places extends Activatable {
 }
 
 const instance = new Places();
+console.log(instance);
 
 module.exports = instance;

@@ -1,6 +1,6 @@
 'use strict';
 
-const Table = require('./table');
+const Table = require('./test_table'); // eslint-disabled-this-line no-unused-vars
 
 
 class Options extends Table {
@@ -11,10 +11,8 @@ class Options extends Table {
   }
 
   updateOptionsOfQuestion(question) {
-    const Question = require('./questions'); // eslint-disabled-this-line global-require
-
+    const Question = require('./test_questions'); // eslint-disable-line
     return new Promise((resolve, reject) => {
-      // Check for valid parameters
       if (!question || !question.id) {
         reject('La pregunta es inválida. No tiene el atributo id');
       }
@@ -22,12 +20,13 @@ class Options extends Table {
       if (!newOptions || !newOptions.length || newOptions.length === 0) {
         reject('La pregunta es inválida. Las opciones no están definidas correctamente');
       }
-      //
+
       Question.findById(question.id).then((beforeQuestion) => {
         if (!question) {
           return reject('La pregunta no existe');
         }
 
+        const newOptions = question.options;
         const beforeOptions = beforeQuestion.options;
         const optionsToCreate = [];
         const optionsToDelete = [];
@@ -39,13 +38,13 @@ class Options extends Table {
           for (let j = 0; j < newOptions.length; j++) {
             if (beforeOptions[i].id === newOptions[j].id) {
               survives = true;
-              optionsToUpdate.push(this.update(newOptions[j].id, newOptions[j]));
+              optionsToUpdate.push(this.save(newOptions[j]));
               break;
             }
           }
 
           if (!survives) {
-            optionsToDelete.push(this.delete(beforeOptions[i].id));
+            optionsToDelete.push(this.save(beforeOptions)[i]);
           }
         }
         const updatesPromise = Promise.all(optionsToUpdate);
@@ -53,15 +52,13 @@ class Options extends Table {
         const updateDeletePromise = Promise.all([updatesPromise, deletePromise]);
         for (let j = 0; j < newOptions.length; j++) {
           let create = true;
-          for (let i = 0; i < beforeOptions.length; i++) {
-            if (newOptions[j].id === beforeOptions[i].id) {
+          for (let i = 0; i < newOptions.length; i++) {
+            if (newOptions[i].id === newOptions[j].id) {
               create = false;
               break;
             }
           }
           if (create) {
-            newOptions[j].question_id = beforeQuestion.id;
-
             optionsToCreate.push(this.save(newOptions[j]));
           }
         }
@@ -70,8 +67,11 @@ class Options extends Table {
 
         allPromises.then(() => {
           // Return all the options of the question
-          Question.findById(beforeQuestion.id).then((modifiedQuestion) => {
-            resolve(modifiedQuestion);
+          this.find({
+            question_id: beforeQuestion.id,
+          }).then((options) => {
+            beforeQuestion.options = options;
+            resolve(beforeQuestion);
           }).catch((err) => {
             reject(err);
           });
@@ -84,8 +84,19 @@ class Options extends Table {
     });
   }
 
+  getName() {
+    return new Promise((resolve) => {
+      return resolve(`Se llamo a  ${Question.getName()}`);
+      // console.log('estamos en options');
+      // Question.getName().then((name) => {
+      //   console.log(`llego ${name}`);
+      //   return resolve(`Se llamo a  ${name}`);
+      // });
+    });
+  }
+
 
 }
 const instance = new Options();
-module.exports = instance;
-// module.exports = Options;
+// module.exports = instance;
+module.exports = Options;

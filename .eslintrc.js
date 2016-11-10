@@ -22,6 +22,7 @@ module.exports = {
     "no-loop-func": 0,
     "no-shadow": 0,
     "arrow-body-style": ["error", "always"],
+    "class-methods-use-this": 0,
   },
   "globals": {
     "angular": true

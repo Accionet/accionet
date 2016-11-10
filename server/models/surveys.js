@@ -214,7 +214,6 @@ exports.update = function updateSurvey(id, attr, callback) {
       if (err) {
         return callback(err);
       }
-      console.log('llego para aca en survey');
       survey.questions = questions;
       return callback(null, survey);
     });

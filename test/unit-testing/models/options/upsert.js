@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const dateChai = require('chai-datetime');
 // const knex = require('../../../../server/db/knex');
-const Option = require('../../../../server/newModels/options');
+const Option = require('../../../../server/models/options');
 
 // eslint-disable-next-line no-unused-vars
 const assert = chai.assert;
@@ -15,7 +15,7 @@ chai.use(dateChai);
 
 const defaultErrorMessage = 'Something went wrong';
 
-const nonExistantAttibute = 'Parameter contains invalid attributes';
+const nonExistantAttibute = 'Cannot add attribute:';
 const unvalidJSON = 'Parameter should be a valid json';
 const emptyJSON = 'Paremeter should not be empty';
 const notFoundMessage = 'No se encontró una entrada con id = ';
@@ -75,7 +75,7 @@ describe('Options: Malicious Save', () => {
     }).then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      assert.equal(nonExistantAttibute, err);
+      assert.equal(`${nonExistantAttibute}  somethingDoestExist.`, err);
       done();
     }).catch((err) => {
       done(err);
@@ -259,7 +259,7 @@ describe('Options: Malicious update', () => {
       }).then(() => {
         done('Error, it should return something valid');
       }).catch((err) => {
-        assert.equal(nonExistantAttibute, err);
+        assert.equal(`${nonExistantAttibute}  somethingDoestExist.`, err);
         done();
       }).catch((err) => {
         done(err);

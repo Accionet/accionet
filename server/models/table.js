@@ -252,20 +252,27 @@ class Table {
 
       this.getAttributesNames().then((attributeNames) => {
         const filteredAttributes = {};
-        let counter = 0;
+        console.log('------------------------------------------------------------------------------------------------------------------');
+        console.log(attributes);
         for (let i = 0; i < attributeNames.length; i++) {
           const attributeName = attributeNames[i];
           if (attributeName in attributes) {
-            counter++;
             filteredAttributes[attributeName] = attributes[attributeName];
+            // remove the key
+            delete attributes[attributeName];
+            console.log(attributes);
           }
         }
-        if (counter !== Object.keys(attributes).length) {
-          console.log('----------------------------------------------------------------------------------');
+        // if there are still keys left its because there where attributes that do not correspond
+        if (Object.keys(attributes).length !== 0) {
+          let attr = '';
           console.log(attributeNames);
-          console.log('--------------------------------');
+          console.log('-------------------------------------------------');
           console.log(attributes);
-          return reject('Parameter contains invalid attributes');
+          for (let i = 0; i < Object.keys(attributes).length; i++) {
+            attr += ` ${Object.keys(attributes)[i]}.`;
+          }
+          return reject(`Cannot add attribute: ${attr}`);
         }
         return resolve(filteredAttributes);
       })

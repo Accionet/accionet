@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 
-const Question = require('../../../../server/newModels/questions');
+const Question = require('../../../../server/models/questions');
 const utils = require('../../../../server/services/utils');
 
 

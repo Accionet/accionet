@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 
-const Survey = require('../../../../server/newModels/surveys');
+const Survey = require('../../../../server/models/surveys');
 
 
 // eslint-disable-next-line no-unused-vars

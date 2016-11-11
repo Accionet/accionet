@@ -106,14 +106,18 @@ exports.edit = function showSurvey(req, res) {
 };
 
 exports.update = function saveSurvey(req, res) {
+  console.log('-------------------------------------------------------++');
+  debug('---------------------------------------------------------');
   const survey = req.body;
   const url_id = parseInt(req.params.id, 10);
   if (!isNaN(req.params.id) && survey.id === url_id) {
+    console.log(survey);
     Surveys.update(survey.id, survey).then((result) => {
       const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
       return res.status(200).send(json);
     }).catch((err) => {
       if (err) {
+        debug(err);
         const json = httpResponse.error(err);
         return res.status(500).send(json);
       }

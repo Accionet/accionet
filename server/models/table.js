@@ -261,6 +261,10 @@ class Table {
           }
         }
         if (counter !== Object.keys(attributes).length) {
+          console.log('----------------------------------------------------------------------------------');
+          console.log(attributeNames);
+          console.log('--------------------------------');
+          console.log(attributes);
           return reject('Parameter contains invalid attributes');
         }
         return resolve(filteredAttributes);

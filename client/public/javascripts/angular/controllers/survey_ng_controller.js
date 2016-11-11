@@ -101,7 +101,9 @@ controllers
         .success(function (data) {
           $window.location.href = `/surveys/${data.survey.id}`;
         })
-        .error(function () {});
+        .error(function (err) {
+          console.log(err);
+        });
       }
     };
 
@@ -191,7 +193,6 @@ controllers
     $scope.addOption = function (question) {
     // push the new option
       question.options.push({
-        value: '',
       });
     // questions[0].options[0] = "ME";
     };
@@ -332,7 +333,6 @@ controllers
     function createMultipleChoiceQuestion(number) {
       const question = {
         title: '',
-        description: '',
         number,
         type: $scope.MULTIPLE_CHOICE,
         options: [{
@@ -351,7 +351,6 @@ controllers
     function createMultipleAnswerQuestion(number) {
       const question = {
         title: '',
-        description: '',
         number,
         type: $scope.MULTIPLE_CHOICE,
         options: [{

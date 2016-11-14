@@ -24,11 +24,13 @@
     "morgan": "~1.7.0",
     "msexcel-builder": "0.0.2",
     "msexcel-builder-protobi": "^0.3.2",
+    "node-cmd": "^1.1.1",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "pg": "^4.5.3",
     "q": "^1.4.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "ttab": "^0.5.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

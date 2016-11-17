@@ -41,9 +41,18 @@ exports.cloneObject = function (obj) {
   return copy;
 };
 
-exports.randomInteger = function (min, max) {
+function randomInteger(min, max) {
   return min + Math.floor(Math.random() * ((max + 1) - min));
+}
+
+
+exports.randomInteger = randomInteger;
+
+exports.randomEntry = function (array) {
+  const randomIndex = randomInteger(0, array.length - 1);
+  return array[randomIndex];
 };
+
 
 exports.sendFile = function (filepath, filename, fileExtension, res) {
   try {

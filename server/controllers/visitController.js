@@ -140,7 +140,10 @@ exports.dayAndHourTable = function (req, res) {
       const json = httpResponse.error(err);
       return res.status(400).send(json);
     }
-
+    console.log('-------------------------------------');
+    console.log(table);
+    console.log(table[0]);
+    console.log('-------------------------------------');
     const json = httpResponse.success('Tabla por hora', 'data', table);
     return res.status(200).send(json);
   });

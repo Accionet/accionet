@@ -8,6 +8,7 @@ const dateChai = require('chai-datetime');
 const VisitMetric = require('../../../../server/newModels/metrics/visitMetric');
 const Place = require('../../../../server/newModels/places');
 const utils = require('../../../../server/services/utils');
+const metricAssert = require('./metricAssert');
 
 
 // const Option = new Options();
@@ -31,7 +32,7 @@ describe('VisitMetric: Malicious tableDateAndHour', () => {
     const metrics = new VisitMetric(place);
     return metrics.tableDateAndHour().then((response) => {
       response.should.be.a('array');
-      assert.equal(response.length, 24);
+      assert.equal(response.length, 0);
       done();
     }).catch((error) => {
       done(error);
@@ -82,14 +83,12 @@ describe('VisitMetric: tableDateAndHour', () => {
         table.should.be.a('array');
         const randomIndex = utils.randomInteger(0, table.length - 1);
         const entry = table[randomIndex];
-        entry.should.be.a('array');
-        try {
-          const date = new Date(entry[0]); //eslint-disable-line
-        } catch (Exception) {
-          done('Not a valid date');
-        }
-        const amount = parseInt(entry[1], 10);
-        amount.should.be.a('number');
+        entry.should.have.property('label');
+        entry.should.have.property('data');
+        metricAssert.arrayContains24Hours(entry.data);
+        entry.data.should.be.array; // eslint-disable-line
+        console.log(table);
+        console.log(entry);
 
         done();
       }).catch((error) => {

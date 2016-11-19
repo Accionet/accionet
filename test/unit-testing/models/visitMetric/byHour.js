@@ -8,6 +8,7 @@ const dateChai = require('chai-datetime');
 const VisitMetric = require('../../../../server/newModels/metrics/visitMetric');
 const Place = require('../../../../server/newModels/places');
 const utils = require('../../../../server/services/utils');
+const metricAssert = require('./metricAssert');
 
 
 // const Option = new Options();
@@ -60,29 +61,14 @@ describe('VisitMetric: Malicious byHour', () => {
     return metrics.byHour().then((response) => {
       response.should.be.a('array');
       assert.equal(response.length, 24);
-      assertArrayContains24Hours(response);
-      assertEmptyValues(response);
+      metricAssert.arrayContains24Hours(response);
+      metricAssert.emptyValues(response);
       done();
     }).catch((error) => {
       done(error);
     });
   });
 });
-
-function assertEmptyValues(entry) {
-  for (let i = 0; i < entry.length; i++) {
-    assert.equal(entry[i][1], 0);
-  }
-}
-
-
-function assertArrayContains24Hours(entry) {
-  entry.should.be.a('array');
-  assert.equal(entry.length, 24);
-  for (let hour = 0; hour < 24; hour++) {
-    assert.equal(new Date(entry[hour][0]).getHours(), hour);
-  }
-}
 // eslint-disable-next-line no-undef
 describe('VisitMetric: byHour', () => {
   // eslint-disable-next-line no-undef
@@ -96,7 +82,7 @@ describe('VisitMetric: byHour', () => {
       const metrics = new VisitMetric(place);
       metrics.byHour().then((entry) => {
         entry.should.be.a('array');
-        assertArrayContains24Hours(entry);
+        metricAssert.arrayContains24Hours(entry);
         const amount = parseInt(entry[1], 10);
         amount.should.be.a('number');
 

@@ -59,7 +59,9 @@ describe('VisitMetric: Malicious byHour', () => {
     const metrics = new VisitMetric(place);
     return metrics.byHour().then((response) => {
       response.should.be.a('array');
-      assert.equal(response.length, 0);
+      assert.equal(response.length, 24);
+      assertArrayContains24Hours(response);
+      assertEmptyValues(response);
       done();
     }).catch((error) => {
       done(error);
@@ -67,27 +69,34 @@ describe('VisitMetric: Malicious byHour', () => {
   });
 });
 
+function assertEmptyValues(entry) {
+  for (let i = 0; i < entry.length; i++) {
+    assert.equal(entry[i][1], 0);
+  }
+}
+
+
+function assertArrayContains24Hours(entry) {
+  entry.should.be.a('array');
+  assert.equal(entry.length, 24);
+  for (let hour = 0; hour < 24; hour++) {
+    assert.equal(new Date(entry[hour][0]).getHours(), hour);
+  }
+}
 // eslint-disable-next-line no-undef
 describe('VisitMetric: byHour', () => {
   // eslint-disable-next-line no-undef
 
 
   // eslint-disable-next-line no-undef
-  it('Pass as parameter something that is a json, without id attribute', (done) => {
+  it('Check it contains the 24 hours in correct order and correct populated.', (done) => {
     return Place.all().then((places) => {
       const randomIndex = utils.randomInteger(0, places.length - 1);
       const place = places[randomIndex];
       const metrics = new VisitMetric(place);
-      metrics.byHour().then((table) => {
-        table.should.be.a('array');
-        const randomIndex = utils.randomInteger(0, table.length - 1);
-        const entry = table[randomIndex];
+      metrics.byHour().then((entry) => {
         entry.should.be.a('array');
-        try {
-          const date = new Date(entry[0]); //eslint-disable-line
-        } catch (Exception) {
-          done('Not a valid date');
-        }
+        assertArrayContains24Hours(entry);
         const amount = parseInt(entry[1], 10);
         amount.should.be.a('number');
 

@@ -73,7 +73,7 @@ describe('VisitMetric: byDay', () => {
 
 
   // eslint-disable-next-line no-undef
-  it('Pass as parameter something that is a json, without id attribute', (done) => {
+  it('Check valid response', (done) => {
     return Place.all().then((places) => {
       const randomIndex = utils.randomInteger(0, places.length - 1);
       const place = places[randomIndex];

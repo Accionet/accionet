@@ -5,9 +5,9 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
-const VisitMetric = require('../../../../server/models/metrics/visitMetric');
-const Place = require('../../../../server/newModels/places');
-const utils = require('../../../../server/services/utils');
+const VisitMetric = require('../../../../../server/models/metrics/visitMetric');
+const Place = require('../../../../../server/newModels/places');
+const utils = require('../../../../../server/services/utils');
 
 
 // const Option = new Options();
@@ -22,14 +22,14 @@ chai.use(dateChai);
 
 
 // eslint-disable-next-line no-undef
-describe('VisitMetric: Malicious countEndUsers', () => {
+describe('VisitMetric: Malicious byDay', () => {
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, without id attribute', (done) => {
     const place = {
       key: 'value',
     };
-    return VisitMetric.countEndUsers(place).then(() => {
-      done('it should not return something valid');
+    return VisitMetric.byDay(place).then(() => {
+      done('It should not get to here');
     }).catch(() => {
       done();
     });
@@ -40,7 +40,7 @@ describe('VisitMetric: Malicious countEndUsers', () => {
     const place = {
       place_id: 'value',
     };
-    return VisitMetric.countEndUsers(place).then(() => {
+    return VisitMetric.byDay(place).then(() => {
       done('It should not get to here');
     }).catch(() => {
       done();
@@ -48,13 +48,13 @@ describe('VisitMetric: Malicious countEndUsers', () => {
   });
 
   // eslint-disable-next-line no-undef
-  it('Pass as parameter something that is a json, with id. But a negative id', (done) => {
+  it('Pass as parameter something that is a json, with id. But not a negative id', (done) => {
     const place = {
       place_id: -2,
     };
-    return VisitMetric.countEndUsers(place).then((response) => {
-      response.should.be.a('number');
-      assert.equal(response, 0);
+    return VisitMetric.byDay(place).then((response) => {
+      response.should.be.a('array');
+      assert.equal(response.length, 0);
       done();
     }).catch((error) => {
       done(error);
@@ -63,17 +63,28 @@ describe('VisitMetric: Malicious countEndUsers', () => {
 });
 
 // eslint-disable-next-line no-undef
-describe('VisitMetric: countEndUsers', () => {
+describe('VisitMetric: byDay', () => {
   // eslint-disable-next-line no-undef
 
 
   // eslint-disable-next-line no-undef
-  it('Check it returns a valid response', (done) => {
+  it('Check valid response', (done) => {
     return Place.all().then((places) => {
       const randomIndex = utils.randomInteger(0, places.length - 1);
       const place = places[randomIndex];
-      return VisitMetric.countEndUsers({ place_id: place.id }).then((amount) => {
+      VisitMetric.byDay({ place_id: place.id }).then((table) => {
+        table.should.be.a('array');
+        const randomIndex = utils.randomInteger(0, table.length - 1);
+        const entry = table[randomIndex];
+        entry.should.be.a('array');
+        try {
+          const date = new Date(entry[0]); //eslint-disable-line
+        } catch (Exception) {
+          done('Not a valid date');
+        }
+        const amount = parseInt(entry[1], 10);
         amount.should.be.a('number');
+
         done();
       }).catch((error) => {
         done(error);

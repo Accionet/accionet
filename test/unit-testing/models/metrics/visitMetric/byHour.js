@@ -5,9 +5,9 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
-const VisitMetric = require('../../../../server/models/metrics/visitMetric');
-const Place = require('../../../../server/newModels/places');
-const utils = require('../../../../server/services/utils');
+const VisitMetric = require('../../../../../server/models/metrics/visitMetric');
+const Place = require('../../../../../server/newModels/places');
+const utils = require('../../../../../server/services/utils');
 const metricAssert = require('./metricAssert');
 
 

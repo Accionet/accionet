@@ -135,6 +135,23 @@ class VisitMetric {
     });
   }
 
+  // End users
+
+  countEndUsers(searchParams) {
+    return new Promise((resolve, reject) => {
+      return knex.count('*').from(function () {
+        this.distinct('macaddress').select().from(Visit.toString()).where(searchParams)
+        .as('t1');
+      }).as('ignored_alias').then((response) => {
+        const amount = parseInt(response[0].count, 10);
+        resolve(amount);
+      })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
 
 }
 const instance = new VisitMetric();

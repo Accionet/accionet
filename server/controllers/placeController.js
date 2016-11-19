@@ -116,11 +116,9 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
 
 
 exports.metrics = function showMetrics(req, res) {
-  console.log('buscar metricaassssssss');
   Places.findById(req.params.id, (err, place) => {
     if (err || !place) {
       const json = httpResponse.error(err);
-      console.log('Ubo un errors');
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
     }
     Places.metrics(place.id, (err, metrics) => {
@@ -168,10 +166,8 @@ exports.show = function showPlace(req, res) {
 
       });
     }
-    console.log(response);
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
       place,
-
     });
   });
 };

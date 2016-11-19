@@ -2,7 +2,7 @@
 'use strict';
 
 
-const Visits = require('../models/visit');
+const Visits = require('../models/visits');
 const Metric = require('../models/metrics/visitMetric');
 const httpResponse = require('../services/httpResponse');
 
@@ -83,15 +83,13 @@ function getBrowser(ua) {
 exports.create = function (req, res) {
   const visit = req.body;
   addRequestParams(visit, req);
-  Visits.save(visit, (err) => {
-    if (err) {
-      return res.status(400).send({
-        error: err,
-      });
-    }
-
+  Visits.save(visit).then(() => {
     return res.status(200).send({
       success: 'success',
+    });
+  }).catch((err) => {
+    return res.status(400).send({
+      error: err,
     });
   });
 };
@@ -147,19 +145,17 @@ exports.countOfPlace = function (req, res) {
   const attr = {
     place_id: id,
   };
-  Visits.count(attr, (err, data) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(400).send(json);
-    }
-    Visits.getFirstDate(attr, (err, date) => {
-      if (err) {
-        const json = httpResponse.error(err);
-        return res.status(400).send(json);
-      }
+  Visits.count(attr).then((data) => {
+    Visits.getFirstDate(attr).then((date) => {
       const json = httpResponse.success('Visitas por lugar', ['data', 'date'], [data, date]);
       return res.status(200).send(json);
+    }).catch((err) => {
+      const json = httpResponse.error(err);
+      return res.status(400).send(json);
     });
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
   });
 };
 

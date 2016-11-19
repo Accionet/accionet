@@ -3,8 +3,8 @@
 
 
 const Visits = require('../models/visit');
+const Metric = require('../models/metrics/visitMetric');
 const httpResponse = require('../services/httpResponse');
-
 
 // Functions to do add Parameters to create
 
@@ -34,7 +34,7 @@ function getOS(userAgent) {
   }
 
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) { // eslint-disable-line
     return 'iOS';
   }
 
@@ -71,8 +71,9 @@ function getBrowser(ua) {
     tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
     if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
   }
-  M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
-  if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+  M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?']; // eslint-disable-line
+  tem = ua.match(/version\/(\d+)/i);
+  if (tem != null) M.splice(1, 1, tem[1]);
   return M.join(' ');
 }
 
@@ -101,51 +102,41 @@ exports.create = function (req, res) {
 
 exports.dailyTable = function (req, res) {
   const id = req.params.id;
-  Visits.amountByDay({
+  Metric.byDay({
     place_id: id,
-  }, (err, daily) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(400).send(json);
-    }
+  }).then((daily) => {
+    console.log(daily);
     const json = httpResponse.success('Tabla por día', 'data', daily);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
   });
 };
 
 exports.hourlyTable = function (req, res) {
-  console.log('hourly');
-
   const id = req.params.id;
-  Visits.amountByHour({
+  Metric.byHour({
     place_id: id,
-  }, (err, hourly) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(400).send(json);
-    }
+  }).then((hourly) => {
     const json = httpResponse.success('Tabla por hora', 'data', hourly);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
   });
 };
 
 exports.dayAndHourTable = function (req, res) {
-  console.log('daily and hour');
-
   const id = req.params.id;
-  Visits.tableDateAndHour({
+  Metric.tableDateAndHour({
     place_id: id,
-  }, (err, table) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(400).send(json);
-    }
-    console.log('-------------------------------------');
-    console.log(table);
-    console.log(table[0]);
-    console.log('-------------------------------------');
+  }).then((table) => {
     const json = httpResponse.success('Tabla por hora', 'data', table);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
   });
 };
 
@@ -153,8 +144,6 @@ exports.dayAndHourTable = function (req, res) {
 This method also return the first date of a visits to count the daily average.
 **/
 exports.countOfPlace = function (req, res) {
-  console.log('fromaa placee');
-
   const id = req.params.id;
   const attr = {
     place_id: id,
@@ -176,7 +165,6 @@ exports.countOfPlace = function (req, res) {
 };
 
 exports.countEndUsersOfPlace = function (req, res) {
-  console.log('enddd users');
   const id = req.params.id;
   const attr = {
     place_id: id,

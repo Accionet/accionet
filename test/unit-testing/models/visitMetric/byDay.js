@@ -5,7 +5,7 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
-const VisitMetric = require('../../../../server/newModels/metrics/visitMetric');
+const VisitMetric = require('../../../../server/models/metrics/visitMetric');
 const Place = require('../../../../server/newModels/places');
 const utils = require('../../../../server/services/utils');
 
@@ -28,23 +28,19 @@ describe('VisitMetric: Malicious byDay', () => {
     const place = {
       key: 'value',
     };
-    const metrics = new VisitMetric(place);
-    return metrics.byDay().then((response) => {
-      response.should.be.a('array');
-      assert.equal(response.length, 0);
+    return VisitMetric.byDay(place).then(() => {
+      done('It should not get to here');
+    }).catch(() => {
       done();
-    }).catch((error) => {
-      done(error);
     });
   });
 
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, with id. but not a valid id', (done) => {
     const place = {
-      id: 'value',
+      place_id: 'value',
     };
-    const metrics = new VisitMetric(place);
-    return metrics.byDay().then(() => {
+    return VisitMetric.byDay(place).then(() => {
       done('It should not get to here');
     }).catch(() => {
       done();
@@ -54,10 +50,9 @@ describe('VisitMetric: Malicious byDay', () => {
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, with id. But not a negative id', (done) => {
     const place = {
-      id: -2,
+      place_id: -2,
     };
-    const metrics = new VisitMetric(place);
-    return metrics.byDay().then((response) => {
+    return VisitMetric.byDay(place).then((response) => {
       response.should.be.a('array');
       assert.equal(response.length, 0);
       done();
@@ -77,8 +72,7 @@ describe('VisitMetric: byDay', () => {
     return Place.all().then((places) => {
       const randomIndex = utils.randomInteger(0, places.length - 1);
       const place = places[randomIndex];
-      const metrics = new VisitMetric(place);
-      metrics.byDay().then((table) => {
+      VisitMetric.byDay({ place_id: place.id }).then((table) => {
         table.should.be.a('array');
         const randomIndex = utils.randomInteger(0, table.length - 1);
         const entry = table[randomIndex];

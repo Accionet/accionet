@@ -105,7 +105,6 @@ exports.dailyTable = function (req, res) {
   Metric.byDay({
     place_id: id,
   }).then((daily) => {
-    console.log(daily);
     const json = httpResponse.success('Tabla por día', 'data', daily);
     return res.status(200).send(json);
   }).catch((err) => {

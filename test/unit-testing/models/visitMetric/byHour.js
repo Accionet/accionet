@@ -5,7 +5,7 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
-const VisitMetric = require('../../../../server/newModels/metrics/visitMetric');
+const VisitMetric = require('../../../../server/models/metrics/visitMetric');
 const Place = require('../../../../server/newModels/places');
 const utils = require('../../../../server/services/utils');
 const metricAssert = require('./metricAssert');
@@ -29,23 +29,19 @@ describe('VisitMetric: Malicious byHour', () => {
     const place = {
       key: 'value',
     };
-    const metrics = new VisitMetric(place);
-    return metrics.byHour().then((response) => {
-      response.should.be.a('array');
-      assert.equal(response.length, 24);
+    return VisitMetric.byHour(place).then(() => {
+      done('it should not get to here');
+    }).catch(() => {
       done();
-    }).catch((error) => {
-      done(error);
     });
   });
 
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, with id. but not a valid id', (done) => {
     const place = {
-      id: 'value',
+      place_id: 'value',
     };
-    const metrics = new VisitMetric(place);
-    return metrics.byHour().then(() => {
+    return VisitMetric.byHour(place).then(() => {
       done('It should not get to here');
     }).catch(() => {
       done();
@@ -55,10 +51,9 @@ describe('VisitMetric: Malicious byHour', () => {
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, with id. But not a negative id', (done) => {
     const place = {
-      id: -2,
+      place_id: -2,
     };
-    const metrics = new VisitMetric(place);
-    return metrics.byHour().then((response) => {
+    return VisitMetric.byHour(place).then((response) => {
       response.should.be.a('array');
       assert.equal(response.length, 24);
       metricAssert.arrayContains24Hours(response);
@@ -79,8 +74,7 @@ describe('VisitMetric: byHour', () => {
     return Place.all().then((places) => {
       const randomIndex = utils.randomInteger(0, places.length - 1);
       const place = places[randomIndex];
-      const metrics = new VisitMetric(place);
-      metrics.byHour().then((entry) => {
+      VisitMetric.byHour({ place_id: place.id }).then((entry) => {
         entry.should.be.a('array');
         metricAssert.arrayContains24Hours(entry);
         const amount = parseInt(entry[1], 10);

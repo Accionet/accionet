@@ -99,13 +99,11 @@ class VisitMetric {
   }
 
   addDateTo(results, row) {
-    console.log(row.year);
     const date = this.dateFromDayAndYear(row.year, row.doy).toString().substring(0, 15);
     if (!results[date]) {
-      results[date] = new Array(24);
+      results[date] = [];
     }
-
-    results[date][row.hour] = row.amount;
+    results[date].push(row);
   }
 
   parseDateAndHourOf(entries) {
@@ -116,18 +114,8 @@ class VisitMetric {
     }
     for (let i = 0; i < Object.keys(json).length; i++) {
       const date = Object.keys(json)[i];
-      const dataFromDate = [];
-      // fill missing hours
-      for (let j = 0; j < 24; j++) {
-        const hours = new Date(null, null, null, j).getTime();
-        let amount;
-        if (json[date][j]) {
-          amount = json[date][j];
-        } else {
-          amount = 0;
-        }
-        dataFromDate.push([hours, amount]);
-      }
+      const dataFromDate = this.parseHourOf(json[date]);
+      this.fillMissingHours(dataFromDate);
       data.push({
         label: date,
         data: dataFromDate,
@@ -157,62 +145,6 @@ class VisitMetric {
     });
   }
 
-  // exports.tableDateAndHour = function (attr, callback) {
-  //   const results = {};
-  //   const data = [];
-  //   pg.connect(connectionString, (err, client, done) => {
-  //         // Handle connection errors
-  //     if (err) {
-  //       done();
-  //       return callback(err);
-  //     }
-  //
-  //         // SQL Query > Delete Data
-  //     const params = base.parseJsonToParams(attr);
-  //     let string_query = `SELECT EXTRACT(doy FROM created_at) as doy, EXTRACT(hour FROM created_at) as hour, count(*) as amount FROM ${table_name} `;
-  //     string_query += base.getWhereFromParams(params, true);
-  //     string_query += '  GROUP BY doy, hour ORDER BY doy,hour ';
-  //     const query = client.query(string_query, params.values);
-  //
-  //
-  //     query.on('error', (err) => (callback(err)));
-  //
-  //         // Stream results back one row at a time
-  //     query.on('row', (row) => {
-  //       const date = dateFromDay(2016, row.doy).toString().substring(0, 15);
-  //       if (!results[date]) {
-  //         results[date] = new Array(24);
-  //       }
-  //
-  //       results[date][row.hour] = row.amount;
-  //     });
-  //
-  //         // After all data is returned, close connection and return results
-  //     query.on('end', () => {
-  //       done();
-  //       for (let i = 0; i < Object.keys(results).length; i++) {
-  //         const date = Object.keys(results)[i];
-  //         const dataFromDate = [];
-  //         for (let j = 0; j < 24; j++) {
-  //           const hours = new Date(null, null, null, j).getTime();
-  //           let amount;
-  //           if (results[Object.keys(results)[i]][j]) {
-  //             amount = results[Object.keys(results)[i]][j];
-  //                         // dataFromDate.push([new Date(null, null, null, h).getTime(), results[Object.keys(results)[i]][j]);
-  //           } else {
-  //             amount = 0;
-  //           }
-  //           dataFromDate.push([hours, amount]);
-  //         }
-  //         data.push({
-  //           label: date,
-  //           data: dataFromDate,
-  //         });
-  //       }
-  //       return callback(null, data);
-  //     });
-  //   });
-  // };
 
 }
 

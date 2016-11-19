@@ -168,12 +168,11 @@ exports.countEndUsersOfPlace = function (req, res) {
   const attr = {
     place_id: id,
   };
-  Visits.countEndUser(attr, (err, data) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(400).send(json);
-    }
+  Metric.countEndUsers(attr).then((data) => {
     const json = httpResponse.success('Usuarios finales', ['data'], [data]);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
   });
 };

@@ -34,6 +34,7 @@ describe('Place Metrics: Check json has correct attributes', () => {
         metrics.should.have.property('daily');
         metrics.should.have.property('hourly');
         metrics.should.have.property('table');
+        done();
       }).catch((err) => {
         done(err);
       });

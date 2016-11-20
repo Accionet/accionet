@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const dateChai = require('chai-datetime');
 const knex = require('../../../../server/db/knex');
-const Place = require('../../../../server/newModels/places');
+const Place = require('../../../../server/models/places');
 const utils = require('../../../../server/services/utils');
 
 // eslint-disable-next-line no-unused-vars

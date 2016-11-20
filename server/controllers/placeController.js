@@ -8,76 +8,57 @@ const Places = require('../models/places');
 const httpResponse = require('../services/httpResponse');
 
 
-exports.index = function (req, res) {
-  const active = true;
+function all(req, res, active) {
   Places.find({
     is_active: active,
-  }, (err, result) => {
-    if (err) {
-      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-        error: `ERROR: ${err}`,
-        places: [],
-        show_active: active,
-      });
-    }
+  }).then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
       places: result,
       show_active: active,
     });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+      error: `ERROR: ${err}`,
+      places: [],
+      show_active: active,
+    });
   });
+}
+
+exports.index = function (req, res) {
+  return all(req, res, true);
 };
 
 exports.disabled = function (req, res) {
-  const active = false;
-  Places.find({
-    is_active: active,
-  }, (err, result) => {
-    if (err) {
-      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-        error: `ERROR: ${err}`,
-        places: [],
-        show_active: active,
-      });
-    }
-    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-      places: result,
-      show_active: active,
-    });
-  });
+  return all(req, res, false);
 };
 
 exports.count = function getAmountOf(req, res) {
-  Places.count({}, (err, count) => {
-    if (err) {
-      return res.status(500).send({
-        error: err,
-        amount: '?',
-      });
-    }
+  Places.count({}).then((count) => {
     const response = {
       success: 'Amount of places where counted successfully',
       amount: count,
     };
     return res.status(200).send(response);
+  }).catch((err) => {
+    return res.status(500).send({
+      error: err,
+      amount: '?',
+    });
   });
 };
 
 
-// exports.activePlaces = function getActivePlaces(req, res) {
-//
-// };
-
 /* Shows the view to create a new place */
 exports.new = function getNewPlace(req, res) {
-  Places.new((err, result) => {
-    if (err) {
-      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-        error: `ERROR: ${err}`,
-        places: [],
-      });
-    }
+  Places.new().then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'create.ejs'), {
       place: result,
+    });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+      error: `ERROR: ${err}`,
+      places: [],
     });
   });
 };
@@ -85,55 +66,58 @@ exports.new = function getNewPlace(req, res) {
 
 exports.create = function savePlace(req, res) {
   if (req.body.name && req.body.email) {
-    Places.save(req.body, (err, place) => {
-      if (err) {
-        return res.status(400).send({
-          error: err,
-        });
-      }
+    Places.save(req.body).then((place) => {
       const json = httpResponse.success('Lugar creado exitosamente', 'place', place);
       return res.status(200).send(json);
+    }).catch((err) => {
+      return res.status(400).send({
+        error: err,
+      });
     });
   } else {
-    // Responder con attributos mal hechos
+    return res.status(400).send({
+      error: 'missing name and/or email',
+    });
   }
 };
 
 /* Equivalent to delete but sets the is_active to false*/
 exports.toggleIsActive = function toggleIsActive(req, res) {
-  Places.toggleIsActive(req.params.id, (err, response) => {
-    if (err) {
-      return res.status(400).send({
-        error: err,
-      });
-    }
+  Places.toggleIsActive(req.params.id).then((response) => {
     const json = {
       place: response,
     };
     return res.status(200).send(json);
+  }).catch((err) => {
+    return res.status(400).send({
+      error: err,
+    });
   });
 };
 
 
 exports.metrics = function showMetrics(req, res) {
-  Places.findById(req.params.id, (err, place) => {
-    if (err || !place) {
-      const json = httpResponse.error(err);
+  Places.findById(req.params.id).then((place) => {
+    if (!place) {
+      const json = httpResponse.error('No place found');
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
     }
-    Places.metrics(place.id, (err, metrics) => {
-      if (err) {
-        const json = httpResponse.error(err);
-        return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
-      }
-      // const json = httpResponse.success(`Metricas de ${place.id}`, 'metrics', metrics);
+    Places.metrics(place.id).then((metrics) => {
       const json = {
         message: `Metricas de ${place.id}`,
         place,
         metrics,
       };
-      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
+      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
+    }).catch((err) => {
+      if (err) {
+        const json = httpResponse.error(err);
+        return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
+      }
     });
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
   });
 };
 
@@ -144,42 +128,56 @@ exports.metrics = function showMetrics(req, res) {
 // };
 
 exports.edit = function editPlace(req, res) {
-  Places.findById(req.params.id, (err, place) => {
-    if (err || !place) {
+  Places.findById(req.params.id).then((place) => {
+    if (!place) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-        error: `ERROR: ${err}`,
+        error: 'ERROR: No place found',
         places: [],
       });
     }
-    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'edit.ejs'), {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'edit.ejs'), {
       place,
+    });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+      error: `ERROR: ${err}`,
+      places: [],
     });
   });
 };
 
 exports.show = function showPlace(req, res) {
-  Places.findById(req.params.id, (err, place) => {
-    if (err || !place) {
+  Places.findById(req.params.id).then((place) => {
+    if (!place) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
-        error: `ERROR: ${err}`,
+        error: 'ERROR: No place found',
         place: [],
-
       });
     }
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
       place,
     });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+      error: `ERROR: ${err}`,
+      place: [],
+    });
   });
 };
 
 exports.update = function updatePlace(req, res) {
-  Places.update(req.params.id, req.body, (err, place) => {
-    if (err || !place) {
+  const id = parseInt(req.params.id, 10);
+  Places.update(id, req.body).then((place) => {
+    if (!place) {
       return res.status(400).send({
-        error: err,
+        error: 'No place found',
       });
     }
     const json = httpResponse.success(`Cambios a  + ${place.name} agregados exitosamente.`, 'place', place);
     return res.status(200).send(json);
+  }).catch((err) => {
+    return res.status(400).send({
+      error: err,
+    });
   });
 };

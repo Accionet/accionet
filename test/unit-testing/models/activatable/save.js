@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const dateChai = require('chai-datetime');
 // const knex = require('../../../../server/db/knex');
-const Place = require('../../../../server/newModels/places');
+const Place = require('../../../../server/models/places');
 
 // eslint-disable-next-line no-unused-vars
 const assert = chai.assert;
@@ -50,6 +50,34 @@ describe('Activatable: Save', () => {
     const place = {
       name: 'place',
       is_active: false,
+    };
+    return Place.save(place).then((place) => {
+      assert.equal(place.is_active, false);
+      done();
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('Save place with is_active = null', (done) => {
+    const place = {
+      name: 'place',
+      is_active: null,
+    };
+    return Place.save(place).then((place) => {
+      assert.equal(place.is_active, false);
+      done();
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('Save place with is_active = undefined', (done) => {
+    const place = {
+      name: 'place',
+      is_active: undefined,
     };
     return Place.save(place).then((place) => {
       assert.equal(place.is_active, false);

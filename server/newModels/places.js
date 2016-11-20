@@ -1,5 +1,5 @@
 const Activatable = require('./activatable'); // eslint-disabled-this-line no-unused-vars
-const VisitMetric = require('../models/metrics/visitMetric');
+const VisitMetric = require('./metrics/visitMetric');
 
 class Places extends Activatable {
 

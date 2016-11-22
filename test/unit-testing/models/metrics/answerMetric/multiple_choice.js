@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const dateChai = require('chai-datetime');
 
-// const knex = require('../../../../server/db/knex');
+const knex = require('../../../../../server/db/knex');
 const AnswerMetric = require('../../../../../server/models/metrics/answerMetric');
 const Answer = require('../../../../../server/models/answer');
 const Question = require('../../../../../server/models/questions');
@@ -43,7 +43,15 @@ describe('AnswerMetric of Question: type Multiple choice', () => {
 
   // eslint-disable-next-line no-undef
   it('type is not multiple_choice', (done) => {
-    done('NOT IMPLEMENTED');
+    const question = { type: 'not multiple_choice' };
+    return AnswerMetric.asMultipleChoice(question).then(() => {
+      done('it should not get to here');
+    }).catch((err) => {
+      assert.equal(err, `Invalid type: ${question.type} is not a multiple_choice`);
+      done();
+    }).catch((err) => {
+      done(err);
+    });
   });
 
   // eslint-disable-next-line no-undef
@@ -57,6 +65,8 @@ describe('AnswerMetric of Question: type Multiple choice', () => {
           const option = options[i];
           metrics.should.have.property(option.enumeration);
         }
+        console.log(metrics);
+        done();
       }).catch((err) => {
         done(err);
       });

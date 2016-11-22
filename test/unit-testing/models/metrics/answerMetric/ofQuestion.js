@@ -16,7 +16,8 @@ const assert = chai.assert;
 const should = chai.should();
 
 chai.use(dateChai);
-
+const notFoundMessage = 'No se encontró una entrada con id = ';
+const findError = 'Find parameter was not defined correctly';
 
 // eslint-disable-next-line no-undef
 describe('AnswerMetric of Question: malicious get', () => {
@@ -26,17 +27,20 @@ describe('AnswerMetric of Question: malicious get', () => {
     return AnswerMetric.ofQuestion(id).then(() => {
       done('it should not get to here');
     }).catch((err) => {
-      console.log(err);
+      assert.equal(findError, err);
       done();
+    }).catch((err) => {
+      done(err);
     });
   });
 
   // eslint-disable-next-line no-undef
   it('pass question id = null', (done) => {
     const id = null;
-    return AnswerMetric.ofQuestion(id).then((metrics) => {
-      metrics.should.be.array; // eslint-disable-line
-      assert.equal(metrics.length, 0);
+    return AnswerMetric.ofQuestion(id).then(() => {
+      done('it should not get to here');
+    }).catch((err) => {
+      assert.equal(err, `${notFoundMessage}${id}`);
       done();
     }).catch((err) => {
       done(err);
@@ -46,9 +50,10 @@ describe('AnswerMetric of Question: malicious get', () => {
   // eslint-disable-next-line no-undef
   it('pass question id of no question', (done) => {
     const id = -3;
-    return AnswerMetric.ofQuestion(id).then((metrics) => {
-      metrics.should.be.array; // eslint-disable-line
-      assert.equal(metrics.length, 0);
+    return AnswerMetric.ofQuestion(id).then(() => {
+      done('it should not get to here');
+    }).catch((err) => {
+      assert.equal(err, `${notFoundMessage}${id}`);
       done();
     }).catch((err) => {
       done(err);

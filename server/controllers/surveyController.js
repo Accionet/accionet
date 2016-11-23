@@ -67,10 +67,6 @@ exports.count = function countSurveys(req, res) {
 
 exports.show = function showSurvey(req, res) {
   Surveys.findById(req.params.id).then((survey) => {
-    debug('========================================================');
-    console.log(survey);
-    debug('========================================================');
-
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
       survey,
     });
@@ -106,12 +102,9 @@ exports.edit = function showSurvey(req, res) {
 };
 
 exports.update = function saveSurvey(req, res) {
-  console.log('-------------------------------------------------------++');
-  debug('---------------------------------------------------------');
   const survey = req.body;
   const url_id = parseInt(req.params.id, 10);
   if (!isNaN(req.params.id) && survey.id === url_id) {
-    console.log(survey);
     Surveys.update(survey.id, survey).then((result) => {
       const json = httpResponse.success('Encuesta actualizada exitosamente', 'survey', result);
       return res.status(200).send(json);
@@ -150,11 +143,13 @@ exports.new = function newSurvey(req, res) {
 
 exports.metrics = function showMetrics(req, res) {
   Surveys.findById(req.params.id).then((survey) => {
+    console.log('-------------------------');
+    console.log(survey);
+    console.log('-------------------------');
+
     Surveys.getMetrics(survey[0].id, (err_find_survey, survey_with_metrics) => {
-      // console.log(survey_with_metrics.questions);
-      // console.log('-------------------------');
-      // console.log(survey_with_metrics.questions[0].metrics);
       if (err_find_survey) {
+        console.log('error hiubo aquii');
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
           error: `ERROR: ${err_find_survey}`,
           survey: [],
@@ -241,6 +236,7 @@ exports.metricsByHour = function (req, res) {
 };
 
 exports.metricsByDay = function (req, res) {
+  console.log('metrics by day');
   const id = req.params.id;
   Response.metricsByDay({
     survey_id: id,
@@ -249,6 +245,7 @@ exports.metricsByDay = function (req, res) {
       const json = httpResponse.error(err);
       return res.status(500).send(json);
     }
+    console.log(result);
     const json = httpResponse.success('Metricas por dia enviada con exito', 'data', result);
     return res.status(200).send(json);
   });

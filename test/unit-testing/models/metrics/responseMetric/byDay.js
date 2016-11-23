@@ -5,10 +5,9 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
-const VisitMetric = require('../../../../../server/models/metrics/visitMetric');
+const ResponseMetric = require('../../../../../server/models/metrics/responseMetric');
 const Place = require('../../../../../server/newModels/places');
 const utils = require('../../../../../server/services/utils');
-const metricAssert = require('../metricAssert');
 
 
 // const Option = new Options();
@@ -23,14 +22,14 @@ chai.use(dateChai);
 
 
 // eslint-disable-next-line no-undef
-describe('VisitMetric: Malicious byHour', () => {
+describe('ResponseMetric: Malicious byDay', () => {
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, without id attribute', (done) => {
     const place = {
       key: 'value',
     };
-    return VisitMetric.byHour(place).then(() => {
-      done('it should not get to here');
+    return ResponseMetric.byDay(place).then(() => {
+      done('It should not get to here');
     }).catch(() => {
       done();
     });
@@ -41,7 +40,7 @@ describe('VisitMetric: Malicious byHour', () => {
     const place = {
       place_id: 'value',
     };
-    return VisitMetric.byHour(place).then(() => {
+    return ResponseMetric.byDay(place).then(() => {
       done('It should not get to here');
     }).catch(() => {
       done();
@@ -53,30 +52,36 @@ describe('VisitMetric: Malicious byHour', () => {
     const place = {
       place_id: -2,
     };
-    return VisitMetric.byHour(place).then((response) => {
+    return ResponseMetric.byDay(place).then((response) => {
       response.should.be.a('array');
-      assert.equal(response.length, 24);
-      metricAssert.arrayContains24Hours(response);
-      metricAssert.emptyValues(response);
+      assert.equal(response.length, 0);
       done();
     }).catch((error) => {
       done(error);
     });
   });
 });
+
 // eslint-disable-next-line no-undef
-describe('VisitMetric: byHour', () => {
+describe('ResponseMetric: byDay', () => {
   // eslint-disable-next-line no-undef
 
 
   // eslint-disable-next-line no-undef
-  it('Check it contains the 24 hours in correct order and correct populated.', (done) => {
+  it('Check valid response', (done) => {
     return Place.all().then((places) => {
       const randomIndex = utils.randomInteger(0, places.length - 1);
       const place = places[randomIndex];
-      VisitMetric.byHour({ place_id: place.id }).then((entry) => {
+      ResponseMetric.byDay({ place_id: place.id }).then((table) => {
+        table.should.be.a('array');
+        const randomIndex = utils.randomInteger(0, table.length - 1);
+        const entry = table[randomIndex];
         entry.should.be.a('array');
-        metricAssert.arrayContains24Hours(entry);
+        try {
+          const date = new Date(entry[0]); //eslint-disable-line
+        } catch (Exception) {
+          done('Not a valid date');
+        }
         const amount = parseInt(entry[1], 10);
         amount.should.be.a('number');
 

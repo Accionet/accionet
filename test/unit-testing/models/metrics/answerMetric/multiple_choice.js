@@ -65,7 +65,6 @@ describe('AnswerMetric of Question: type Multiple choice', () => {
           const option = options[i];
           metrics.should.have.property(option.enumeration);
         }
-        console.log(metrics);
         done();
       }).catch((err) => {
         done(err);

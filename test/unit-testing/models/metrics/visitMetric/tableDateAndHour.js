@@ -8,7 +8,7 @@ const dateChai = require('chai-datetime');
 const VisitMetric = require('../../../../../server/models/metrics/visitMetric');
 const Place = require('../../../../../server/newModels/places');
 const utils = require('../../../../../server/services/utils');
-const metricAssert = require('./metricAssert');
+const metricAssert = require('../metricAssert');
 
 
 // const Option = new Options();

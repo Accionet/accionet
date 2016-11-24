@@ -4,11 +4,6 @@ const knex = require('../db/knex');
 
 class MacAddressInterface extends Table {
 
-  constructor() {
-    const table_name = 'visits';
-    super(table_name);
-  }
-
   countEndUsers(searchParams) {
     return new Promise((resolve, reject) => {
       const table_name = this.toString();
@@ -16,8 +11,6 @@ class MacAddressInterface extends Table {
         this.distinct('macaddress').select().from(table_name).where(searchParams)
             .as('t1');
       }).as('ignored_alias').then((response) => {
-        console.log(searchParams);
-        console.log(response);
         const amount = parseInt(response[0].count, 10);
         resolve(amount);
       })

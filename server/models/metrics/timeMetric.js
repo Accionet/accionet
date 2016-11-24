@@ -1,5 +1,5 @@
 const knex = require('../../db/knex');
-const TimeMapper = require('../../mappers/timeMapper');
+const TimeAdapter = require('../../adapters/timeAdapter');
 
 
 class TimeMetric {
@@ -21,7 +21,7 @@ class TimeMetric {
   byDay(searchParams) {
     return new Promise((resolve, reject) => {
       this.getGroupedByDay(searchParams).then((entries) => {
-        const parsedEntries = TimeMapper.mapForDailyGraph(entries);
+        const parsedEntries = TimeAdapter.mapForDailyGraph(entries);
         resolve(parsedEntries);
       }).catch((err) => {
         reject(err);
@@ -43,7 +43,7 @@ class TimeMetric {
   byHour(searchParams) {
     return new Promise((resolve, reject) => {
       this.getGroupedByHour(searchParams).then((entries) => {
-        const parsedEntries = TimeMapper.mapForHourlyGraph(entries);
+        const parsedEntries = TimeAdapter.mapForHourlyGraph(entries);
         resolve(parsedEntries);
       }).catch((err) => {
         reject(err);

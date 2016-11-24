@@ -5,9 +5,9 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
-const VisitMetric = require('../../../../../server/models/metrics/visitMetric');
-const Place = require('../../../../../server/newModels/places');
-const utils = require('../../../../../server/services/utils');
+const Place = require('../../../../server/models/places');
+const Visits = require('../../../../server/models/visits');
+const utils = require('../../../../server/services/utils');
 
 
 // const Option = new Options();
@@ -22,13 +22,13 @@ chai.use(dateChai);
 
 
 // eslint-disable-next-line no-undef
-describe('VisitMetric: Malicious countEndUsers', () => {
+describe('MacAddressInterface: Malicious countEndUsers', () => {
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, without id attribute', (done) => {
     const place = {
       key: 'value',
     };
-    return VisitMetric.countEndUsers(place).then(() => {
+    return Visits.countEndUsers(place).then(() => {
       done('it should not return something valid');
     }).catch(() => {
       done();
@@ -40,7 +40,7 @@ describe('VisitMetric: Malicious countEndUsers', () => {
     const place = {
       place_id: 'value',
     };
-    return VisitMetric.countEndUsers(place).then(() => {
+    return Visits.countEndUsers(place).then(() => {
       done('It should not get to here');
     }).catch(() => {
       done();
@@ -52,7 +52,7 @@ describe('VisitMetric: Malicious countEndUsers', () => {
     const place = {
       place_id: -2,
     };
-    return VisitMetric.countEndUsers(place).then((response) => {
+    return Visits.countEndUsers(place).then((response) => {
       response.should.be.a('number');
       assert.equal(response, 0);
       done();
@@ -63,7 +63,7 @@ describe('VisitMetric: Malicious countEndUsers', () => {
 });
 
 // eslint-disable-next-line no-undef
-describe('VisitMetric: countEndUsers', () => {
+describe('MacAddressInterface: countEndUsers', () => {
   // eslint-disable-next-line no-undef
 
 
@@ -72,7 +72,7 @@ describe('VisitMetric: countEndUsers', () => {
     return Place.all().then((places) => {
       const randomIndex = utils.randomInteger(0, places.length - 1);
       const place = places[randomIndex];
-      return VisitMetric.countEndUsers({ place_id: place.id }).then((amount) => {
+      return Visits.countEndUsers({ place_id: place.id }).then((amount) => {
         amount.should.be.a('number');
         done();
       }).catch((error) => {

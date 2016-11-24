@@ -1,7 +1,7 @@
-const Table = require('./table'); // eslint-disabled-this-line no-unused-vars
+const MacAddressInterface = require('./MacAddressInterface'); // eslint-disabled-this-line no-unused-vars
 
 
-class Visits extends Table {
+class Visits extends MacAddressInterface {
 
   constructor() {
     const table_name = 'visits';

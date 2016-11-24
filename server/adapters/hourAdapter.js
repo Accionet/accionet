@@ -32,4 +32,6 @@ function fillMissingHours(array) {
   });
 }
 
+exports.fillMissingHours = fillMissingHours;
+
 exports.forGraph = forGraph;

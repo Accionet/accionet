@@ -50,6 +50,27 @@ class TimeMetric {
       });
     });
   }
+
+  // Table Date and Hour
+
+  getGroupedByDayAndHour(searchParams) {
+    return this.Table.table()
+      .select(knex.raw('EXTRACT(year FROM created_at) as year, EXTRACT(doy FROM created_at) as doy, EXTRACT (hour from created_at) as hour, count(*) as amount'))
+      .where(searchParams)
+      .groupByRaw('year, doy, hour')
+      .orderByRaw('year, doy, hour');
+  }
+
+  tableDateAndHour(searchParams) {
+    return new Promise((resolve, reject) => {
+      this.getGroupedByDayAndHour(searchParams).then((entries) => {
+        const data = TimeAdapter.mapForDayAndHourGraph(entries);
+        resolve(data);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 }
 
 //

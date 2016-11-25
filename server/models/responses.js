@@ -1,5 +1,7 @@
 const table = require('./table');
 const utils = require('../services/utils');
+const EndUserDecorator = require('./decorators/CountEndUsers');
+const DayMetricsDecorator = require('./decorators/DayMetrics');
 
 class Response extends table {
 
@@ -50,5 +52,8 @@ class Response extends table {
 }
 
 const instance = new Response();
+EndUserDecorator.addCountEndUsers(instance);
+DayMetricsDecorator.addDayMetrics(instance);
+
 
 module.exports = instance;

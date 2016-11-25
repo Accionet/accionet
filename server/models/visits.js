@@ -1,5 +1,6 @@
 const table = require('./table'); // eslint-disabled-this-line no-unused-vars
 const EndUserDecorator = require('./decorators/CountEndUsers');
+const DayMetricsDecorator = require('./decorators/DayMetrics');
 
 
 class Visits extends table {
@@ -13,5 +14,6 @@ class Visits extends table {
 const instance = new Visits();
 
 EndUserDecorator.addCountEndUsers(instance);
+DayMetricsDecorator.addDayMetrics(instance);
 
 module.exports = instance;

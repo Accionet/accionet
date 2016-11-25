@@ -1,5 +1,5 @@
 const Activatable = require('./activatable'); // eslint-disabled-this-line no-unused-vars
-const VisitMetric = require('./metrics/visitMetric');
+const Visits = require('./visits');
 
 class Places extends Activatable {
 
@@ -14,9 +14,9 @@ class Places extends Activatable {
       const place = {
         place_id: id,
       };
-      visitPromises.push(VisitMetric.byDay(place));
-      visitPromises.push(VisitMetric.byHour(place));
-      visitPromises.push(VisitMetric.tableDateAndHour(place));
+      visitPromises.push(Visits.byDay(place));
+      visitPromises.push(Visits.byHour(place));
+      visitPromises.push(Visits.tableDateAndHour(place));
       const allPromises = Promise.all(visitPromises);
 
       allPromises.then((response) => {

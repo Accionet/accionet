@@ -2,6 +2,7 @@ const table = require('./table');
 const utils = require('../services/utils');
 const EndUserDecorator = require('./decorators/CountEndUsers');
 const DayMetricsDecorator = require('./decorators/DayMetrics');
+const HourMetricsDecorator = require('./decorators/HourMetrics');
 
 class Response extends table {
 
@@ -52,8 +53,11 @@ class Response extends table {
 }
 
 const instance = new Response();
+
+// decorate
 EndUserDecorator.addCountEndUsers(instance);
 DayMetricsDecorator.addDayMetrics(instance);
+HourMetricsDecorator.addHourMetrics(instance);
 
 
 module.exports = instance;

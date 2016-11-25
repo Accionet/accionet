@@ -6,7 +6,7 @@ const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
 const Response = require('../../../../server/models/responses');
-const Place = require('../../../../server/newModels/places');
+const Survey = require('../../../../server/newModels/surveys');
 const utils = require('../../../../server/services/utils');
 const metricAssert = require('../../models/metrics/metricAssert');
 
@@ -26,10 +26,10 @@ chai.use(dateChai);
 describe('Response: Malicious byHour', () => {
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, without id attribute', (done) => {
-    const place = {
+    const survey = {
       key: 'value',
     };
-    return Response.byHour(place).then(() => {
+    return Response.byHour(survey).then(() => {
       done('it should not get to here');
     }).catch(() => {
       done();
@@ -38,10 +38,10 @@ describe('Response: Malicious byHour', () => {
 
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, with id. but not a valid id', (done) => {
-    const place = {
-      place_id: 'value',
+    const survey = {
+      survey_id: 'value',
     };
-    return Response.byHour(place).then(() => {
+    return Response.byHour(survey).then(() => {
       done('It should not get to here');
     }).catch(() => {
       done();
@@ -50,10 +50,10 @@ describe('Response: Malicious byHour', () => {
 
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, with id. But not a negative id', (done) => {
-    const place = {
-      place_id: -2,
+    const survey = {
+      survey_id: -2,
     };
-    return Response.byHour(place).then((response) => {
+    return Response.byHour(survey).then((response) => {
       response.should.be.a('array');
       assert.equal(response.length, 24);
       metricAssert.arrayContains24Hours(response);
@@ -71,10 +71,10 @@ describe('Response: byHour', () => {
 
   // eslint-disable-next-line no-undef
   it('Check it contains the 24 hours in correct order and correct populated.', (done) => {
-    return Place.all().then((places) => {
-      const randomIndex = utils.randomInteger(0, places.length - 1);
-      const place = places[randomIndex];
-      Response.byHour({ place_id: place.id }).then((entry) => {
+    return Survey.all().then((surveys) => {
+      const randomIndex = utils.randomInteger(0, surveys.length - 1);
+      const survey = surveys[randomIndex];
+      Response.byHour({ survey_id: survey.id }).then((entry) => {
         entry.should.be.a('array');
         metricAssert.arrayContains24Hours(entry);
         const amount = parseInt(entry[1], 10);

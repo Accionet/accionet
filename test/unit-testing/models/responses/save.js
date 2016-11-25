@@ -14,9 +14,6 @@ const assert = chai.assert;
 // eslint-disable-next-line no-unused-vars
 const should = chai.should();
 
-const OPTION_NOT_ARRAY = 'Answers should be an array';
-const DEFAULT_ERROR = 'Something went wrong';
-
 
 function getRandomSurvey() {
   return new Promise((resolve, reject) => {
@@ -53,19 +50,29 @@ function createResponseOfSurvey(survey) {
   return response;
 }
 
-function assertEqualAnswers(newResponse, oldResponse) {
-  for (let i = 0; i < oldResponse.answers.length; i++) {
-    const previousAnswer = oldResponse.answers[i];
+function assertEqualAnswers(newResponse, answers) {
+  for (let i = 0; i < answers.length; i++) {
+    const previousAnswer = answers[i];
+    const previousID = parseInt(previousAnswer.question_id, 10);
     let exists = false;
     for (let j = 0; j < newResponse.answers.length; j++) {
       const currentAnswer = newResponse.answers[j];
-      if (currentAnswer.question_id === previousAnswer.question_id) {
+      const currentID = parseInt(currentAnswer.question_id, 10);
+      if (previousID === currentID) {
         assert.equal(currentAnswer.answer_option_id, previousAnswer.answer_option_id);
         exists = true;
       }
     }
     assert.equal(exists, true);
   }
+}
+
+function cloneAnswers(response) {
+  const answers = [];
+  for (let i = 0; i < response.answers.length; i++) {
+    answers.push(utils.cloneObject(response.answers[i]));
+  }
+  return answers;
 }
 
 
@@ -99,11 +106,12 @@ describe('Responses: save, check it saves the response correctly', () => {
   it('Check that also the answers are saved', (done) => {
     return getRandomSurvey().then((survey) => {
       const response = createResponseOfSurvey(survey);
+      const answers = cloneAnswers(response);
       Response.save(response).then((savedResponse) => {
         assert.equal(response.survey_id, savedResponse.survey_id);
         assert.equal(response.macaddress, savedResponse.macaddress);
         savedResponse.answers.should.be.array; // eslint-disable-line
-        assertEqualAnswers(savedResponse, response);
+        assertEqualAnswers(savedResponse, answers);
         done();
       }).catch((err) => {
         done(err);

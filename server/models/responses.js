@@ -39,12 +39,28 @@ class Response extends table {
       }
       // delete response answers so it does not complain that it has attributes it shoulnt
       delete response.answers;
+
       super.save(response).then((response) => {
         if (answers && answers.length > 0) {
-          resolve(this.saveAnswers(answers, response));
+          resolve(this.saveAnswers(answers, response, attr));
         } else {
           resolve(response);
         }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  parseToSend(response) {
+    const Answer = require('./answer'); // eslint-disable-line
+
+    return new Promise((resolve, reject) => {
+      Answer.find({
+        response_id: response.id,
+      }).then((answers) => {
+        response.answers = answers;
+        resolve(response);
       }).catch((err) => {
         reject(err);
       });

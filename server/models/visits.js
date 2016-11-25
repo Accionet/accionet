@@ -1,7 +1,8 @@
-const MacAddressInterface = require('./MacAddressInterface'); // eslint-disabled-this-line no-unused-vars
+const table = require('./table'); // eslint-disabled-this-line no-unused-vars
+const EndUserDecorator = require('./decorators/CountEndUsers');
 
 
-class Visits extends MacAddressInterface {
+class Visits extends table {
 
   constructor() {
     const table_name = 'visits';
@@ -10,5 +11,7 @@ class Visits extends MacAddressInterface {
 }
 
 const instance = new Visits();
+
+EndUserDecorator.addCountEndUsers(instance);
 
 module.exports = instance;

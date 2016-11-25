@@ -1,7 +1,7 @@
-const MacAddressInterface = require('./MacAddressInterface');
+const table = require('./table');
 const utils = require('../services/utils');
 
-class Response extends MacAddressInterface {
+class Response extends table {
 
   constructor() {
     const table_name = 'response';

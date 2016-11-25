@@ -8,7 +8,7 @@ const Surveys = require('../models/surveys');
 const excelbuilder = require('msexcel-builder-protobi');
 const ExcelGenerator = require('../services/excelGenerator');
 const Utils = require('../services/utils');
-const Response = require('../models/response');
+const Response = require('../models/responses');
 // const Answer = require('../models/answer');
 const httpResponse = require('../services/httpResponse');
 const debug = require('debug')('Survey Controller');
@@ -143,13 +143,8 @@ exports.new = function newSurvey(req, res) {
 
 exports.metrics = function showMetrics(req, res) {
   Surveys.findById(req.params.id).then((survey) => {
-    console.log('-------------------------');
-    console.log(survey);
-    console.log('-------------------------');
-
     Surveys.getMetrics(survey[0].id, (err_find_survey, survey_with_metrics) => {
       if (err_find_survey) {
-        console.log('error hiubo aquii');
         res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
           error: `ERROR: ${err_find_survey}`,
           survey: [],
@@ -204,13 +199,12 @@ exports.responseSurvey = function (req, res) {
   const response = JSON.parse(req.body.string_json);
   const url_id = parseInt(req.params.id, 10);
   if (!isNaN(req.params.id) && response.survey_id && response.survey_id === url_id) {
-    Response.save(response, (err, result) => {
-      if (err) {
-        const json = httpResponse.error(err);
-        return res.status(400).send(json);
-      }
+    Response.save(response).then((result) => {
       const json = httpResponse.success('Respuesta enviada con exito', 'response', result);
       return res.status(200).send(json);
+    }).catch((err) => {
+      const json = httpResponse.error(err);
+      return res.status(400).send(json);
     });
   } else {
     // Responder con attributos mal hechos
@@ -223,31 +217,28 @@ exports.responseSurvey = function (req, res) {
 
 exports.metricsByHour = function (req, res) {
   const id = req.params.id;
-  Response.metricsByHour({
+  Response.byHour({
     survey_id: id,
-  }, (err, result) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(500).send(json);
-    }
+  }).then((result) => {
     const json = httpResponse.success('Metricas por hora enviada con exito', 'data', result);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(500).send(json);
   });
 };
 
 exports.metricsByDay = function (req, res) {
   console.log('metrics by day');
   const id = req.params.id;
-  Response.metricsByDay({
+  Response.byDay({
     survey_id: id,
-  }, (err, result) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(500).send(json);
-    }
-    console.log(result);
+  }).then((result) => {
     const json = httpResponse.success('Metricas por dia enviada con exito', 'data', result);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(500).send(json);
   });
 };
 
@@ -255,27 +246,25 @@ exports.countResponses = function (req, res) {
   const id = req.params.id;
   Response.count({
     survey_id: id,
-  }, (err, result) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(500).send(json);
-    }
+  }).then((result) => {
     const json = httpResponse.success('Cantidad de respuestas enviada con exito', 'data', result);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(500).send(json);
   });
 };
 
 exports.countEndUser = function (req, res) {
   const id = req.params.id;
-  Response.countEndUser({
+  Response.countEndUsers({
     survey_id: id,
-  }, (err, result) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(500).send(json);
-    }
+  }).then((result) => {
     const json = httpResponse.success('Cantidad de usuarios finales enviada con éxito', 'data', result);
     return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(500).send(json);
   });
 };
 

@@ -3,7 +3,7 @@
 
 
 const Visits = require('../models/visits');
-const Metric = require('../models/metrics/visitMetric');
+const Metric = require('../models/visits');
 const httpResponse = require('../services/httpResponse');
 
 // Functions to do add Parameters to create

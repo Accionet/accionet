@@ -66,6 +66,12 @@ class Response extends table {
       });
     });
   }
+
+  findOfSurvey(survey_id) {
+    return super.find({
+      survey_id,
+    });
+  }
 }
 
 const instance = new Response();

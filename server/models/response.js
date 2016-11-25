@@ -275,6 +275,7 @@ function buildSelectQueryForExcel(params) {
   }
   // ORDER BY
   string += ' ORDER BY q.number, o.enumeration, "ingresada" ';
+  console.log(string);
   return string;
 }
 

@@ -9,6 +9,9 @@ const utils = require('../../../../server/services/utils');
 const knex = require('../../../../server/db/knex');
 
 
+const DEFAULT_ERROR = 'Something went wrong';
+const OPTION_NOT_ARRAY = 'Answers should be an array';
+
 // eslint-disable-next-line no-unused-vars
 const assert = chai.assert;
 // eslint-disable-next-line no-unused-vars
@@ -124,41 +127,34 @@ describe('Responses: save, check it saves the response correctly', () => {
 
 // eslint-disable-next-line no-undef
 describe('Responses:  Malicious save', () => {
-  // // eslint-disable-next-line no-undef
-  // it('Create a response with wrong parameters', (done) => {
-  //   return Response.new().then((response) => {
-  //     response.title = 'New response';
-  //     response.number = 'not a number';
-  //     response.type = 'another tye';
-  //     Response.save(response).then(() => {
-  //       done('it should not get to here');
-  //     }).catch((err) => {
-  //       assert.equal(err, DEFAULT_ERROR);
-  //       done();
-  //     }).catch((err) => {
-  //       done(err);
-  //     });
-  //   }).catch((err) => {
-  //     done(err);
-  //   });
-  // });
-  // // eslint-disable-next-line no-undef
-  // it('Pass invalid answers', (done) => {
-  //   return Response.new().then((response) => {
-  //     response.title = 'New response with answers';
-  //     response.number = 8;
-  //     response.type = 'multiple_choice';
-  //     response.answers = 'not valid';
-  //     Response.save(response).then(() => {
-  //       done('it should not get to here');
-  //     }).catch((err) => {
-  //       assert.equal(err, OPTION_NOT_ARRAY);
-  //       done();
-  //     }).catch((err) => {
-  //       done(err);
-  //     });
-  //   }).catch((err) => {
-  //     done(err);
-  //   });
-  // });
+  // eslint-disable-next-line no-undef
+  it('Create a response with wrong parameters', (done) => {
+    const response = {
+      survey_id: 'not an id',
+    };
+    return Response.save(response).then(() => {
+      done('it should not get to here');
+    }).catch((err) => {
+      assert.equal(err, DEFAULT_ERROR);
+      done();
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('Pass invalid answers', (done) => {
+    const response = {
+      survey_id: 'not an id',
+    };
+    response.answers = 'not valid';
+    return Response.save(response).then(() => {
+      done('it should not get to here');
+    }).catch((err) => {
+      assert.equal(err, OPTION_NOT_ARRAY);
+      done();
+    }).catch((err) => {
+      done(err);
+    });
+  });
 });

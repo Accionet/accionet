@@ -124,12 +124,10 @@ exports.update = function saveSurvey(req, res) {
 
 exports.create = function saveSurvey(req, res) {
   const survey = req.body;
-  console.log(survey);
   Surveys.save(survey).then((result) => {
     const json = httpResponse.success('Encuesta guardada exitosamente', 'survey', result);
     return res.status(200).send(json);
   }).catch((err) => {
-    console.log('Error ' + err);
     const json = httpResponse.error(err);
     return res.status(500).send(json);
   });

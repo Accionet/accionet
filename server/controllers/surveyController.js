@@ -142,12 +142,8 @@ exports.new = function newSurvey(req, res) {
 
 
 exports.metrics = function showMetrics(req, res) {
-  console.log('metricsss');
   Surveys.findById(req.params.id).then((survey) => {
-    console.log(survey);
     Surveys.getMetrics(survey.id).then((survey_with_metrics) => {
-      console.log('-------------------');
-      console.log(survey_with_metrics);
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
         survey: survey_with_metrics,
       });

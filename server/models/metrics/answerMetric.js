@@ -11,7 +11,7 @@ class AnswerMetric {
       Question.findById(id).then((question) => {
         switch (question.type) {
         case Answer.MULTIPLE_CHOICE:
-          this.asMultipleChoice(question);
+          resolve(this.asMultipleChoice(question));
           break;
         default:
         }

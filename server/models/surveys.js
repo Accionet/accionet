@@ -1,4 +1,5 @@
 const Activatable = require('./activatable'); // eslint-disabled-this-line no-unused-vars
+const AnswerMetric = require('./metrics/answerMetric');
 
 const utils = require('../services/utils');
 
@@ -64,6 +65,36 @@ class Surveys extends Activatable {
         } else {
           resolve(survey);
         }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  metricOfQuestion(question) {
+    return new Promise((resolve, reject) => {
+      AnswerMetric.ofQuestion(question.id).then((metrics) => {
+        question.metrics = metrics;
+        resolve(question);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+
+  getMetrics(id) {
+    return new Promise((resolve, reject) => {
+      this.findById(id).then((survey) => {
+        const promises = [];
+        for (let i = 0; i < survey.questions.length; i++) {
+          promises.push(this.metricOfQuestion(survey.questions[i]));
+        }
+        Promise.all(promises).then(() => {
+          resolve(survey);
+        }).catch((err) => {
+          reject(err);
+        });
       }).catch((err) => {
         reject(err);
       });

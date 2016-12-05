@@ -8,7 +8,7 @@ const Surveys = require('../models/surveys');
 const excelbuilder = require('msexcel-builder-protobi');
 const ExcelGenerator = require('../services/excelGenerator');
 const Utils = require('../services/utils');
-const Response = require('../models/response');
+const Response = require('../models/responses');
 // const Answer = require('../models/answer');
 const httpResponse = require('../services/httpResponse');
 const debug = require('debug')('Survey Controller');
@@ -142,18 +142,19 @@ exports.new = function newSurvey(req, res) {
 
 
 exports.metrics = function showMetrics(req, res) {
+  console.log('metricsss');
   Surveys.findById(req.params.id).then((survey) => {
-    Surveys.getMetrics(survey[0].id, (err_find_survey, survey_with_metrics) => {
-      if (err_find_survey) {
-        res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
-          error: `ERROR: ${err_find_survey}`,
-          survey: [],
-        });
-        return;
-      }
-
-      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
+    console.log(survey);
+    Surveys.getMetrics(survey.id).then((survey_with_metrics) => {
+      console.log('-------------------');
+      console.log(survey_with_metrics);
+      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
         survey: survey_with_metrics,
+      });
+    }).catch((err) => {
+      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'metrics.ejs'), {
+        error: `ERROR: ${err}`,
+        survey: [],
       });
     });
   }).catch((err) => {
@@ -229,7 +230,6 @@ exports.metricsByHour = function (req, res) {
 };
 
 exports.metricsByDay = function (req, res) {
-  console.log('metrics by day');
   const id = req.params.id;
   Response.byDay({
     survey_id: id,

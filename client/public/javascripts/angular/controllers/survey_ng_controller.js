@@ -83,7 +83,7 @@ controllers
       setEnumerationAndNumbers();
       const survey = $scope.selectedSurvey;
       survey.is_active = true;
-      survey.user_id = 1;
+      survey.user_id = null;
       if ($scope.validForm()) {
         $http.post('/surveys/new', survey)
         .success(function () {

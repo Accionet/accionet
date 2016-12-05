@@ -9,7 +9,6 @@ const excelbuilder = require('msexcel-builder-protobi');
 const ExcelGenerator = require('../services/excelGenerator');
 const Utils = require('../services/utils');
 const Response = require('../models/responses');
-const OldResponse = require('../models/response');
 // const Answer = require('../models/answer');
 const httpResponse = require('../services/httpResponse');
 const debug = require('debug')('Survey Controller');
@@ -125,14 +124,14 @@ exports.update = function saveSurvey(req, res) {
 
 exports.create = function saveSurvey(req, res) {
   const survey = req.body;
+  console.log(survey);
   Surveys.save(survey).then((result) => {
     const json = httpResponse.success('Encuesta guardada exitosamente', 'survey', result);
     return res.status(200).send(json);
   }).catch((err) => {
-    if (err) {
-      const json = httpResponse.error(err);
-      return res.status(500).send(json);
-    }
+    console.log('Error ' + err);
+    const json = httpResponse.error(err);
+    return res.status(500).send(json);
   });
 };
 

@@ -1,6 +1,7 @@
 'use strict';
 
 const Table = require('./table');
+const utils = require('../services/utils');
 
 
 class Options extends Table {
@@ -10,9 +11,10 @@ class Options extends Table {
     super(table_name);
   }
 
-  updateOptionsOfQuestion(question) {
+  updateOptionsOfQuestion(originalQuestion) {
     const Question = require('./questions'); // eslint-disable-line global-require
 
+    const question = utils.cloneJSON(originalQuestion);
     return new Promise((resolve, reject) => {
       // Check for valid parameters
       if (!question || !question.id) {

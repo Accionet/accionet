@@ -19,7 +19,7 @@ chai.use(dateChai);
 
 
 const defaultErrorMessage = 'Find parameter was not defined correctly';
-const nonExistantAttibute = 'Parameter contains invalid attributes';
+const addNonExistantAttribute = 'Cannot add attribute: ';
 const unvalidJSON = 'Parameter should be a valid json';
 const notFoundMessage = 'No se encontró una entrada con id = ';
 
@@ -48,7 +48,7 @@ describe('Options: Malicious find', () => {
     }).then(() => {
       done('Error, it should return something valid');
     }).catch((err) => {
-      assert.equal(nonExistantAttibute, err);
+      assert.equal(`${addNonExistantAttribute} someDoestExist.`, err);
       done();
     }).catch((err) => {
       done(err);

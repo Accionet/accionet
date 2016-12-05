@@ -46,8 +46,10 @@ class Table {
     });
   }
 
-  save(entry) {
+  save(originalEntry) {
     const errorString = 'Something went wrong';
+    // make a clone so if we delete stuff from entry it does not modify the original one
+    const entry = utils.cloneJSON(originalEntry);
     return new Promise((resolve, reject) => {
       this.parseAttributesForUpsert(entry, true)
         .then((attributes) => {
@@ -67,7 +69,8 @@ class Table {
     });
   }
 
-  update(id, attr) {
+  update(id, originalAttributes) {
+    const attr = utils.cloneJSON(originalAttributes);
     const errorString = 'Something went wrong';
     return new Promise((resolve, reject) => {
       this.findById(id).then(() => {

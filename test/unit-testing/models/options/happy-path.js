@@ -224,20 +224,15 @@ describe('Options: See what happens with empty table. (Count, find, all, new, ge
 // eslint-disable-next-line no-undef
 describe('Options: CUD of CRUD', () => {
   // eslint-disable-next-line no-undef
-  // before((done) => {
-  //   return knex.seed.run()
-  //     .then(() => {
-  //       done();
-  //     }).catch((err) => {
-  //       done(err);
-  //     });
-  // });
+
 
   // eslint-disable-next-line no-undef
   it('Create new Option', (done) => {
+    const statement = 'meneh';
+    const enumeration = 'c';
     const newOption = {
-      statement: 'meneh',
-      enumeration: 'c',
+      statement,
+      enumeration,
     };
     return Option.save(newOption).then((option) => {
       option.should.have.property('id');
@@ -261,8 +256,9 @@ describe('Options: CUD of CRUD', () => {
     return Option.all().then((options) => {
       const i = Math.floor(Math.random() * options.length);
       const beforeUpdate = options[i];
+      const statement = 'new statement';
       const updateAttr = {
-        statement: 'new statement',
+        statement,
       };
       Option.update(beforeUpdate.id, updateAttr)
       .then((option) => {
@@ -273,7 +269,7 @@ describe('Options: CUD of CRUD', () => {
         option.should.have.property('updated_at');
         assert.afterTime(option.updated_at, beforeUpdate.updated_at);
         option.should.have.property('statement');
-        assert.equal(option.statement, updateAttr.statement);
+        assert.equal(option.statement, statement);
         option.should.have.property('enumeration');
         assert.equal(option.enumeration, beforeUpdate.enumeration);
         option.should.have.property('question_id');

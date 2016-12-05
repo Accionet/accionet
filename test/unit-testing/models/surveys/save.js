@@ -12,7 +12,7 @@ const assert = chai.assert;
 const should = chai.should();
 
 const QUESTION_NOT_ARRAY = 'Questions should be an array';
-const WRONG_PARAMETER = 'Parameter contains invalid attributes';
+const WRONG_PARAMETER = 'Cannot add attribute: ';
 
 
 function getQuestions() {
@@ -111,7 +111,7 @@ describe('Surveys:  Malicious save', () => {
       Survey.save(survey).then(() => {
         done('it should not get to here');
       }).catch((err) => {
-        assert.equal(err, WRONG_PARAMETER);
+        assert.equal(`${WRONG_PARAMETER} number. type.`, err);
         done();
       }).catch((err) => {
         done(err);

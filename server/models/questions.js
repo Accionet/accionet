@@ -75,7 +75,8 @@ class Questions extends Table {
     });
   }
 
-  updateQuestionsOfSurvey(survey) {
+  updateQuestionsOfSurvey(originalSurvey) {
+    const survey = utils.cloneJSON(originalSurvey);
     const Survey = require('./surveys'); // eslint-disable-line global-require
 
     return new Promise((resolve, reject) => {

@@ -41,6 +41,10 @@ exports.cloneObject = function (obj) {
   return copy;
 };
 
+exports.cloneJSON = function (json) {
+  return JSON.parse(JSON.stringify(json));
+};
+
 function randomInteger(min, max) {
   return min + Math.floor(Math.random() * ((max + 1) - min));
 }

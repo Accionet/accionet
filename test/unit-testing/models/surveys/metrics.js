@@ -14,6 +14,12 @@ const assert = chai.assert;
 const should = chai.should();
 
 
+function assertEachQuestionHasMetrics(survey) {
+  for (let i = 0; i < survey.questions.length; i++) {
+    survey.questions[i].should.have.property('metrics');
+  }
+}
+
 // eslint-disable-next-line no-undef
 describe('Surveys: get Metrics', () => {
   // eslint-disable-next-line no-undef
@@ -21,7 +27,8 @@ describe('Surveys: get Metrics', () => {
     return Survey.all().then((results) => {
       const survey = utils.randomEntry(results);
       Survey.getMetrics(survey.id).then((survey) => {
-        survey.should.have.property('metrics)');
+        assertEachQuestionHasMetrics(survey);
+        done();
       }).catch((err) => {
         done(err);
       });

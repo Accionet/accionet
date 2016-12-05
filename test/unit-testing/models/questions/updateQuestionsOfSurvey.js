@@ -142,7 +142,6 @@ describe('Questions: Update questions of survey', () => {
       };
       survey.questions.push(newQuestion);
 
-
       Question.updateQuestionsOfSurvey(survey).then((modifiedSurvey) => {
         assert.equal(modifiedSurvey.id, survey.id);
         assert.equal(modifiedSurvey.questions.length, survey.questions.length);
@@ -164,7 +163,6 @@ describe('Questions: Update questions of survey', () => {
               for (let l = 0; l < newQuestion.options.length; l++) {
                 if (newQuestion.options[l].statement === option.statement) {
                   assert.equal(option.statement, newQuestion.options[l].statement);
-                  assert.equal(option.question_id, newQuestion.options[l].question_id);
                   assert.equal(option.enumeration, newQuestion.options[l].enumeration);
                 }
               }

@@ -115,7 +115,6 @@ describe('Options: Update options of question', () => {
   it('Delete questions, add new, and modify existing', (done) => {
     return Question.all().then((questions) => {
       const i = Math.floor(Math.random() * questions.length);
-
       const n = Math.floor(Math.random() * questions[i].options.length);
       let cut = 1;
       if (n > 2) {

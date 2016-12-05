@@ -43,7 +43,6 @@ controllers
 
   // Get all surveys
     $scope.initializeSurveys = function (surveys, selectedSurvey) {
-      console.log(selectedSurvey);
       if (selectedSurvey) {
         $scope.selectedSurvey = JSON.parse(selectedSurvey);
       }
@@ -265,7 +264,6 @@ controllers
 
 
     $scope.getResponsesByDay = function (survey) {
-      console.log(survey);
       $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/byday`)
       .success(function (results) {
         const data = results.data;
@@ -296,9 +294,6 @@ controllers
     };
 
     $scope.getResponsesByHour = function (survey) {
-      console.log('------------------');
-      console.log(survey);
-      console.log('------------------');
       $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/byhour`)
       .success(function (results) {
         const d = results.data;

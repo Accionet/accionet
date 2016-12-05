@@ -9,6 +9,7 @@ const excelbuilder = require('msexcel-builder-protobi');
 const ExcelGenerator = require('../services/excelGenerator');
 const Utils = require('../services/utils');
 const Response = require('../models/responses');
+const OldResponse = require('../models/response');
 // const Answer = require('../models/answer');
 const httpResponse = require('../services/httpResponse');
 const debug = require('debug')('Survey Controller');
@@ -266,13 +267,14 @@ exports.countEndUser = function (req, res) {
 
 exports.generateExcel = function (req, res) {
   const id = req.params.id;
-  Response.dataForExcel({
+  OldResponse.dataForExcel({
     survey_id: id,
   }, (err, data) => {
     if (err || !data) {
       const json = httpResponse.error(err);
       return res.status(500).send(json);
     }
+    console.log(data);
     // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
     let filepath = path.join(__dirname, '../', 'uploads');
     const filename = `/${(new Date()).getTime()}.xlsx`;

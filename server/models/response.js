@@ -275,7 +275,6 @@ function buildSelectQueryForExcel(params) {
   }
   // ORDER BY
   string += ' ORDER BY q.number, o.enumeration, "ingresada" ';
-  console.log(string);
   return string;
 }
 
@@ -287,6 +286,7 @@ exports.dataForExcel = function (attr, callback) {
     }
     const params = base.parseJsonToParams(attr);
     const query_string = buildSelectQueryForExcel(params);
+    console.log(query_string);
     const query = client.query(query_string, params.values);
 
     query.on('error', (err) => (callback(err)));

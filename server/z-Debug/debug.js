@@ -8,6 +8,7 @@ const Option = require('../newModels/options');
 const Place = require('../newModels/places');
 const Answer = require('../models/answer');
 const Response = require('../models/responses');
+const OldResponse = require('../models/response');
 const Survey = require('../models/surveys');
 
 const AnswerMetric = require('../models/metrics/answerMetric');
@@ -29,6 +30,26 @@ const visit = require('../models/visits');
 //   this.on('accounts.id', '=', 'users.account_id').andOn('accounts.owner_id', '=', 'users.id')
 // }).toString());
 // Response.dataForExcel({survey_id: 2386});
+
+// OldResponse.dataForExcel({
+//   survey_id: 2685
+// }, (err, data) => {
+//   console.log(data);
+// });
+
+Response.dataForExcel({survey_id: 2685}).then((res) =>{
+console.log(res);
+}).catch((err) =>{
+  console.log(err);
+})
+
+
+
+// Response.find({
+//   survey_id: 2685
+// }).then((res) => {
+//   console.log(res);
+// })
 
 
 // class Animal {

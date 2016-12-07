@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 require('./server/passport/config');
 
 const routes = require('./server/routes/routes');
+const placeRoutes = require('./server/routes/places');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './client', 'public')));
 
 app.use('/', routes);
+app.use('/place', placeRoutes);
 
 
 // catch 404 and forward to error handler

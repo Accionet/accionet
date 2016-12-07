@@ -1,3 +1,7 @@
+const path = require('path');
+const excelbuilder = require('msexcel-builder-protobi');
+
+
 exports.addSheetToWorkbook = function (params, workbook) {
   // check valid input
   if (!params || !workbook) {
@@ -23,4 +27,18 @@ exports.addSheetToWorkbook = function (params, workbook) {
       }
     }
   }
+};
+
+
+exports.new = function () {
+  // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
+  let filepath = path.join(__dirname, '../', 'uploads');
+  const filename = `/${(new Date()).getTime()}.xlsx`;
+  const workbook = excelbuilder.createWorkbook(filepath, filename);
+  filepath += filename;
+  const file = {
+    workbook,
+    path: filepath,
+  };
+  return file;
 };

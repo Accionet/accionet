@@ -5,6 +5,10 @@
 const Visits = require('../models/visits');
 const Metric = require('../models/visits');
 const httpResponse = require('../services/httpResponse');
+const ExcelGenerator = require('../services/excelGenerator');
+const utils = require('../services/utils');
+const DayAndHourAdapter = require('../adapters/excelAdapters/DayAndHourAdapter');
+
 
 // Functions to do add Parameters to create
 
@@ -172,3 +176,56 @@ exports.countEndUsersOfPlace = function (req, res) {
     return res.status(400).send(json);
   });
 };
+
+exports.generateExcel = function (req, res) {
+  const id = parseInt(req.params.id, 10);
+  Metric.tableDateAndHour({
+    place_id: id,
+  }).then((data) => {
+    const file = ExcelGenerator.new();
+    const workbook = file.workbook;
+    const sheet = DayAndHourAdapter.forExcel(data, 'día y hora');
+    ExcelGenerator.addSheetToWorkbook(sheet, workbook);
+    workbook.save((err) => {
+      if (err) {
+        throw err;
+      } else {
+        utils.sendFile(file.path, `Metricas de visitas a: ${id}`, 'xlsx', res);
+      }
+    });
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
+  });
+};
+
+// if (!data) {
+//   const json = httpResponse.error('No data');
+//   return res.status(500).send(json);
+// }
+// // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
+// let filepath = path.join(__dirname, '../', 'uploads');
+// const filename = `/${(new Date()).getTime()}.xlsx`;
+// const workbook = excelbuilder.createWorkbook(filepath, filename);
+// filepath += filename;
+// // headers of the excel sheet
+// let firstRow;
+// try {
+//   firstRow = Object.keys(data[0]);
+// } catch (e) {
+//   firstRow = [];
+// }
+// const sheet = {
+//   name: 'Respuestas',
+//   firstRow,
+//   data,
+// };
+// ExcelGenerator.addSheetToWorkbook(sheet, workbook);
+// // Save it
+// workbook.save((err) => {
+//   if (err) {
+//     throw err;
+//   } else {
+//     Utils.sendFile(filepath, `Metricas de Encuesta: ${id}`, 'xlsx', res);
+//   }
+// });

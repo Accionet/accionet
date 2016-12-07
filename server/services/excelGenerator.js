@@ -8,7 +8,7 @@ exports.adaptArrayToSheet = function (array, sheetname) {
   try {
     firstRow = Object.keys(array[0]);
   } catch (e) {
-    firstRow = [];
+    firstRow = ['No data'];
   }
   const sheet = {
     name: sheetname,

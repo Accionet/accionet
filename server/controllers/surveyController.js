@@ -262,44 +262,6 @@ exports.countEndUser = function (req, res) {
   });
 };
 
-// exports.generateExcel = function (req, res) {
-//   const id = req.params.id;
-//   OldResponse.dataForExcel({
-//     survey_id: id,
-//   }, (err, data) => {
-//     if (err || !data) {
-//       const json = httpResponse.error(err);
-//       return res.status(500).send(json);
-//     }
-//     // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
-//     let filepath = path.join(__dirname, '../', 'uploads');
-//     const filename = `/${(new Date()).getTime()}.xlsx`;
-//     const workbook = excelbuilder.createWorkbook(filepath, filename);
-//     filepath += filename;
-//     // headers of the excel sheet
-//     let firstRow;
-//     try {
-//       firstRow = Object.keys(data[0]);
-//     } catch (e) {
-//       firstRow = [];
-//     }
-//     const sheet = {
-//       name: 'Respuestas',
-//       firstRow,
-//       data,
-//     };
-//     ExcelGenerator.addSheetToWorkbook(sheet, workbook);
-//     // Save it
-//     workbook.save((err) => {
-//       if (err) {
-//         throw err;
-//       } else {
-//         Utils.sendFile(filepath, `Metricas de Encuesta: ${id}`, 'xlsx', res);
-//       }
-//     });
-//   });
-// };
-
 exports.generateExcel = function (req, res) {
   const id = req.params.id;
   Response.dataForExcel({

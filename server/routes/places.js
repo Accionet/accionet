@@ -6,7 +6,7 @@ const router = express.Router();
 
 // var passport = require('passport');
 
-const placeController = require('../controllers/placeController');
+// const placeController = require('../controllers/placeController');
 const visitController = require('../controllers/visitController');
 
 

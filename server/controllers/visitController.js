@@ -178,19 +178,22 @@ exports.countEndUsersOfPlace = function (req, res) {
 };
 
 exports.generateExcel = function (req, res) {
-  const id = parseInt(req.params.id, 10);
-  Metric.tableDateAndHour({
-    place_id: id,
-  }).then((data) => {
+  const attr = {
+    place_id: parseInt(req.params.id, 10),
+  };
+  const promises = [Metric.tableDateAndHour(attr), Visits.find(attr)];
+  Promise.all(promises).then((data) => {
     const file = ExcelGenerator.new();
     const workbook = file.workbook;
-    const sheet = DayAndHourAdapter.forExcel(data, 'día y hora');
+    const sheet = DayAndHourAdapter.forExcel(data[0], 'día y hora');
     ExcelGenerator.addSheetToWorkbook(sheet, workbook);
+    const secondSheet = ExcelGenerator.adaptArrayToSheet(data[1], 'Detalle');
+    ExcelGenerator.addSheetToWorkbook(secondSheet, workbook);
     workbook.save((err) => {
       if (err) {
         throw err;
       } else {
-        utils.sendFile(file.path, `Metricas de visitas a: ${id}`, 'xlsx', res);
+        utils.sendFile(file.path, `Metricas de visitas a: ${req.params.id}`, 'xlsx', res);
       }
     });
   }).catch((err) => {

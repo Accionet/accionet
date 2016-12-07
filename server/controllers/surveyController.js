@@ -314,18 +314,7 @@ exports.generateExcel = function (req, res) {
     const filename = `/${(new Date()).getTime()}.xlsx`;
     const workbook = excelbuilder.createWorkbook(filepath, filename);
     filepath += filename;
-    // headers of the excel sheet
-    let firstRow;
-    try {
-      firstRow = Object.keys(data[0]);
-    } catch (e) {
-      firstRow = [];
-    }
-    const sheet = {
-      name: 'Respuestas',
-      firstRow,
-      data,
-    };
+    const sheet = ExcelGenerator.adaptArrayToSheet(data, 'Respuestas');
     ExcelGenerator.addSheetToWorkbook(sheet, workbook);
     // Save it
     workbook.save((err) => {

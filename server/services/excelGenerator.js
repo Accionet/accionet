@@ -2,6 +2,23 @@ const path = require('path');
 const excelbuilder = require('msexcel-builder-protobi');
 
 
+exports.adaptArrayToSheet = function (array, sheetname) {
+  // headers of the excel sheet
+  let firstRow;
+  try {
+    firstRow = Object.keys(array[0]);
+  } catch (e) {
+    firstRow = [];
+  }
+  const sheet = {
+    name: sheetname,
+    firstRow,
+    data: array,
+  };
+  return sheet;
+};
+
+
 exports.addSheetToWorkbook = function (params, workbook) {
   // check valid input
   if (!params || !workbook) {

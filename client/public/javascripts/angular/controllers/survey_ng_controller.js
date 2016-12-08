@@ -24,7 +24,7 @@ controllers
     $scope.LIKERT = 'likert';
 
     $scope.NUMERIC = 'numeric';
-    $scope.SHORT_ANSWER = 'short_answer';
+    $scope.SHORT_ANSWER = 'short_text';
     $scope.LONG_ANSWER = 'long_answer';
 
   // ORdering
@@ -146,6 +146,7 @@ controllers
 
   // Add question to array. Recieves what type of question is
     $scope.addQuestion = function (myType) {
+      console.log(myType);
     // The question to be added
       let question;
     // Create the question depending on what type of question is

@@ -16,7 +16,7 @@ controllers
       $scope.MULTIPLE_CHOICE = 'multiple_choice';
       $scope.YES_NO = 'yes_no';
       $scope.NUMERIC = 'numeric';
-      $scope.SHORT_ANSWER = 'short_answer';
+      $scope.SHORT_ANSWER = 'short_text';
       $scope.LONG_ANSWER = 'long_answer';
 
     // ORdering

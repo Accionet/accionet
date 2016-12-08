@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ingresar</title>
+
+
+    <link rel="stylesheet" href="css/normalize.css">
+
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+
+
+
+
+</head>
+
+<body>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up Form</title>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+
+    <body>
+
+        <form id="#myForm">
+            <img class= "logo" src="img/antenasola.png">
+            <h1>Accionet</h1>
+            <p> Luego de responder esta breve encuesta podrá navegar gratis por una hora por wifi. </p>
+            <fieldset>
+                <legend><span class="number">1</span>Encuesta</legend>
+
+
+                <label>¿Pregunta de texto?</label>
+                <input type="text" id="a" value="" name="text_answer">
+                <br>
+                <input type="hidden" id="macAddress" value="T-$(mac-esc)">
+                <input type="hidden" id="link" value="$(link-login-only)?dst=http://goo.gl/JiDICB&amp;username=T-$(mac-esc)">
+            </fieldset>
+
+
+            <fieldset>
+                <legend><span class="number">2</span>Aceptar términos y condiciones</legend>
+                <input type="checkbox" id="terms_and_conditions" value="" name="accept_terms"><label class="light" for="terms_and_conditions">He leído y aceptado los <a href="term_and_conditions.html" target="_blank">terminos y condiciones de uso </a></label><br>
+            </fieldset>
+            <a id="sendSurvey" class="boton submit"  href=""> Navegar </a>
+
+
+
+        </form>
+
+    </body>
+
+    <script type="text/javascript" src="js/ready_to_send.js"></script>
+    <script type="text/javascript" src="js/counter.js"></script>
+
+
+</html>
+
+</body>
+
+</html>

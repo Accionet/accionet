@@ -14,15 +14,16 @@ $(function () {
 
   const $sendSurvey = $('#sendSurvey');
 
-  const survey_id = 19;
+  const survey_id = 22;
 
   $sendSurvey.on('click', function (event) {
     event.preventDefault();
+    console.log($('input[name=text_answer]').val());
     const json = {
       survey_id,
       answers: [{
-        question_id: 38,
-        answer_option_id: $('input[name=user_age]:checked').val(),
+        question_id: 42,
+        answer_text: $('input[name=text_answer]').val(),
       }],
       macaddress,
     };

@@ -60,7 +60,9 @@ class Table {
             }
             resolve(entry[0]);
           })
-            .catch(() => {
+            .catch((err) => {
+              console.log('EL ERROOOR ========');
+              console.log(err);
               reject(errorString);
             });
         }).catch((err) => {

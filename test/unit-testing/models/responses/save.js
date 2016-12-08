@@ -29,10 +29,28 @@ function getRandomSurvey() {
   });
 }
 
-function createAnswer(option, question) {
+function getSurveyWithTextQuestion() {
+  return {
+    title: 'with text question',
+    questions: [{
+      title: 'short_text question',
+      type: 'short_text',
+      number: 1,
+    }],
+  };
+}
+
+function createMultipleChoiceAnswer(option, question) {
   return {
     question_id: question.id,
     answer_option_id: option.id,
+  };
+}
+
+function createTextAnswer(text, question) {
+  return {
+    question_id: question.id,
+    answer_text: text,
   };
 }
 
@@ -44,9 +62,12 @@ function createResponseOfSurvey(survey) {
   };
   const questions = survey.questions;
   for (let i = 0; i < questions.length; i++) {
-    if (questions[i].options) {
+    if (questions[i].options && questions[i].options.length !== 0) {
       const selectedOption = utils.randomEntry(questions[i].options);
-      const answer = createAnswer(selectedOption, questions[i]);
+      const answer = createMultipleChoiceAnswer(selectedOption, questions[i]);
+      response.answers.push(answer);
+    } else {
+      const answer = createTextAnswer('text', questions[i]);
       response.answers.push(answer);
     }
   }
@@ -63,6 +84,7 @@ function assertEqualAnswers(newResponse, answers) {
       const currentID = parseInt(currentAnswer.question_id, 10);
       if (previousID === currentID) {
         assert.equal(currentAnswer.answer_option_id, previousAnswer.answer_option_id);
+        assert.equal(currentAnswer.answer_text, previousAnswer.answer_text);
         exists = true;
       }
     }
@@ -106,8 +128,28 @@ describe('Responses: save, check it saves the response correctly', () => {
     });
   });
   // eslint-disable-next-line no-undef
-  it('Check that also the answers are saved', (done) => {
+  it('Check that also the multiple_choice answers are saved', (done) => {
     return getRandomSurvey().then((survey) => {
+      const response = createResponseOfSurvey(survey);
+      const answers = cloneAnswers(response);
+      Response.save(response).then((savedResponse) => {
+        assert.equal(response.survey_id, savedResponse.survey_id);
+        assert.equal(response.macaddress, savedResponse.macaddress);
+        savedResponse.answers.should.be.array; // eslint-disable-line
+        assertEqualAnswers(savedResponse, answers);
+        done();
+      }).catch((err) => {
+        done(err);
+      });
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('Check that also the text answers are saved', (done) => {
+    const s = getSurveyWithTextQuestion();
+    return Survey.save(s).then((survey) => {
       const response = createResponseOfSurvey(survey);
       const answers = cloneAnswers(response);
       Response.save(response).then((savedResponse) => {

@@ -38,6 +38,10 @@ function getQuestions() {
       statement: 'statement 4',
       enumeration: 'b',
     }],
+  }, {
+    title: 'third question',
+    number: 3,
+    type: 'short_text',
   }];
 }
 

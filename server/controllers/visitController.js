@@ -141,6 +141,17 @@ exports.dayAndHourTable = function (req, res) {
   });
 };
 
+exports.count = function (req, res) {
+  Visits.count().then((data) => {
+    console.log(data);
+    const json = httpResponse.success('Visitas totales', 'amount', data);
+    return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
+  });
+};
+
 /**
 This method also return the first date of a visits to count the daily average.
 **/
@@ -201,34 +212,3 @@ exports.generateExcel = function (req, res) {
     return res.status(400).send(json);
   });
 };
-
-// if (!data) {
-//   const json = httpResponse.error('No data');
-//   return res.status(500).send(json);
-// }
-// // we put the timestamp as file name to secure uniqueness. It could, eventually, fail if two requests arrive at the exact same time
-// let filepath = path.join(__dirname, '../', 'uploads');
-// const filename = `/${(new Date()).getTime()}.xlsx`;
-// const workbook = excelbuilder.createWorkbook(filepath, filename);
-// filepath += filename;
-// // headers of the excel sheet
-// let firstRow;
-// try {
-//   firstRow = Object.keys(data[0]);
-// } catch (e) {
-//   firstRow = [];
-// }
-// const sheet = {
-//   name: 'Respuestas',
-//   firstRow,
-//   data,
-// };
-// ExcelGenerator.addSheetToWorkbook(sheet, workbook);
-// // Save it
-// workbook.save((err) => {
-//   if (err) {
-//     throw err;
-//   } else {
-//     Utils.sendFile(filepath, `Metricas de Encuesta: ${id}`, 'xlsx', res);
-//   }
-// });

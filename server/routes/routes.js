@@ -185,6 +185,10 @@ router.post('/visits/new', (req, res, next) => {
   visitController.create(req, res, next);
 });
 
+router.get('/visits/count', (req, res, next) => {
+  visitController.count(req, res, next);
+});
+
 router.get('/api/v1/places/:id/metrics/visits/daily', (req, res, next) => {
   visitController.dailyTable(req, res, next);
 });

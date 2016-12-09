@@ -3,7 +3,7 @@
 
 
  const connectionString = require(path.join(__dirname, '../', '../', 'config'));
-
+ console.log(connectionString);
  const client = new pg.Client(connectionString);
  client.connect();
  const query = client.query('DROP SCHEMA public CASCADE;');

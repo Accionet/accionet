@@ -287,6 +287,7 @@ exports.generateExcel = function (req, res) {
       }
     });
   }).catch((err) => {
+    console.log(err);
     const json = httpResponse.error(err);
     return res.status(500).send(json);
   });

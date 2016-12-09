@@ -76,13 +76,7 @@ class Response extends table {
       survey_id,
     });
   }
-    /*
-    SELECT r.id as contestacion, r.created_at as "ingresada", r.updated_at as "ultima actualizacion", r.macaddress, q.number as "N. de la pregunta", q.title as "pregunta", o.statement as "respuesta"
-    FROM response as r, questions as q, options as o, answer as a
-    WHERE  q.survey_id = r.survey_id  AND o.question_id = q.id  AND q.type = 'multiple_choice'
-        AND a.response_id = r.id  AND a.answer_option_id = o.id  AND  r.survey_id = 2386
-    ORDER BY q.number, o.enumeration, "ingresada"
-    */
+
 
   queryForExcel(attr) {
     const response = this.toString();
@@ -96,16 +90,34 @@ class Response extends table {
         `${response}.macaddress`,
         `${question}.number as N. de la pregunta`,
         `${question}.title as pregunta`,
-        `${option}.statement as respuesta`)
+        `${option}.statement as alternativa`,
+        `${answer}.answer_text as texto`)
       .from(knex.raw(`${response}, ${question}, ${option}, ${answer}`))
       .where(knex.raw(`${response}.survey_id = ${attr.survey_id}`))
       .andWhere(knex.raw(`${question}.survey_id = ${response}.survey_id`))
-      .andWhere(knex.raw(`${option}.question_id = ${question}.id`))
-      .andWhere(knex.raw(`${question}.type = 'multiple_choice'`))
       .andWhere(knex.raw(`${answer}.response_id = ${response}.id`))
+      .andWhere(knex.raw(`${answer}.answer_option_id IS NOT NULL`))
+      .andWhere(knex.raw(`${option}.question_id = ${question}.id`))
       .andWhere(knex.raw(`${answer}.answer_option_id = ${option}.id`))
-      .orderByRaw(`${question}.number, ${option}.enumeration, "ingresada"`);
+      .union((subquery) => {
+        subquery.select(`${response}.id as contestacion`,
+            `${response}.created_at as ingresada`,
+            `${response}.updated_at as ultima actualizacion`,
+            `${response}.macaddress`,
+            `${question}.number as N. de la pregunta`,
+            `${question}.title as pregunta`,
+            knex.raw('NULL as alternativa'),
+            `${answer}.answer_text as texto`)
+          .from(knex.raw(`${response}, ${question}, ${answer}`))
+          .where(knex.raw(`${response}.survey_id = ${attr.survey_id}`))
+          .andWhere(knex.raw(`${question}.survey_id = ${response}.survey_id`))
+          .andWhere(knex.raw(`${answer}.response_id = ${response}.id`))
+          .andWhere(knex.raw(`${answer}.answer_option_id IS NULL`))
+          .andWhere(knex.raw(`${answer}.question_id = ${question}.id`));
+      })
+      .orderByRaw('"N. de la pregunta", "ingresada"');
   }
+
 
   dataForExcel(attr) {
     return this.queryForExcel(attr);

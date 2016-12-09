@@ -80,10 +80,10 @@
                                     <div class="col-xs-3">
                                         <i class="fa fa-users fa-5x"></i>
                                     </div>
-                                    <div class="col-xs-9 text-right" ng-init="count('users')">
-                                      <div ng-if = "users.loading" class="huge"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
-                                      <div ng-if = "!users.loading" class="huge">{{users.count}}</div>
-                                        <div>Usuarios</div>
+                                    <div class="col-xs-9 text-right" ng-init="count('visits')">
+                                      <div ng-if = "visits.loading" class="huge"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>
+                                      <div ng-if = "!visits.loading" class="huge">{{visits.count}}</div>
+                                        <div>Visitas</div>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +131,6 @@
     <%= include partials/scripts.ejs %>
 
     <!-- Angular controllers -->
-    <script src="/javascripts/angular/controllers/controllers.js"></script>
     <script src="/javascripts/angular/controllers/dashboard-controller.js"></script>
 
 </body>

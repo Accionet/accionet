@@ -12,7 +12,7 @@ controllers
             count: undefined,
         };
 
-        $scope.users = {
+        $scope.visits = {
             loading: true,
             count: undefined,
         };

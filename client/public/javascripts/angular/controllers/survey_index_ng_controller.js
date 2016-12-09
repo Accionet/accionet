@@ -57,16 +57,6 @@ controllers
       .error(function(data) {});
   };
 
-  // toggle active in survey
-  $scope.delete = function(survey) {
-    survey.deleting = true;
-    $http.delete('/surveys/' + survey.id + '/delete')
-      .success(function(data) {
-        survey.is_active = 'deleted';
-      })
-      .error(function(data) {});
-  };
-
   function locallyUpdateSurvey(updated_survey) {
     if ($scope.selectedSurvey && $scope.selectedSurvey.id == updated_survey.id)
       $scope.selectedSurvey = updated_survey;

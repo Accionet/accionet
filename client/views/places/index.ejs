@@ -1,117 +1,132 @@
 <html ng-app="accionet-web-app">
 
-<head>
+  <head>
     <title>Lugares - Accionet</title>
     <% include ../partials/head.ejs %>
 
-        <!-- DataTables CSS -->
-        <link href="/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
 
-        <!-- DataTables Responsive CSS -->
-        <link href="/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
-</head>
+    <!-- DataTables Responsive CSS -->
+    <link href="/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+  </head>
 
-<body ng-controller="placeIndexController">
+  <body ng-controller="placeIndexController">
 
     <% include ../partials/message_log.ejs %>
 
-        <div id="wrapper">
+    <div id="wrapper">
 
-            <%= include ../partials/navbar.ejs %>
+      <%= include ../partials/navbar.ejs %>
 
-                <div id="page-wrapper" ng-init="initializePlaces(' <%= JSON.stringify(places) %>', null)">
-                    <!-- /.row -->
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h1 class="page-header">Índice de lugares</h1>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <div class="input-group custom-search-form">
-                                    <input type="text" class="form-control" placeholder="Buscar..." ng-model="myFilter.name" />
-                                    <span class="input-group-btn">
-                                      <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <!-- /.panel-heading -->
-                                <div class="panel-body">
-                                    <table width="100%" class="table table-hover" id="" ng-init="myFilter.is_active =  <%= show_active %>">
-                                        <thead>
-                                            <tr>
-                                                <th ng-click="setOrderBy('name')">Nombre</th>
-                                                <th ng-click="setOrderBy('daily_visits')">Visitas (físicas)</th>
-                                                <th ng-click="setOrderBy('totalVisits')">Total de visitas </th>
-                                                <th ng-click="setOrderBy('totalEndUsers')">Alcance </th>
-                                                <th>Acciones </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="" ng-repeat="place in places | orderBy:myOrderBy |filter: myFilter">
-                                                <td><span class="glyphicon glyphicon-file"></span> {{place.name}}</td>
-                                                <td>{{place.daily_visits}}</td>
-                                                <td ng-init="getTotalVisits(place)">
-                                                    <span ng-if="place.totalVisits" class="percent">{{place.totalVisits}}</span>
-                                                    <span ng-if="!place.totalVisits" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                                                </td>
-                                                <td class="center" ng-init="getTotalEndUsers(place)">
-                                                    <span ng-if="place.totalEndUsers" class="percent">{{place.totalEndUsers}}</span>
-                                                    <span ng-if="!place.totalEndUsers" class="percent"><i class="fa fa-spinner fa-pulse fa-fw"></i> </span>
-                                                </td>
-                                                <td class="text-right text-nowrap">
-                                                    <a class="pull-right red icon-list-holder"><i class="fa fa-trash"></i></a>
-                                                    <a ng-click="toggleIsActive(place)" class="pull-right dark-red icon-list-holder" ng-if="place.is_active"><i class="fa fa-ban"></i></a>
-                                                    <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder" ng-if="!place.is_active"><i class="fa fa-check"></i></a>
-                                                    <a href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder"><i class="fa fa-edit"></i></a>
-                                                    <a class="pull-right blue icon-list-holder" href="/places/{{place.id}}/metrics"><i class="fa fa-line-chart"></i></a>
-                                                    <a href="/places/{{place.id}}" class="pull-right green icon-list-holder"><i class="fa fa-eye"></i></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- /.table-responsive -->
-                                </div>
-                                <!-- /.panel-body -->
-                            </div>
-                            <!-- /.panel -->
-                        </div>
-                        <!-- /.col-lg-12 -->
-                    </div>
-                    <!-- /.row -->
-
-
-                </div>
-                <!-- /#page-wrapper -->
-
+      <div id="page-wrapper" ng-init="initializePlaces(' <%= JSON.stringify(places) %>', null)">
+        <!-- /.row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">Índice de lugares</h1>
+          </div>
         </div>
 
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="input-group custom-search-form">
+                <input type="text" class="form-control" placeholder="Buscar..." ng-model="myFilter.name"/>
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <% include ../partials/scripts.ejs %>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <!-- /.panel-heading -->
+              <div class="panel-body">
+                <table width="100%" class="table table-hover" id="" ng-init="myFilter.is_active =  <%= show_active %>">
+                  <thead>
+                    <tr>
+                      <th ng-click="setOrderBy('name')">Nombre</th>
+                      <th ng-click="setOrderBy('daily_visits')">Visitas (físicas)</th>
+                      <th ng-click="setOrderBy('totalVisits')">Total de visitas
+                      </th>
+                      <th ng-click="setOrderBy('totalEndUsers')">Alcance
+                      </th>
+                      <th>Acciones
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="" ng-repeat="place in places | orderBy:myOrderBy |filter: myFilter">
+                      <td>
+                        <span class="glyphicon glyphicon-file"></span>
+                        {{place.name}}</td>
+                      <td>{{place.daily_visits}}</td>
+                      <td ng-init="getTotalVisits(place)">
+                        <span ng-if="place.totalVisits" class="percent">{{place.totalVisits}}</span>
+                        <span ng-if="!place.totalVisits" class="percent">
+                          <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
+                      </td>
+                      <td class="center" ng-init="getTotalEndUsers(place)">
+                        <span ng-if="place.totalEndUsers" class="percent">{{place.totalEndUsers}}</span>
+                        <span ng-if="!place.totalEndUsers" class="percent">
+                          <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
+                      </td>
+                      <td class="text-right text-nowrap">
+                        <a ng-click="toggleIsActive(place)" class="pull-right dark-red icon-list-holder" ng-if="place.is_active">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                        <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder" ng-if="!place.is_active">
+                          <i class="fa fa-check"></i>
+                        </a>
+                        <a href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder">
+                          <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="pull-right blue icon-list-holder" href="/places/{{place.id}}/metrics">
+                          <i class="fa fa-line-chart"></i>
+                        </a>
+                        <a href="/places/{{place.id}}" class="pull-right green icon-list-holder">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+          </div>
+          <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
 
-            <% include partials/places_scripts.ejs %>
+      </div>
+      <!-- /#page-wrapper -->
 
+    </div>
 
-                <!-- DataTables JavaScript -->
-                <script src="/vendor/datatables/js/jquery.dataTables.min.js"></script>
-                <script src="/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-                <script src="/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <% include ../partials/scripts.ejs %>
 
-                <script>
-                    $(document).ready(function() {
-                        $('#dataTables-example').DataTable({
-                            responsive: true
-                        });
-                    });
-                </script>
-</body>
+    <% include partials/places_scripts.ejs %>
+
+    <!-- DataTables JavaScript -->
+    <script src="/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $('#dataTables-example').DataTable({responsive: true});
+      });
+    </script>
+  </body>
 
 </html>

@@ -31,3 +31,8 @@
   margin: 3px;
   padding: 3px;
 }
+
+td{
+  max-width: 500px;
+  overflow: hidden;
+}

@@ -28,18 +28,18 @@
     width: 120px;
 }
 
-#easypiechart-blue .percent {
+.easypiechart-blue .percent {
     color: #347AB6;
 }
 
-#easypiechart-teal .percent {
+.easypiechart-teal .percent {
     color: #5BB85D;
 }
 
-#easypiechart-orange .percent {
+.easypiechart-orange .percent {
     color: #EFAD4C;
 }
 
-#easypiechart-red .percent {
+.easypiechart-red .percent {
     color: #CF5353;
 }

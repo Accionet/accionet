@@ -13,7 +13,12 @@ class AnswerMetric {
         case Answer.MULTIPLE_CHOICE:
           resolve(this.asMultipleChoice(question));
           break;
+        case Answer.SHORT_TEXT:
+          resolve(this.asText(question));
+          break;
         default:
+          resolve();
+          break;
         }
       }).catch((err) => {
         reject(err);
@@ -39,6 +44,27 @@ class AnswerMetric {
       };
     }
     return metrics;
+  }
+
+  asText(question) {
+    return new Promise((resolve, reject) => {
+      if (!(question.type === Answer.SHORT_TEXT || question.type === Answer.LONG_TEXT)) {
+        return reject(`Invalid type: ${question.type} is not a multiple_choice`);
+      }
+      Answer.table().count('* as amount')
+      .select('answer_text').where({
+        question_id: question.id,
+      })
+      .groupBy('answer_text')
+      .orderBy('amount', 'desc')
+      .limit(20)
+        .then((answers) => {
+          resolve(answers);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 
   asMultipleChoice(question) {

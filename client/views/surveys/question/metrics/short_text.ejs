@@ -1,0 +1,36 @@
+<div id="question{{question.id}}" class="panel-collapse collapse in" ng-init="question.showTable = false">
+  <div class="row">
+    <div ng-repeat ="i in [1,2,3,4,5, 6]" class="col-xs-12 col-md-4">
+        <div class="panel-body easypiechart-panel" ng-init="getTotalResponses(selectedSurvey)">
+          <div class="easypiechart easypiechart-orange" data-percent="100">
+            <span ng-if="question.metrics[i]" class="percent">{{question.metrics[i].amount}}</span>
+          </div>
+          <h4 class="text-center">{{question.metrics[i].answer_text}}</h4>
+        </div>
+    </div>
+  </div>
+    <a ng-if="!question.showTable" ng-click="question.showTable = true" class="btn btn-default btn-block">Mostrar 20 más repetidos</a>
+    <a ng-if="question.showTable" ng-click="question.showTable = false" class="btn btn-default btn-block">Ocultar
+    </a>
+    <br>
+    <table ng-if="question.showTable" class="table table-hover ">
+
+      <thead>
+        <tr>
+          <th>Respuesta</th>
+          <th>Frecuencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="answer in question.metrics">
+          <td>
+            {{answer.answer_text}}
+          </td>
+          <td>
+            {{answer.amount}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+</div>

@@ -1,5 +1,5 @@
 /* eslint-disable*/
-$(function () {
+$(function() {
   const url = 'http://localhost:3000/';
 
   const macaddress = $('#macAddress').val();
@@ -14,15 +14,17 @@ $(function () {
 
   const $sendSurvey = $('#sendSurvey');
 
-  const survey_id = 22;
+  const survey_id = 23;
 
-  $sendSurvey.on('click', function (event) {
+  $sendSurvey.on('click', function(event) {
     event.preventDefault();
-    console.log($('input[name=text_answer]').val());
     const json = {
       survey_id,
       answers: [{
-        question_id: 42,
+        question_id: 43,
+        answer_option_id: $('input[name=multiple_choice]:checked').val(),
+      }, {
+        question_id: 44,
         answer_text: $('input[name=text_answer]').val(),
       }],
       macaddress,
@@ -38,7 +40,7 @@ $(function () {
       url: (url + `survey/${survey_id}/response`),
       success() {
         console.log('success');
-                // window.location = destination;
+        // window.location = destination;
       },
       error(err) {
         console.log('error');

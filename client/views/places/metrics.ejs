@@ -57,7 +57,7 @@
                     <div class="col-xs-12 col-md-4">
                       <div class="panel panel-default">
                         <div class="panel-body easypiechart-panel" ng-init="getTotalEndUsers(selectedPlace)">
-                          <div class="easypiechart" id="easypiechart-orange" data-percent="100">
+                          <div class="easypiechart easypiechart-orange" id="" data-percent="100">
                             <span ng-if="selectedPlace.totalEndUsers" class="percent">{{selectedPlace.totalEndUsers}}</span>
                             <span ng-if="!selectedPlace.totalEndUsers" class="percent">
                               <i class="fa fa-spinner fa-pulse fa-fw"></i>
@@ -70,7 +70,7 @@
                       <div class="col-xs-12 col-md-4">
                         <div class="panel panel-default">
                           <div class="panel-body easypiechart-panel">
-                            <div class="easypiechart" id="easypiechart-teal" data-percent="100">
+                            <div class="easypiechart easypiechart-teal" id="" data-percent="100">
                               <span ng-if="selectedPlace.totalVisits" class="percent">{{selectedPlace.totalVisits/ selectedPlace.totalDays | number:2}}</span>
                               <span ng-if="!selectedPlace.totalVisits" class="percent">
                                 <i class="fa fa-spinner fa-pulse fa-fw"></i>
@@ -85,7 +85,7 @@
                       <div class="col-xs-12 col-md-4">
                         <div class="panel panel-default">
                           <div class="panel-body easypiechart-panel" ng-init="getTotalVisits(selectedPlace)">
-                            <div class="easypiechart" id="easypiechart-red" data-percent="100">
+                            <div class="easypiechart easypiechart-red" id="" data-percent="100">
                               <span ng-if="selectedPlace.totalVisits" class="percent">{{selectedPlace.totalVisits}}</span>
                               <span ng-if="!selectedPlace.totalVisits" class="percent">
                                 <i class="fa fa-spinner fa-pulse fa-fw"></i>

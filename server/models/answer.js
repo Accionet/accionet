@@ -11,6 +11,8 @@ class Answer extends Table {
 
   setTypes() {
     this.MULTIPLE_CHOICE = 'multiple_choice';
+    this.SHORT_TEXT = 'short_text';
+    this.LONG_TEXT = 'long_text';
   }
 }
 

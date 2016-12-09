@@ -54,7 +54,6 @@ controllers
               locallyUpdateSurvey(data.survey);
             })
             .error(function (data) {
-              console.log('Error: ' + data);
             });
       };
 
@@ -65,7 +64,6 @@ controllers
                 // data.survey
             })
             .error(function (data) {
-              console.log('Error: ' + data);
             });
       };
 
@@ -107,7 +105,6 @@ controllers
                   survey = data.survey;
                 })
                 .error(function (error) {
-                  console.log('Error: ' + error);
                 });
         }
       };
@@ -285,7 +282,6 @@ controllers
               $.plot('#response-by-day-line-chart', [d], options);
             })
             .error(function (data) {
-              console.log('Error: ' + data);
             });
       };
 
@@ -302,16 +298,13 @@ controllers
               $.plot('#response-by-hour-line-chart', [d], options);
             })
             .error(function (data) {
-              console.log('Error: ' + data);
             });
       };
 
       $scope.getTotalResponses = function (survey) {
-        console.log('RE');
         $http.get('/api/v1/surveys/' + survey.id + '/metrics/responses/count')
 
         .success(function (results) {
-          console.log(results);
           survey.totalResponses = results.data;
         })
             .error(function (data) {
@@ -320,11 +313,9 @@ controllers
       };
 
       $scope.getTotalEndUsers = function (survey) {
-        console.log('RE');
         $http.get('/api/v1/surveys/' + survey.id + '/metrics/enduser/count')
 
         .success(function (results) {
-          console.log(results);
           survey.totalEndUsers = results.data;
         })
             .error(function (data) {

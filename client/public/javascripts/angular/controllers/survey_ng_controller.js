@@ -312,7 +312,7 @@ controllers
     $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/count`)
 
     .success(function(results) {
-        survey.totalResponses = results.data;
+        survey.totalResponses = results.data.toString();
       })
       .error(function() {});
   };
@@ -320,7 +320,7 @@ controllers
   $scope.getTotalEndUsers = function(survey) {
     $http.get(`/api/v1/surveys/${survey.id}/metrics/enduser/count`)
       .success(function(results) {
-        survey.totalEndUsers = results.data;
+        survey.totalEndUsers = results.data.toString();
       })
       .error(function() {});
   };

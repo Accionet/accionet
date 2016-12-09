@@ -33,7 +33,6 @@ controllers
 
 
       $scope.toggleIsActive = function (place) {
-        console.log('meeeeeeneneee');
         $http.put(`/places/${place.id}/toggleIsActive`)
             .success(function (data) {
               console.log(data);
@@ -212,8 +211,7 @@ controllers
         $http.get('/api/v1/places/' + place.id + '/metrics/endusers/count')
 
         .success(function (results) {
-          place.totalEndUsers = results.data;
-          console.log(place.totalEndUsers);
+          place.totalEndUsers = results.data.toString();
         })
             .error(function (data) {});
       };

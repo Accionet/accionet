@@ -1,0 +1,20 @@
+<% if(!locals.index) { %>
+<a href="/places" class="pull-right green icon-list-holder" data-toggle="tooltip" data-placement="top" title="Todos">
+  <i class="fa fa-list"></i>
+</a>
+<% } %>
+<% if(!locals.edit) { %>
+<a href="/places/{{selectedPlace.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
+  <i class="fa fa-edit"></i>
+</a>
+<% } %>
+<% if(!locals.metrics) { %>
+<a ng-click="" class="pull-right blue icon-list-holder" href="/places/{{selectedPlace.id}}/metrics" data-toggle="tooltip" data-placement="top" title="Ver m&eacute;tricas">
+  <i class="fa fa-line-chart"></i>
+</a>
+<% } %>
+<% if(!locals.show) { %>
+<a href="/places/{{selectedPlace.id}}" class="pull-right green icon-list-holder" data-toggle="tooltip" data-placement="top" title="Ver detalles">
+  <i class="fa fa-eye"></i>
+</a>
+<% } %>

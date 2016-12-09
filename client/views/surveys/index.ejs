@@ -38,7 +38,7 @@
 
         <div class="panel panel-default">
 
-          <table class="table table-hover" ng-init="myFilter.is_active =  <%= show_active %>">
+          <table class="table table-hover" ng-init="myFilter.is_active =  <%= show_active %>; myFilter.id != 0">
             <thead>
               <th ng-click="orderByMe('created_at')">
                 Fecha
@@ -76,11 +76,8 @@
                     <i class="fa fa-spinner fa-pulse fa-fw"></i>
                   </td>
                   <td class="text-right text-nowrap">
-                    <a data-toggle="modal" data-target="#myModal{{survey.id}}" class="pull-right red icon-list-holder">
-                      <i class="fa fa-trash"></i>
-                    </a>
                     <a ng-click="toggleIsActive(survey)" class="pull-right dark-red icon-list-holder" ng-if="survey.is_active">
-                      <i class="fa fa-ban"></i>
+                      <i class="fa fa-trash"></i>
                     </a>
                     <a ng-click="toggleIsActive(survey)" class="pull-right dark-green icon-list-holder" ng-if="!survey.is_active">
                       <i class="fa fa-check"></i>
@@ -94,30 +91,6 @@
                     <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}" ng-click="setSelectedSurvey(survey)" class="pull-right green icon-list-holder">
                       <i class="fa fa-eye"></i>
                     </a>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                      <!-- Modal -->
-                      <div class="modal fade" id="myModal{{survey.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                              <h4 class="modal-title text-left" id="myModalLabel">Eliminar {{survey.title}}</h4>
-                            </div>
-                            <div class="modal-body">
-                              ¿Seguro que desea eliminar {{survey.title}}? Esta acci&oacute;n es irreversible.
-                  </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                              <button ng-click='delete(survey)' type="button" class="btn btn-danger" data-dismiss="modal">Eliminar</button>
-                            </div>
-                          </div>
-                          <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                      </div>
-                      <!-- /.modal -->
-                    </div>
 
                   </td>
                 </tr>

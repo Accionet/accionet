@@ -59,9 +59,10 @@ controllers
 
   // toggle active in survey
   $scope.delete = function(survey) {
+    survey.deleting = true;
     $http.delete('/surveys/' + survey.id + '/delete')
       .success(function(data) {
-        // data.survey
+        survey.is_active = 'deleted';
       })
       .error(function(data) {});
   };

@@ -8,6 +8,7 @@ const router = express.Router();
 // var passport = require('passport');
 
 const placeController = require('../controllers/placeController');
+const responseController = require('../controllers/responseController');
 const userController = require('../controllers/userController');
 const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
@@ -155,6 +156,11 @@ router.put('/surveys/:id/update', (req, res, next) => {
 
 router.delete('/surveys/:id/delete', (req, res, next) => {
   surveyController.delete(req, res, next);
+});
+
+
+router.get('/responses/count', (req, res, next) => {
+  responseController.count(req, res, next);
 });
 
 

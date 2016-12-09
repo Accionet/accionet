@@ -79,27 +79,31 @@
                         </span>
                       </td>
                       <td class="text-right text-nowrap">
-                        <a ng-click="toggleIsActive(place)" class="pull-right dark-red icon-list-holder" ng-if="place.is_active" data-toggle="tooltip" data-placement="top" title="Desactivar">
+                        <a ng-click="toggleIsActive(place)" class="pull-right dark-red icon-list-holder" ng-if="place.is_active">
                           <i class="fa fa-trash"></i>
                         </a>
-                        <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder" ng-if="!place.is_active" data-toggle="tooltip" data-placement="top" title="Activar">
+                        <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder" ng-if="!place.is_active">
                           <i class="fa fa-check"></i>
                         </a>
-                        <a href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
+                        <a href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder">
                           <i class="fa fa-edit"></i>
                         </a>
-                        <a class="pull-right blue icon-list-holder" href="/places/{{place.id}}/metrics" data-toggle="tooltip" data-placement="top" title="Ver m&eacute;tricas">
+                        <a class="pull-right blue icon-list-holder" href="/places/{{place.id}}/metrics">
                           <i class="fa fa-line-chart"></i>
                         </a>
-                        <a href="/places/{{place.id}}" class="pull-right green icon-list-holder" data-toggle="tooltip" data-placement="top" title="Ver detalles">
+                        <a href="/places/{{place.id}}" class="pull-right green icon-list-holder">
                           <i class="fa fa-eye"></i>
                         </a>
                       </td>
-
+                      <div class="tooltip-demo">
+                          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Tooltip on the left">Tooltip on left</button>
+                          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Tooltip on top</button>
+                          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Tooltip on bottom</button>
+                          <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Tooltip on right">Tooltip on right</button>
+                      </div>
                     </tr>
                   </tbody>
                 </table>
-
                 <!-- /.table-responsive -->
               </div>
               <!-- /.panel-body -->
@@ -128,11 +132,6 @@
       $(document).ready(function () {
         $('#dataTables-example').DataTable({responsive: true});
       });
-    </script>
-    <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-    });
     </script>
   </body>
 

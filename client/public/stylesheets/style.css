@@ -36,3 +36,7 @@ td{
   max-width: 500px;
   overflow: hidden;
 }
+
+td a .tooltip {
+    position:absolute
+}

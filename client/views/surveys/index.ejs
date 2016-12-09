@@ -76,19 +76,19 @@
                     <i class="fa fa-spinner fa-pulse fa-fw"></i>
                   </td>
                   <td class="text-right text-nowrap">
-                    <a ng-click="toggleIsActive(survey)" class="pull-right dark-red icon-list-holder" ng-if="survey.is_active">
+                    <a ng-click="toggleIsActive(survey)" class="pull-right dark-red icon-list-holder" ng-if="survey.is_active" data-toggle="tooltip" data-placement="top" title="Desactivar">
                       <i class="fa fa-trash"></i>
                     </a>
-                    <a ng-click="toggleIsActive(survey)" class="pull-right dark-green icon-list-holder" ng-if="!survey.is_active">
+                    <a ng-click="toggleIsActive(survey)" class="pull-right dark-green icon-list-holder" ng-if="!survey.is_active" data-toggle="tooltip" data-placement="top" title="Activar">
                       <i class="fa fa-check"></i>
                     </a>
-                    <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}/edit" class="pull-right orange icon-list-holder">
+                    <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
                       <i class="fa fa-edit"></i>
                     </a>
-                    <a ng-click="" class="pull-right blue icon-list-holder" href="/surveys/{{survey.id}}/metrics">
+                    <a ng-click="" class="pull-right blue icon-list-holder" href="/surveys/{{survey.id}}/metrics" data-toggle="tooltip" data-placement="top" title="Ver m&eacute;tricas">
                       <i class="fa fa-line-chart"></i>
                     </a>
-                    <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}" ng-click="setSelectedSurvey(survey)" class="pull-right green icon-list-holder">
+                    <a ng-click="setSelectedSurvey(survey)" href="/surveys/{{survey.id}}" ng-click="setSelectedSurvey(survey)" class="pull-right green icon-list-holder" data-toggle="tooltip" data-placement="top" title="Ver detalles">
                       <i class="fa fa-eye"></i>
                     </a>
 
@@ -106,6 +106,12 @@
       <% include ../partials/scripts.ejs %>
 
       <% include partials/surveys_scripts.ejs %>
+
+      <script>
+      $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+      });
+      </script>
     </body>
 
   </html>

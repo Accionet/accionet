@@ -8,6 +8,7 @@ const router = express.Router();
 // var passport = require('passport');
 
 const placeController = require('../controllers/placeController');
+const responseController = require('../controllers/responseController');
 const userController = require('../controllers/userController');
 const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
@@ -158,6 +159,11 @@ router.delete('/surveys/:id/delete', (req, res, next) => {
 });
 
 
+router.get('/responses/count', (req, res, next) => {
+  responseController.count(req, res, next);
+});
+
+
 // API
 
 router.get('/api/v1/surveys/:id/metrics/responses/byhour', (req, res, next) => {
@@ -183,6 +189,10 @@ router.get('/api/v1/surveys/:id/metrics/enduser/count', (req, res, next) => {
 
 router.post('/visits/new', (req, res, next) => {
   visitController.create(req, res, next);
+});
+
+router.get('/visits/count', (req, res, next) => {
+  visitController.count(req, res, next);
 });
 
 router.get('/api/v1/places/:id/metrics/visits/daily', (req, res, next) => {

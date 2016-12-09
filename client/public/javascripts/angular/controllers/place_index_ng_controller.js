@@ -85,7 +85,7 @@ controllers
             $http.get('/api/v1/places/' + place.id + '/metrics/endusers/count')
 
         .success(function (results) {
-            place.totalEndUsers = results.data;
+            place.totalEndUsers = results.data.toString();
         })
             .error(function (data) {});
         };

@@ -25,6 +25,8 @@
       <div class="row">
         <div class="col-lg-12">
           <h1 class="page-header">{{selectedSurvey.title}}</h1>
+          <% locals.metrics = true %>
+          <%= include ./partials/navigate.ejs %>
         </div>
       </div>
       <div class="row">

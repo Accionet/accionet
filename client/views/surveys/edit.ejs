@@ -14,11 +14,12 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"> Editar Encuesta </h1>
+                        <% locals.edit = true %>
+                        <%= include ./partials/navigate.ejs %>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
 
-                <% locals.edit = true %>
                     <% include partials/upsert.ejs %>
             </div>
             <!-- /#page-wrapper -->

@@ -7,7 +7,7 @@ const Metric = require('../models/visits');
 const httpResponse = require('../services/httpResponse');
 const ExcelGenerator = require('../services/excelGenerator');
 const utils = require('../services/utils');
-const DayAndHourAdapter = require('../adapters/excelAdapters/DayAndHourAdapter');
+const DayAndHourAdapter = require('../adapters/excelAdapters/dayAndHourAdapter');
 
 
 // Functions to do add Parameters to create

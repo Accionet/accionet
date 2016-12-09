@@ -65,7 +65,8 @@ describe('Responses Excel: check correct attributes', () => {
         entry.should.have.property('ultima actualizacion');
         entry.should.have.property('N. de la pregunta');
         entry.should.have.property('pregunta');
-        entry.should.have.property('respuesta');
+        entry.should.have.property('alternativa');
+        entry.should.have.property('texto');
         done();
       }).catch((err) => {
         done(err);

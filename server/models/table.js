@@ -60,9 +60,7 @@ class Table {
             }
             resolve(entry[0]);
           })
-            .catch((err) => {
-              console.log('EL ERROOOR ========');
-              console.log(err);
+            .catch(() => {
               reject(errorString);
             });
         }).catch((err) => {
@@ -221,9 +219,12 @@ class Table {
     });
   }
 
-  count() {
+  count(attr) {
+    if (!attr) {
+      attr = {};
+    }
     return new Promise((resolve, reject) => {
-      this.table().count('*')
+      this.table().count('*').where(attr)
         .then((results) => {
           if (results[0].count) {
             return resolve(results[0].count);

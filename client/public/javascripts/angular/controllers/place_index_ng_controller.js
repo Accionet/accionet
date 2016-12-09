@@ -1,3 +1,4 @@
+/* eslint-disable*/
 controllers
 
     .controller('placeIndexController', function ($scope, $http, $window) {

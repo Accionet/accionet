@@ -8,6 +8,7 @@ const httpResponse = require('../services/httpResponse');
 const ExcelGenerator = require('../services/excelGenerator');
 const utils = require('../services/utils');
 const DayAndHourAdapter = require('../adapters/excelAdapters/dayAndHourAdapter');
+const UserAgent = require('ua-parser');
 
 
 // Functions to do add Parameters to create
@@ -22,12 +23,42 @@ function addRequestParams(visit, req) {
   // add Browser
 
   if (userAgent) {
-    visit.browser = getBrowser(userAgent);
     visit.os = getOS(userAgent);
+    visit.browser = getBrowser(userAgent);
+    console.log(visit.browser);
   }
 
   visit.other = userAgent;
 }
+//
+// function test(ua) {
+//   const $ = {};
+//
+//   if (/mobile/i.test(ua)) {
+//     $.Mobile = true;
+//   }
+//   if (/like Mac OS X/.test(ua)) {
+//     $.iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
+//     $.iPhone = /iPhone/.test(ua);
+//     $.iPad = /iPad/.test(ua);
+//   }
+//
+//   if (/Android/.test(ua)) {
+//     $.Android = /Android ([0-9\.]+)[\);]/.exec(ua)[1];
+//   }
+//   if (/webOS\//.test(ua)) {
+//     $.webOS = /webOS\/([0-9\.]+)[\);]/.exec(ua)[1];
+//   }
+//
+//   if (/(Intel|PPC) Mac OS X/.test(ua)) {
+//     $.Mac = /(Intel|PPC) Mac OS X ?([0-9\._]*)[\)\;]/.exec(ua)[2].replace(/_/g, '.') || true;
+//   }
+//
+//   if (/Windows NT/.test(ua)) {
+//     $.Windows = /Windows NT ([0-9\._]+)[\);]/.exec(ua)[1];
+//   }
+//   return $;
+// }
 
 function getOS(userAgent) {
   // Windows Phone must come first because its UA also contains "Android"
@@ -64,21 +95,25 @@ function getOS(userAgent) {
 }
 
 function getBrowser(ua) {
-  let tem;
-
-  let M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-  if (/trident/i.test(M[1])) {
-    tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-    return `IE ${(tem[1] || '')}`;
-  }
-  if (M[1] === 'Chrome') {
-    tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
-    if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
-  }
-  M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?']; // eslint-disable-line
-  tem = ua.match(/version\/(\d+)/i);
-  if (tem != null) M.splice(1, 1, tem[1]);
-  return M.join(' ');
+  const browser = UserAgent.parse(ua);
+  return browser.ua.toString();
+  // let tem;
+  //
+  // let M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+  // if (/trident/i.test(M[1])) {
+  //   tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+  //   return `IE ${(tem[1] || '')}`;
+  // }
+  // if (M[1] === 'Chrome') {
+  //   tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+  // }
+  // if (tem != null) {
+  //   return tem.slice(1).join(' ').replace('OPR', 'Opera');
+  // }
+  // M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?']; // eslint-disable-line
+  // tem = ua.match(/version\/(\d+)/i);
+  // if (tem != null) M.splice(1, 1, tem[1]);
+  // return M.join(' ');
 }
 
 

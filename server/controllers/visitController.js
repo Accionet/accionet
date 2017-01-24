@@ -23,7 +23,10 @@ function addRequestParams(visit, req) {
   // add Browser
 
   if (userAgent) {
+    console.log('Go get the OS');
     visit.os = getOS(userAgent);
+    console.log(visit.os);
+    console.console.log('Go get the browser');
     visit.browser = getBrowser(userAgent);
     console.log(visit.browser);
   }
@@ -96,6 +99,7 @@ function getOS(userAgent) {
 
 function getBrowser(ua) {
   const browser = UserAgent.parse(ua);
+  console.log('now returning browser');
   return browser.ua.toString();
   // let tem;
   //

@@ -23,11 +23,12 @@ function addRequestParams(visit, req) {
   // add Browser
 
   if (userAgent) {
+    console.console.log('Go get the browser');
+    visit.browser = getBrowser(userAgent);
     console.log('Go get the OS');
     visit.os = getOS(userAgent);
     console.log(visit.os);
-    console.console.log('Go get the browser');
-    visit.browser = getBrowser(userAgent);
+
     console.log(visit.browser);
   }
 
@@ -72,7 +73,7 @@ function getOS(userAgent) {
   }
 
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) { // eslint-disable-line
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
     return 'iOS';
   }
 

@@ -25,11 +25,10 @@ function addRequestParams(visit, req) {
   if (userAgent) {
     console.log('Go get the browser');
     visit.browser = getBrowser(userAgent);
+    console.log(visit.browser);
     console.log('Go get the OS');
     visit.os = getOS(userAgent);
     console.log(visit.os);
-
-    console.log(visit.browser);
   }
 
   visit.other = userAgent;
@@ -64,43 +63,44 @@ function addRequestParams(visit, req) {
 //   return $;
 // }
 
-function getOS(userAgent) {
-  // Windows Phone must come first because its UA also contains "Android"
-  if (/windows phone/i.test(userAgent)) {
-    return 'Windows Phone';
-  } else if (/android/i.test(userAgent)) {
-    return 'Android';
-  }
-
-  // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-    return 'iOS';
-  }
-
-  // Mac detection
-  // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/Mac/.test(userAgent)) {
-    return 'MacOS';
-  }
-  // CHEck if this is correct
-  if (/Win/.test(userAgent)) {
-    return 'Windows';
-  }
-
-  if (/BlackBerry/.test(userAgent)) {
-    return 'BlackBerry';
-  }
-
-  if (/Linux/.test(userAgent)) {
-    return 'BlackBerry';
-  }
-
-  return '';
+function getOS(ua) {
+  const browser = UserAgent.parse(ua);
+  return browser.os.toString();
+  // // Windows Phone must come first because its UA also contains "Android"
+  // if (/windows phone/i.test(userAgent)) {
+  //   return 'Windows Phone';
+  // } else if (/android/i.test(userAgent)) {
+  //   return 'Android';
+  // }
+  //
+  // // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  // if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+  //   return 'iOS';
+  // }
+  //
+  // // Mac detection
+  // // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  // if (/Mac/.test(userAgent)) {
+  //   return 'MacOS';
+  // }
+  // // CHEck if this is correct
+  // if (/Win/.test(userAgent)) {
+  //   return 'Windows';
+  // }
+  //
+  // if (/BlackBerry/.test(userAgent)) {
+  //   return 'BlackBerry';
+  // }
+  //
+  // if (/Linux/.test(userAgent)) {
+  //   return 'BlackBerry';
+  // }
+  //
+  // return '';
 }
 
 function getBrowser(ua) {
   const browser = UserAgent.parse(ua);
-  console.log('now returning browser');
   return browser.ua.toString();
   // let tem;
   //

@@ -7,27 +7,6 @@
           </h4>
         </div>
         <!-- /.panel-heading -->
-        <div>
-          <label for="name">
-            Nombre:
-          </label>
-          <input name="name" type="text" placeholder="Nombre" ng-model="selectedPlace.name" required ng-maxlength="80"/>
-          <p ng-show="form.name.$error.required">
-            No puede ser vacio
-          </p>
-          <p ng-show="form.name.$error.maxlength">
-            No puede tener más de 80 caracteres
-          </p>
-        </div>
-        <div>
-          <label for="description">
-            Descripción:
-          </label>
-          <textarea name="description" rows="5" placeholder="Descripción" ng-model="selectedPlace.description" ng-maxlength="800"></textarea>
-          <p ng-show="form.description.$error.maxlength">
-            No puede tener más de 800 caracteres
-          </p>
-        </div>
 
         <div class="panel-body">
           <div class="form-group">

@@ -16,9 +16,10 @@
                     <% if(locals.edit) { %>  <button class="btn btn-primary" ng-click="updateSurvey()">Guardar Cambios</button> <% }%>
 
                 </div>
-                <h6 ng-if="error" class="error">{{ error}}</h6>
                 <h6 ng-if="success" class="success">{{ success}}</h6>
             </div>
+            <div ng-if="error" class="error alert alert-danger">{{ error}}</div>
+
             <!-- .panel-heading -->
             <div class="panel-body">
                 <div class="panel-group">

@@ -1,4 +1,8 @@
 
+.error{
+  white-space: pre-line;
+}
+
 .red{
   color: rgb(207,83,83)
 }

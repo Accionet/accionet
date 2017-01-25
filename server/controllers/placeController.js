@@ -130,18 +130,18 @@ exports.metrics = function showMetrics(req, res) {
 exports.edit = function editPlace(req, res) {
   Places.findById(req.params.id).then((place) => {
     if (!place) {
-      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'edit.ejs'), {
         error: 'ERROR: No place found',
-        places: [],
+        place: [],
       });
     }
     return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'edit.ejs'), {
       place,
     });
   }).catch((err) => {
-    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'edit.ejs'), {
       error: `ERROR: ${err}`,
-      places: [],
+      place: [],
     });
   });
 };
@@ -149,7 +149,7 @@ exports.edit = function editPlace(req, res) {
 exports.show = function showPlace(req, res) {
   Places.findById(req.params.id).then((place) => {
     if (!place) {
-      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
         error: 'ERROR: No place found',
         place: [],
       });

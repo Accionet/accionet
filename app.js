@@ -10,6 +10,10 @@ require('./server/passport/config');
 
 const routes = require('./server/routes/routes');
 const placeRoutes = require('./server/routes/places');
+const passport = require('passport');
+const session = require('express-session');
+const flash = require('connect-flash');
+
 
 const app = express();
 
@@ -32,6 +36,15 @@ app.use(express.static(path.join(__dirname, './client', 'public')));
 
 app.use('/', routes);
 app.use('/place', placeRoutes);
+
+// passport setup
+require('./server/passport')(passport); // pass passport for configuration
+
+// required for passport
+app.use(session({ secret: 'freewififorallfreewifibyaccionet' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 // catch 404 and forward to error handler

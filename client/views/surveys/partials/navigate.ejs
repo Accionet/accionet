@@ -1,3 +1,4 @@
+<% if(survey.id) {%>
   <% if(!locals.index) { %>
   <a href="/surveys" class="pull-right green icon-list-holder" data-toggle="tooltip" data-placement="top" title="Todos">
     <i class="fa fa-list"></i>
@@ -17,4 +18,5 @@
   <a href="/surveys/{{selectedSurvey.id}}" class="pull-right green icon-list-holder" data-toggle="tooltip" data-placement="top" title="Ver detalles">
     <i class="fa fa-eye"></i>
   </a>
+  <% } %>
   <% } %>

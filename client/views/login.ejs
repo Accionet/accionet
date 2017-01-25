@@ -13,10 +13,9 @@
 </head>
 
 <body>
-
-    <div class="prueba">
-                      <span class="pull-right"><i class="fa fa-university"></i></span>
-    </div>
+  <% if (message.length > 0) { %>
+    <div class="alert alert-danger"><%= message %></div>
+<% } %>
 
     <div class="container">
         <div class="row">

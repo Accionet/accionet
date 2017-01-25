@@ -97,28 +97,6 @@ class AnswerMetric {
     });
   }
 
-  asMultipleAnswer(question) {
-    return new Promise((resolve, reject) => {
-      if (!this.isMultipleOption(question)) {
-        return reject(`Invalid type: ${question.type} is not a multiple option`);
-      }
-      const searchParams = this.multipleOptionsSearchParams(question.id);
-      Answer.table()
-        .join(Option.toString(), `${Option.toString()}.id`, '=', `${Answer.toString()}.answer_option_id`)
-        .where(searchParams)
-        .select('enumeration', 'statement')
-        .count('*')
-        .groupByRaw('enumeration, statement')
-        .orderBy('enumeration')
-        .then((response) => {
-          const metrics = this.adaptMultipleOptions(response);
-          resolve(metrics);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
 }
 
 const instance = new AnswerMetric();

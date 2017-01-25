@@ -1,3 +1,4 @@
+/*eslint-disable*/
 directives
 
     .directive('pieChart', function () {

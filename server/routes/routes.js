@@ -23,14 +23,15 @@ router.use((req, res, next) => {
 
 /* GET  page. */
 router.get('/', (req, res, next) => {
-  // userController.login(req,res);
-  dashboardController.show(req, res, next);
+  // userController.login(req, res, next);
+  res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {});
+
+  // dashboardController.show(req, res, next);
   // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 
-router.get('/login', (req, res) => {
+router.post('/login', (req, res) => {
   // userController.login(req,res);
-  res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {});
   // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
 });
 

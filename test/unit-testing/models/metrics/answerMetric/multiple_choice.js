@@ -44,10 +44,10 @@ describe('AnswerMetric of Question: type Multiple choice', () => {
   // eslint-disable-next-line no-undef
   it('type is not multiple_choice', (done) => {
     const question = { type: 'not multiple_choice' };
-    return AnswerMetric.asMultipleChoice(question).then(() => {
+    return AnswerMetric.asMultipleOptions(question).then(() => {
       done('it should not get to here');
     }).catch((err) => {
-      assert.equal(err, `Invalid type: ${question.type} is not a multiple_choice`);
+      assert.equal(err, `Invalid type: ${question.type} is not a multiple option`);
       done();
     }).catch((err) => {
       done(err);
@@ -58,7 +58,7 @@ describe('AnswerMetric of Question: type Multiple choice', () => {
   it('check contains all metrics', (done) => {
     return Question.all().then((questions) => {
       const question = getMultipleChoiceQuestion(questions);
-      AnswerMetric.asMultipleChoice(question).then((metrics) => {
+      AnswerMetric.asMultipleOptions(question).then((metrics) => {
         metrics.should.be.object; // eslint-disable-line
         const options = question.options;
         for (let i = 0; i < options.length; i++) {

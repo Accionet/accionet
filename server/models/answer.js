@@ -13,6 +13,7 @@ class Answer extends Table {
     this.MULTIPLE_CHOICE = 'multiple_choice';
     this.SHORT_TEXT = 'short_text';
     this.LONG_TEXT = 'long_text';
+    this.MULTIPLE_ANSWER = 'multiple_answer';
   }
 }
 

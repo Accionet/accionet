@@ -48,7 +48,7 @@
                             <!-- .panel-heading -->
                             <div class="panel-body">
                                 <div class="panel-group">
-                                    <div ng-repeat="question in selectedSurvey.questions | orderBy: 'question.number'" class="panel panel-default">
+                                    <div ng-repeat="question in selectedSurvey.questions | orderBy: 'number'" class="panel panel-default">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
                                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{question.id}}"> {{$index + 1}})  {{question.title}} <small>(ID: {{question.id}}) </small> </a>
@@ -56,9 +56,8 @@
                                         </div>
                                         <div id="collapse{{question.id}}" class="panel-collapse collapse in">
                                             <div class="panel-body">
-                                                <ul ng-if="!'multiple_choice'.localeCompare(question.type)">
-
-                                                    <li ng-repeat="option in question.options">
+                                                <ul ng-if="!'multiple_choice'.localeCompare(question.type) || !'multiple_answer'.localeCompare(question.type)">
+                                                    <li ng-repeat="option in question.options | orderBy:'enumeration'">
                                                         {{option.enumeration}}) {{option.statement}} <small> (ID: {{option.id}}) </small>
                                                     </li>
 

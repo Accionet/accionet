@@ -158,7 +158,7 @@ exports.show = function showPlace(req, res) {
       place,
     });
   }).catch((err) => {
-    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
       error: `ERROR: ${err}`,
       place: [],
     });

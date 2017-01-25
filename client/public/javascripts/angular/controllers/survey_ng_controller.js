@@ -370,7 +370,7 @@ controllers
     const question = {
       title: '',
       number,
-      type: $scope.MULTIPLE_CHOICE,
+      type: $scope.MULTIPLE_ANSWER,
       options: [{
         statement: '',
       }, {

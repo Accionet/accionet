@@ -48,9 +48,9 @@
                         </div>
                     </div>
                     <!-- show the 'no questions' whe there is no questions in the activity -->
-                    <h6 class="empty-list" ng-if="questions.length == 0">
-                    No hay preguntas. Elija bajo 'Agregar Pregunta' que tipo de pregunta desea agregar.
-                    </h6>
+                    <div class="alert alert-warning" ng-if="selectedSurvey.questions.length == 0">
+                      No hay preguntas. Elija bajo 'Agregar Pregunta' que tipo de pregunta desea agregar.
+                    </div>
                 </div>
             </div>
             <!-- .panel-body -->

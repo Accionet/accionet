@@ -73,7 +73,7 @@ exports.show = function showSurvey(req, res) {
   }).catch((err) => {
     debug(err);
     if (err) {
-      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
         error: `ERROR: ${err}`,
         survey: [],
       });
@@ -84,16 +84,17 @@ exports.show = function showSurvey(req, res) {
 exports.edit = function showSurvey(req, res) {
   Surveys.findById(req.params.id).then((survey) => {
     if (!survey) {
-      const json = httpResponse.error(`No survey found with id ${req.params.id}`);
-      const view_path = httpResponse.errorPath();
-      return res.render(view_path, json);
+      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'edit.ejs'), {
+        error: `No se encontró un survey con id: ${req.params.id}`,
+        survey: [],
+      });
     }
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'edit.ejs'), {
       survey,
     });
   }).catch((err) => {
     if (err) {
-      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
+      res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'edit.ejs'), {
         error: `ERROR: ${err}`,
         survey: [],
       });

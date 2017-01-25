@@ -56,9 +56,9 @@ exports.new = function getNewPlace(req, res) {
       place: result,
     });
   }).catch((err) => {
-    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'create.ejs'), {
       error: `ERROR: ${err}`,
-      places: [],
+      place: [],
     });
   });
 };

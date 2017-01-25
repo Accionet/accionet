@@ -290,7 +290,12 @@ controllers
 
         $.plot('#response-by-day-line-chart', [d], options);
       })
-      .error(function() {});
+      .error(function() {
+        $scope.loadingResponseByDayChart = false;
+        $.plot('#response-by-day-line-chart', [], options);
+
+
+      });
   };
 
   $scope.getResponsesByHour = function(survey) {
@@ -305,16 +310,22 @@ controllers
         $scope.loadingResponseByHourChart = false;
         $.plot('#response-by-hour-line-chart', [d], options);
       })
-      .error(function() {});
+      .error(function() {
+        $scope.loadingResponseByHourChart = false;
+        $.plot('#response-by-hour-line-chart', [], options);
+
+
+      });
   };
 
   $scope.getTotalResponses = function(survey) {
     $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/count`)
-
     .success(function(results) {
         survey.totalResponses = results.data.toString();
       })
-      .error(function() {});
+      .error(function() {
+        survey.totalResponses = "?";
+      });
   };
 
   $scope.getTotalEndUsers = function(survey) {
@@ -322,7 +333,10 @@ controllers
       .success(function(results) {
         survey.totalEndUsers = results.data.toString();
       })
-      .error(function() {});
+      .error(function() {
+        survey.totalEndUsers = "?";
+
+      });
   };
 
   $scope.getNumber = function(num) {

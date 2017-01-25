@@ -30,7 +30,11 @@ controllers
         $scope[entry].count = toSimpleString(data.amount);
         $scope[entry].loading = false;
       })
-      .error(function error() {});
+      .error(function error() {
+        $scope[entry].count = '-';
+        $scope[entry].loading = false;
+
+      });
   };
 
   function roundDecimal(num) {

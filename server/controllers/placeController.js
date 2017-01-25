@@ -97,13 +97,17 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
 
 
 exports.metrics = function showMetrics(req, res) {
+  let json = {
+    error: `Metricas de ${req.params.id} no se encuentran disponible`,
+    place: [],
+    metrics: [],
+  };
   Places.findById(req.params.id).then((place) => {
     if (!place) {
-      const json = httpResponse.error('No place found');
-      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
+      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
     }
     Places.metrics(place.id).then((metrics) => {
-      const json = {
+      json = {
         message: `Metricas de ${place.id}`,
         place,
         metrics,
@@ -111,13 +115,11 @@ exports.metrics = function showMetrics(req, res) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
     }).catch((err) => {
       if (err) {
-        const json = httpResponse.error(err);
-        return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
+        return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
       }
     });
-  }).catch((err) => {
-    const json = httpResponse.error(err);
-    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'error.ejs'), json);
+  }).catch(() => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
   });
 };
 

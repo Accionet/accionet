@@ -16,7 +16,6 @@
                     <% if(locals.edit) { %>  <button class="btn btn-primary" ng-click="updateSurvey()">Guardar Cambios</button> <% }%>
 
                 </div>
-                <h6 ng-if="success" class="success">{{ success}}</h6>
             </div>
             <div ng-if="error" class="error alert alert-danger">{{ error}}</div>
 
@@ -54,6 +53,7 @@
                     </div>
                 </div>
             </div>
+            <div ng-if="error" class="error alert alert-danger">{{ error}}</div>
             <!-- .panel-body -->
             <div class="panel-footer clearfix">
                 <div class="pull-right">
@@ -61,8 +61,6 @@
                   <% if(locals.edit) { %>  <button class="btn btn-primary" ng-click="updateSurvey()">Guardar Cambios</button> <% }%>
 
                 </div>
-                <h6 ng-if="error" class="error">{{ error}}</h6>
-                <h6 ng-if="success" class="success">{{ success}}</h6>
             </div>
         </div>
         <!-- /.panel -->

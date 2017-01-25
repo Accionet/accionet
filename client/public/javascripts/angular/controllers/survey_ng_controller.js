@@ -231,8 +231,31 @@ controllers
       }
       return data;
     }
+    if (question.type === 'multiple_answer') {
+      return multipleAnswerData(question);
+    }
   };
 
+  function multipleAnswerData(question) {
+    $scope.index += 1;
+    const data = {
+      info: [],
+      ticks: []
+    };
+    const options = question.options;
+    const metrics = question.metrics;
+
+    for (var i = 0; i < options.length; i++) {
+      const metric = metrics[options[i].enumeration]
+      if(metric) {
+        data.info.push([i, metric.count]);
+      } else {
+        data.info.push([i, 0]);
+      }
+      data.ticks.push([i, options[i].statement]);
+    }
+    return data;
+  }
   // metrics
 
   const options = {
@@ -320,7 +343,7 @@ controllers
 
   $scope.getTotalResponses = function(survey) {
     $http.get(`/api/v1/surveys/${survey.id}/metrics/responses/count`)
-    .success(function(results) {
+      .success(function(results) {
         survey.totalResponses = results.data.toString();
       })
       .error(function() {

@@ -14,19 +14,22 @@ $(function() {
 
   const $sendSurvey = $('#sendSurvey');
 
-  const survey_id = 23;
+  const survey_id = 54;
 
   $sendSurvey.on('click', function(event) {
     event.preventDefault();
+    answers = [];
+    $answers = $('input[name=multiple_answer]:checked');
+    for (var i = 0; i < $answers.length; i++) {
+      var a = {
+            question_id: 76,
+            answer_option_id: $($answers[i]).val(),
+      }
+      answers.push(a);
+    }
     const json = {
       survey_id,
-      answers: [{
-        question_id: 43,
-        answer_option_id: $('input[name=multiple_choice]:checked').val(),
-      }, {
-        question_id: 44,
-        answer_text: $('input[name=text_answer]').val(),
-      }],
+      answers,
       macaddress,
     };
     const json_send = JSON.stringify(json);

@@ -151,6 +151,7 @@
                         </h4>
                       </div>
                       <div ng-if="question.type == 'multiple_choice'"> <%= include ./question/metrics/multiple_choice.ejs %> </div>
+                      <div ng-if="question.type == 'multiple_answer'"> <%= include ./question/metrics/multiple_answer.ejs %> </div>
                       <div ng-if="question.type == 'short_text'"> <%= include ./question/metrics/short_text.ejs %> </div>
 
 
@@ -227,7 +228,8 @@
     <script src="/vendor/flot/jquery.flot.resize.js"></script>
     <script src="/vendor/flot/jquery.flot.time.js"></script>
     <script src="/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
-    <!-- <script src="/data/flot-data.js"></script> -->
+
+    <script src="/data/flot-data.js"></script>
     <!-- <script src="/prueba.js"></script> -->
 
     <script src="/vendor/lumino/js/easypiechart.js"></script>

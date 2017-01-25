@@ -1,5 +1,5 @@
 <div id="question{{question.id}}" class="panel-collapse collapse in" ng-init="question.showTable = false">
-  <pie-chart ng-data='{{getData(question)}}'></pie-chart>
+  <bar-chart ng-data='{{getData(question)}}'></bar-chart>
   <br>
   <a ng-if="!question.showTable" ng-click="question.showTable = true" class="btn btn-default btn-block">Mostrar tabla</a>
   <a ng-if="question.showTable" ng-click="question.showTable = false" class="btn btn-default btn-block">Ocultar tabla</a>

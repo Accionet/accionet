@@ -33,6 +33,11 @@ module.exports = function router(app, passport) {
     failureFlash: true, // allow flash messages
   }));
 
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+  });
+
 
   /* GET home page. */
   app.get('/dashboard', (req, res, next) => {

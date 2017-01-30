@@ -224,9 +224,12 @@ module.exports = function router(app, passport) {
     userController.index(req, res, next);
   });
 
-
   app.get('/users/disabled', isAdmin, (req, res, next) => {
     userController.disabled(req, res, next);
+  });
+
+  app.get('/users/new', isAdmin, (req, res, next) => {
+    userController.new(req, res, next);
   });
 };
 //

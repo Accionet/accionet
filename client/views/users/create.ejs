@@ -1,0 +1,31 @@
+<html ng-app="accionet-web-app">
+
+<head>
+    <title>Lugares - Accionet</title>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body ng-controller="userController">
+    <% include ../partials/message_log.ejs %>
+    <%= include ../partials/navbar.ejs %>
+    <div id="page-wrapper" ng-init="initializeUsers(null, ' <%= JSON.stringify(user) %>')">
+      <div class="row">
+          <div class="col-lg-12">
+              <h1 class="page-header">{{selectedUser.name}}</h1>
+          </div>
+      </div>
+
+        <br>
+
+        <% include partials/form.ejs %>
+
+        <button ng-if="!validForm()" ng-click="createUser(selectedUser)" type="button" class="btn btn-block btn-success" disabled>  Guardar</button>
+        <button ng-if="validForm()" ng-click="createUser(selectedUser)" type="button" class="btn btn-block btn-success" >Guardar </button>
+        <br>
+    </div>
+    <% include ../partials/scripts.ejs %>
+    <% include partials/users_scripts.ejs %>
+
+</body>
+
+</html>

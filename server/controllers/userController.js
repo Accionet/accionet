@@ -44,3 +44,17 @@ exports.index = function (req, res) {
 exports.disabled = function (req, res) {
   return all(req, res, false);
 };
+
+/* Shows the view to create a new user */
+exports.new = function (req, res) {
+  Users.new().then((result) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'create.ejs'), {
+      user: result,
+    });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'create.ejs'), {
+      error: `ERROR: ${err}`,
+      user: [],
+    });
+  });
+};

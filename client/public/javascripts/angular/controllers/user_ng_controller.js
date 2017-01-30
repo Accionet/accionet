@@ -85,9 +85,13 @@ controllers
     }
   };
 
+  $scope.passwordMatch = function() {
+    return $scope.selectedUser.password === $scope.password_verify;
+  }
+
   $scope.validForm = function() {
     return !($scope.form.$error.required || $scope.form.$error.maxlength ||
-      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer);
+      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !$scope.passwordMatch());
   };
 
 

@@ -60,12 +60,14 @@ controllers
       console.log('menehe');
       $http.post('/users/new', $scope.selectedUser)
         .success(function(data) {
+          console.log('finish');
           $scope.formData = {};
           $scope.users = data;
           console.log(data);
-          $window.location.href = '/users/' + data.user.id;
+          $window.location.href = '/users/';
         })
         .error(function(error) {
+          console.log('hola');
           console.log(error);
         });
     }

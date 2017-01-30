@@ -16,9 +16,18 @@ class User extends Table {
 
   // checking if password is valid
   validPassword(user, password) {
-    console.log(password);
-    console.log(user);
     return bcrypt.compareSync(password, user.password);
+  }
+
+  save(originalEntry) {
+    if (!originalEntry.is_active) {
+      originalEntry.is_active = false;
+    }
+
+    if (!originalEntry.is_admin) {
+      originalEntry.is_active = false;
+    }
+    return super.save(originalEntry);
   }
 
 }

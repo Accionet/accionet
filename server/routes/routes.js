@@ -45,18 +45,6 @@ module.exports = function router(app, passport) {
     // res.sendFile(path.join(__dirname, '../','../', 'client','views', 'index.html'));
   });
 
-  // // process the login form
-  // app.post('/login', passport.authenticate('local-login', {
-  //     successRedirect : '/dashboard', // redirect to the secure profile section
-  //     failureRedirect : '/', // redirect back to the signup page if there is an error
-  //     failureFlash : true // allow flash messages
-  // }));
-
-  // app.get('/logout', function (req, res) {
-  //     req.logout();
-  //     res.redirect('/');
-  // });
-
   // ////////////////////////////////////////////
   // /////////// PLACES ////////////////////////
   // //////////////////////////////////////////
@@ -231,6 +219,15 @@ module.exports = function router(app, passport) {
   app.get('/users/count', isLoggedIn, (req, res, next) => {
     userController.count(req, res, next);
   });
+
+  app.get('/users', isAdmin, (req, res, next) => {
+    userController.index(req, res, next);
+  });
+
+
+  app.get('/users/disabled', isAdmin, (req, res, next) => {
+    userController.disabled(req, res, next);
+  });
 };
 //
 // ////////////////////////////////////////////
@@ -240,41 +237,41 @@ module.exports = function router(app, passport) {
 //
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on
+  // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
     return next();
   }
 
-    // if they aren't redirect them to the home page
+  // if they aren't redirect them to the home page
   res.redirect('/');
 }
 
 function hasAccessToWrite(req, res, next) {
-    // if user is authenticated in the session, carry on
+  // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
     return next();
   }
 
-    // if they aren't redirect them to the home page
+  // if they aren't redirect them to the home page
   res.redirect('/');
 }
 
 function hasAccessToRead(req, res, next) {
-    // if user is authenticated in the session, carry on
+  // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
     return next();
   }
 
-    // if they aren't redirect them to the home page
+  // if they aren't redirect them to the home page
   res.redirect('/');
 }
 
 function isAdmin(req, res, next) {
-    // if user is authenticated in the session, carry on
+  // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
     return next();
   }
 
-    // if they aren't redirect them to the home page
+  // if they aren't redirect them to the home page
   res.redirect('/');
 }

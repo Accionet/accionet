@@ -60,7 +60,8 @@ class Table {
             }
             resolve(entry[0]);
           })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err);
               reject(errorString);
             });
         }).catch((err) => {

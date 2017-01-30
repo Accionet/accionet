@@ -57,6 +57,7 @@ controllers
   // Create a new user
   $scope.createUser = function(user) {
     if ($scope.validForm()) {
+      console.log('menehe');
       $http.post('/users/new', $scope.selectedUser)
         .success(function(data) {
           $scope.formData = {};
@@ -77,7 +78,7 @@ controllers
         .success(function(data) {
           user = data.user;
           console.log(user);
-          $window.location.href = '/users/' + user.id;
+          $window.location.href = '/users/';
         })
         .error(function(error) {
           console.log(error);

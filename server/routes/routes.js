@@ -231,6 +231,14 @@ module.exports = function router(app, passport) {
   app.get('/users/new', isAdmin, (req, res, next) => {
     userController.new(req, res, next);
   });
+
+  // process the signup form
+  app.post('/users/new', isAdmin, passport.authenticate('local-signup', {
+    successRedirect: '/users/', // redirect to the secure profile section
+    failureRedirect: '/users/new', // redirect back to the signup page if there is an error
+    failureFlash: true, // allow flash messages
+
+  }));
 };
 //
 // ////////////////////////////////////////////

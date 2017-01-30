@@ -50,11 +50,14 @@ exports.new = function (req, res) {
   Users.new().then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'create.ejs'), {
       user: result,
+      message: req.flash('signupMessage'),
     });
   }).catch((err) => {
     return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'create.ejs'), {
       error: `ERROR: ${err}`,
       user: [],
+      message: req.flash('signupMessage'),
+
     });
   });
 };

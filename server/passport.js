@@ -5,7 +5,6 @@ const LocalStrategy = require('passport-local').Strategy;
 
 // load up the user model
 const User = require('./models/users');
-const Place = require('./models/places');
 
 
 // expose this function to our app using module.exports
@@ -51,23 +50,21 @@ module.exports = function auth(passport) {
         User.find({
           username,
         })
-          .then((user) => {
+          .then((users) => {
+            const user = users[0];
             // check to see if theres already a user with that username
             if (user) {
               return done(null, false, req.flash('signupMessage',
-                'That username is already taken.'));
+                'Ya existe un usuario con ese nombre de usuario.'));
             }
             // if there is no user with that username
             // create the user
             User.new().then((newUser) => {
               // set the user's local credentials
-              newUser.username = username;
+              newUser = req.body;
               newUser.password = User.generateHash(password);
-              newUser.address = req.body.address;
-              newUser.bloodtype = req.body.bloodtype;
-              if ((new Date(req.body.birthday) !== 'Invalid Date' && !isNaN(new Date(req.body.birthday)))) {
-                newUser.birthday = req.body.birthday;
-              }
+              delete newUser.id;
+              newUser.email_verified = false;
               // save the user
               User.save(newUser).then((user) => {
                 return done(null, user);

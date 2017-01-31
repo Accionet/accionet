@@ -232,6 +232,14 @@ module.exports = function router(app, passport) {
     userController.new(req, res, next);
   });
 
+  app.get('/users/:id', hasAccessToRead, (req, res, next) => {
+    userController.show(req, res, next);
+  });
+
+  app.get('/profile', hasAccessToRead, (req, res, next) => {
+    userController.profile(req, res, next);
+  });
+
   // process the signup form
   app.post('/users/new', isAdmin, passport.authenticate('local-signup', {
     successRedirect: '/users/', // redirect to the secure profile section

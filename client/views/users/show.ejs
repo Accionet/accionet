@@ -1,0 +1,75 @@
+<html ng-app="accionet-web-app">
+
+<head>
+    <title>Lugares - Accionet</title>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body ng-controller="userController">
+    <% include ../partials/message_log.ejs %>
+        <%= include ../partials/navbar.ejs %>
+
+            <div id="page-wrapper" ng-init="initializeUsers(null, ' <%= JSON.stringify(show_user) %>')">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">{{selectedUser.username}}</h1>
+                        <% locals.show = true %>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">Información <small> (ID: {{selectedUser.id}}) </small>
+                              </h4>
+
+
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <h4>Nombre: {{selectedUser.name}}</h4>
+                                <h4>Descripci&oacute;n: {{selectedUser.description}}</h4>
+                                <h4> email: {{selectedUser.email}}</h4>
+                                <h4 ng-if="selectedUser.is_admin">Es administrador</h4>
+                                <h4 ng-if="selectedUser.is_active">Usuario activo</h4>
+                                <h4 ng-if="!selectedUser.is_active">Usuario no activo</h4>
+
+                                <h4 ng-if="selectedUser.description">Descripcion de Encuesta: </h4>
+                                <p> {{selectedUser.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                  <div>
+                    <a class="btn btn-primary col-lg-12 "> Editar </a>
+
+                  </div>
+                  <br />
+                  <br />
+                  <div>
+                    <a class="btn btn-success col-lg-12 "> Cambiar contrase&ntilde;a </a>
+
+                  </div>
+
+                  <!--<a class="btn btn-success col-sm-12"> Cambiar contrase&ntilde;a </a> -->
+
+
+                  <!-- <div class="col-xs-12 col-md-6 col-lg-6 ">
+                    <a class="btn btn-success col-lg-12"> Cambiar contrase&ntilde;a </a>
+
+                  </div>
+                  <div class=" col-xs-12 col-lg-6 ">
+                    <a class="btn btn-success col-lg-12"> Editar</a>
+                  </div> -->
+
+                </div>
+
+            </div>
+            <% include ../partials/scripts.ejs %>
+                <% include partials/users_scripts.ejs %>
+
+</body>
+
+</html>

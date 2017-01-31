@@ -61,3 +61,34 @@ exports.new = function (req, res) {
     });
   });
 };
+
+function getUser(id, req, res) {
+  Users.findById(id).then((user) => {
+    if (!user) {
+      return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'show.ejs'), {
+        error: 'ERROR: No user found',
+        show_user: [],
+      });
+    }
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'show.ejs'), {
+      show_user: user,
+    });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'show.ejs'), {
+      error: `ERROR: ${err}`,
+      show_user: [],
+    });
+  });
+}
+
+exports.show = function (req, res) {
+  return getUser(req.params.id, req, res);
+};
+
+exports.profile = function (req, res) {
+  console.log('useer');
+  console.log(req.user);
+  console.log('passport');
+  console.log(req);
+  return getUser(req.user.id, req, res);
+};

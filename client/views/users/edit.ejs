@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="accionet-web-app">
+
+<head>
+    <% include ../partials/head %>
+        <title>Accionet</title>
+</head>
+
+<body ng-controller="userController">
+    <% include ../partials/message_log.ejs %>
+        <%= include ../partials/navbar.ejs %>
+            <div id="page-wrapper" ng-init="initializeUsers(null, ' <%= JSON.stringify(show_user) %>')">
+                <!-- set the course. Note that it has to be a string, otherwise it throws an error -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header"> Editar Usuario </h1>
+                        <% locals.edit = true %>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+
+                    <% include partials/form.ejs %>
+                        <div class="row">
+                            <div class="col-lg-12">
+                              <button ng-if="!validForm(true)" ng-click="updateUser(selectedUser)" type="button" class="btn btn-block btn-success" disabled>  Guardar Cambios</button>
+                              <button ng-if="validForm(true)" ng-click="updateUser(selectedUser)" type="button" class="btn btn-block btn-success" >Guardar Cambios </button>
+                            </div>
+                        </div>
+                        <br>
+
+            </div>
+            <!-- /#page-wrapper -->
+
+            <% include ../partials/scripts.ejs %>
+                <% include partials/users_scripts.ejs %>
+
+
+
+</body>
+
+</html>

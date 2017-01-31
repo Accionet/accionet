@@ -45,13 +45,11 @@ controllers
 
 
   function locallyUpdateUser(updated_user) {
-    console.log(updated_user);
     for (let i = 0; i < $scope.users.length; i++) {
       if ($scope.users[i].id == updated_user.id) {
         $scope.users[i] = updated_user;
       }
     }
-    console.log($scope.users);
   }
 
   // Create a new user
@@ -75,26 +73,26 @@ controllers
 
   // updates a user
   $scope.updateUser = function(user) {
-    if ($scope.validForm()) {
-      $http.put('/users/' + $scope.selectedUser.id + '/edit', $scope.selectedUser)
-        .success(function(data) {
-          user = data.user;
-          console.log(user);
-          $window.location.href = '/users/';
-        })
-        .error(function(error) {
-          console.log(error);
-        });
-    }
+    console.log('meneh');
+    console.log('ir a buscar');
+    $http.put('/users/' + $scope.selectedUser.id + '/edit', $scope.selectedUser)
+      .success(function(data) {
+        user = data.user;
+        console.log(user);
+        $window.location.href = '/users/';
+      })
+      .error(function(error) {
+        console.log(error);
+      });
   };
 
   $scope.passwordMatch = function() {
     return $scope.selectedUser.password === $scope.password_verify;
   }
 
-  $scope.validForm = function() {
+  $scope.validForm = function(skipPassword) {
     return !($scope.form.$error.required || $scope.form.$error.maxlength ||
-      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !$scope.passwordMatch());
+      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !($scope.passwordMatch() || skipPassword));
   };
 
 

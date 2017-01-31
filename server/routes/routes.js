@@ -236,6 +236,14 @@ module.exports = function router(app, passport) {
     userController.show(req, res, next);
   });
 
+  app.get('/users/:id/edit', hasAccessToWrite, (req, res, next) => {
+    userController.edit(req, res, next);
+  });
+
+  app.put('/users/:id/edit', hasAccessToWrite, (req, res, next) => {
+    userController.update(req, res, next);
+  });
+
   app.get('/profile', hasAccessToRead, (req, res, next) => {
     userController.profile(req, res, next);
   });

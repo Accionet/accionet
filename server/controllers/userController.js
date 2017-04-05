@@ -128,7 +128,7 @@ exports.update = function updateUser(req, res) {
 exports.toggleIsActive = function toggleIsActive(req, res) {
   Users.toggleIsActive(req.params.id).then((response) => {
     const json = {
-      place: response,
+      user: response,
     };
     return res.status(200).send(json);
   }).catch((err) => {

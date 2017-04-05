@@ -28,24 +28,20 @@ controllers
 
 
         $scope.toggleIsActive = function (user) {
-            console.log(user);
             $http.put(`/users/${user.id}/toggleIsActive`)
             .success(function (data) {
-                user.is_active = data.user.is_active;
-                // locallyUpdateUser(data.user);
+                locallyUpdateUser(data.user);
             })
             .error(function (data) {});
         };
 
 
         function locallyUpdateUser(updated_user) {
-            console.log(updated_user);
             for (let i = 0; i < $scope.users.length; i++) {
                 if ($scope.users[i].id === updated_user.id) {
-                // $scope.users[i] = updated_user;
+                $scope.users[i] = updated_user;
                 }
             }
-            console.log($scope.users);
         }
 
 

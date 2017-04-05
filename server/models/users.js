@@ -1,8 +1,9 @@
-const Table = require('./table'); // eslint-disabled-this-line no-unused-vars
+const Activatable = require('./activatable'); // eslint-disable-line no-unused-vars
+
 const bcrypt = require('bcrypt-nodejs');
 
 
-class User extends Table {
+class User extends Activatable {
 
 
   constructor() {

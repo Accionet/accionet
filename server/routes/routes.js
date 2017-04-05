@@ -244,9 +244,9 @@ module.exports = function router(app, passport) {
     userController.update(req, res, next);
   });
 
-  // app.put('/surveys/:id/toggleIsActive', hasAccessToWrite, (req, res, next) => {
-  //   userController.toggleIsActive(req, res, next);
-  // });
+  app.put('/users/:id/toggleIsActive', hasAccessToWrite, (req, res, next) => {
+    userController.toggleIsActive(req, res, next);
+  });
 
   app.get('/profile', hasAccessToRead, (req, res, next) => {
     userController.profile(req, res, next);

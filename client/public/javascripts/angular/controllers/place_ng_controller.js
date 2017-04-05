@@ -21,9 +21,12 @@ controllers
   };
 
   $scope.initializeMetrics = function(metrics) {
+    console.log(typeof metrics);
+    console.log(metrics);
     if (metrics) {
       $scope.metrics = JSON.parse(metrics);
     }
+    console.log($scope.metrics.daily);
   };
 
 

@@ -20,11 +20,8 @@ class User extends Table {
   }
 
   save(originalEntry) {
+    // if it is not defined (or false) set it to false
     if (!originalEntry.is_active) {
-      originalEntry.is_active = false;
-    }
-
-    if (!originalEntry.is_admin) {
       originalEntry.is_active = false;
     }
     return super.save(originalEntry);

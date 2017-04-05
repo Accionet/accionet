@@ -105,8 +105,14 @@ module.exports = function auth(passport) {
       }).then((users) => {
         const user = users[0];
         // if no user is found, return the message
+
         if (!user) {
           return done(null, false, req.flash('loginMessage', 'Usuario no existe.')); // req.flash is the way to set flashdata using connect-flash
+        }
+
+        // if the user is not active notify that
+        if (!user.is_active) {
+          return done(null, false, req.flash('loginMessage', 'Usuario no se encuentra activo. Para activarlo contacte a Accionet')); // req.flash is the way to set flashdata using connect-flash
         }
         // if the user is found but the password is wrong
         if (!User.validPassword(user, password)) {

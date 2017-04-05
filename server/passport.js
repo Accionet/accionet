@@ -62,7 +62,6 @@ module.exports = function auth(passport) {
             User.new().then((newUser) => {
               // set the user's local credentials
               newUser = req.body;
-              newUser.password = User.generateHash(password);
               delete newUser.id;
               newUser.email_verified = false;
               // save the user

@@ -60,7 +60,7 @@ class Table {
             }
             resolve(entry[0]);
           })
-            .catch(() => {
+            .catch((err) => {  //eslint-disable-line
               reject(errorString);
             });
         }).catch((err) => {

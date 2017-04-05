@@ -17,6 +17,10 @@ class User extends Activatable {
 
   // checking if password is valid
   validPassword(user, password) {
+    // invalid arguments
+    if (!user || !user.password) {
+      return false;
+    }
     return bcrypt.compareSync(password, user.password);
   }
 
@@ -25,6 +29,12 @@ class User extends Activatable {
     if (!originalEntry.is_active) {
       originalEntry.is_active = false;
     }
+    // set email verified to false by default
+    originalEntry.email_verified = false;
+
+    // encrypt password
+    originalEntry.password = this.generateHash(originalEntry.password);
+
     return super.save(originalEntry);
   }
 

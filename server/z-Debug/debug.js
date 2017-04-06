@@ -19,7 +19,8 @@ const visit = require('../models/visits');
 
 
 
-Survey.filterColumns(['id', 'title', ]).then((entries) =>{
+Survey.find( {}, {surveys: ['id', 'title']}).then((entries) =>{
+  console.log('termino');
   console.log(entries);
 }).catch((err) =>{
   console.log(err);

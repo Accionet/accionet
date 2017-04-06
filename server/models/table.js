@@ -133,7 +133,13 @@ class Table {
 
   find(attributes, columns) {
     return new Promise((resolve, reject) => {
-      this.filterColumns().then((columnsOfThisTable) => {
+      // If it speciffically say that columns.table_name is an empty array then he is asking for no columns
+      const columnsForThisTable = columns[this.table_name];
+      if (Array.isArray(columnsForThisTable) && columnsForThisTable.length == 0) {
+        resolve([]);
+        return;
+      }
+      this.filterColumns(columnsForThisTable).then((columnsOfThisTable) => {
         this.filterAttributes(attributes)
             .then((filteredAttributes) => {
               this.table().select(columnsOfThisTable).where(filteredAttributes).then((results) => {
@@ -165,12 +171,12 @@ class Table {
     //
   }
 
-  findById(id) {
+  findById(id, columns) {
     const attributes = {
       id,
     };
     return new Promise((resolve, reject) => {
-      this.find(attributes).then((entries) => {
+      this.find(attributes, columns).then((entries) => {
         if (entries.length !== 0) {
           return resolve(entries[0]);
         }

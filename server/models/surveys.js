@@ -101,13 +101,19 @@ class Surveys extends Activatable {
     });
   }
 
-  parseToSend(survey) {
+  parseToSend(survey, columns) {
     const Question = require('./questions'); // eslint-disable-line
 
     return new Promise((resolve, reject) => {
+      /*
+      If it does not specify anything for question, we dont look up question*/
+      if (!(Question.table_name in columns)) {
+        resolve(survey);
+        return;
+      }
       Question.find({
         survey_id: survey.id,
-      }).then((questions) => {
+      }, columns).then((questions) => {
         survey.questions = questions;
         resolve(survey);
       }).catch((err) => {

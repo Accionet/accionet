@@ -34,7 +34,7 @@ describe('Surveys: get only some parameters', () => {
   // eslint-disable-next-line no-undef
   it('Check that contains only two params', (done) => {
     return Survey.find({}, {
-      survey: ['id', 'title'],
+      surveys: ['id', 'title'],
     }).then((surveys) => {
       for (let i = 0; i < surveys.length; i++) {
         expect(surveys[i]).to.have.all.keys('id', 'title');
@@ -48,7 +48,7 @@ describe('Surveys: get only some parameters', () => {
   // eslint-disable-next-line no-undef
   it('Pass as input things that are not valid columns', (done) => {
     return Survey.find({}, {
-      survey: ['ititle'],
+      surveys: ['ititle'],
     }).then((surveys) => {
       assert.deepEqual(surveys, []);
       done();
@@ -60,7 +60,7 @@ describe('Surveys: get only some parameters', () => {
   // eslint-disable-next-line no-undef
   it('Pass as input empty array', (done) => {
     return Survey.find({}, {
-      survey: [],
+      surveys: [],
     }).then((surveys) => {
       assert.deepEqual(surveys, []);
       done();
@@ -99,7 +99,7 @@ describe('Surveys: get only some parameters of questions and options', () => {
   // eslint-disable-next-line no-undef
   it('Check that contains questions things and options things', (done) => {
     return Survey.find({}, {
-      survey: ['id', 'title'],
+      surveys: ['id', 'title'],
       questions: ['title', 'type'],
       options: ['enumeration'],
     }).then((surveys) => {

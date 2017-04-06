@@ -150,13 +150,13 @@ class Questions extends Table {
     });
   }
 
-  parseToSend(question) {
+  parseToSend(question, columns) {
     const Option = require('./options'); // eslint-disable-line
 
     return new Promise((resolve, reject) => {
       Option.find({
         question_id: question.id,
-      }).then((options) => {
+      }, columns).then((options) => {
         question.options = options;
         resolve(question);
       }).catch((err) => {

@@ -4,9 +4,9 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const dateChai = require('chai-datetime');
 
-const knex = require('../../../../server/db/knex');
 const Survey = require('../../../../server/models/surveys');
-// const utils = require('../../../../server/services/utils');
+const Question = require('../../../../server/models/questions');
+const Option = require('../../../../server/models/options');
 
 
 // eslint-disable-next-line no-unused-vars
@@ -22,15 +22,6 @@ chai.use(dateChai);
 
 // eslint-disable-next-line no-undef
 describe('Surveys: get only some parameters', () => {
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
   // eslint-disable-next-line no-undef
   it('Check that contains only two params', (done) => {
     return Survey.find({}, {
@@ -50,8 +41,14 @@ describe('Surveys: get only some parameters', () => {
     return Survey.find({}, {
       surveys: ['ititle'],
     }).then((surveys) => {
-      assert.deepEqual(surveys, []);
-      done();
+      Survey.getAttributesNames().then((attributes) => {
+        for (let i = 0; i < surveys.length; i++) {
+          expect(surveys[i]).to.have.all.keys(attributes);
+        }
+        done();
+      }).catch((err) => {
+        done(err);
+      });
     }).catch((err) => {
       done(err);
     });
@@ -76,6 +73,7 @@ describe('Surveys: get only some parameters', () => {
         for (let i = 0; i < surveys.length; i++) {
           expect(surveys[i]).to.have.all.keys(attributes);
         }
+        done();
       }).catch((err) => {
         done(err);
       });
@@ -88,15 +86,6 @@ describe('Surveys: get only some parameters', () => {
 // eslint-disable-next-line no-undef
 describe('Surveys: get only some parameters of questions and options', () => {
   // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
-  // eslint-disable-next-line no-undef
   it('Check that contains questions things and options things', (done) => {
     return Survey.find({}, {
       surveys: ['id', 'title'],
@@ -106,17 +95,58 @@ describe('Surveys: get only some parameters of questions and options', () => {
       for (let i = 0; i < surveys.length; i++) {
         const survey = surveys[i];
         expect(survey).to.have.all.keys('id', 'title', 'questions');
-        for (let j = 0; j < survey.questions[j].length; j++) {
+        for (let j = 0; j < survey.length; j++) {
           const question = survey.questions[j];
           expect(question).to.have.all.keys('title', 'type');
-          if (question.type == 'multiple_choice' || true) {
-            for (let k = 0; k < question.options.length; k++) {
-              expect(question.options[k]).to.have.all.keys('enumeration');
-            }
+          for (let k = 0; k < question.length; k++) {
+            expect(question.options[k]).to.have.all.keys('enumeration');
           }
         }
       }
       done();
+    }).catch((err) => {
+      done(err);
+    });
+  });
+});
+
+
+// eslint-disable-next-line no-undef
+describe('Surveys: use Survey: "all" to get everything', () => {
+  // eslint-disable-next-line no-undef
+  it('Check that contains questions things and options things', (done) => {
+    return Survey.find({}, {
+      surveys: 'all',
+      questions: 'all',
+      options: 'all',
+    }).then((surveys) => {
+      Survey.getAttributesNames().then((attributesSurvey) => {
+        Question.getAttributesNames().then((attributesQuestion) => {
+          Option.getAttributesNames().then((optionAttributes) => {
+            attributesSurvey.push('questions');
+            attributesQuestion.push('options');
+
+            for (let i = 0; i < surveys.length; i++) {
+              const survey = surveys[i];
+              expect(survey).to.have.all.keys(attributesSurvey);
+              for (let j = 0; j < survey.questions.length; j++) {
+                const question = survey.questions[j];
+                expect(question).to.have.all.keys(attributesQuestion);
+                for (let k = 0; k < question.options.length; k++) {
+                  expect(question.options[k]).to.have.all.keys(optionAttributes);
+                }
+              }
+            }
+            done();
+          }).catch((err) => {
+            done(err);
+          });
+        }).catch((err) => {
+          done(err);
+        });
+      }).catch((err) => {
+        done(err);
+      });
     }).catch((err) => {
       done(err);
     });

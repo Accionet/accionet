@@ -153,7 +153,14 @@ class Questions extends Table {
   parseToSend(question, columns) {
     const Option = require('./options'); // eslint-disable-line
 
+
     return new Promise((resolve, reject) => {
+      /*
+      If it does not specify anything for options, we dont look up options*/
+      if ((columns && !columns[Option.table_name]) || !(Option.table_name in columns)) {
+        resolve(question);
+        return;
+      }
       Option.find({
         question_id: question.id,
       }, columns).then((options) => {

@@ -19,9 +19,12 @@ const visit = require('../models/visits');
 
 
 
-Survey.find( {}, {surveys: ['id', 'title']}).then((entries) =>{
-  console.log('termino');
-  console.log(entries);
-}).catch((err) =>{
-  console.log(err);
-})
+Survey.find({}, {
+  surveys: 'all',
+  questions: 'all',
+  options: 'all',
+}).then((surveys) => {
+  console.log(surveys);
+}).catch((err) => {
+
+});

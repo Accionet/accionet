@@ -8,6 +8,21 @@ controllers
   $scope.loadingVisitsByDayChart = true;
   $scope.loadingVisitsByHourChart = true;
   $scope.loadingVisitsByDayAndHourChart = true;
+  $scope.giveAccessTo = [];
+  $scope.places = [{
+    name: "Lugar 1",
+    id: "1"
+  }, {
+    name: "Lugar 1",
+    id: "2"
+  }];
+  $scope.surveys = [{
+    name: "Encuesta 1",
+    id: "1"
+  }, {
+    name: "Encuesta 1",
+    id: "2"
+  }];
 
 
   // Get all users
@@ -55,13 +70,10 @@ controllers
   // Create a new user
   $scope.createUser = function(user) {
     if ($scope.validForm()) {
-      console.log('menehe');
       $http.post('/users/new', $scope.selectedUser)
         .success(function(data) {
-          console.log('finish');
           $scope.formData = {};
           $scope.users = data;
-          console.log(data);
           $window.location.href = '/users/';
         })
         .error(function(error) {
@@ -231,4 +243,34 @@ controllers
 
       });
   };
+
+
+  //Acesss
+  $scope.addNewAccess = function() {
+    $scope.giveAccessTo.push({});
+  }
+
+  //Remove access from array
+  $scope.removeAccess = function(i) {
+    console.log(i);
+    $scope.giveAccessTo.splice(i, 1);
+  }
+
+  $scope.registerAccess = function(access, accessTo) {
+    var temp = JSON.parse(accessTo);
+    access.table = temp.table;
+    access.id = temp.id;
+
+  }
+
+  $scope.accessWellDefined = function () {
+    for (var i = 0; i < $scope.giveAccessTo.length; i++) {
+      var everythingDefined = $scope.giveAccessTo[i].table && $scope.giveAccessTo[i].id && $scope.giveAccessTo[i].accessType;
+      if(!(everythingDefined)){
+        return false;
+      }
+    }
+    return true;
+  }
+
 });

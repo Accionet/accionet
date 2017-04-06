@@ -7,8 +7,6 @@ const Question = require('../newModels/questions');
 const Option = require('../newModels/options');
 const Place = require('../newModels/places');
 const Answer = require('../models/answer');
-const Response = require('../models/responses');
-const OldResponse = require('../models/response');
 const Survey = require('../models/surveys');
 
 const AnswerMetric = require('../models/metrics/answerMetric');
@@ -20,72 +18,9 @@ const visit = require('../models/visits');
 
 
 
-// Survey.getMetrics(2424).then((result) => {
-//   console.log(result);
-// }).catch((err) => {
-//   console.log(err);
-// });
 
-// console.log(knex.select('*').from('users').join('accounts', function() {
-//   this.on('accounts.id', '=', 'users.account_id').andOn('accounts.owner_id', '=', 'users.id')
-// }).toString());
-// Response.dataForExcel({survey_id: 2386});
-
-// OldResponse.dataForExcel({
-//   survey_id: 2685
-// }, (err, data) => {
-//   console.log(data);
-// });
-
-Response.dataForExcel({survey_id: 2685}).then((res) =>{
-console.log(res);
+Survey.filterColumns(['id', 'title', ]).then((entries) =>{
+  console.log(entries);
 }).catch((err) =>{
   console.log(err);
 })
-
-
-
-// Response.find({
-//   survey_id: 2685
-// }).then((res) => {
-//   console.log(res);
-// })
-
-
-// class Animal {
-//
-//   constructor(name){
-//     this.name = name;
-//   }
-//
-//   speak(){
-//     console.log(`Im a ${this.name} and Im a animal`);
-//   }
-// }
-//
-// class Dog extends Animal {
-//
-//   speak(){
-//     super.speak();
-//     console.log(' and I bark');
-//   }
-// }
-//
-// // decorate
-// console.log(Dog.prototype);
-//
-// Dog.prototype['run'] = function() {
-//   console.log(`Im running! And i am ${this.name}`);
-// }
-//
-// // log
-//
-// const animal = new Animal('Jhonny');
-//
-// animal.speak();
-//
-// const doggy = new Dog('Mr. Peanutbutter');
-//
-// doggy.speak();
-//
-// doggy.run();

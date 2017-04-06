@@ -60,7 +60,7 @@ class Table {
             }
             resolve(entry[0]);
           })
-            .catch((err) => {  //eslint-disable-line
+            .catch((err) => { //eslint-disable-line
               reject(errorString);
             });
         }).catch((err) => {
@@ -121,8 +121,8 @@ class Table {
   // ################################################
   // Find (R from CRUD)
   // ################################################
-  all() {
-    return this.find({});
+  all(columns) {
+    return this.find({}, columns);
   }
 
   parseToSend(entry) {
@@ -131,27 +131,32 @@ class Table {
     });
   }
 
-  find(attributes) {
+  find(attributes, columns) {
     return new Promise((resolve, reject) => {
-      this.filterAttributes(attributes)
-        .then((filteredAttributes) => {
-          this.table().select().where(filteredAttributes).then((results) => {
-            const promises = [];
-            for (let i = 0; i < results.length; i++) {
-              promises.push(this.parseToSend(results[i]));
-            }
-            const allPromises = Promise.all(promises);
-            allPromises.then((response) => {
-              resolve(response);
-            }).catch((err) => {
+      this.filterColumns().then((columnsOfThisTable) => {
+        this.filterAttributes(attributes)
+            .then((filteredAttributes) => {
+              this.table().select(columnsOfThisTable).where(filteredAttributes).then((results) => {
+                const promises = [];
+                for (let i = 0; i < results.length; i++) {
+                  promises.push(this.parseToSend(results[i], columns));
+                }
+                const allPromises = Promise.all(promises);
+                allPromises.then((response) => {
+                  resolve(response);
+                }).catch((err) => {
+                  reject(err);
+                });
+                  // return resolve(results);
+              })
+                .catch(() => {
+                  reject('Find parameter was not defined correctly');
+                });
+            })
+            .catch((err) => {
               reject(err);
             });
-            // return resolve(results);
-          })
-            .catch(() => {
-              reject('Find parameter was not defined correctly');
-            });
-        })
+      })
         .catch((err) => {
           reject(err);
         });
@@ -171,16 +176,16 @@ class Table {
         }
         reject(`No se encontró una entrada con id = ${id}`);
       })
-          .catch((error) => {
-            reject(error);
-          });
+        .catch((error) => {
+          reject(error);
+        });
     });
   }
 
 
-    // ################################################
-    // Miscelaneous
-    // ################################################
+  // ################################################
+  // Miscelaneous
+  // ################################################
 
   getFirstDate() {
     return new Promise((resolve, reject) => {
@@ -216,6 +221,26 @@ class Table {
         .catch((err) => {
           reject(err);
         });
+    });
+  }
+
+  filterColumns(columns) {
+    return new Promise((resolve, reject) => {
+      if (!Array.isArray(columns)) {
+        resolve([]);
+        return;
+      }
+      this.getAttributesNames().then((attributes) => {
+        const thisTableColumns = [];
+        for (let i = 0; i < attributes.length; i++) {
+          if (columns.indexOf(attributes[i]) > -1) {
+            thisTableColumns.push(attributes[i]);
+          }
+        }
+        resolve(thisTableColumns);
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
 
@@ -262,11 +287,11 @@ class Table {
           const attributeName = attributeNames[i];
           if (attributeName in attributes) {
             filteredAttributes[attributeName] = attributes[attributeName];
-            // remove the key
+              // remove the key
             delete attributes[attributeName];
           }
         }
-        // if there are still keys left its because there where attributes that do not correspond
+          // if there are still keys left its because there where attributes that do not correspond
         if (Object.keys(attributes).length !== 0) {
           let attr = '';
           for (let i = 0; i < Object.keys(attributes).length; i++) {

@@ -33,7 +33,6 @@ describe('User check valid password', () => {
       user.password = password;
       user.email = 'a@a';
       User.save(user).then((savedUser) => {
-        console.log(savedUser);
         assert.notEqual(savedUser.password, password);
         done();
       })

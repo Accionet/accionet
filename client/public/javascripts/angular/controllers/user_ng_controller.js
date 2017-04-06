@@ -11,20 +11,13 @@ controllers
   $scope.loadingAccesables = true;
 
   $scope.giveAccessTo = [];
-  $scope.places = [{
-    name: "Lugar 1",
-    id: "1"
-  }, {
-    name: "Lugar 1",
-    id: "2"
-  }];
-  $scope.surveys = [{
-    name: "Encuesta 1",
-    id: "1"
-  }, {
-    name: "Encuesta 1",
-    id: "2"
-  }];
+  $scope.places = [];
+  $scope.surveys = [];
+
+  let surveysLoaded = false;
+  let placesLoaded = false;
+
+
 
 
   // Get all users
@@ -265,14 +258,33 @@ controllers
 
   }
 
-  $scope.accessWellDefined = function () {
+  $scope.accessWellDefined = function() {
     for (var i = 0; i < $scope.giveAccessTo.length; i++) {
       var everythingDefined = $scope.giveAccessTo[i].table && $scope.giveAccessTo[i].id && $scope.giveAccessTo[i].accessType;
-      if(!(everythingDefined)){
+      if (!(everythingDefined)) {
         return false;
       }
     }
     return true;
+  }
+
+  $scope.loadAccesables = function() {
+    load('api/v1/surveys/all/name', $scope.surveys, surveysLoaded);
+    load('api/v1/surveys/all/name', $scope.surveys, placesLoaded);
+
+  }
+
+  function load(route, saveIn, changeBoolean) {
+    $http.get(route)
+    .success(function(results) {
+      console.log(results);
+      saveIn = results;
+      changeBoolean = true;
+      $scope.loadingAccesables = surveysLoaded && placesLoaded;
+      })
+      .error(function(data) {
+
+      });
   }
 
 });

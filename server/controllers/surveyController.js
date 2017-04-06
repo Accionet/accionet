@@ -52,6 +52,20 @@ exports.disabled = function getAllSurveys(req, res) {
   });
 };
 
+exports.onlyNamesAndId = function (req, res) {
+  const active = true;
+  const columns = { survey: ['id', 'title'] };
+  Surveys.find({ is_active: active }, columns).then((result) => {
+    const json = httpResponse.success('nombres enviados exitosamente', 'data', result);
+    return res.status(200).send(json);
+  }).catch((err) => {
+    if (err) {
+      const json = httpResponse.error(err);
+      return res.status(500).send(json);
+    }
+  });
+};
+
 exports.count = function countSurveys(req, res) {
   Surveys.count({}).then((result) => {
     const json = httpResponse.success('Encuestas contadas exitosamente', 'amount', result);

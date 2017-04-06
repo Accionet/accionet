@@ -17,6 +17,9 @@ controllers
   let surveysLoaded = false;
   let placesLoaded = false;
 
+  const SURVEYS = 0;
+  const PLACES =1;
+
 
 
 
@@ -269,22 +272,29 @@ controllers
   }
 
   $scope.loadAccesables = function() {
-    load('api/v1/surveys/all/name', $scope.surveys, surveysLoaded);
-    load('api/v1/surveys/all/name', $scope.surveys, placesLoaded);
+    load('/api/v1/surveys/all/names', 'surveys', surveysLoaded);
+    load('/api/v1/places/all/names', PLACES, placesLoaded);
 
   }
 
   function load(route, saveIn, changeBoolean) {
     $http.get(route)
     .success(function(results) {
-      console.log(results);
-      saveIn = results;
+      console.log(results.data);
+      // saveData(results.data, whatToLoad);
+      $scope[saveIn] = results.data;
       changeBoolean = true;
       $scope.loadingAccesables = surveysLoaded && placesLoaded;
       })
       .error(function(data) {
 
       });
+  }
+
+  function saveData(data, where){
+    if(where == SURVEYS){
+      // $scope.surveys =
+    }
   }
 
 });

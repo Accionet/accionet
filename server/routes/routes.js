@@ -215,6 +215,10 @@ module.exports = function router(app, passport) {
     visitController.countEndUsersOfPlace(req, res, next);
   });
 
+  app.get('/api/v1/places/all/names', hasAccessToRead, (req, res, next) => {
+    placeController.onlyNamesAndId(req, res, next);
+  });
+
 
   // //////////////////////////////////////////
   // ///////// USERS  ////////////////////////

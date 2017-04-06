@@ -8,6 +8,8 @@ controllers
   $scope.loadingVisitsByDayChart = true;
   $scope.loadingVisitsByHourChart = true;
   $scope.loadingVisitsByDayAndHourChart = true;
+  $scope.loadingAccesables = true;
+
   $scope.giveAccessTo = [];
   $scope.places = [{
     name: "Lugar 1",

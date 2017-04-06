@@ -174,6 +174,10 @@ module.exports = function router(app, passport) {
     surveyController.countEndUser(req, res, next);
   });
 
+  app.get('/api/v1/surveys/all/names', hasAccessToRead, (req, res, next) => {
+    surveyController.onlyNamesAndId(req, res, next);
+  });
+
 
   // //////////////////////////////////////////
   // ///////// Visits  ////////////////////

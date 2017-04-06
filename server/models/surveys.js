@@ -107,7 +107,7 @@ class Surveys extends Activatable {
     return new Promise((resolve, reject) => {
       /*
       If it does not specify anything for question, we dont look up question*/
-      if ((columns && !columns[Question.table_name]) || !(Question.table_name in columns)) {
+      if (columns && (!columns[Question.table_name] || !(Question.table_name in columns))) {
         resolve(survey);
         return;
       }

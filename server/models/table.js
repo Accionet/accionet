@@ -134,8 +134,13 @@ class Table {
   find(attributes, columns) {
     return new Promise((resolve, reject) => {
       // If it speciffically say that columns.table_name is an empty array then he is asking for no columns
-      const columnsForThisTable = columns[this.table_name];
-      if (Array.isArray(columnsForThisTable) && columnsForThisTable.length === 0) {
+      let columnsForThisTable;
+      if (columns) {
+        columnsForThisTable = columns[this.table_name];
+      } else {
+        columnsForThisTable = undefined;
+      }
+      if (columns && Array.isArray(columns[this.table_name]) && columns[this.table_name].length === 0) {
         resolve([]);
         return;
       }

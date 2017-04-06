@@ -157,7 +157,7 @@ class Questions extends Table {
     return new Promise((resolve, reject) => {
       /*
       If it does not specify anything for options, we dont look up options*/
-      if ((columns && !columns[Option.table_name]) || !(Option.table_name in columns)) {
+      if (columns && (!columns[Option.table_name] || !(Option.table_name in columns))) {
         resolve(question);
         return;
       }

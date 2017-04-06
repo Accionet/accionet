@@ -44,3 +44,7 @@ td{
 td a .tooltip {
     position:absolute
 }
+
+.center-text{
+  text-align: center;
+}

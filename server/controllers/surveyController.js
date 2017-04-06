@@ -54,7 +54,7 @@ exports.disabled = function getAllSurveys(req, res) {
 
 exports.onlyNamesAndId = function (req, res) {
   const active = true;
-  const columns = { survey: ['id', 'title'] };
+  const columns = { surveys: ['id', 'title'] };
   Surveys.find({ is_active: active }, columns).then((result) => {
     const json = httpResponse.success('nombres enviados exitosamente', 'data', result);
     return res.status(200).send(json);

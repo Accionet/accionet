@@ -273,7 +273,7 @@ controllers
 
   $scope.loadAccesables = function() {
     load('/api/v1/surveys/all/names', 'surveys', surveysLoaded);
-    load('/api/v1/places/all/names', PLACES, placesLoaded);
+    load('/api/v1/places/all/names', 'places', placesLoaded);
 
   }
 

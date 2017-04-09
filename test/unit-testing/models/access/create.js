@@ -26,7 +26,13 @@ function getUser() {
 
 function getPlace() {
   return {
+    name: 'name',
+  };
+}
 
+function getSurvey() {
+  return {
+    title: 'title',
   };
 }
 
@@ -44,7 +50,8 @@ describe('Save User with access to place.', () => {
       User.save(getUser()).then((savedUser) => {
         Access.find({
           user_id: savedUser.id,
-          place_id: place.id,
+          access_id: place.id,
+          table: 'places',
         }).then((access) => {
         // only one element
           assert.equal(access.length, 1);
@@ -59,22 +66,54 @@ describe('Save User with access to place.', () => {
       done(err);
     });
   });
-// eslint-disable-next-line no-undef
-  it('Save Access: bad params: place id is valid but non existant', (done) => {
-    const newUser = getUser();
-    const place_id = -4;
-    newUser.access = {
-      to: place_id,
-      in: 'places',
-      accessType: 'r',
-    };
+});
 
-    return User.save(getUser()).then((savedUser) => {
-      Access.find({
-        user_id: savedUser.id,
-        place_id,
-      }).then((access) => {
-        done(access);
+// eslint-disable-next-line no-undef
+describe('Test Has Access.', () => {
+// eslint-disable-next-line no-undef
+  it('To place', (done) => {
+    const table_name = 'places';
+    return Place.save(getPlace()).then((place) => {
+      const newUser = getUser();
+      newUser.access = {
+        to: place.id,
+        in: 'places',
+        accessType: 'r',
+      };
+      User.save(getUser()).then((savedUser) => {
+        Access.hasAccess(savedUser.id, place.id, table_name).then((access) => {
+        // only one element
+          assert.equal(access.length, 1);
+          assert.equal(access[0].type, newUser.access.accessType);
+        }).catch((err) => {
+          done(err);
+        });
+      }).catch((err) => {
+        done(err);
+      });
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('To survey', (done) => {
+    const table_name = 'survey';
+    return Survey.save(getSurvey()).then((place) => {
+      const newUser = getUser();
+      newUser.access = {
+        to: place.id,
+        in: table_name,
+        accessType: 'r',
+      };
+      User.save(getUser()).then((savedUser) => {
+        Access.hasAccess(savedUser.id, place.id, table_name).then((access) => {
+          // only one element
+          assert.equal(access.length, 1);
+          assert.equal(access[0].type, newUser.access.accessType);
+        }).catch((err) => {
+          done(err);
+        });
       }).catch((err) => {
         done(err);
       });

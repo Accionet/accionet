@@ -280,7 +280,6 @@ controllers
   function load(route, saveIn, changeBoolean) {
     $http.get(route)
     .success(function(results) {
-      console.log(results.data);
       // saveData(results.data, whatToLoad);
       $scope[saveIn] = results.data;
       changeBoolean = true;
@@ -289,12 +288,6 @@ controllers
       .error(function(data) {
 
       });
-  }
-
-  function saveData(data, where){
-    if(where == SURVEYS){
-      // $scope.surveys =
-    }
   }
 
 });

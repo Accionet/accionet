@@ -161,7 +161,6 @@
             <div ng-if="loadingAccesables" class="center-text big-text top-margin-10px">
               <i class="fa fa-spinner fa-pulse fa-fw "></i>
             </div>
-            {{places}}
             <div ng-if="!loadingAccesables" ng-repeat="i in giveAccessTo" class="row top-margin-10px">
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <select ng-model="value" ng-change="registerAccess(i, value)" name="accessTo" required>

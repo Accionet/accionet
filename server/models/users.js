@@ -25,6 +25,7 @@ class User extends Activatable {
   }
 
   save(originalEntry) {
+    const promises = [];
     // if it is not defined (or false) set it to false
     if (!originalEntry.is_active) {
       originalEntry.is_active = false;
@@ -35,8 +36,11 @@ class User extends Activatable {
     // encrypt password
     originalEntry.password = this.generateHash(originalEntry.password);
 
-    return super.save(originalEntry);
+
+    promises.push(super.save(originalEntry));
+    return Promise.all(promises);
   }
+
 
 }
 

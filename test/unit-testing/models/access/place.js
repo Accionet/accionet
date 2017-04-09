@@ -60,7 +60,7 @@ describe('Save User with access to place.', () => {
     });
   });
 // eslint-disable-next-line no-undef
-  it('Save Access: bad params', (done) => {
+  it('Save Access: bad params: place id is valid but non existant', (done) => {
     const newUser = getUser();
     const place_id = -4;
     newUser.access = {

@@ -7,6 +7,7 @@ const Survey = require('../../../../server/models/surveys');
 const Place = require('../../../../server/models/places');
 const User = require('../../../../server/models/users');
 const Access = require('../../../../server/models/access');
+const knex = require('../../../../server/db/knex');
 
 
 // eslint-disable-next-line no-unused-vars
@@ -38,24 +39,35 @@ function getSurvey() {
 
 // eslint-disable-next-line no-undef
 describe('Save User with access to place.', () => {
+  // eslint-disable-next-line no-undef
+  before((done) => {
+    return knex.seed.run()
+      .then(() => {
+        done();
+      }).catch((err) => {
+        done(err);
+      });
+  });
 // eslint-disable-next-line no-undef
   it('Save Access', (done) => {
     return Place.save(getPlace()).then((place) => {
       const newUser = getUser();
+      const accessType = 'r';
       newUser.access = {
         to: place.id,
         in: 'places',
-        accessType: 'r',
+        accessType,
       };
-      User.save(getUser()).then((savedUser) => {
+      User.save(newUser).then((savedUser) => {
         Access.find({
           user_id: savedUser.id,
           access_id: place.id,
-          table: 'places',
+          table_name: 'places',
         }).then((access) => {
         // only one element
           assert.equal(access.length, 1);
-          assert.equal(access[0].type, newUser.access.accessType);
+          assert.equal(access[0].access_type, accessType);
+          done();
         }).catch((err) => {
           done(err);
         });
@@ -85,6 +97,7 @@ describe('Test Has Access.', () => {
         // only one element
           assert.equal(access.length, 1);
           assert.equal(access[0].type, newUser.access.accessType);
+          done();
         }).catch((err) => {
           done(err);
         });
@@ -111,6 +124,7 @@ describe('Test Has Access.', () => {
           // only one element
           assert.equal(access.length, 1);
           assert.equal(access[0].type, newUser.access.accessType);
+          done();
         }).catch((err) => {
           done(err);
         });

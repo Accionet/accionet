@@ -1,5 +1,5 @@
 const Activatable = require('./activatable'); // eslint-disable-line no-unused-vars
-
+const Access = require('./access');
 const bcrypt = require('bcrypt-nodejs');
 
 
@@ -24,8 +24,19 @@ class User extends Activatable {
     return bcrypt.compareSync(password, user.password);
   }
 
+  parseAccess(entry, user_id) {
+    if (entry && entry.to && entry.in && entry.accessType && user_id) {
+      return {
+        access_id: entry.to,
+        user_id,
+        table_name: entry.in,
+        access_type: entry.accessType,
+      };
+    }
+    return false;
+  }
+
   save(originalEntry) {
-    const promises = [];
     // if it is not defined (or false) set it to false
     if (!originalEntry.is_active) {
       originalEntry.is_active = false;
@@ -36,9 +47,27 @@ class User extends Activatable {
     // encrypt password
     originalEntry.password = this.generateHash(originalEntry.password);
 
+    const access_params = originalEntry.access;
+    delete originalEntry.access;
+    console.log(originalEntry);
 
-    promises.push(super.save(originalEntry));
-    return Promise.all(promises);
+    return new Promise((resolve, reject) => {
+      super.save(originalEntry).then((savedUser) => {
+        const access = this.parseAccess(access_params, savedUser.id);
+        if (access) {
+          console.log(access);
+          Access.save(access).then(() => {
+            resolve(savedUser);
+          }).catch((err) => {
+            reject(err);
+          });
+        } else {
+          resolve(savedUser);
+        }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
   }
 
 

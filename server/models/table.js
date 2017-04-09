@@ -48,6 +48,8 @@ class Table {
 
   save(originalEntry) {
     const errorString = 'Something went wrong';
+    console.log('-------------------------------------------------');
+    console.log(originalEntry);
     // make a clone so if we delete stuff from entry it does not modify the original one
     const entry = utils.cloneJSON(originalEntry);
     return new Promise((resolve, reject) => {

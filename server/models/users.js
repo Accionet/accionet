@@ -49,13 +49,11 @@ class User extends Activatable {
 
     const access_params = originalEntry.access;
     delete originalEntry.access;
-    console.log(originalEntry);
 
     return new Promise((resolve, reject) => {
       super.save(originalEntry).then((savedUser) => {
         const access = this.parseAccess(access_params, savedUser.id);
         if (access) {
-          console.log(access);
           Access.save(access).then(() => {
             resolve(savedUser);
           }).catch((err) => {

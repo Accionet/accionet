@@ -16,9 +16,9 @@ const assert = chai.assert;
 const should = chai.should();
 
 
-function getUser() {
+function getUser(i) {
   return {
-    username: 'username',
+    username: `username${i}`,
     password: 'password',
     email_verified: 'true',
     email: 'a@a.cl',
@@ -48,10 +48,10 @@ describe('Save User with access to place.', () => {
         done(err);
       });
   });
-// eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   it('Save Access', (done) => {
     return Place.save(getPlace()).then((place) => {
-      const newUser = getUser();
+      const newUser = getUser(1);
       const accessType = 'r';
       newUser.access = {
         to: place.id,
@@ -64,7 +64,7 @@ describe('Save User with access to place.', () => {
           access_id: place.id,
           table_name: 'places',
         }).then((access) => {
-        // only one element
+          // only one element
           assert.equal(access.length, 1);
           assert.equal(access[0].access_type, accessType);
           done();
@@ -82,21 +82,29 @@ describe('Save User with access to place.', () => {
 
 // eslint-disable-next-line no-undef
 describe('Test Has Access.', () => {
-// eslint-disable-next-line no-undef
-  it('To place', (done) => {
+// eslint-disable-next-line
+  before((done) => {
+    return knex.seed.run()
+      .then(() => {
+        done();
+      }).catch((err) => {
+        done(err);
+      });
+  });
+  // eslint-disable-next-line no-undef
+  it('Read: only read', (done) => {
     const table_name = 'places';
     return Place.save(getPlace()).then((place) => {
-      const newUser = getUser();
+      const newUser = getUser(2);
       newUser.access = {
         to: place.id,
         in: 'places',
         accessType: 'r',
       };
-      User.save(getUser()).then((savedUser) => {
-        Access.hasAccess(savedUser.id, place.id, table_name).then((access) => {
-        // only one element
-          assert.equal(access.length, 1);
-          assert.equal(access[0].type, newUser.access.accessType);
+      User.save(newUser).then((savedUser) => {
+        Access.hasReadAccess(savedUser.id, place.id, table_name).then((access) => {
+          // only one element
+          assert.equal(access, true);
           done();
         }).catch((err) => {
           done(err);
@@ -110,20 +118,91 @@ describe('Test Has Access.', () => {
   });
 
   // eslint-disable-next-line no-undef
-  it('To survey', (done) => {
+  it('Read: read and write', (done) => {
+    const table_name = 'places';
+    return Place.save(getPlace()).then((place) => {
+      const newUser = getUser(3);
+      newUser.access = {
+        to: place.id,
+        in: 'places',
+        accessType: 'r/w',
+      };
+      User.save(newUser).then((savedUser) => {
+        Access.hasReadAccess(savedUser.id, place.id, table_name).then((access) => {
+          // only one element
+          assert.equal(access, true);
+          done();
+        }).catch((err) => {
+          done(err);
+        });
+      }).catch((err) => {
+        done(err);
+      });
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('Read: it doesnt have', (done) => {
+    const table_name = 'places';
+    return Place.save(getPlace()).then((place) => {
+      User.save(getUser(4)).then((savedUser) => {
+        Access.hasReadAccess(savedUser.id, place.id, table_name).then((access) => {
+          // only one element
+          assert.equal(access, false);
+          done();
+        }).catch((err) => {
+          done(err);
+        });
+      }).catch((err) => {
+        done(err);
+      });
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('Write: with only r', (done) => {
     const table_name = 'survey';
     return Survey.save(getSurvey()).then((place) => {
-      const newUser = getUser();
+      const newUser = getUser(5);
       newUser.access = {
         to: place.id,
         in: table_name,
         accessType: 'r',
       };
-      User.save(getUser()).then((savedUser) => {
-        Access.hasAccess(savedUser.id, place.id, table_name).then((access) => {
+      User.save(getUser(6)).then((savedUser) => {
+        Access.hasWriteAccess(savedUser.id, place.id, table_name).then((access) => {
           // only one element
-          assert.equal(access.length, 1);
-          assert.equal(access[0].type, newUser.access.accessType);
+          assert.equal(false, access);
+          done();
+        }).catch((err) => {
+          done(err);
+        });
+      }).catch((err) => {
+        done(err);
+      });
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('Write: with r/w', (done) => {
+    const table_name = 'survey';
+    return Survey.save(getSurvey()).then((place) => {
+      const newUser = getUser(7);
+      newUser.access = {
+        to: place.id,
+        in: table_name,
+        accessType: 'r/w',
+      };
+      User.save(newUser).then((savedUser) => {
+        Access.hasWriteAccess(savedUser.id, place.id, table_name).then((access) => {
+          // only one element
+          assert.equal(true, access);
           done();
         }).catch((err) => {
           done(err);

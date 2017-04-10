@@ -161,15 +161,15 @@
             <div ng-if="loadingAccesables" class="center-text big-text top-margin-10px">
               <i class="fa fa-spinner fa-pulse fa-fw "></i>
             </div>
-            <div ng-if="!loadingAccesables" ng-repeat="i in giveAccessTo" class="row top-margin-10px">
+            <div ng-if="!loadingAccesables" ng-repeat="i in accessTo" class="row top-margin-10px">
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <select ng-model="value" ng-change="registerAccess(i, value)" name="accessTo" required>
                   <optgroup label="Lugares">
                     <option selected hidden>Seleccione...</option>
-                    <option value='{"table": "places","id":"{{p.id}}"}' ng-repeat="p in places">{{p.name}}</option>
+                    <option value='{"in": "places","to":"{{p.id}}"}' ng-repeat="p in places">{{p.name}}</option>
                   </optgroup>
                   <optgroup label="Encuestas">
-                    <option value='{"table": "surveys","id":"{{s.id}}"}' ng-repeat="s in surveys">{{s.title}}</option>
+                    <option value='{"in": "surveys","to":"{{s.id}}"}' ng-repeat="s in surveys">{{s.title}}</option>
                   </optgroup>
                 </select>
               </div>
@@ -185,12 +185,12 @@
           </div>
 
           <div ng-if="!loadingAccesables" class=" green center-text" ng-click="addNewAccess()">
-            <p ng-if="giveAccessTo.length == 0">
+            <p ng-if="accessTo.length == 0">
               No has otorgado permisos, click
               <b>Aqu&iacute;</b>
               para agregar uno
             </p>
-            <p ng-if="giveAccessTo.length != 0">
+            <p ng-if="accessTo.length != 0">
               Agregar otro permiso
             </p>
           </div>

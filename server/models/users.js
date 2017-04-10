@@ -24,16 +24,34 @@ class User extends Activatable {
     return bcrypt.compareSync(password, user.password);
   }
 
-  parseAccess(entry, user_id) {
-    if (entry && entry.to && entry.in && entry.accessType && user_id) {
-      return {
-        access_id: entry.to,
-        user_id,
-        table_name: entry.in,
-        access_type: entry.accessType,
-      };
+  parseAccess(entryArray, user_id) {
+    // entryArray is not an array
+    if (!Array.isArray(entryArray)) {
+      return false;
     }
-    return false;
+    const returnArray = [];
+    for (let i = 0; i < entryArray.length; i++) {
+      const entry = entryArray[i];
+      if (entry && entry.to && entry.in && entry.accessType && user_id) {
+        returnArray.push({
+          access_id: entry.to,
+          user_id,
+          table_name: entry.in,
+          access_type: entry.accessType,
+        });
+      } else {
+        return false;
+      }
+    }
+    return returnArray;
+  }
+
+  saveAccess(accessArray) {
+    const promises = [];
+    for (let i = 0; i < accessArray.length; i++) {
+      promises.push(Access.save(accessArray[i]));
+    }
+    return Promise.all(promises);
   }
 
   save(originalEntry) {
@@ -54,7 +72,7 @@ class User extends Activatable {
       super.save(originalEntry).then((savedUser) => {
         const access = this.parseAccess(access_params, savedUser.id);
         if (access) {
-          Access.save(access).then(() => {
+          this.saveAccess(access).then(() => {
             resolve(savedUser);
           }).catch((err) => {
             reject(err);

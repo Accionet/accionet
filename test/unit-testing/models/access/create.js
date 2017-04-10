@@ -53,11 +53,11 @@ describe('Save User with access to place.', () => {
     return Place.save(getPlace()).then((place) => {
       const newUser = getUser(1);
       const accessType = 'r';
-      newUser.access = {
+      newUser.access = [{
         to: place.id,
         in: 'places',
         accessType,
-      };
+      }];
       User.save(newUser).then((savedUser) => {
         Access.find({
           user_id: savedUser.id,
@@ -96,11 +96,11 @@ describe('Test Has Access.', () => {
     const table_name = 'places';
     return Place.save(getPlace()).then((place) => {
       const newUser = getUser(2);
-      newUser.access = {
+      newUser.access = [{
         to: place.id,
         in: 'places',
         accessType: 'r',
-      };
+      }];
       User.save(newUser).then((savedUser) => {
         Access.hasReadAccess(savedUser.id, place.id, table_name).then((access) => {
           // only one element
@@ -122,11 +122,11 @@ describe('Test Has Access.', () => {
     const table_name = 'places';
     return Place.save(getPlace()).then((place) => {
       const newUser = getUser(3);
-      newUser.access = {
+      newUser.access = [{
         to: place.id,
         in: 'places',
         accessType: 'r/w',
-      };
+      }];
       User.save(newUser).then((savedUser) => {
         Access.hasReadAccess(savedUser.id, place.id, table_name).then((access) => {
           // only one element
@@ -168,11 +168,11 @@ describe('Test Has Access.', () => {
     const table_name = 'survey';
     return Survey.save(getSurvey()).then((place) => {
       const newUser = getUser(5);
-      newUser.access = {
+      newUser.access = [{
         to: place.id,
         in: table_name,
         accessType: 'r',
-      };
+      }];
       User.save(getUser(6)).then((savedUser) => {
         Access.hasWriteAccess(savedUser.id, place.id, table_name).then((access) => {
           // only one element
@@ -194,11 +194,11 @@ describe('Test Has Access.', () => {
     const table_name = 'survey';
     return Survey.save(getSurvey()).then((place) => {
       const newUser = getUser(7);
-      newUser.access = {
+      newUser.access = [{
         to: place.id,
         in: table_name,
         accessType: 'r/w',
-      };
+      }];
       User.save(newUser).then((savedUser) => {
         Access.hasWriteAccess(savedUser.id, place.id, table_name).then((access) => {
           // only one element

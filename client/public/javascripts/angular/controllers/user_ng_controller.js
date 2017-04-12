@@ -12,8 +12,9 @@ controllers
   $scope.accessTo = [];
   $scope.places = [];
   $scope.surveys = [];
-  $scope.isUnique =false;
+  $scope.usernameUnique =false;
   $scope.loadingIsUnique = false;
+  $scope.bool = true;
 
   let surveysLoaded = false;
   let placesLoaded = false;
@@ -97,12 +98,14 @@ controllers
   }
 
   $scope.isUnique = function() {
+    console.log('is un');
+    $scope.usernameUnique = false;
     $scope.loadingIsUnique = true;
-    $http.post('/api/v1/users/isunique' + $scope.selectedUser.username)
+    $http.get('/users/isunique/' + $scope.selectedUser.username)
       .success(function(results) {
-        $scope.isUnique = results;
+        console.log(results);
+        $scope.usernameUnique = results;
         $scope.loadingIsUnique = false;
-
       })
       .error(function(err) {
         console.log(err);
@@ -112,7 +115,7 @@ controllers
 
   $scope.validForm = function(skipPassword) {
     return !($scope.form.$error.required || $scope.form.$error.maxlength ||
-      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !($scope.passwordMatch() || skipPassword) || !isUnique);
+      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !($scope.passwordMatch() || skipPassword) || !$scope.usernameUnique);
   };
 
 

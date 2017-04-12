@@ -256,6 +256,10 @@ module.exports = function router(app, passport) {
     userController.toggleIsActive(req, res, next);
   });
 
+  app.get('/users/isunique/:username', hasAccessToWrite, (req, res, next) => {
+    userController.isUnique(req, res, next);
+  });
+
   app.get('/profile', hasAccessToRead, (req, res, next) => {
     userController.profile(req, res, next);
   });

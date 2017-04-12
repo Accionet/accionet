@@ -24,7 +24,7 @@
             <div ng-show="loadingIsUnique" class="alert alert-warning">
               <i class="fa fa-spinner fa-pulse fa-fw "></i>
             </div>
-            <div ng-show="!form.username.$error.required && !isUnique && !loadingIsUnique" class="alert alert-danger">
+            <div ng-show="!form.username.$error.required && !usernameUnique && !loadingIsUnique" class="alert alert-warning">
               El usuario {{selectedUser.username}} ya est&aacute; registrado
             </div>
           </div>

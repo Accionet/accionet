@@ -19,7 +19,6 @@ exports.count = function getAmountOf(req, res) {
   });
 };
 
-
 function all(req, res, active) {
   Users.find({
     is_active: active,
@@ -133,6 +132,17 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
     return res.status(200).send(json);
   }).catch((err) => {
     return res.status(400).send({
+      error: err,
+    });
+  });
+};
+
+exports.isUnique = function (req, res) {
+  const username = req.params.username;
+  Users.usernameTaken(username).then((taken) => {
+    return res.status(200).send(!taken);
+  }).catch((err) => {
+    return res.status(500).send({
       error: err,
     });
   });

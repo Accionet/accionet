@@ -16,15 +16,4 @@ const cmd = require('node-cmd');
 
 const visit = require('../models/visits');
 
-
-
-
-Survey.find({}, {
-  surveys: 'all',
-  questions: 'all',
-  options: 'all',
-}).then((surveys) => {
-  console.log(surveys);
-}).catch((err) => {
-
-});
+const userController = require('../controllers/userController');

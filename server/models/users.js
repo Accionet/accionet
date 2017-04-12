@@ -25,8 +25,8 @@ class User extends Activatable {
   }
 
   usernameTaken(username) {
-    return new Promise(function (resolve, reject) {
-      this.find({ username }).then((results) => {
+    return new Promise((resolve, reject) => {
+      super.find({ username }).then((results) => {
         if (results.length > 0) {
           return resolve(true);
         }

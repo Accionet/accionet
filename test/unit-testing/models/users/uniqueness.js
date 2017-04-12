@@ -23,37 +23,41 @@ describe('User check is Unique', () => {
       user.username = username;
       user.password = password;
       user.email = 'a@a';
-      User.usernameTaken(username).then((answer) => {
-        assert.equal(true, answer);
-        done();
-      })
-        .catch((err) => {
-          done(err);
-        });
+      User.save(user).then(() => {
+        User.usernameTaken(username).then((answer) => {
+          assert.equal(true, answer);
+          done();
+        })
+              .catch((err) => {
+                done(err);
+              });
+      }).catch((err) => {
+        done(err);
+      });
     }).catch((err) => {
       done(err);
     });
   });
 
-  // eslint-disable-next-line no-undef
+// eslint-disable-next-line no-undef
   it('It is not taken', (done) => {
     User.usernameTaken('not taken username').then((answer) => {
       assert.equal(answer, false);
       done();
     })
-      .catch((err) => {
-        done(err);
-      });
+    .catch((err) => {
+      done(err);
+    });
   });
 
-  // eslint-disable-next-line no-undef
+// eslint-disable-next-line no-undef
   it('Pass undefined as param', (done) => {
     User.usernameTaken(undefined).then((answer) => {
       assert.equal(answer, false);
       done();
     })
-      .catch((err) => {
-        done(err);
-      });
+    .catch((err) => {
+      done(err);
+    });
   });
 });

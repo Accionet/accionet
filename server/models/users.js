@@ -24,6 +24,19 @@ class User extends Activatable {
     return bcrypt.compareSync(password, user.password);
   }
 
+  usernameTaken(username) {
+    return new Promise(function (resolve, reject) {
+      this.find({ username }).then((results) => {
+        if (results.length > 0) {
+          return resolve(true);
+        }
+        resolve(false);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
   parseAccess(entryArray, user_id) {
     // entryArray is not an array
     if (!Array.isArray(entryArray)) {

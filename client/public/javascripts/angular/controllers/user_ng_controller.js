@@ -244,6 +244,10 @@ controllers
 
   //Remove access from array
   $scope.removeAccess = function(i) {
+    const access = $scope.accessTo[i];
+    if (access.in && access.to) {
+      changeSelected($scope[access.in], access.to, false);
+    }
     $scope.accessTo.splice(i, 1);
   }
 

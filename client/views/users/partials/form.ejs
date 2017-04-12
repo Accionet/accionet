@@ -166,10 +166,10 @@
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <select ng-model="value" ng-change="registerAccess(i, value)" name="accessTo" required>
                   <optgroup label="Lugares">
-                    <option ng-if='isAvailable(value, p)' id="places{{p.id}}"  value='{"in": "places","to":"{{p.id}}"}' ng-repeat="p in places" >{{p.name}}</option>
+                    <option ng-if='isAvailable(value, p)' value='{"in": "places","to":"{{p.id}}"}' ng-repeat="p in places" >{{p.name}}</option>
                   </optgroup>
                   <optgroup label="Encuestas">
-                    <option ng-if="!s.disabled" value='{"in": "surveys","to":"{{s.id}}"}' ng-repeat="s in surveys">{{s.title}}</option>
+                    <option ng-if='isAvailable(value, s)' value='{"in": "surveys","to":"{{s.id}}"}' ng-repeat="s in surveys">{{s.title}}</option>
 
                   </optgroup>
                 </select>

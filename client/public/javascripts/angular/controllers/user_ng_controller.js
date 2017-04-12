@@ -17,7 +17,7 @@ controllers
   let placesLoaded = false;
 
   const SURVEYS = 0;
-  const PLACES =1;
+  const PLACES = 1;
 
 
 
@@ -47,12 +47,9 @@ controllers
   $scope.toggleIsActive = function(user) {
     $http.put(`/users/${user.id}/toggleIsActive`)
       .success(function(data) {
-        console.log(data);
         locallyUpdateUser(data.user);
       })
-      .error(function(data) {
-        console.log(data);
-      });
+      .error(function(data) {});
   };
 
 
@@ -72,24 +69,20 @@ controllers
         .success(function(data) {
           $scope.formData = {};
           $scope.users = data;
-          console.log($scope.selectedUser);
           $window.location.href = '/users/';
         })
         .error(function(error) {
-          console.log('hola');
-          console.log(error);
+
         });
     }
   };
 
   // updates a user
   $scope.updateUser = function(user) {
-    console.log('meneh');
-    console.log('ir a buscar');
+
     $http.put('/users/' + $scope.selectedUser.id + '/edit', $scope.selectedUser)
       .success(function(data) {
         user = data.user;
-        console.log(user);
         $window.location.href = '/users/';
       })
       .error(function(error) {
@@ -255,10 +248,13 @@ controllers
   }
 
   $scope.registerAccess = function(access, accessTo) {
+    if (access.in && access.to) {
+      changeAvailable($scope[access.in], access.to, true);
+    }
     var temp = JSON.parse(accessTo);
     access.in = temp.in;
     access.to = temp.to;
-
+    changeAvailable($scope[access.in], access.to, false);
   }
 
   $scope.accessWellDefined = function() {
@@ -271,6 +267,31 @@ controllers
     return true;
   }
 
+  $scope.isAvailable = function(selected, p) {
+    // if its selected in current option then it should return true
+    if (selected) {
+      selected = JSON.parse(selected);
+      if (selected.to == p.id) {
+        console.log('reeedeee');
+        return true;
+      }
+    }
+    return !p.selected;
+  }
+
+
+  function changeAvailable(array, inElement, toValue) {
+
+    inElement = parseInt(inElement, 10);
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].id === inElement) {
+        array[i].selected = true;
+        return;
+      }
+
+    }
+  }
+
   $scope.loadAccesables = function() {
     load('/api/v1/surveys/all/names', 'surveys', surveysLoaded);
     load('/api/v1/places/all/names', 'places', placesLoaded);
@@ -279,11 +300,11 @@ controllers
 
   function load(route, saveIn, changeBoolean) {
     $http.get(route)
-    .success(function(results) {
-      // saveData(results.data, whatToLoad);
-      $scope[saveIn] = results.data;
-      changeBoolean = true;
-      $scope.loadingAccesables = surveysLoaded && placesLoaded;
+      .success(function(results) {
+        // saveData(results.data, whatToLoad);
+        $scope[saveIn] = results.data;
+        changeBoolean = true;
+        $scope.loadingAccesables = surveysLoaded && placesLoaded;
       })
       .error(function(data) {
 

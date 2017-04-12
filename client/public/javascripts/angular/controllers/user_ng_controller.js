@@ -249,12 +249,12 @@ controllers
 
   $scope.registerAccess = function(access, accessTo) {
     if (access.in && access.to) {
-      changeAvailable($scope[access.in], access.to, true);
+      changeSelected($scope[access.in], access.to, false);
     }
     var temp = JSON.parse(accessTo);
     access.in = temp.in;
     access.to = temp.to;
-    changeAvailable($scope[access.in], access.to, false);
+    changeSelected($scope[access.in], access.to, true);
   }
 
   $scope.accessWellDefined = function() {
@@ -272,7 +272,6 @@ controllers
     if (selected) {
       selected = JSON.parse(selected);
       if (selected.to == p.id) {
-        console.log('reeedeee');
         return true;
       }
     }
@@ -280,12 +279,12 @@ controllers
   }
 
 
-  function changeAvailable(array, inElement, toValue) {
+  function changeSelected(array, inElement, toValue) {
 
     inElement = parseInt(inElement, 10);
     for (var i = 0; i < array.length; i++) {
       if (array[i].id === inElement) {
-        array[i].selected = true;
+        array[i].selected = toValue;
         return;
       }
 

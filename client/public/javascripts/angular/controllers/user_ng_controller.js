@@ -101,12 +101,12 @@ controllers
     $http.post('/api/v1/users/isunique' + $scope.selectedUser.username)
       .success(function(results) {
         $scope.isUnique = results;
-        // $scope.loadingIsUnique = false;
+        $scope.loadingIsUnique = false;
 
       })
       .error(function(err) {
         console.log(err);
-        // $scope.loadingIsUnique = false;
+        $scope.loadingIsUnique = false;
       });
   }
 

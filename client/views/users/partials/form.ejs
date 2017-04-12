@@ -14,12 +14,18 @@
             <label for="username">
               Usuario:
             </label>
-            <input class="form-control" name="username" type="text" placeholder="Usuario" ng-model="selectedUser.username" required ng-maxlength="80"/>
+            <input class="form-control" name="username" type="text" placeholder="Usuario" ng-model="selectedUser.username" ng-change="isUnique()" required ng-maxlength="80"/>
             <div ng-show="form.username.$error.required" class="alert alert-danger">
               No puede ser vacio
             </div>
             <div ng-show="form.username.$error.maxlength" class="alert alert-danger">
               No puede tener más de 80 caracteres
+            </div>
+            <div ng-show="loadingIsUnique" class="alert alert-warning">
+              <i class="fa fa-spinner fa-pulse fa-fw "></i>
+            </div>
+            <div ng-show="!form.username.$error.required && !isUnique && !loadingIsUnique" class="alert alert-danger">
+              El usuario {{selectedUser.username}} ya est&aacute; registrado
             </div>
           </div>
 

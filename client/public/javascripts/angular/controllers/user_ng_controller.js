@@ -12,6 +12,8 @@ controllers
   $scope.accessTo = [];
   $scope.places = [];
   $scope.surveys = [];
+  $scope.isUnique =false;
+  $scope.loadingIsUnique = false;
 
   let surveysLoaded = false;
   let placesLoaded = false;
@@ -94,9 +96,23 @@ controllers
     return $scope.selectedUser.password === $scope.password_verify;
   }
 
+  $scope.isUnique = function() {
+    $scope.loadingIsUnique = true;
+    $http.post('/api/v1/users/isunique' + $scope.selectedUser.username)
+      .success(function(results) {
+        $scope.isUnique = results;
+        // $scope.loadingIsUnique = false;
+
+      })
+      .error(function(err) {
+        console.log(err);
+        // $scope.loadingIsUnique = false;
+      });
+  }
+
   $scope.validForm = function(skipPassword) {
     return !($scope.form.$error.required || $scope.form.$error.maxlength ||
-      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !($scope.passwordMatch() || skipPassword));
+      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !($scope.passwordMatch() || skipPassword) || !isUnique);
   };
 
 

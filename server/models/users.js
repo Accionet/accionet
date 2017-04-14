@@ -117,6 +117,9 @@ class User extends Activatable {
       if (!user || !user.id) {
         reject('User param not defined correctly');
       }
+      if (!Array.isArray(finalAccess)) {
+        reject('Access param not defined correctly');
+      }
       Access.find({
         user_id: user.id,
       }).then((initialAccess) => {

@@ -1,4 +1,6 @@
 const Table = require('./table'); // eslint-disable-line no-unused-vars
+const utils = require('../services/utils');
+
 
 const READ = 'r'; //eslint-disable-line
 const READ_AND_WRITE = 'r/w';
@@ -54,6 +56,7 @@ class Access extends Table {
   }
 
   parseAccessForClient(results) {
+    results = utils.cloneJSON(results);
     for (let i = 0; i < results.length; i++) {
       this.renameAttributeInJson(results[i], 'access_id', 'to');
       this.renameAttributeInJson(results[i], 'table_name', 'in');
@@ -63,6 +66,7 @@ class Access extends Table {
   }
 
   parseAccessForServer(results) {
+    results = utils.cloneJSON(results);
     for (let i = 0; i < results.length; i++) {
       this.renameAttributeInJson(results[i], 'to', 'access_id');
       this.renameAttributeInJson(results[i], 'in', 'table_name');
@@ -92,9 +96,6 @@ class Access extends Table {
 
   save(attr) {
     attr = this.parseAccessForServer([attr]);
-    console.log('attrrr in save');
-    console.log(attr[0]);
-    console.log('----------------------------');
     return super.save(attr[0]);
   }
 

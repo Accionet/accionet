@@ -60,15 +60,20 @@ describe('Edit access of user.', () => {
   // eslint-disable-next-line no-undef
   before((done) => {
     const promises = [];
-    promises.push(knex('users').del());
-    promises.push(knex('access').del());
+    const knexPromises = [];
+    knexPromises.push(knex('users').del());
+    knexPromises.push(knex('access').del());
 
     for (let i = 0; i < 4; i++) {
       promises.push(Place.save(getPlace()));
     }
-    return Promise.all(promises).then((results) => {
-      places = results;
-      done();
+    return Promise.all(knexPromises).then(() => {
+      Promise.all(promises).then((results) => {
+        places = results;
+        done();
+      }).catch((err) => {
+        done(err);
+      });
     }).catch((err) => {
       done(err);
     });
@@ -78,7 +83,7 @@ describe('Edit access of user.', () => {
   //   const newUser = getUser(1);
   //   const initialAccess = [];
   //
-  //   initialAccess.push(setAccessTo(places[1], 'r'));
+  //   initialAccess.push(setAccessTo(places[0], 'r'));
   //   newUser.access = initialAccess;
   //   return User.save(newUser).then((user) => {
   //     initialAccess.push(setAccessTo(places[1], 'r'));
@@ -94,31 +99,29 @@ describe('Edit access of user.', () => {
   //     done(err);
   //   });
   // });
-  // eslint-disable-next-line no-undef
-  it('Only edit existing', (done) => {
-    const newUser = getUser(2);
-    const initialAccess = [];
-    initialAccess.push(setAccessTo(places[1], 'r'));
-    initialAccess.push(setAccessTo(places[2], 'r/w'));
-    newUser.access = initialAccess;
-    // console.log(initialAccess);
-    return User.save(newUser).then((user) => {
-      initialAccess[0].accessType = 'r/w';
-      initialAccess[1].accessType = 'r';
-      done();
-      console.log(user);
-      // User.editAccess(user, initialAccess).then((finalAccess) => {
-      //   assert.equal(initialAccess.length, finalAccess.length);
-      //   assert.equal(accessIsIn(initialAccess[0], finalAccess), true);
-      //   assert.equal(accessIsIn(initialAccess[1], finalAccess), true);
-      //   done();
-      // }).catch((err) => {
-      //   done(err);
-      // });
-    }).catch((err) => {
-      done(err);
-    });
-  });
+  // // eslint-disable-next-line no-undef
+  // it('Only edit existing', (done) => {
+  //   const newUser = getUser(2);
+  //   const initialAccess = [];
+  //   initialAccess.push(setAccessTo(places[1], 'r'));
+  //   initialAccess.push(setAccessTo(places[2], 'r/w'));
+  //   newUser.access = initialAccess;
+  //   // console.log(initialAccess);
+  //   return User.save(newUser).then((user) => {
+  //     initialAccess[0].accessType = 'r/w';
+  //     initialAccess[1].accessType = 'r';
+  //     User.editAccess(user, initialAccess).then((finalAccess) => {
+  //       assert.equal(initialAccess.length, finalAccess.length);
+  //       assert.equal(accessIsIn(initialAccess[0], finalAccess), true);
+  //       assert.equal(accessIsIn(initialAccess[1], finalAccess), true);
+  //       done();
+  //     }).catch((err) => {
+  //       done(err);
+  //     });
+  //   }).catch((err) => {
+  //     done(err);
+  //   });
+  // });
   // // eslint-disable-next-line no-undef
   // it('Only delete existing', (done) => {
   //   const newUser = getUser(1);
@@ -139,30 +142,32 @@ describe('Edit access of user.', () => {
   //     done(err);
   //   });
   // });
-  // // eslint-disable-next-line no-undef
-  // it('Delete one, edit one and add one new', (done) => {
-  //   const newUser = getUser(1);
-  //   const initialAccess = [];
-  //   initialAccess.push(setAccessTo(places[1], 'r'));
-  //   initialAccess.push(setAccessTo(places[2], 'r/w'));
-  //   newUser.access = initialAccess;
-  //   return User.save(newUser).then((user) => {
-  //     // edit
-  //     initialAccess.push(setAccessTo(places[1], 'r/w'));
-  //     initialAccess.splice(1, 1);
-  //     initialAccess.push(setAccessTo(places[3], 'r/w'));
-  //     User.editAccess(user, initialAccess).then((finalAccess) => {
-  //       assert.equal(initialAccess.length, finalAccess.length);
-  //       assert.equal(accessIsIn(initialAccess[0], finalAccess), true);
-  //       assert.equal(accessIsIn(initialAccess[1], finalAccess), true);
-  //       done();
-  //     }).catch((err) => {
-  //       done(err);
-  //     });
-  //   }).catch((err) => {
-  //     done(err);
-  //   });
-  // });
+  // eslint-disable-next-line no-undef
+  it('Delete one, edit one and add one new', (done) => {
+    const newUser = getUser(1);
+    const initialAccess = [];
+    initialAccess.push(setAccessTo(places[1], 'r'));
+    initialAccess.push(setAccessTo(places[2], 'r/w'));
+    newUser.access = initialAccess;
+    return User.save(newUser).then((user) => {
+      // edit
+      initialAccess[0].accessType = 'r/w';
+      // delete
+      initialAccess.splice(1, 1);
+      // add
+      initialAccess.push(setAccessTo(places[3], 'r/w'));
+      User.editAccess(user, initialAccess).then((finalAccess) => {
+        assert.equal(initialAccess.length, finalAccess.length);
+        assert.equal(accessIsIn(initialAccess[0], finalAccess), true);
+        assert.equal(accessIsIn(initialAccess[1], finalAccess), true);
+        done();
+      }).catch((err) => {
+        done(err);
+      });
+    }).catch((err) => {
+      done(err);
+    });
+  });
 });
 
 // // eslint-disable-next-line no-undef

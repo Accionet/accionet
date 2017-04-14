@@ -41,7 +41,7 @@ class User extends Activatable {
 
   parseAccess(entryArray, user_id) {
     // entryArray is not an array
-    if (!Array.isArray(entryArray)) {
+    if (!(Array.isArray(entryArray) || entryArray instanceof Array)) {
       return false;
     }
     const returnArray = [];
@@ -54,8 +54,6 @@ class User extends Activatable {
           table_name: entry.in,
           access_type: entry.accessType,
         });
-      } else {
-        return false;
       }
     }
     return returnArray;
@@ -68,19 +66,20 @@ class User extends Activatable {
     }
     return Promise.all(promises);
   }
-  isIn(array, access) {
+  getAccessIndex(array, access) {
     for (let i = 0; i < array.length; i++) {
       if (array[i].in === access.in && array[i].to === access.to) {
         return i;
       }
     }
-    return false;
+    return -1;
   }
 
-  getNewAccess(before, after) {
+  getNewAccess(before, after, user_id) {
     const promises = [];
     for (let i = 0; i < after.length; i++) {
-      if (!this.isIn(before, after[i])) {
+      if (this.getAccessIndex(before, after[i]) === -1) {
+        after[i].user_id = user_id;
         promises.push(Access.save(after[i]));
       }
     }
@@ -90,7 +89,7 @@ class User extends Activatable {
   getDeleteAccess(before, after) {
     const promises = [];
     for (let i = 0; i < before.length; i++) {
-      if (!this.isIn(after, before[i])) {
+      if (this.getAccessIndex(after, before[i]) === -1) {
         promises.push(Access.delete(before[i].id));
       }
     }
@@ -98,19 +97,13 @@ class User extends Activatable {
   }
 
   getEditAccess(before, after) {
-    console.log('before:');
-    console.log(before);
-    console.log('after:');
-    console.log(after);
-    console.log('------------------------------------------------');
     const promises = [];
     for (let i = 0; i < before.length; i++) {
-      const index = this.isIn(after, after[i]);
-      if (index) {
+      const index = this.getAccessIndex(after, before[i]);
+      if (index >= 0) {
         const changed = before[i].accessType !== after[index].accessType;
         if (changed) {
           after[index].user_id = before[i].user_id;
-          console.log(after[index]);
           promises.push(Access.update(before[i].id, after[index]));
         }
       }
@@ -127,12 +120,15 @@ class User extends Activatable {
       Access.find({
         user_id: user.id,
       }).then((initialAccess) => {
+        const createAccess = this.getNewAccess(initialAccess, finalAccess, user.id);
         const deleteAccess = this.getDeleteAccess(initialAccess, finalAccess);
-        const createAccess = this.getNewAccess(initialAccess, finalAccess);
         const editAccess = this.getEditAccess(initialAccess, finalAccess);
-        const returnablePromises = Promise.all([createAccess, editAccess]);
-        deleteAccess.then(() => {
-          resolve(returnablePromises);
+        const returnablePromises = Promise.all([createAccess, editAccess, deleteAccess]);
+
+        returnablePromises.then(() => {
+          resolve(Access.find({
+            user_id: user.id,
+          }));
         }).catch((err) => {
           reject(err);
         });
@@ -160,8 +156,6 @@ class User extends Activatable {
     return new Promise((resolve, reject) => {
       super.save(originalEntry).then((savedUser) => {
         const access = this.parseAccess(access_params, savedUser.id);
-        console.log(access);
-        console.log('-=----------------------');
 
         if (access) {
           this.saveAccess(access).then(() => {

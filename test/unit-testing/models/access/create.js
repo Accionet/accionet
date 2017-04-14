@@ -66,7 +66,7 @@ describe('Save User with access to place.', () => {
         }).then((access) => {
           // only one element
           assert.equal(access.length, 1);
-          assert.equal(access[0].access_type, accessType);
+          assert.equal(access[0].accessType, accessType);
           done();
         }).catch((err) => {
           done(err);

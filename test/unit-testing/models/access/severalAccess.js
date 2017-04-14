@@ -32,7 +32,7 @@ function getPlace() {
 
 
 function isAccessToPlaceSavedIn(placeAccess, access) {
-  return access.access_id === placeAccess.to && access.table_name === placeAccess.in;
+  return access.to === placeAccess.to && access.in === placeAccess.in;
 }
 
 // eslint-disable-next-line no-undef

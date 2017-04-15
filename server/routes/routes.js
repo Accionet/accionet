@@ -12,6 +12,8 @@ const userController = require('../controllers/userController');
 const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
 const visitController = require('../controllers/visitController');
+const accessController = require('../controllers/accessController');
+
 
 module.exports = function router(app, passport) {
   app.use((req, res, next) => {
@@ -258,6 +260,10 @@ module.exports = function router(app, passport) {
 
   app.get('/users/isunique/:username', hasAccessToWrite, (req, res, next) => {
     userController.isUnique(req, res, next);
+  });
+
+  app.get('/users/:id/access', hasAccessToRead, (req, res, next) => {
+    accessController.fromUser(req, res, next);
   });
 
   app.get('/profile', hasAccessToRead, (req, res, next) => {

@@ -42,11 +42,6 @@ function setAccessTo(place, accessType) {
 }
 
 function accessIsIn(access, array) {
-  // console.log('--------------');
-  // console.log(access);
-  // console.log('------------');
-  // console.log(array);
-  // console.log('-------------------------');
   for (let i = 0; i < array.length; i++) {
     if (access.in === array[i].in && access.to === array[i].to && access.accessType === array[i].accessType) {
       return true;

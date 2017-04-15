@@ -18,6 +18,8 @@ controllers
 
   let surveysLoaded = false;
   let placesLoaded = false;
+  let currentAccessLoaded = false;
+
 
   const SURVEYS = 0;
   const PLACES = 1;
@@ -98,17 +100,14 @@ controllers
   }
 
   $scope.isUnique = function() {
-    console.log('is un');
     $scope.usernameUnique = false;
     $scope.loadingIsUnique = true;
     $http.get('/users/isunique/' + $scope.selectedUser.username)
       .success(function(results) {
-        console.log(results);
         $scope.usernameUnique = results;
         $scope.loadingIsUnique = false;
       })
       .error(function(err) {
-        console.log(err);
         $scope.loadingIsUnique = false;
       });
   }
@@ -314,7 +313,10 @@ controllers
     }
   }
 
+
+
   $scope.loadAccesables = function() {
+    load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded)
     load('/api/v1/surveys/all/names', 'surveys', surveysLoaded);
     load('/api/v1/places/all/names', 'places', placesLoaded);
 
@@ -323,14 +325,12 @@ controllers
   function load(route, saveIn, changeBoolean) {
     $http.get(route)
       .success(function(results) {
-        // saveData(results.data, whatToLoad);
         $scope[saveIn] = results.data;
         changeBoolean = true;
-        $scope.loadingAccesables = surveysLoaded && placesLoaded;
+        $scope.loadingAccesables = surveysLoaded && placesLoaded && currentAccessLoaded;
       })
       .error(function(data) {
 
       });
   }
-
 });

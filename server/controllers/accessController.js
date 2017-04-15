@@ -6,7 +6,7 @@ const httpResponse = require('../services/httpResponse');
 
 exports.fromUser = function (req, res) {
   const user_id = req.params.id;
-  Access.find({ user_id }).then((results) => {
+  Access.find({ user_id }, 'all', true).then((results) => {
     const json = httpResponse.success('Ok', 'data', results);
     return res.status(200).send(json);
   }).catch((err) => {

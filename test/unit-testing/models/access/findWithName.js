@@ -45,7 +45,12 @@ function getSurvey() {
 describe('Find Access, check it brings name.', () => {
   // eslint-disable-next-line no-undef
   before((done) => {
-    return knex.seed.run()
+    const promises = [];
+    promises.push(knex(User.table_name).del());
+    promises.push(knex(Place.table_name).del());
+    promises.push(knex(Survey.table_name).del());
+
+    return Promise.all(promises)
       .then(() => {
         done();
       }).catch((err) => {
@@ -67,7 +72,7 @@ describe('Find Access, check it brings name.', () => {
           user_id: savedUser.id,
           access_id: place.id,
           table_name: 'places',
-        }, true).then((access) => {
+        }, 'all', true).then((access) => {
           // only one element
           assert.equal(access[0].name, place.name);
           done();
@@ -88,7 +93,7 @@ describe('Find Access, check it brings name.', () => {
       const accessType = 'r';
       newUser.access = [{
         to: survey.id,
-        in: 'places',
+        in: 'surveys',
         accessType,
       }];
       User.save(newUser).then((savedUser) => {
@@ -96,7 +101,7 @@ describe('Find Access, check it brings name.', () => {
           user_id: savedUser.id,
           access_id: survey.id,
           table_name: 'surveys',
-        }, true).then((access) => {
+        }, 'all', true).then((access) => {
           // only one element
           assert.equal(access[0].title, survey.title);
           done();
@@ -128,9 +133,7 @@ describe('Find Access, check it brings name.', () => {
         User.save(newUser).then((savedUser) => {
           Access.find({
             user_id: savedUser.id,
-            access_id: place.id,
-            table_name: 'places',
-          }, true).then((access) => {
+          }, 'all', true).then((access) => {
             // only one element
             assert.equal(access[1].title, survey.title);
             assert.equal(access[0].name, place.name);

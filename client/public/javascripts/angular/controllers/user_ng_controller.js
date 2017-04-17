@@ -319,12 +319,16 @@ $scope.myColor = $scope.colors[4];
   $scope.isAvailable = function(selected, p) {
     // if its selected in current option then it should return true
     if (selected) {
-      selected = JSON.parse(selected);
       if (selected.to == p.id) {
         return true;
       }
+      for (var i = 0; i < $scope.accessTo.length; i++) {
+        if($scope.accessTo[i].to == p.id){
+          return false;
+        }
+      }
     }
-    return !p.selected;
+    return true;
   }
 
 

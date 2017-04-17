@@ -1,11 +1,11 @@
 //
 const path = require('path');
-const Users = require('../models/users');
+const User = require('../models/users');
 const httpResponse = require('../services/httpResponse');
 
 
 exports.count = function getAmountOf(req, res) {
-  Users.count({}).then((count) => {
+  User.count({}).then((count) => {
     const response = {
       success: 'Amount of users where counted successfully',
       amount: count,
@@ -20,7 +20,7 @@ exports.count = function getAmountOf(req, res) {
 };
 
 function all(req, res, active) {
-  Users.find({
+  User.find({
     is_active: active,
   }).then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'index.ejs'), {
@@ -46,7 +46,7 @@ exports.disabled = function (req, res) {
 
 /* Shows the view to create a new user */
 exports.new = function (req, res) {
-  Users.new().then((result) => {
+  User.new().then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'create.ejs'), {
       user: result,
       message: req.flash('signupMessage'),
@@ -61,8 +61,50 @@ exports.new = function (req, res) {
   });
 };
 
+exports.create = function (req, res) {
+  const username = req.body.username;
+  User.find({
+    username,
+  })
+    .then((users) => {
+      const user = users[0];
+      // check to see if theres already a user with that username
+      if (user) {
+        const json = httpResponse.error('Usuario ya existe');
+        return res.status(400).send(json);
+      }
+      // if there is no user with that username
+      // create the user
+      User.new().then((newUser) => {
+        // set the user's local credentials
+        newUser = req.body;
+        delete newUser.id;
+        newUser.email_verified = false;
+        // save the user
+        User.save(newUser).then((user) => {
+          const json = httpResponse.success('Usuario creado exitosamente', 'user', user);
+          return res.status(200).send(json);
+        }).catch((err) => {
+          if (err) {
+            const json = httpResponse.error(err);
+            return res.status(400).send(json);
+          }
+        });
+      }).catch((err) => {
+        // if there are any errors, return the error
+        if (err) {
+          const json = httpResponse.error(err);
+          return res.status(400).send(json);
+        }
+      });
+    }).catch((err) => {
+      const json = httpResponse.error(err);
+      return res.status(400).send(json);
+    });
+};
+
 function getUser(id, req, res) {
-  Users.findById(id).then((user) => {
+  User.findById(id).then((user) => {
     if (!user) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'show.ejs'), {
         error: 'ERROR: No user found',
@@ -89,7 +131,7 @@ exports.profile = function (req, res) {
 };
 
 exports.edit = function (req, res) {
-  Users.findById(req.params.id).then((user) => {
+  User.findById(req.params.id).then((user) => {
     if (!user) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'edit.ejs'), {
         error: 'ERROR: No user found',
@@ -109,7 +151,7 @@ exports.edit = function (req, res) {
 
 exports.update = function updateUser(req, res) {
   const id = parseInt(req.params.id, 10);
-  Users.update(id, req.body).then((user) => {
+  User.update(id, req.body).then((user) => {
     if (!user) {
       return res.status(400).send({
         error: 'No user found',
@@ -125,7 +167,7 @@ exports.update = function updateUser(req, res) {
 };
 
 exports.toggleIsActive = function toggleIsActive(req, res) {
-  Users.toggleIsActive(req.params.id).then((response) => {
+  User.toggleIsActive(req.params.id).then((response) => {
     const json = {
       user: response,
     };
@@ -139,7 +181,7 @@ exports.toggleIsActive = function toggleIsActive(req, res) {
 
 exports.isUnique = function (req, res) {
   const username = req.params.username;
-  Users.usernameTaken(username).then((taken) => {
+  User.usernameTaken(username).then((taken) => {
     return res.status(200).send(!taken);
   }).catch((err) => {
     return res.status(500).send({

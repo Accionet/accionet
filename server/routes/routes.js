@@ -5,7 +5,7 @@ const path = require('path');
 // eslint-disable-next-line new-cap
 
 // var passport = require('passport');
-
+// controllers
 const placeController = require('../controllers/placeController');
 const responseController = require('../controllers/responseController');
 const userController = require('../controllers/userController');
@@ -13,6 +13,9 @@ const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
 const visitController = require('../controllers/visitController');
 const accessController = require('../controllers/accessController');
+
+// models
+const User = require('../models/users');
 
 
 module.exports = function router(app, passport) {
@@ -275,12 +278,9 @@ module.exports = function router(app, passport) {
   });
 
   // process the signup form
-  app.post('/users/new', isAdmin, passport.authenticate('local-signup', {
-    successRedirect: '/users/', // redirect to the secure profile section
-    failureRedirect: '/users/new', // redirect back to the signup page if there is an error
-    failureFlash: true, // allow flash messages
-
-  }));
+  app.post('/users/new', isAdmin, (req, res, next) => {
+    userController.create(req, res, next);
+  });
 };
 //
 // ////////////////////////////////////////////
@@ -322,9 +322,27 @@ function hasAccessToRead(req, res, next) {
 function isAdmin(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
-    return next();
-  }
+    console.log('ir a ver si es admin');
+    User.isAdmin(req.user.id).then((isAdmin) => {
+      console.log(req.user.id);
+      console.log(isAdmin);
+      if (isAdmin) {
+        console.log('lo es');
+        return next();
+      }
+      console.log('no lo es ');
 
-  // if they aren't redirect them to the home page
+      logout(req, res);
+    }).catch(() => {
+      console.log('no lo es catch');
+
+      logout(req, res);
+    });
+  }
+}
+
+function logout(req, res) {
+  req.logout();
+    // if they aren't redirect them to the home page
   res.redirect('/');
 }

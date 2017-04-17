@@ -102,7 +102,9 @@ describe('Pass wrong params', () => {
     return User.isAdmin(undefined).then(() => {
       done('it should not return as valid');
     }).catch((err) => {
-      done(err);
+      const correctErr = err === 'No se encontró una entrada con id = undefined';
+      assert.equal(correctErr, true);
+      done();
     });
   });
 
@@ -111,7 +113,8 @@ describe('Pass wrong params', () => {
     User.isAdmin(-1).then(() => {
       done('it should not return as valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(err, 'No se encontró una entrada con id = -1');
+      done();
     });
   });
 
@@ -120,7 +123,8 @@ describe('Pass wrong params', () => {
     User.isAdmin('this is not valid').then(() => {
       done('it should not return as valid');
     }).catch((err) => {
-      done(err);
+      assert.equal(err, 'Find parameter was not defined correctly');
+      done();
     });
   });
 });

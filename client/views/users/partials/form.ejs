@@ -180,7 +180,7 @@
               </div>
               <div class="col-sm-12 col-md-12 col-lg-4">
                 <select ng-model="i.to" name="accessTo" required>
-                  <option ng-if="i.in === 'places' && isAvailable(i, p)" value="{{p.id}}" ng-repeat="p in places" ng-selected="i.to === p.id" >{{p.name}}</option>
+                  <option ng-if="i.in === 'places' && true" value="{{p.id}}" ng-repeat="p in places" ng-selected="i.to === p.id" >{{p.name}} </option>
                   <option ng-if="i.in === 'surveys' && isAvailable(i, s)" value="{{s.id}}" ng-repeat="s in surveys" ng-selected="i.to === s.id" >{{s.title}}</option>
                 </select>
               </div>

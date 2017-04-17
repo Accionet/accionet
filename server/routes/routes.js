@@ -180,7 +180,7 @@ module.exports = function router(app, passport) {
     surveyController.countEndUser(req, res, next);
   });
 
-  app.get('/api/v1/surveys/all/names', hasAccessToRead, (req, res, next) => {
+  app.get('/api/v1/surveys/all/names', isLoggedIn, (req, res, next) => {
     surveyController.onlyNamesAndId(req, res, next);
   });
 
@@ -221,7 +221,7 @@ module.exports = function router(app, passport) {
     visitController.countEndUsersOfPlace(req, res, next);
   });
 
-  app.get('/api/v1/places/all/names', hasAccessToRead, (req, res, next) => {
+  app.get('/api/v1/places/all/names', isLoggedIn, (req, res, next) => {
     placeController.onlyNamesAndId(req, res, next);
   });
 
@@ -251,7 +251,6 @@ module.exports = function router(app, passport) {
   });
 
   app.get('/users/:id/edit', hasAccessToWrite, (req, res, next) => {
-    console.log('esta en en controller');
     userController.edit(req, res, next);
   });
 
@@ -267,15 +266,15 @@ module.exports = function router(app, passport) {
     userController.isUnique(req, res, next);
   });
 
-  app.get('/users/:id/access', isAdmin, (req, res, next) => {
+  app.get('/users/:id/access', hasAccessToRead, (req, res, next) => {
     accessController.fromUser(req, res, next);
   });
 
-  app.put('/users/:id/access', hasAccessToRead, (req, res, next) => {
+  app.put('/users/:id/access', hasAccessToWrite, (req, res, next) => {
     accessController.editFromUser(req, res, next);
   });
 
-  app.get('/profile', hasAccessToRead, (req, res, next) => {
+  app.get('/profile', isLoggedIn, (req, res, next) => {
     userController.profile(req, res, next);
   });
 
@@ -300,7 +299,18 @@ function isLoggedIn(req, res, next) {
   logout(req, res);
 }
 
+function selfUser(req) {
+  if (!(req.user && req.params.id)) {
+    return false;
+  }
+// turn then to strings to avoid returning false when one is 1 and the other "1"
+  return req.user.id.toString() === req.params.id.toString();
+}
+
 function hasAccessToWrite(req, res, next) {
+  if (selfUser(req)) {
+    return next();
+  }
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
     const access = { in: extractTableFromUrl(req.url),
@@ -325,12 +335,30 @@ function hasAccessToWrite(req, res, next) {
 }
 
 function hasAccessToRead(req, res, next) {
-  // if user is authenticated in the session, carry on
-  if (req.isAuthenticated()) {
+  if (selfUser(req)) {
     return next();
   }
-  // if they aren't redirect them to the home page
-  logout(req, res);
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()) {
+    const access = { in: extractTableFromUrl(req.url),
+      to: req.params.id,
+      user_id: req.user.id,
+    };
+    const promises = [];
+    promises.push(User.isAdmin(access.user_id));
+    promises.push(Access.hasReadAccess(access.user_id, access.to, access.in));
+    Promise.all(promises).then((results) => {
+      if (results[0] || results[1]) {
+        return next();
+      }
+      logout(req, res);
+    }).catch(() => {
+      logout(req, res);
+    });
+  } else {
+    // if they aren't redirect them to the home page
+    logout(req, res);
+  }
 }
 
 function isAdmin(req, res, next) {
@@ -346,7 +374,7 @@ function isAdmin(req, res, next) {
       logout(req, res);
     });
   } else {
-    logout();
+    logout(req, res);
   }
 }
 

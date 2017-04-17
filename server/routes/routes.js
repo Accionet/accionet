@@ -261,11 +261,11 @@ module.exports = function router(app, passport) {
     userController.toggleIsActive(req, res, next);
   });
 
-  app.get('/users/isunique/:username', hasAccessToWrite, (req, res, next) => {
+  app.get('/users/isunique/:username', isAdmin, (req, res, next) => {
     userController.isUnique(req, res, next);
   });
 
-  app.get('/users/:id/access', hasAccessToRead, (req, res, next) => {
+  app.get('/users/:id/access', isAdmin, (req, res, next) => {
     accessController.fromUser(req, res, next);
   });
 

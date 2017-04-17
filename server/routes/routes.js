@@ -16,6 +16,7 @@ const accessController = require('../controllers/accessController');
 
 // models
 const User = require('../models/users');
+const Access = require('../models/access');
 
 
 module.exports = function router(app, passport) {
@@ -250,6 +251,7 @@ module.exports = function router(app, passport) {
   });
 
   app.get('/users/:id/edit', hasAccessToWrite, (req, res, next) => {
+    console.log('esta en en controller');
     userController.edit(req, res, next);
   });
 
@@ -294,19 +296,32 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-
   // if they aren't redirect them to the home page
-  res.redirect('/');
+  logout(req, res);
 }
 
 function hasAccessToWrite(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
-    return next();
+    const access = { in: extractTableFromUrl(req.url),
+      to: req.params.id,
+      user_id: req.user.id,
+    };
+    const promises = [];
+    promises.push(User.isAdmin(access.user_id));
+    promises.push(Access.hasWriteAccess(access.user_id, access.to, access.in));
+    Promise.all(promises).then((results) => {
+      if (results[0] || results[1]) {
+        return next();
+      }
+      logout(req, res);
+    }).catch(() => {
+      logout(req, res);
+    });
+  } else {
+    // if they aren't redirect them to the home page
+    logout(req, res);
   }
-
-  // if they aren't redirect them to the home page
-  res.redirect('/');
 }
 
 function hasAccessToRead(req, res, next) {
@@ -314,35 +329,37 @@ function hasAccessToRead(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-
   // if they aren't redirect them to the home page
-  res.redirect('/');
+  logout(req, res);
 }
 
 function isAdmin(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
-    console.log('ir a ver si es admin');
     User.isAdmin(req.user.id).then((isAdmin) => {
-      console.log(req.user.id);
-      console.log(isAdmin);
       if (isAdmin) {
-        console.log('lo es');
         return next();
       }
-      console.log('no lo es ');
 
       logout(req, res);
     }).catch(() => {
-      console.log('no lo es catch');
-
       logout(req, res);
     });
+  } else {
+    logout();
   }
 }
 
 function logout(req, res) {
+  // if they aren't redirect them to the home page
   req.logout();
-    // if they aren't redirect them to the home page
   res.redirect('/');
+}
+
+function extractTableFromUrl(url) {
+  const parts = url.split('/');
+  if (parts[1] === 'api') {
+    return parts[3];
+  }
+  return parts[1];
 }

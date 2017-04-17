@@ -8,7 +8,6 @@
         </div>
         <!-- /.panel-heading -->
 
-
         <div class="panel-body" ng-init='loadAccesables()'>
           <div class="form-group">
             <label for="username">
@@ -24,8 +23,11 @@
             <div ng-show="loadingIsUnique" class="alert alert-warning">
               <i class="fa fa-spinner fa-pulse fa-fw "></i>
             </div>
-            <div ng-show="!form.username.$error.required && !usernameUnique && !loadingIsUnique" class="alert alert-warning">
-              El usuario {{selectedUser.username}} ya est&aacute; registrado
+
+            <div ng-show="!form.username.$error.required && !usernameUnique && !loadingIsUnique && usernameChanged" class="alert alert-warning">
+              El usuario
+              {{selectedUser.username}}
+              ya est&aacute; registrado
             </div>
           </div>
 
@@ -169,18 +171,38 @@
               <i class="fa fa-spinner fa-pulse fa-fw "></i>
             </div>
             <div ng-if="!loadingAccesables" ng-repeat="i in accessTo" class="row top-margin-10px">
-              <div class="col-sm-12 col-md-6 col-lg-6">
-                <select ng-model="value" ng-change="registerAccess(i, value)" name="accessTo" required>
+              <!-- <div class="col-sm-12 col-md-6 col-lg-6">
+                <select ng-model="i.value" name="accessTo" required>
                   <optgroup label="Lugares">
-                    <option ng-if='isAvailable(value, p)' value='{"in": "places","to":"{{p.id}}"}' ng-repeat="p in places" >{{p.name}}</option>
+                    <option ng-if='isAvailable(value, p)' value='{"in":"places","to":"{{p.id}}"}' ng-repeat="p in places"> {{p.name}}
+                    </option>
                   </optgroup>
                   <optgroup label="Encuestas">
-                    <option ng-if='isAvailable(value, s)' value='{"in": "surveys","to":"{{s.id}}"}' ng-repeat="s in surveys">{{s.title}}</option>
-
+                    <option ng-if='isAvailable(value, s)' value='{"in":"surveys","to":"{{s.id}}"}' ng-repeat="s in surveys">{{s.title}}</option>
                   </optgroup>
                 </select>
               </div>
               <div class="col-sm-12 col-md-4 col-lg-5">
+                <select title="Seleccione permiso" ng-model="i.accessType">
+                  <option value="r" selected>Lectura</option>
+                  <option value="r/w">Escritura y Lectura</option>
+                </select>
+              </div> -->
+              <div class="col-sm-12 col-md-12 col-lg-3">
+                <select ng-model="i.in" name="accessTo" required>
+                  <option value="places" selected>Lugar</option>
+                  <option value="surveys">Encuesta</option>
+                </select>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <select ng-model="i.to" name="accessTo" required>
+                  <option ng-if="i.in === 'places'" value="{{p.id}}" ng-repeat="p in places" >{{p.name}}</option>
+                  <option ng-if="i.in === 'surveys'" value="{{s.id}}" ng-repeat="s in surveys" >{{s.title}}</option>
+
+                </select>
+              </div>
+
+              <div class="col-sm-12 col-md-12 col-lg-4">
                 <select title="Seleccione permiso" ng-model="i.accessType">
                   <option value="r" selected>Lectura</option>
                   <option value="r/w">Escritura y Lectura</option>
@@ -202,9 +224,7 @@
             </p>
           </div>
         </div>
-        <div ng-init="loadCurrentAccessables()">
-
-        </div>
+        <div ng-init="loadCurrentAccessables()"></div>
       </div>
     </div>
   </div>

@@ -12,9 +12,21 @@ controllers
   $scope.accessTo = [];
   $scope.places = [];
   $scope.surveys = [];
-  $scope.usernameUnique =false;
+  $scope.accessables = []
+  $scope.usernameUnique = false;
   $scope.loadingIsUnique = false;
   $scope.bool = true;
+  $scope.usernameChanged = false;
+  var initialUsername = '';
+
+  $scope.colors = [
+  {name:'black', shade:'dark', notAnOption: true},
+  {name:'white', shade:'light', notAnOption: false},
+  {name:'red', shade:'dark', notAnOption: false},
+  {name:'blue', shade:'dark', notAnOption: true},
+  {name:'yellow', shade:'light', notAnOption: false}
+];
+$scope.myColor = $scope.colors[4];
 
   let surveysLoaded = false;
   let placesLoaded = false;
@@ -34,6 +46,7 @@ controllers
     }
     if (selectedUser) {
       $scope.selectedUser = JSON.parse(selectedUser);
+      initialUsername = $scope.selectedUser.username;
     }
   };
 
@@ -100,6 +113,8 @@ controllers
   }
 
   $scope.isUnique = function() {
+    $scope.usernameChanged = $scope.selectedUser.username !== initialUsername;
+    if($scope.usernameChanged) {
     $scope.usernameUnique = false;
     $scope.loadingIsUnique = true;
     $http.get('/users/isunique/' + $scope.selectedUser.username)
@@ -110,11 +125,15 @@ controllers
       .error(function(err) {
         $scope.loadingIsUnique = false;
       });
+    } else {
+      $scope.usernameUnique = true;
+
+    }
   }
 
   $scope.validForm = function(skipPassword) {
     return !($scope.form.$error.required || $scope.form.$error.maxlength ||
-      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !($scope.passwordMatch() || skipPassword) || !$scope.usernameUnique);
+      $scope.form.$error.minlength || $scope.form.$error.email || $scope.form.$error.integer || !($scope.passwordMatch() || skipPassword) || !($scope.usernameUnique || !$scope.usernameChanged));
   };
 
 
@@ -316,7 +335,7 @@ controllers
 
 
   $scope.loadAccesables = function() {
-    load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded)
+    load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded);
     load('/api/v1/surveys/all/names', 'surveys', surveysLoaded);
     load('/api/v1/places/all/names', 'places', placesLoaded);
 
@@ -328,9 +347,43 @@ controllers
         $scope[saveIn] = results.data;
         changeBoolean = true;
         $scope.loadingAccesables = surveysLoaded && placesLoaded && currentAccessLoaded;
+        parseAccess();
+        parseAccessable(results.data,saveIn);
       })
       .error(function(data) {
 
       });
   }
+
+  function parseAccess() {
+    for (var i = 0; i < $scope.accessTo.length; i++) {
+      const elem = $scope.accessTo[i];
+      const value = { in: elem.in,
+        to: elem.to.toString()
+      }
+      $scope.accessTo[i].value = JSON.stringify(value);
+    }
+  }
+
+  function parseAccessable(array, saveIn) {
+    if(saveIn !== 'places' && saveIn !== 'surveys') {
+      return;
+    }
+    var name;
+    if(saveIn === 'places') {
+      name = 'name';
+    } else {
+      name = "title";
+    }
+    for (var i = 0; i < array.length; i++) {
+      var accessable = {
+        to: array[i].id,
+        in: saveIn,
+        name: array[i][name],
+      };
+      $scope.accessables.push(accessable);
+    }
+
+  }
+
 });

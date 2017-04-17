@@ -175,7 +175,19 @@ class User extends Activatable {
     });
   }
 
-
+  isAdmin(id) {
+    return new Promise((resolve, reject) => {
+      super.findById(id).then((user) => {
+        // in case user.is_admin is null
+        if (!user.is_admin) {
+          user.is_admin = false;
+        }
+        resolve(user.is_admin);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 }
 
 const user = new User();

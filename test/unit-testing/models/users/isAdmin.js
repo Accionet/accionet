@@ -51,7 +51,7 @@ describe('User check valid password', () => {
   // eslint-disable-next-line no-undef
   it('Creates not admin user', (done) => {
     return User.new().then((user) => {
-      user.username = 'test name';
+      user.username = 'test name 1';
       user.password = password;
       user.is_admin = false;
       user.email = 'a@a';
@@ -74,7 +74,7 @@ describe('User check valid password', () => {
   // eslint-disable-next-line no-undef
   it('Creates not admin user (by not specify isAdmin)', (done) => {
     return User.new().then((user) => {
-      user.username = 'test name';
+      user.username = 'test name 2';
       user.password = password;
       user.email = 'a@a';
       User.save(user).then((savedUser) => {
@@ -99,7 +99,7 @@ describe('Pass wrong params', () => {
   // eslint-disable-next-line no-undef
   // eslint-disable-next-line no-undef
   it('undefined', (done) => {
-    return User.isAdmmin(undefined).then(() => {
+    return User.isAdmin(undefined).then(() => {
       done('it should not return as valid');
     }).catch((err) => {
       done(err);
@@ -108,7 +108,7 @@ describe('Pass wrong params', () => {
 
   // eslint-disable-next-line no-undef
   it('Id of no user', (done) => {
-    User.isAdmmin(-1).then(() => {
+    User.isAdmin(-1).then(() => {
       done('it should not return as valid');
     }).catch((err) => {
       done(err);
@@ -117,7 +117,7 @@ describe('Pass wrong params', () => {
 
   // eslint-disable-next-line no-undef
   it('Id not a valid param', (done) => {
-    User.isAdmmin('this is not valid').then(() => {
+    User.isAdmin('this is not valid').then(() => {
       done('it should not return as valid');
     }).catch((err) => {
       done(err);

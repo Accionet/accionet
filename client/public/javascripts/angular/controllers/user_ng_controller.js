@@ -9,7 +9,7 @@ controllers
   $scope.loadingVisitsByHourChart = true;
   $scope.loadingVisitsByDayAndHourChart = true;
   $scope.loadingAccesables = true;
-  $scope.accessTo = [];
+  $scope.accessTo;
   $scope.places = [];
   $scope.surveys = [];
   $scope.accessables = []
@@ -19,14 +19,6 @@ controllers
   $scope.usernameChanged = false;
   var initialUsername = '';
 
-  $scope.colors = [
-  {name:'black', shade:'dark', notAnOption: true},
-  {name:'white', shade:'light', notAnOption: false},
-  {name:'red', shade:'dark', notAnOption: false},
-  {name:'blue', shade:'dark', notAnOption: true},
-  {name:'yellow', shade:'light', notAnOption: false}
-];
-$scope.myColor = $scope.colors[4];
 
   let surveysLoaded = false;
   let placesLoaded = false;
@@ -344,6 +336,14 @@ $scope.myColor = $scope.colors[4];
     }
   }
 
+  $scope.loadAccessOfUser = function () {
+    load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded);
+  }
+
+  $scope.loadingCurrentAccess = function () {
+    return !$scope.accessTo;
+  }
+
 
 
   $scope.loadAccesables = function() {
@@ -375,7 +375,4 @@ $scope.myColor = $scope.colors[4];
       $scope.accessTo[i].value = JSON.stringify(value);
     }
   }
-
-
-
 });

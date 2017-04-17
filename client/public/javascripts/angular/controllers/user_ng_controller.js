@@ -101,7 +101,15 @@ $scope.myColor = $scope.colors[4];
     $http.put('/users/' + $scope.selectedUser.id + '/edit', $scope.selectedUser)
       .success(function(data) {
         user = data.user;
-        $window.location.href = '/users/';
+        console.log($scope.accessTo);
+        $http.put('/users/' + $scope.selectedUser.id + '/access', $scope.accessTo)
+          .success(function(data) {
+            user = data.user;
+            $window.location.href = '/users/';
+          })
+          .error(function(error) {
+            console.log(error);
+          });
       })
       .error(function(error) {
         console.log(error);
@@ -348,7 +356,6 @@ $scope.myColor = $scope.colors[4];
         changeBoolean = true;
         $scope.loadingAccesables = surveysLoaded && placesLoaded && currentAccessLoaded;
         parseAccess();
-        parseAccessable(results.data,saveIn);
       })
       .error(function(data) {
 
@@ -359,31 +366,12 @@ $scope.myColor = $scope.colors[4];
     for (var i = 0; i < $scope.accessTo.length; i++) {
       const elem = $scope.accessTo[i];
       const value = { in: elem.in,
-        to: elem.to.toString()
+        to: elem.to,
       }
       $scope.accessTo[i].value = JSON.stringify(value);
     }
   }
 
-  function parseAccessable(array, saveIn) {
-    if(saveIn !== 'places' && saveIn !== 'surveys') {
-      return;
-    }
-    var name;
-    if(saveIn === 'places') {
-      name = 'name';
-    } else {
-      name = "title";
-    }
-    for (var i = 0; i < array.length; i++) {
-      var accessable = {
-        to: array[i].id,
-        in: saveIn,
-        name: array[i][name],
-      };
-      $scope.accessables.push(accessable);
-    }
 
-  }
 
 });

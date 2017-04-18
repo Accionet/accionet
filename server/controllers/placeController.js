@@ -83,8 +83,6 @@ exports.create = function savePlace(req, res) {
   if (req.body.name && req.body.email && req.body.location) {
     TimeZone.getMinutesOffset(req.body.location).then((minutes_offset) => {
       req.body.minutes_offset = minutes_offset;
-      console.log(minutes_offset);
-      console.log(req.body);
       Places.save(req.body).then((place) => {
         const json = httpResponse.success('Lugar creado exitosamente', 'place', place);
         return res.status(200).send(json);

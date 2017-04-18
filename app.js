@@ -4,6 +4,7 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const TimeZone = require('./server/controllers/timeZoneController');
 
 
 require('./server/passport/config');
@@ -55,7 +56,6 @@ app.use((req, res, next) => {
 });
 
 // error handlers
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -78,5 +78,9 @@ app.use((err, req, res) => {
   });
 });
 
+// Start the timeout for updating the places timeout
+const time = 24 * 60 * 60 * 1000; // equivalent to one day in miliseconds
+
+setInterval(TimeZone.updateOffset, time);
 
 module.exports = app;

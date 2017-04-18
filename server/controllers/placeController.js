@@ -6,6 +6,7 @@
 const path = require('path');
 const Places = require('../models/places');
 const httpResponse = require('../services/httpResponse');
+const TimeZone = require('./timeZoneController');
 
 
 function all(req, res, active) {
@@ -79,13 +80,22 @@ exports.new = function getNewPlace(req, res) {
 
 
 exports.create = function savePlace(req, res) {
-  if (req.body.name && req.body.email) {
-    Places.save(req.body).then((place) => {
-      const json = httpResponse.success('Lugar creado exitosamente', 'place', place);
-      return res.status(200).send(json);
-    }).catch((err) => {
+  if (req.body.name && req.body.email && req.body.location) {
+    TimeZone.getMinutesOffset(req.body.location).then((minutes_offset) => {
+      req.body.minutes_offset = minutes_offset;
+      console.log(minutes_offset);
+      console.log(req.body);
+      Places.save(req.body).then((place) => {
+        const json = httpResponse.success('Lugar creado exitosamente', 'place', place);
+        return res.status(200).send(json);
+      }).catch((err) => {
+        return res.status(400).send({
+          error: err,
+        });
+      });
+    }).catch(() => {
       return res.status(400).send({
-        error: err,
+        error: 'Zona horaria mal indicada',
       });
     });
   } else {

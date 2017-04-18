@@ -39,12 +39,20 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="location">
+            <label for="location_address">
               Ubicación:
             </label>
-            <input class="form-control" name="visits" type="number" placeholder="0" min="0" ng-model="selectedPlace.daily_visits" integer/>
-            <div ng-show="form.visits.$error.integer" class="alert alert-danger">
-              No es un número entero
+            <input class="form-control" name="location_address" type="text" placeholder="Glamis 3296, Las Condes" ng-model="selectedPlace.location_address"/>
+          </div>
+          <div class="form-group">
+            <label for="location">
+              Zona Horaria:
+            </label>
+            <select class="form-control" name="location" ng-model="selectedPlace.location" required>
+              <option value="-33.4876785,-70.78158" selected>Santiago, Chile</option>
+            </select>
+            <div ng-show="form.location.$error.required" class="alert alert-danger">
+              No puede ser vacio
             </div>
           </div>
           <div class="form-group">

@@ -21,12 +21,10 @@ controllers
   };
 
   $scope.initializeMetrics = function(metrics) {
-    console.log(typeof metrics);
-    console.log(metrics);
+
     if (metrics) {
       $scope.metrics = JSON.parse(metrics);
     }
-    console.log($scope.metrics.daily);
   };
 
 
@@ -38,7 +36,6 @@ controllers
   $scope.toggleIsActive = function(place) {
     $http.put(`/places/${place.id}/toggleIsActive`)
       .success(function(data) {
-        console.log(data);
         locallyUpdatePlace(data.place);
       })
       .error(function(data) {
@@ -48,7 +45,6 @@ controllers
 
 
   function locallyUpdatePlace(updated_place) {
-    console.log(updated_place);
     for (let i = 0; i < $scope.places.length; i++) {
       if ($scope.places[i].id == updated_place.id) {
         $scope.places[i] = updated_place;
@@ -229,4 +225,17 @@ controllers
 
       });
   };
+
+  $scope.printTimeZome = function(minutes_offset) {
+    console.log('time zone');
+    console.log(minutes_offset);
+    if (!minutes_offset && minutes_offset !== 0) {
+      return ""
+    }
+    if (minutes_offset >= 0) {
+      return "UTC+" + minutes_offset / 60;
+    } else {
+      return "UTC" + minutes_offset / 60;
+    }
+  }
 });

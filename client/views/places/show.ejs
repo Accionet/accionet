@@ -35,7 +35,10 @@
                                         <li>Visitas diara: {{selectedPlace.daily_visits}}</li>
                                         <li ng-if="selectedPlace.is_active"> El lugar está activo </li>
                                         <li ng-if="!selectedPlace.is_active"> El lugar no está activo </li>
-                                        <li> Status: {{selectedPlace.status}} </li>
+                                        <li ng-if="selectedPlace.status"> Status: {{selectedPlace.status}} </li>
+                                        <li> Ubicaci&oacute;n: {{selectedPlace.location_address}} </li>
+                                        <li> Zona Horaria: {{printTimeZome(selectedPlace.minutes_offset)}} </li>
+
                                     </ul>
                                 </div>
                             </div>

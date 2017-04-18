@@ -5,7 +5,7 @@ $(function() {
   const macaddress = $('#macAddress').val();
   $.post(url + 'visits/new', {
     macaddress,
-    place_id: 18,
+    place_id: 38,
   });
 
 

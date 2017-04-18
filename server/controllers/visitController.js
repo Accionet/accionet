@@ -23,102 +23,21 @@ function addRequestParams(visit, req) {
   // add Browser
 
   if (userAgent) {
-    console.log('Go get the browser');
     visit.browser = getBrowser(userAgent);
-    console.log(visit.browser);
-    console.log('Go get the OS');
     visit.os = getOS(userAgent);
-    console.log(visit.os);
   }
 
   visit.other = userAgent;
 }
-//
-// function test(ua) {
-//   const $ = {};
-//
-//   if (/mobile/i.test(ua)) {
-//     $.Mobile = true;
-//   }
-//   if (/like Mac OS X/.test(ua)) {
-//     $.iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
-//     $.iPhone = /iPhone/.test(ua);
-//     $.iPad = /iPad/.test(ua);
-//   }
-//
-//   if (/Android/.test(ua)) {
-//     $.Android = /Android ([0-9\.]+)[\);]/.exec(ua)[1];
-//   }
-//   if (/webOS\//.test(ua)) {
-//     $.webOS = /webOS\/([0-9\.]+)[\);]/.exec(ua)[1];
-//   }
-//
-//   if (/(Intel|PPC) Mac OS X/.test(ua)) {
-//     $.Mac = /(Intel|PPC) Mac OS X ?([0-9\._]*)[\)\;]/.exec(ua)[2].replace(/_/g, '.') || true;
-//   }
-//
-//   if (/Windows NT/.test(ua)) {
-//     $.Windows = /Windows NT ([0-9\._]+)[\);]/.exec(ua)[1];
-//   }
-//   return $;
-// }
 
 function getOS(ua) {
   const browser = UserAgent.parse(ua);
   return browser.os.toString();
-  // // Windows Phone must come first because its UA also contains "Android"
-  // if (/windows phone/i.test(userAgent)) {
-  //   return 'Windows Phone';
-  // } else if (/android/i.test(userAgent)) {
-  //   return 'Android';
-  // }
-  //
-  // // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  // if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-  //   return 'iOS';
-  // }
-  //
-  // // Mac detection
-  // // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  // if (/Mac/.test(userAgent)) {
-  //   return 'MacOS';
-  // }
-  // // CHEck if this is correct
-  // if (/Win/.test(userAgent)) {
-  //   return 'Windows';
-  // }
-  //
-  // if (/BlackBerry/.test(userAgent)) {
-  //   return 'BlackBerry';
-  // }
-  //
-  // if (/Linux/.test(userAgent)) {
-  //   return 'BlackBerry';
-  // }
-  //
-  // return '';
 }
 
 function getBrowser(ua) {
   const browser = UserAgent.parse(ua);
   return browser.ua.toString();
-  // let tem;
-  //
-  // let M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-  // if (/trident/i.test(M[1])) {
-  //   tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-  //   return `IE ${(tem[1] || '')}`;
-  // }
-  // if (M[1] === 'Chrome') {
-  //   tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
-  // }
-  // if (tem != null) {
-  //   return tem.slice(1).join(' ').replace('OPR', 'Opera');
-  // }
-  // M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?']; // eslint-disable-line
-  // tem = ua.match(/version\/(\d+)/i);
-  // if (tem != null) M.splice(1, 1, tem[1]);
-  // return M.join(' ');
 }
 
 

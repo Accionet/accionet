@@ -1,18 +1,27 @@
 // Table Date and Hour
 const knex = require('../../db/knex');
 const TimeAdapter = require('../../adapters/timeAdapter');
+const dbUtils = require('../../services/dbUtils');
 
-function getGroupedByDayAndHour(searchParams) {
-  return this.table()
-    .select(knex.raw('EXTRACT(year FROM created_at) as year, EXTRACT(doy FROM created_at) as doy, EXTRACT (hour from created_at) as hour, count(*) as amount'))
-    .where(searchParams)
-    .groupByRaw('year, doy, hour')
-    .orderByRaw('year, doy, hour');
+
+function getGroupedByDayAndHour(searchParams, minUTCOffset) {
+  return new Promise((resolve, reject) => {
+    dbUtils.getMinutesInterval(minUTCOffset).then((minOffset) => {
+      resolve(this.table()
+        .select(knex.raw(`EXTRACT(year FROM (created_at + INTERVAL '${minOffset} minutes')) as year, EXTRACT(doy FROM (created_at + INTERVAL '${minOffset} minutes')) as doy, EXTRACT (hour from (created_at + INTERVAL '${minOffset} minutes')) as hour, count(*) as amount`))
+        .where(searchParams)
+        .groupByRaw('year, doy, hour')
+        .orderByRaw('year, doy, hour')
+      );
+    }).catch((err) => {
+      reject(err);
+    });
+  });
 }
 
-function tableDateAndHour(searchParams) {
+function tableDateAndHour(searchParams, minUTCOffset) {
   return new Promise((resolve, reject) => {
-    this.getGroupedByDayAndHour(searchParams).then((entries) => {
+    this.getGroupedByDayAndHour(searchParams, minUTCOffset).then((entries) => {
       const data = TimeAdapter.mapForDayAndHourGraph(entries);
       resolve(data);
     }).catch((err) => {

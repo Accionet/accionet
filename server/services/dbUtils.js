@@ -4,7 +4,7 @@ const knex = require('../db/knex');
 function getMinutesInterval(inputParam) {
   return new Promise((resolve, reject) => {
     const minutes_offset = parseInt(inputParam, 10);
-    if (minutes_offset < 0 || isNaN(minutes_offset)) {
+    if (isNaN(minutes_offset)) {
       return resolve(0);
     }
     getOffset().then((result) => {

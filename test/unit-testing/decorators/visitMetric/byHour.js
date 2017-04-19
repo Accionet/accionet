@@ -93,10 +93,12 @@ chai.use(dateChai);
 
 // eslint-disable-next-line no-undef
 describe('Visit: byHour different time zones', () => {
+  let bd_offset = 0;
   // eslint-disable-next-line no-undef
   before((done) => {
-    return knex.seed.run()
-      .then(() => {
+    return Promise.all([knex.raw('SELECT EXTRACT(TIMEZONE from now()) as sec_offset'), knex.seed.run()])
+      .then((results) => {
+        bd_offset = results[0].rows[0].sec_offset / 60;
         done();
       }).catch((err) => {
         done(err);
@@ -116,13 +118,12 @@ describe('Visit: byHour different time zones', () => {
           place_id: place.id,
         }, minutes_offset).then((withOffset) => {
           assert.equal(withOffset.length, noOffset.length);
-          const hourOffset = minutes_offset / 60;
+          const hourOffset = (minutes_offset - bd_offset) / 60;
+
           for (let i = 0; i < noOffset.length; i++) {
             const j = (i + hourOffset) % 24; // index for withOffset
-            // correct hour different
-            assert.equal(new Date(noOffset[i][0]).getHours(), new Date(withOffset[j][0]).getHours());
             // correct amount
-            assert.equal(noOffset[i][0], withOffset[j][0]);
+            assert.equal(noOffset[i][1], withOffset[j][1]);
           }
           done();
         }).catch((error) => {

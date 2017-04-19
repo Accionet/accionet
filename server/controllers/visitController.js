@@ -3,6 +3,8 @@
 
 
 const Visits = require('../models/visits');
+const Place = require('../models/places');
+
 const Metric = require('../models/visits');
 const httpResponse = require('../services/httpResponse');
 const ExcelGenerator = require('../services/excelGenerator');
@@ -63,11 +65,16 @@ exports.create = function (req, res) {
 
 exports.dailyTable = function (req, res) {
   const id = req.params.id;
-  Metric.byDay({
-    place_id: id,
-  }).then((daily) => {
-    const json = httpResponse.success('Tabla por día', 'data', daily);
-    return res.status(200).send(json);
+  Place.findById(id).then((place) => {
+    Metric.byDay({
+      place_id: id,
+    }, place.minutes_offset).then((daily) => {
+      const json = httpResponse.success('Tabla por día', 'data', daily);
+      return res.status(200).send(json);
+    }).catch((err) => {
+      const json = httpResponse.error(err);
+      return res.status(400).send(json);
+    });
   }).catch((err) => {
     const json = httpResponse.error(err);
     return res.status(400).send(json);
@@ -76,11 +83,16 @@ exports.dailyTable = function (req, res) {
 
 exports.hourlyTable = function (req, res) {
   const id = req.params.id;
-  Metric.byHour({
-    place_id: id,
-  }).then((hourly) => {
-    const json = httpResponse.success('Tabla por hora', 'data', hourly);
-    return res.status(200).send(json);
+  Place.findById(id).then((place) => {
+    Metric.byHour({
+      place_id: id,
+    }, place.minutes_offset).then((hourly) => {
+      const json = httpResponse.success('Tabla por hora', 'data', hourly);
+      return res.status(200).send(json);
+    }).catch((err) => {
+      const json = httpResponse.error(err);
+      return res.status(400).send(json);
+    });
   }).catch((err) => {
     const json = httpResponse.error(err);
     return res.status(400).send(json);
@@ -89,11 +101,16 @@ exports.hourlyTable = function (req, res) {
 
 exports.dayAndHourTable = function (req, res) {
   const id = req.params.id;
-  Metric.tableDateAndHour({
-    place_id: id,
-  }).then((table) => {
-    const json = httpResponse.success('Tabla por hora', 'data', table);
-    return res.status(200).send(json);
+  Place.findById(id).then((place) => {
+    Metric.tableDateAndHour({
+      place_id: id,
+    }, place.minutes_offset).then((table) => {
+      const json = httpResponse.success('Tabla por hora', 'data', table);
+      return res.status(200).send(json);
+    }).catch((err) => {
+      const json = httpResponse.error(err);
+      return res.status(400).send(json);
+    });
   }).catch((err) => {
     const json = httpResponse.error(err);
     return res.status(400).send(json);

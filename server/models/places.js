@@ -8,15 +8,15 @@ class Places extends Activatable {
     super(table_name);
   }
 
-  metrics(id) {
+  metrics(id, offset) {
     return new Promise((resolve, reject) => {
       const visitPromises = [];
       const place = {
         place_id: id,
       };
-      visitPromises.push(Visits.byDay(place));
-      visitPromises.push(Visits.byHour(place));
-      visitPromises.push(Visits.tableDateAndHour(place));
+      visitPromises.push(Visits.byDay(place, offset));
+      visitPromises.push(Visits.byHour(place, offset));
+      visitPromises.push(Visits.tableDateAndHour(place, offset));
       const allPromises = Promise.all(visitPromises);
 
       allPromises.then((response) => {

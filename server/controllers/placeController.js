@@ -128,7 +128,7 @@ exports.metrics = function showMetrics(req, res) {
     if (!place) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'metrics.ejs'), json);
     }
-    Places.metrics(place.id).then((metrics) => {
+    Places.metrics(place.id, place.minutes_offset).then((metrics) => {
       json = {
         message: `Metricas de ${place.id}`,
         place,

@@ -50,7 +50,6 @@ controllers
         $scope.places[i] = updated_place;
       }
     }
-    console.log($scope.places);
   }
 
   // Create a new place
@@ -60,7 +59,6 @@ controllers
         .success(function(data) {
           $scope.formData = {};
           $scope.places = data;
-          console.log(data);
           $window.location.href = '/places/' + data.place.id;
         })
         .error(function(error) {
@@ -75,7 +73,6 @@ controllers
       $http.put('/places/' + $scope.selectedPlace.id + '/edit', $scope.selectedPlace)
         .success(function(data) {
           place = data.place;
-          console.log(place);
           $window.location.href = '/places/' + place.id;
         })
         .error(function(error) {
@@ -163,11 +160,6 @@ controllers
     $http.get('/api/v1/places/' + place.id + '/metrics/visits/hourly')
       .success(function(results) {
         const d = results.data;
-        // get Offset
-        const offset = new Date().getTimezoneOffset();
-        for (let i = 0; i < d.length; i++) {
-          d[i][0] -= (offset * 60 * 1000);
-        }
         $scope.loadingVisitsByHourChart = false;
         $.plot('#visits-by-hour-line-chart', [d], options);
       })
@@ -181,11 +173,6 @@ controllers
     $http.get('/api/v1/places/' + place.id + '/metrics/visits/dayandhour')
       .success(function(results) {
         const d = results.data;
-        // get Offset
-        const offset = new Date().getTimezoneOffset();
-        for (let i = 0; i < d.length; i++) {
-          d[i].data[0] -= (offset * 60 * 1000);
-        }
         $scope.loadingVisitsByDayAndHourChart = false;
         $.plot('#visits-by-day-and-hour-line-chart', d, options);
       })
@@ -227,8 +214,6 @@ controllers
   };
 
   $scope.printTimeZome = function(minutes_offset) {
-    console.log('time zone');
-    console.log(minutes_offset);
     if (!minutes_offset && minutes_offset !== 0) {
       return ""
     }

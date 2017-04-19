@@ -101,12 +101,10 @@ chai.use(dateChai);
 // eslint-disable-next-line no-undef
 describe('Visits: byDay with timezone changed', () => {
   // eslint-disable-next-line no-undef
-  let bd_offset = 0;
   // eslint-disable-next-line no-undef
   before((done) => {
     return Promise.all([knex.raw('SELECT EXTRACT(TIMEZONE from now()) as sec_offset')])
-      .then((results) => {
-        bd_offset = results[0].rows[0].sec_offset / 60;
+      .then(() => {
         done();
       }).catch((err) => {
         done(err);

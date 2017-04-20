@@ -93,7 +93,6 @@ controllers
     $http.put('/users/' + $scope.selectedUser.id + '/edit', $scope.selectedUser)
       .success(function(data) {
         user = data.user;
-        console.log($scope.accessTo);
         $http.put('/users/' + $scope.selectedUser.id + '/access', $scope.accessTo)
           .success(function(data) {
             user = data.user;
@@ -337,6 +336,7 @@ controllers
   }
 
   $scope.loadAccessOfUser = function() {
+    console.log('aca');
     load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded);
   }
 
@@ -347,7 +347,9 @@ controllers
 
 
   $scope.loadAccesables = function() {
-    load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded);
+    if ($scope.selectedUser.id) {
+      load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded);
+    }
     load('/api/v1/surveys/all/names', 'surveys', surveysLoaded);
     load('/api/v1/places/all/names', 'places', placesLoaded);
 
@@ -369,7 +371,6 @@ controllers
   }
 
   function parseAccess() {
-    console.log($scope.accessTo);
     for (var i = 0; i < $scope.accessTo.length; i++) {
       const elem = $scope.accessTo[i];
       const value = { in: elem.in,
@@ -379,5 +380,4 @@ controllers
     }
   }
 
-  console.log($scope.accessTo);
 });

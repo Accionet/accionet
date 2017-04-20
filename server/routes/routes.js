@@ -351,6 +351,7 @@ function hasAccessToRead(req, res, next) {
       if (results[0] || results[1]) {
         return next();
       }
+
       logout(req, res);
     }).catch(() => {
       logout(req, res);
@@ -380,6 +381,7 @@ function isAdmin(req, res, next) {
 
 function logout(req, res) {
   // if they aren't redirect them to the home page
+
   req.logout();
   res.redirect('/');
 }

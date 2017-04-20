@@ -96,7 +96,7 @@ controllers
         $http.put('/users/' + $scope.selectedUser.id + '/access', $scope.accessTo)
           .success(function(data) {
             user = data.user;
-            $window.location.href = '/users/';
+            $window.location.href = '/users/' + $scope.selectedUser.id;
           })
           .error(function(error) {
             console.log(error);

@@ -79,12 +79,14 @@
                         </span>
                       </td>
                       <td class="text-right text-nowrap">
+                        <% if(user.is_admin) {%>
                         <a ng-click="toggleIsActive(place)" class="pull-right dark-red icon-list-holder" ng-if="place.is_active" data-toggle="tooltip" data-placement="top" title="Desactivar">
                           <i class="fa fa-trash"></i>
                         </a>
                         <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder" ng-if="!place.is_active" data-toggle="tooltip" data-placement="top" title="Activar">
                           <i class="fa fa-check"></i>
                         </a>
+                        <%}%>
                         <a href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
                           <i class="fa fa-edit"></i>
                         </a>

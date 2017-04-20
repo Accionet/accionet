@@ -26,6 +26,11 @@ module.exports = function router(app, passport) {
     next();
   });
 
+  app.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+  });
+
   /* GET  page. */
   app.get('/', (req, res) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'login.ejs'), {

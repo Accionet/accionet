@@ -78,6 +78,7 @@ app.use((err, req, res) => {
   });
 });
 
+
 // Start the timeout for updating the places timeout
 const time = 24 * 60 * 60 * 1000; // equivalent to one day in miliseconds
 

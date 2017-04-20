@@ -83,7 +83,6 @@ exports.show = function showSurvey(req, res) {
   Surveys.findById(req.params.id).then((survey) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
       survey,
-      is_admin: req.user.is_admin,
     });
   }).catch((err) => {
     debug(err);
@@ -91,7 +90,6 @@ exports.show = function showSurvey(req, res) {
       res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'show.ejs'), {
         error: `ERROR: ${err}`,
         survey: [],
-        is_admin: req.user.is_admin,
       });
     }
   });

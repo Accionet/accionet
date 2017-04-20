@@ -23,7 +23,7 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4 class="panel-title">Información
-                <%if(is_admin) {%>
+                <%if(user.is_admin) {%>
                   <small>
                     (ID:
                     {{selectedSurvey.id}})
@@ -63,7 +63,7 @@
                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{question.id}}">
                         {{$index + 1}})
                         {{question.title}}
-                        <%if(is_admin) {%>
+                        <%if(user.is_admin) {%>
                           <small>
                             (ID:
                             {{question.id}})
@@ -78,7 +78,7 @@
                         <li ng-repeat="option in question.options | orderBy:'enumeration'">
                           {{option.enumeration}})
                           {{option.statement}}
-                          <%if(is_admin) {%>
+                          <%if(user.is_admin) {%>
                             <small>
                               (ID:
                               {{option.id}})

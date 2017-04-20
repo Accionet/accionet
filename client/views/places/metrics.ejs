@@ -183,7 +183,7 @@
                             <tbody>
                               <tr ng-repeat="visit in metrics.daily">
                                 <td>
-                                  {{visit[0] | date}}
+                                  {{visit[0] | date:'MMM dd, yyyy' : 'UTC'}}
                                 </td>
                                 <td>
                                   {{visit[1]}}
@@ -202,7 +202,6 @@
                             </a>
                           </h4>
                         </div>
-                        {{metrics.hourly}}
                         <div id="hourlytable" class="panel-collapse collapse in">
                           <table class="table table-hover ">
                             <thead>

@@ -225,6 +225,4 @@ controllers
     }
   }
 
-  console.log('off');
-  console.log(new Date().getTimezoneOffset());
 });

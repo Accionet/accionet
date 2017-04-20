@@ -65,6 +65,7 @@
                 <li>
                     <a href="/dashboard"><i class="fa fa-wifi fa-fw"></i> Accionet</a>
                 </li>
+                <% if(user.is_admin) { %>
                 <li>
                     <a href="#"><i class="fa fa-users fa-fw"></i> Usuarios<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -80,18 +81,21 @@
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
+                <% } %>
                 <li>
                     <a href="#"><i class="fa fa-university fa-fw"></i> Lugares<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a href="/places">índice</a>
                         </li>
+                        <%if(user.is_admin) {%>
                         <li>
                             <a href="/places/disabled">Lugares desactivados</a>
                         </li>
                         <li>
                             <a href="/places/new">nuevo lugar</a>
                         </li>
+                        <% } %>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
@@ -101,12 +105,15 @@
                         <li>
                             <a href="/surveys">índice</a>
                         </li>
+                        <%if(user.is_admin) {%>
                         <li>
                             <a href="/surveys/disabled">Encuestas Desactivadas</a>
                         </li>
                         <li>
                             <a href="/surveys/new">Crear Nueva Encuesta</a>
                         </li>
+                        <% }%>
+
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>

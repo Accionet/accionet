@@ -9,7 +9,7 @@ controllers
   $scope.loadingVisitsByHourChart = true;
   $scope.loadingVisitsByDayAndHourChart = true;
   $scope.loadingAccesables = true;
-  $scope.accessTo;
+  $scope.accessTo = [];
   $scope.places = [];
   $scope.surveys = [];
   $scope.accessables = []
@@ -114,17 +114,17 @@ controllers
 
   $scope.isUnique = function() {
     $scope.usernameChanged = $scope.selectedUser.username !== initialUsername;
-    if($scope.usernameChanged) {
-    $scope.usernameUnique = false;
-    $scope.loadingIsUnique = true;
-    $http.get('/users/isunique/' + $scope.selectedUser.username)
-      .success(function(results) {
-        $scope.usernameUnique = results;
-        $scope.loadingIsUnique = false;
-      })
-      .error(function(err) {
-        $scope.loadingIsUnique = false;
-      });
+    if ($scope.usernameChanged) {
+      $scope.usernameUnique = false;
+      $scope.loadingIsUnique = true;
+      $http.get('/users/isunique/' + $scope.selectedUser.username)
+        .success(function(results) {
+          $scope.usernameUnique = results;
+          $scope.loadingIsUnique = false;
+        })
+        .error(function(err) {
+          $scope.loadingIsUnique = false;
+        });
     } else {
       $scope.usernameUnique = true;
 
@@ -315,7 +315,7 @@ controllers
         return true;
       }
       for (var i = 0; i < $scope.accessTo.length; i++) {
-        if($scope.accessTo[i].to == p.id){
+        if ($scope.accessTo[i].to == p.id) {
           return false;
         }
       }
@@ -336,11 +336,11 @@ controllers
     }
   }
 
-  $scope.loadAccessOfUser = function () {
+  $scope.loadAccessOfUser = function() {
     load('/users/' + $scope.selectedUser.id + '/access', 'accessTo', currentAccessLoaded);
   }
 
-  $scope.loadingCurrentAccess = function () {
+  $scope.loadingCurrentAccess = function() {
     return !$scope.accessTo;
   }
 
@@ -356,7 +356,9 @@ controllers
   function load(route, saveIn, changeBoolean) {
     $http.get(route)
       .success(function(results) {
-        $scope[saveIn] = results.data;
+        if (results.data) {
+          $scope[saveIn] = results.data;
+        }
         changeBoolean = true;
         $scope.loadingAccesables = surveysLoaded && placesLoaded && currentAccessLoaded;
         parseAccess();
@@ -367,6 +369,7 @@ controllers
   }
 
   function parseAccess() {
+    console.log($scope.accessTo);
     for (var i = 0; i < $scope.accessTo.length; i++) {
       const elem = $scope.accessTo[i];
       const value = { in: elem.in,
@@ -375,4 +378,6 @@ controllers
       $scope.accessTo[i].value = JSON.stringify(value);
     }
   }
+
+  console.log($scope.accessTo);
 });

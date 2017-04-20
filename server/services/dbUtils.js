@@ -8,7 +8,6 @@ function getMinutesInterval(inputParam) {
       return resolve(0);
     }
     getOffset().then((result) => {
-      console.log('Desfaz bd ' + (result.rows[0].sec_offset / 60));
       resolve(minutes_offset - (result.rows[0].sec_offset / 60));
     }).catch((err) => {
       reject(err);

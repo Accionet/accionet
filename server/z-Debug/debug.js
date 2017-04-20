@@ -21,28 +21,35 @@ const userController = require('../controllers/userController');
 
 const d = new Date();
 
-Visit.byHour({
-  place_id: 4556,
-}, 60).then((withOffset) => {
-  console.log('--------------CON OFFSET-------------------');
+const array = [
+  [-2209075200000, "14"],
+  [-2209071600000, "22"],
+  [-2209068000000, "19"],
+  [-2209064400000, "26"],
+  [-2209060800000, "19"],
+  [-2209057200000, "25"],
+  [-2209053600000, "44"],
+  [-2209050000000, "29"],
+  [-2209046400000, "21"],
+  [-2209042800000, "20"],
+  [-2209039200000, "29"],
+  [-2209035600000, "17"],
+  [-2209032000000, "20"],
+  [-2209028400000, "27"],
+  [-2209024800000, "21"],
+  [-2209021200000, "23"],
+  [-2209017600000, "20"],
+  [-2209014000000, "21"],
+  [-2209010400000, "17"],
+  [-2209006800000, "26"],
+  [-2209003200000, "23"],
+  [-2208999600000, "20"],
+  [-2208996000000, "13"],
+  [-2208992400000, "23"]
+];
 
-  for (var i = 0; i < withOffset.length; i++) {
-    console.log(new Date(withOffset[i][0]).getHours() + " " + withOffset[i][1]);
-  }
-  console.log('--------------CON OFFSET-------------------');
+for (var i = 0; i < array.length; i++) {
+  console.log(new Date(array[i][0]).getUTCHours());
+  console.log(new Date(array[i][0]).getHours());
 
-}).catch((error) => {
-console.log(error);});
-
-
-Visit.byHour({
-  place_id: 4556,
-}).then((withOffset) => {
-  console.log('--------------SIN OFFSET-------------------');
-  for (var i = 0; i < withOffset.length; i++) {
-    console.log(new Date(withOffset[i][0]).getHours() + " " + withOffset[i][1]);
-  }
-  console.log('--------------SIN OFFSET-------------------');
-
-}).catch((error) => {
-console.log(error);});
+}

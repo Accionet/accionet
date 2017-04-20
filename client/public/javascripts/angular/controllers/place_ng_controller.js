@@ -25,8 +25,21 @@ controllers
     if (metrics) {
       $scope.metrics = JSON.parse(metrics);
     }
+    parseMetrics();
   };
 
+  function parseHourly(){
+    for (var i = 0; i < $scope.metrics.hourly.length; i++) {
+      var temp = new Date($scope.metrics.hourly[i][0]);
+      console.log(`${temp.getHours()} ${temp.getUTCHours()} ${$scope.metrics.hourly[i][1]}`);
+      // const hour = temp.getUTCHours();
+      //  $scope.metrics.hourly[i][0] = hour +':00'
+    }
+  }
+
+  function parseMetrics() {
+    parseHourly();
+  }
 
   $scope.getKeys = function(json) {
     return Object.keys(json);
@@ -160,6 +173,7 @@ controllers
     $http.get('/api/v1/places/' + place.id + '/metrics/visits/hourly')
       .success(function(results) {
         const d = results.data;
+        console.log(d);
         $scope.loadingVisitsByHourChart = false;
         $.plot('#visits-by-hour-line-chart', [d], options);
       })
@@ -223,4 +237,7 @@ controllers
       return "UTC" + minutes_offset / 60;
     }
   }
+
+  console.log('off');
+  console.log(new Date().getTimezoneOffset());
 });

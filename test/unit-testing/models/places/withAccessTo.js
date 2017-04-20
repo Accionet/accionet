@@ -25,6 +25,17 @@ function getUser() {
   };
 }
 
+function getAdmin() {
+  return {
+    username: 'username for access place admin',
+    password: 'password',
+    email_verified: 'true',
+    email: 'a@a.cl',
+    is_admin: true,
+
+  };
+}
+
 function getPlace() {
   return {
     name: 'name',
@@ -42,7 +53,6 @@ function makeAccess(to, user_id, access_type) {
 
 function placeIsInArray(place, accessType, array) {
   for (let i = 0; i < array.length; i++) {
-    console.log(array[i].id, place.id, array[i].access_type, accessType);
     if (array[i].id === place.id && array[i].access_type === accessType) {
       return true;
     }
@@ -52,6 +62,7 @@ function placeIsInArray(place, accessType, array) {
 
 
 let user;
+let admin;
 let places;
 
 // eslint-disable-next-line no-undef
@@ -59,8 +70,9 @@ describe('Get places to which he has access.', () => {
   // eslint-disable-next-line no-undef
   before((done) => {
     return knex('users').del().then(() => {
-      Promise.all([Place.save(getPlace()), Place.save(getPlace()), Place.save(getPlace()), User.save(getUser())]).then((results) => {
+      Promise.all([Place.save(getPlace()), Place.save(getPlace()), Place.save(getPlace()), User.save(getUser()), User.save(getAdmin())]).then((results) => {
         user = results[3];
+        admin = results[4];
         places = results.slice(0, 3);
         const promises = [];
         promises.push(Access.save(makeAccess(places[0].id, user.id, 'r')));
@@ -83,7 +95,20 @@ describe('Get places to which he has access.', () => {
     return Place.accessibleBy(user.id).then((accessiblePlaces) => {
       assert.equal(placeIsInArray(places[0], 'r', accessiblePlaces), true);
       assert.equal(placeIsInArray(places[1], 'r/w', accessiblePlaces), true);
-      assert.equal(placeIsInArray(places[2], null, accessiblePlaces), false);
+      assert.equal(placeIsInArray(places[2], undefined, accessiblePlaces), false);
+      done();
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+
+  // eslint-disable-next-line no-undef
+  it('If user is admin', (done) => {
+    return Place.accessibleBy(admin.id).then((accessiblePlaces) => {
+      assert.equal(placeIsInArray(places[0], undefined, accessiblePlaces), true);
+      assert.equal(placeIsInArray(places[1], undefined, accessiblePlaces), true);
+      assert.equal(placeIsInArray(places[2], undefined, accessiblePlaces), true);
       done();
     }).catch((err) => {
       done(err);

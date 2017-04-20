@@ -100,6 +100,7 @@ class Table {
       });
     });
   }
+
   delete(id) {
     return new Promise((resolve, reject) => {
       this.table().where({

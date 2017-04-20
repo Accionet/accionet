@@ -5,14 +5,17 @@ const knex = require('../../db/knex');
 
 
 function accessibleBy(user_id, is_active) {
+  if (!is_active) {
+    is_active = false;
+  }
   return new Promise((resolve, reject) => {
     User.isAdmin(user_id).then((isAdmin) => {
       if (isAdmin) {
-        resolve(this.find({
+        return resolve(this.find({
           is_active,
         }));
       }
-      resolve(this.filterWithAccess(user_id, is_active));
+      return resolve(this.filterWithAccess(user_id, is_active));
     }).catch((err) => {
       reject(err);
     });
@@ -20,11 +23,10 @@ function accessibleBy(user_id, is_active) {
 }
 
 function getWhereParamsForAccessible(user_id, table_name, is_active) {
-  if (!is_active) {
-    is_active = false;
-  }
   return {
-    user_id, table_name, is_active,
+    user_id,
+    table_name,
+    is_active,
   };
 }
 
@@ -42,8 +44,8 @@ function filterWithAccess(user_id, is_active) {
     this.getAttributesNames().then((attributesNames) => {
       const selectParams = this.getSelectParamsForAccessible(attributesNames);
       resolve(knex.select(selectParams)
-      .from(this.table_name).innerJoin(Access.table_name, `${this.table_name}.id`, '=', `${Access.table_name}.access_id`)
-      .where(where));
+        .from(this.table_name).innerJoin(Access.table_name, `${this.table_name}.id`, '=', `${Access.table_name}.access_id`)
+        .where(where));
     }).catch((err) => {
       reject(err);
     });

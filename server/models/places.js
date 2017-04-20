@@ -1,5 +1,6 @@
 const Activatable = require('./activatable'); // eslint-disabled-this-line no-unused-vars
 const Visits = require('./visits');
+const AccessibleDecorator = require('./decorators/Accessible');
 
 class Places extends Activatable {
 
@@ -43,4 +44,6 @@ class Places extends Activatable {
 
 const instance = new Places();
 
+// decorate
+AccessibleDecorator.decorate(instance);
 module.exports = instance;

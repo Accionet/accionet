@@ -23,3 +23,10 @@ const d = new Date();
 
 
 // console.log('\x1b[36m%s\x1b[0m', 'ii', '\x1b[36m%s\x1b[0mfff/', '1234');  //cyan
+
+
+Place.getAttributesNames().then((attr)=>{
+  console.log(attr);
+}).catch((err) =>{
+  console.log(err);
+})

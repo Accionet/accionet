@@ -42,7 +42,8 @@ function makeAccess(to, user_id, access_type) {
 
 function placeIsInArray(place, accessType, array) {
   for (let i = 0; i < array.length; i++) {
-    if (array[i].id === place.id && array[i].accessType === accessType) {
+    console.log(array[i].id, place.id, array[i].access_type, accessType);
+    if (array[i].id === place.id && array[i].access_type === accessType) {
       return true;
     }
   }
@@ -54,7 +55,7 @@ let user;
 let places;
 
 // eslint-disable-next-line no-undef
-describe('Get places to whom he has access.', () => {
+describe('Get places to which he has access.', () => {
   // eslint-disable-next-line no-undef
   before((done) => {
     return knex('users').del().then(() => {

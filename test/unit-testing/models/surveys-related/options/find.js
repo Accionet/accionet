@@ -5,7 +5,7 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
-const Option = require('../../../../server/models/options');
+const Option = require('../../../../../server/models/options');
 
 // const Option = new Options();
 

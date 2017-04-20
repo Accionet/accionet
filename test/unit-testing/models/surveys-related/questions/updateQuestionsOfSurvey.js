@@ -2,9 +2,9 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const dateChai = require('chai-datetime');
-const knex = require('../../../../server/db/knex');
-const Question = require('../../../../server/models/questions');
-const Survey = require('../../../../server/models/surveys');
+const knex = require('../../../../../server/db/knex');
+const Question = require('../../../../../server/models/questions');
+const Survey = require('../../../../../server/models/surveys');
 
 // eslint-disable-next-line no-unused-vars
 const assert = chai.assert;

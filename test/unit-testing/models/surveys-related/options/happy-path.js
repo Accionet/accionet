@@ -2,8 +2,8 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const dateChai = require('chai-datetime');
-const knex = require('../../../../server/db/knex');
-const Option = require('../../../../server/models/options');
+const knex = require('../../../../../server/db/knex');
+const Option = require('../../../../../server/models/options');
 
 // eslint-disable-next-line no-unused-vars
 const assert = chai.assert;

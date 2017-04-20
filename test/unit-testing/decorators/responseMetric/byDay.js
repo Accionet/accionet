@@ -6,7 +6,7 @@ const dateChai = require('chai-datetime');
 
 // const knex = require('../../../../server/db/knex');
 const Response = require('../../../../server/models/responses');
-const Survey = require('../../../../server/newModels/surveys');
+const Survey = require('../../../../server/models/surveys');
 const utils = require('../../../../server/services/utils');
 
 

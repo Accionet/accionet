@@ -22,7 +22,7 @@ function assertArrayContains24Hours(entry) {
   entry.should.be.a('array');
   assert.equal(entry.length, 24);
   for (let hour = 0; hour < 24; hour++) {
-    assert.equal(new Date(entry[hour][0]).getHours(), hour);
+    assert.equal(new Date(entry[hour][0]).getUTCHours(), hour);
   }
 }
 

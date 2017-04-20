@@ -4,7 +4,7 @@ const chai = require('chai');
 const dateChai = require('chai-datetime');
 const knex = require('../../../../server/db/knex');
 const Option = require('../../../../server/models/options');
-const Question = require('../../../../server/newModels/questions');
+const Question = require('../../../../server/models/questions');
 
 // eslint-disable-next-line no-unused-vars
 const assert = chai.assert;

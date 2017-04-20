@@ -1,84 +1,109 @@
 <html ng-app="accionet-web-app">
 
-<head>
+  <head>
     <title>Lugares - Accionet</title>
     <% include ../partials/head.ejs %>
-</head>
+  </head>
 
-<body ng-controller="surveyController">
+  <body ng-controller="surveyController">
     <% include ../partials/message_log.ejs %>
-        <%= include ../partials/navbar.ejs %>
+    <%= include ../partials/navbar.ejs %>
 
-            <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey) %>')">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">{{selectedSurvey.title}}</h1>
-                        <% locals.show = true %>
-                        <%= include ./partials/navigate.ejs %>
-                    </div>
-                </div>
+    <div id="page-wrapper" ng-init="initializeSurveys(null, ' <%= JSON.stringify(survey) %>')">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">{{selectedSurvey.title}}</h1>
+          <% locals.show = true %>
+          <%= include ./partials/navigate.ejs %>
+        </div>
+      </div>
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h4 class="panel-title">Información <small> (ID: {{selectedSurvey.id}}) </small>
-                              </h4>
-
-
-                            </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-                                <h4>Encuesta creada el: {{selectedSurvey.created_at | date}}</h4>
-                                <h4>Última modificación: {{selectedSurvey.updated_at | date}}</h4>
-                                <h4 ng-if="selectedSurvey.description">Descripcion de Encuesta: </h4>
-                                <p> {{selectedSurvey.description}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h4 class="panel-title">Preguntas
-                              </h4>
-                            </div>
-                            <!-- .panel-heading -->
-                            <div class="panel-body">
-                                <div class="panel-group">
-                                    <div ng-repeat="question in selectedSurvey.questions | orderBy: 'number'" class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{question.id}}"> {{$index + 1}})  {{question.title}} <small>(ID: {{question.id}}) </small> </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse{{question.id}}" class="panel-collapse collapse in">
-                                            <div class="panel-body">
-                                                <ul ng-if="!'multiple_choice'.localeCompare(question.type) || !'multiple_answer'.localeCompare(question.type)">
-                                                    <li ng-repeat="option in question.options | orderBy:'enumeration'">
-                                                        {{option.enumeration}}) {{option.statement}} <small> (ID: {{option.id}}) </small>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- .panel-body -->
-                        </div>
-                        <!-- /.panel -->
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
-                <!-- /.row -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">Información
+                <%if(is_admin) {%>
+                  <small>
+                    (ID:
+                    {{selectedSurvey.id}})
+                  </small>
+                <%}%>
+              </h4>
 
             </div>
-            <% include ../partials/scripts.ejs %>
-                <% include partials/surveys_scripts.ejs %>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+              <h4>Encuesta creada el:
+                {{selectedSurvey.created_at | date}}</h4>
+              <h4>Última modificación:
+                {{selectedSurvey.updated_at | date}}</h4>
+              <h4 ng-if="selectedSurvey.description">Descripcion de Encuesta:
+              </h4>
+              <p>
+                {{selectedSurvey.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-</body>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">Preguntas
+              </h4>
+            </div>
+            <!-- .panel-heading -->
+            <div class="panel-body">
+              <div class="panel-group">
+                <div ng-repeat="question in selectedSurvey.questions | orderBy: 'number'" class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{question.id}}">
+                        {{$index + 1}})
+                        {{question.title}}
+                        <%if(is_admin) {%>
+                          <small>
+                            (ID:
+                            {{question.id}})
+                          </small>
+                        <%}%>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapse{{question.id}}" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                      <ul ng-if="!'multiple_choice'.localeCompare(question.type) || !'multiple_answer'.localeCompare(question.type)">
+                        <li ng-repeat="option in question.options | orderBy:'enumeration'">
+                          {{option.enumeration}})
+                          {{option.statement}}
+                          <%if(is_admin) {%>
+                            <small>
+                              (ID:
+                              {{option.id}})
+                            </small>
+                          <%}%>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- .panel-body -->
+          </div>
+          <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <% include ../partials/scripts.ejs %>
+    <% include partials/surveys_scripts.ejs %>
+
+  </body>
 
 </html>

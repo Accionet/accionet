@@ -1,84 +1,119 @@
 <html ng-app="accionet-web-app">
 
-<head>
+  <head>
     <title>Lugares - Accionet</title>
     <% include ../partials/head.ejs %>
-</head>
+  </head>
 
-<body ng-controller="placeController">
+  <body ng-controller="placeController">
     <% include ../partials/message_log.ejs %>
-        <%= include ../partials/navbar.ejs %>
+    <%= include ../partials/navbar.ejs %>
 
-            <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">{{selectedPlace.name}}</h1>
-                        <% locals.show = true %>
-                        <%= include ./partials/navigate.ejs %>
-                    </div>
-                </div>
+    <div id="page-wrapper" ng-init="initializePlaces(null, ' <%= JSON.stringify(place) %>')">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">{{selectedPlace.name}}</h1>
+          <% locals.show = true %>
+          <%= include ./partials/navigate.ejs %>
+        </div>
+      </div>
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel-group">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                  <a data-toggle="collapse" data-parent="#accordion" href="#information"> Información <small> (ID: {{selectedPlace.id}}) </small> </a>
-                                </h4>
-                                </div>
-                                <!-- /.panel-heading -->
-                                <div id="information" class="panel-collapse collapse in">
-                                    <ul>
-                                        <li>Encuesta creada el: {{selectedPlace.created_at | date}}</li>
-                                        <li>Última modificación: {{selectedPlace.updated_at | date}}</li>
-                                        <li>Visitas diara: {{selectedPlace.daily_visits}}</li>
-                                        <li ng-if="selectedPlace.is_active"> El lugar está activo </li>
-                                        <li ng-if="!selectedPlace.is_active"> El lugar no está activo </li>
-                                        <li ng-if="selectedPlace.status"> Status: {{selectedPlace.status}} </li>
-                                        <li> Ubicaci&oacute;n: {{selectedPlace.location_address}} </li>
-                                        <li> Zona Horaria: {{printTimeZome(selectedPlace.minutes_offset)}} </li>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel-group">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#information">
+                    Informaci&oacute;n
+                    <% if(is_admin) { %>
+                      <small>
+                        (ID:
+                        {{selectedPlace.id}})
+                      </small>
+                    <% } %>
+                  </a>
+                </h4>
+              </div>
+              <!-- /.panel-heading -->
+              <div id="information" class="panel-collapse collapse in">
+                <ul>
+                  <li>Encuesta creada el:
+                    {{selectedPlace.created_at | date}}</li>
+                  <li>Última modificación:
+                    {{selectedPlace.updated_at | date}}</li>
+                  <li>Visitas diara:
+                    {{selectedPlace.daily_visits}}</li>
+                  <li ng-if="selectedPlace.is_active">
+                    El lugar está activo
+                  </li>
+                  <li ng-if="!selectedPlace.is_active">
+                    El lugar no está activo
+                  </li>
+                  <li ng-if="selectedPlace.status">
+                    Status:
+                    {{selectedPlace.status}}
+                  </li>
+                  <li>
+                    Ubicaci&oacute;n:
+                    {{selectedPlace.location_address}}
+                  </li>
+                  <li>
+                    Zona Horaria:
+                    {{printTimeZome(selectedPlace.minutes_offset)}}
+                  </li>
 
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                  <a data-toggle="collapse" data-parent="#accordion" href="#description"> Descripción </a>
-                                </h4>
-                                </div>
-                                <!-- /.panel-heading -->
-                                <div id="description" class="panel-collapse collapse in">
-                                  <ul>
-                                    <li ng-if="selectedPlace.description"> {{selectedPlace.description}} </li>
-                                    <li ng-if="!selectedPlace.description"> No hay descripción disponible </li>
-                                  </ul>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                  <a data-toggle="collapse" data-parent="#accordion" href="#contact"> Contacto </a>
-                                </h4>
-                                </div>
-                                <!-- /.panel-heading -->
-                                <div id="contact" class="panel-collapse collapse in">
-                                  <ul>
-                                      <li>Mail: {{selectedPlace.email}}</li>
-                                      <li>Teléfono: {{selectedPlace.phone_number}}</li>
-                                      <li>Nombre del contacto: {{selectedPlace.contact_name}}</li>
-                                  </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                </ul>
+              </div>
             </div>
-            <% include ../partials/scripts.ejs %>
-                <% include partials/places_scripts.ejs %>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#description">
+                    Descripción
+                  </a>
+                </h4>
+              </div>
+              <!-- /.panel-heading -->
+              <div id="description" class="panel-collapse collapse in">
+                <ul>
+                  <li ng-if="selectedPlace.description">
+                    {{selectedPlace.description}}
+                  </li>
+                  <li ng-if="!selectedPlace.description">
+                    No hay descripción disponible
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#contact">
+                    Contacto
+                  </a>
+                </h4>
+              </div>
+              <!-- /.panel-heading -->
+              <div id="contact" class="panel-collapse collapse in">
+                <ul>
+                  <li>Mail:
+                    {{selectedPlace.email}}</li>
+                  <li>Teléfono:
+                    {{selectedPlace.phone_number}}</li>
+                  <li>Nombre del contacto:
+                    {{selectedPlace.contact_name}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-</body>
+    </div>
+    <% include ../partials/scripts.ejs %>
+    <% include partials/places_scripts.ejs %>
+
+  </body>
 
 </html>

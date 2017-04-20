@@ -10,18 +10,21 @@ const TimeZone = require('./timeZoneController');
 
 
 function all(req, res, active) {
+  console.log(req.user);
   Places.find({
     is_active: active,
   }).then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
       places: result,
       show_active: active,
+      is_admin: req.user.is_admin,
     });
   }).catch((err) => {
     return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
       error: `ERROR: ${err}`,
       places: [],
       show_active: active,
+      is_admin: req.user.is_admin,
     });
   });
 }
@@ -176,15 +179,18 @@ exports.show = function showPlace(req, res) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
         error: 'ERROR: No place found',
         place: [],
+        is_admin: true,
       });
     }
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
       place,
+      is_admin: req.user.is_admin,
     });
   }).catch((err) => {
     return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'show.ejs'), {
       error: `ERROR: ${err}`,
       place: [],
+      is_admin: req.user.is_admin,
     });
   });
 };

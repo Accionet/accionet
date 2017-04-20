@@ -18,7 +18,7 @@ function parseHourOf(entries) {
   const parsedEntries = [];
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
-    const time = new Date(null, null, null, entry.hour).getTime();
+    const time = new Date(Date.UTC(null, null, null, entry.hour)).getTime();
     parsedEntries.push([time, entry.amount]);
   }
   return parsedEntries;

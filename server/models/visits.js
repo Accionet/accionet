@@ -3,6 +3,7 @@ const EndUserDecorator = require('./decorators/CountEndUsers');
 const DayMetricsDecorator = require('./decorators/DayMetrics');
 const HourMetricsDecorator = require('./decorators/HourMetrics');
 const DayAndHourMetricDecorator = require('./decorators/DayAndHourMetrics');
+const AccessibleParent = require('./decorators/AccessibleParent');
 
 
 class Visits extends table {
@@ -20,4 +21,7 @@ EndUserDecorator.addCountEndUsers(instance);
 DayMetricsDecorator.addDayMetrics(instance);
 HourMetricsDecorator.addHourMetrics(instance);
 DayAndHourMetricDecorator.addDayAndHourTable(instance);
+
+AccessibleParent.decorate(instance, require('./places'));
+
 module.exports = instance;

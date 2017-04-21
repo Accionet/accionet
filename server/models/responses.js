@@ -3,6 +3,8 @@ const utils = require('../services/utils');
 const EndUserDecorator = require('./decorators/CountEndUsers');
 const DayMetricsDecorator = require('./decorators/DayMetrics');
 const HourMetricsDecorator = require('./decorators/HourMetrics');
+const AccessibleParent = require('./decorators/AccessibleParent');
+
 const Option = require('./options');
 const Question = require('./questions');
 const Answer = require('./answer');
@@ -131,5 +133,6 @@ EndUserDecorator.addCountEndUsers(instance);
 DayMetricsDecorator.addDayMetrics(instance);
 HourMetricsDecorator.addHourMetrics(instance);
 
+AccessibleParent.decorate(instance, require('./surveys'));
 
 module.exports = instance;

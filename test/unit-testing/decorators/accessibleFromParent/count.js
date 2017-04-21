@@ -25,6 +25,7 @@ chai.use(dateChai);
 let surveys = [];
 let responsesCount = [];
 let user = {};
+let admin = {};
 
 function makeAccessToSurvey(to, user_id, access_type) {
   return { in: Survey.table_name,
@@ -42,6 +43,17 @@ function getUser() {
     email: 'a@a.cl',
   };
 }
+
+function getAdmin() {
+  return {
+    username: 'username admin for access responses',
+    password: 'password',
+    email_verified: 'true',
+    email: 'a@a.cl',
+    is_admin: true,
+  };
+}
+
 
 function createAccessTo(user, to) {
   if (to === 'surveys') {
@@ -85,9 +97,25 @@ describe('Check for surveys:', () => {
     }
     return Promise.all(promises).then((counts) => {
       responsesCount = counts;
-      Response.countAccessibleBy(user.id).then((accessibleCount) => {
-        console.log(accessibleCount);
-        assert.equal(accessibleCount, responsesCount[0] + responsesCount[1]);
+      Response.countAccessibleBy(user.id, true).then((accessibleCount) => {
+        const shouldBe = parseInt(responsesCount[0], 10) + parseInt(responsesCount[1], 10);
+        assert.equal(accessibleCount, shouldBe);
+        done();
+      }).catch((err) => {
+        done(err);
+      });
+    }).catch((err) => {
+      done(err);
+    });
+  });
+
+  // eslint-disable-next-line no-undef
+  it('User that is an admin', (done) => {
+    return User.save(getAdmin()).then((tempAdmin) => {
+      admin = tempAdmin;
+      Response.countAccessibleBy(admin.id, true).then((accessibleCount) => {
+        const shouldBe = parseInt(responsesCount[0], 10) + parseInt(responsesCount[1], 10) + parseInt(responsesCount[2], 10);
+        assert.equal(accessibleCount, shouldBe);
         done();
       }).catch((err) => {
         done(err);

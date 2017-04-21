@@ -118,7 +118,7 @@ exports.dayAndHourTable = function (req, res) {
 };
 
 exports.count = function (req, res) {
-  Visits.count().then((data) => {
+  Visits.countAccessibleBy(req.user.id, true).then((data) => {
     const json = httpResponse.success('Visitas totales', 'amount', data);
     return res.status(200).send(json);
   }).catch((err) => {

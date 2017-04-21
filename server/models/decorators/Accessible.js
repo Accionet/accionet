@@ -53,10 +53,52 @@ function filterWithAccess(user_id, is_active) {
   });
 }
 
+function countAccessibleBy(user_id, is_active) {
+  const User = require('../users'); // eslint-disable-line global-require
+
+  if (!is_active) {
+    is_active = false;
+  }
+  return new Promise((resolve, reject) => {
+    User.isAdmin(user_id).then((isAdmin) => {
+      if (isAdmin) {
+        return resolve(this.count({
+          is_active,
+        }));
+      }
+      return resolve(this.countFilterWithAccess(user_id, is_active));
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
+function countFilterWithAccess(user_id, is_active) {
+  const Access = require('../access'); // eslint-disable-line global-require
+
+  const where = this.getWhereParamsForAccessible(user_id, this.table_name, is_active);
+
+  return new Promise((resolve, reject) => {
+    knex.count()
+      .from(this.table_name).innerJoin(Access.table_name, `${this.table_name}.id`, '=', `${Access.table_name}.access_id`)
+      .where(where)
+      .then((result) => {
+        resolve(result[0].count);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
 
 exports.decorate = function (prototype) {
+  // select
   prototype.accessibleBy = accessibleBy;
   prototype.filterWithAccess = filterWithAccess;
   prototype.getWhereParamsForAccessible = getWhereParamsForAccessible;
   prototype.getSelectParamsForAccessible = getSelectParamsForAccessible;
+  // count
+  prototype.countAccessibleBy = countAccessibleBy;
+  prototype.countFilterWithAccess = countFilterWithAccess;
 };

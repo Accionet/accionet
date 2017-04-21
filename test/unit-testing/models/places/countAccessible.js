@@ -51,13 +51,8 @@ function makeAccess(to, user_id, access_type) {
   };
 }
 
-function placeIsInArray(place, accessType, array) {
-  for (let i = 0; i < array.length; i++) {
-    if (array[i].id === place.id && array[i].access_type === accessType) {
-      return true;
-    }
-  }
-  return false;
+function clearBD() {
+  return Promise.all([knex('users').del(), knex('places').del()]);
 }
 
 
@@ -69,7 +64,7 @@ let places;
 describe('Get places to which he has access.', () => {
   // eslint-disable-next-line no-undef
   before((done) => {
-    return knex('users').del().then(() => {
+    return clearBD().then(() => {
       Promise.all([Place.save(getPlace()), Place.save(getPlace()), Place.save(getPlace()), User.save(getUser()), User.save(getAdmin())]).then((results) => {
         user = results[3];
         admin = results[4];
@@ -91,10 +86,9 @@ describe('Get places to which he has access.', () => {
   });
 
   // eslint-disable-next-line no-undef
-  it('check correct places are returned', (done) => {
+  it('check count to be the correct amount', (done) => {
     return Place.countAccessibleBy(user.id).then((count) => {
-      assert.equal(Array.isArray(count), true);
-      assert.equal(count.length, 2);
+      assert.equal(count, 2);
       done();
     }).catch((err) => {
       done(err);
@@ -105,8 +99,7 @@ describe('Get places to which he has access.', () => {
   // eslint-disable-next-line no-undef
   it('If user is admin', (done) => {
     return Place.countAccessibleBy(admin.id).then((count) => {
-      assert.equal(Array.isArray(count), true);
-      assert.equal(count.length, 3);
+      assert.equal(count, 3);
       done();
     }).catch((err) => {
       done(err);

@@ -51,7 +51,7 @@ exports.onlyNamesAndId = function (req, res) {
 };
 
 exports.count = function getAmountOf(req, res) {
-  Places.count({}).then((count) => {
+  Places.countAccessibleBy(req.user.id, true).then((count) => {
     const response = {
       success: 'Amount of places where counted successfully',
       amount: count,

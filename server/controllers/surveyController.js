@@ -67,7 +67,7 @@ exports.onlyNamesAndId = function (req, res) {
 };
 
 exports.count = function countSurveys(req, res) {
-  Surveys.count({}).then((result) => {
+  Surveys.countAccessibleBy(req.user.id, true).then((result) => {
     const json = httpResponse.success('Encuestas contadas exitosamente', 'amount', result);
     return res.status(200).send(json);
   }).catch((err) => {

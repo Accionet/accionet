@@ -1,6 +1,6 @@
 const Activatable = require('./activatable'); // eslint-disabled-this-line no-unused-vars
 const AnswerMetric = require('./metrics/answerMetric');
-
+const AccessibleDecorator = require('./decorators/Accessible');
 const utils = require('../services/utils');
 
 class Surveys extends Activatable {
@@ -124,5 +124,8 @@ class Surveys extends Activatable {
 }
 
 const instance = new Surveys();
+
+// decorate
+AccessibleDecorator.decorate(instance);
 
 module.exports = instance;

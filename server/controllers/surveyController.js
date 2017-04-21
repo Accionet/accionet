@@ -16,9 +16,7 @@ const debug = require('debug')('Survey Controller');
 
 exports.index = function getAllSurveys(req, res) {
   const active = true;
-  Surveys.find({
-    is_active: active,
-  }).then((result) => {
+  Surveys.accessibleBy(req.user.id, active).then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
       surveys: result,
       show_active: active,
@@ -36,9 +34,7 @@ exports.index = function getAllSurveys(req, res) {
 
 exports.disabled = function getAllSurveys(req, res) {
   const active = false;
-  Surveys.find({
-    is_active: active,
-  }).then((result) => {
+  Surveys.accessibleBy(req.user.id, active).then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'surveys', 'index.ejs'), {
       surveys: result,
       show_active: active,
@@ -54,8 +50,12 @@ exports.disabled = function getAllSurveys(req, res) {
 
 exports.onlyNamesAndId = function (req, res) {
   const active = true;
-  const columns = { surveys: ['id', 'title'] };
-  Surveys.find({ is_active: active }, columns).then((result) => {
+  const columns = {
+    surveys: ['id', 'title'],
+  };
+  Surveys.find({
+    is_active: active,
+  }, columns).then((result) => {
     const json = httpResponse.success('nombres enviados exitosamente', 'data', result);
     return res.status(200).send(json);
   }).catch((err) => {

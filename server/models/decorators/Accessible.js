@@ -1,10 +1,9 @@
-const User = require('../users');
-const Access = require('../access');
-
 const knex = require('../../db/knex');
 
 
 function accessibleBy(user_id, is_active) {
+  const User = require('../users'); // eslint-disable-line global-require
+
   if (!is_active) {
     is_active = false;
   }
@@ -39,6 +38,8 @@ function getSelectParamsForAccessible(attributesNames) {
 }
 
 function filterWithAccess(user_id, is_active) {
+  const Access = require('../access'); // eslint-disable-line global-require
+
   return new Promise((resolve, reject) => {
     const where = this.getWhereParamsForAccessible(user_id, this.table_name, is_active);
     this.getAttributesNames().then((attributesNames) => {

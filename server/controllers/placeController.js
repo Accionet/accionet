@@ -10,9 +10,7 @@ const TimeZone = require('./timeZoneController');
 
 
 function all(req, res, active) {
-  Places.find({
-    is_active: active,
-  }).then((result) => {
+  Places.accessibleBy(req.user.id, active).then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'places', 'index.ejs'), {
       places: result,
       show_active: active,
@@ -36,8 +34,12 @@ exports.disabled = function (req, res) {
 
 exports.onlyNamesAndId = function (req, res) {
   const active = true;
-  const columns = { places: ['id', 'name'] };
-  Places.find({ is_active: active }, columns).then((result) => {
+  const columns = {
+    places: ['id', 'name'],
+  };
+  Places.find({
+    is_active: active,
+  }, columns).then((result) => {
     const json = httpResponse.success('nombres enviados exitosamente', 'data', result);
     return res.status(200).send(json);
   }).catch((err) => {

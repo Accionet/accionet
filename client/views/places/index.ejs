@@ -86,8 +86,11 @@
                         <a ng-click="toggleIsActive(place)" class="pull-right dark-green icon-list-holder" ng-if="!place.is_active" data-toggle="tooltip" data-placement="top" title="Activar">
                           <i class="fa fa-check"></i>
                         </a>
-                        <%}%>
                         <a href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
+                          <i class="fa fa-edit"></i>
+                        </a>
+                        <%}%>
+                        <a ng-if='place.access_type ==="r/w"' href="/places/{{place.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
                           <i class="fa fa-edit"></i>
                         </a>
                         <a class="pull-right blue icon-list-holder" href="/places/{{place.id}}/metrics" data-toggle="tooltip" data-placement="top" title="Ver m&eacute;tricas">

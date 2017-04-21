@@ -1,11 +1,13 @@
 /* eslint-disable */
 'use strict';
-process.env.NODE_ENV = 'test';
+// process.env.NODE_ENV = 'test';
 
 
 const Place = require('../models/places');
 const Answer = require('../models/answer');
 const User = require('../models/users');
+const Access = require('../models/access');
+
 
 const Survey = require('../models/surveys');
 
@@ -25,8 +27,9 @@ const d = new Date();
 // console.log('\x1b[36m%s\x1b[0m', 'ii', '\x1b[36m%s\x1b[0mfff/', '1234');  //cyan
 
 
-Place.getAttributesNames().then((attr)=>{
-  console.log(attr);
-}).catch((err) =>{
-  console.log(err);
-})
+
+console.log(knex.count().from(knex.raw("(" +knex.select('places.id')
+    .from('places').innerJoin(Access.table_name, `places.id`, '=', `${Access.table_name}.access_id`)
+    .where({
+      user_id: 45
+    })+ ") as alias")).innerJoin('visits', 'alias.id', '=', 'visits.place_id').toString());

@@ -36,7 +36,7 @@ function makeAccessToSurvey(to, user_id, access_type) {
 
 function getUser() {
   return {
-    username: 'username for access visits',
+    username: 'username for access responses',
     password: 'password',
     email_verified: 'true',
     email: 'a@a.cl',
@@ -45,7 +45,7 @@ function getUser() {
 
 function createAccessTo(user, to) {
   if (to === 'surveys') {
-    return Promise.all([Access.save(makeAccessToSurvey(surveys[0], user.id, 'r')), Access.save(makeAccessToSurvey(surveys[1], user.id, 'r/w'))]);
+    return Promise.all([Access.save(makeAccessToSurvey(surveys[0].id, user.id, 'r')), Access.save(makeAccessToSurvey(surveys[1].id, user.id, 'r/w'))]);
   }
 }
 
@@ -56,9 +56,9 @@ describe('Check for surveys:', () => {
     return knex.seed.run().then(() => {
       Survey.all().then((results) => {
         surveys = results;
-        console.log(surveys);
         User.save(getUser()).then((tempUser) => {
           user = tempUser;
+
           createAccessTo(user, 'surveys').then(() => {
             done();
           }).catch((err) => {
@@ -85,8 +85,13 @@ describe('Check for surveys:', () => {
     }
     return Promise.all(promises).then((counts) => {
       responsesCount = counts;
-      console.log(counts);
-      done();
+      Response.countAccessibleBy(user.id).then((accessibleCount) => {
+        console.log(accessibleCount);
+        assert.equal(accessibleCount, responsesCount[0] + responsesCount[1]);
+        done();
+      }).catch((err) => {
+        done(err);
+      });
     }).catch((err) => {
       done(err);
     });

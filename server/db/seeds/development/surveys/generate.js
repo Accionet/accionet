@@ -8,7 +8,6 @@ exports.seed = function (knex, user) {
   const surveysToAdd = surveys[user.username];
   const promises = [];
   surveysToAdd.forEach((survey) => {
-    survey.user_id = user.id;
     const q1 = createSurvey(knex, survey);
     promises.push(q1);
   });

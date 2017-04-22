@@ -28,6 +28,8 @@ module.exports = function router(app, passport) {
 
   app.use((req, res, next) => {
     res.locals.user = req.user;
+    // console.log(req.url);
+    // console.log(req.user);
     next();
   });
 
@@ -386,6 +388,10 @@ function isAdmin(req, res, next) {
 
 function logout(req, res) {
   // if they aren't redirect them to the home page
+  console.log('-------------------------------');
+  console.log('calling logout from', req.url);
+  console.log(req.user);
+  console.log('-------------------------------');
 
   req.logout();
   res.redirect('/');

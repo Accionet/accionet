@@ -48,7 +48,7 @@ exports.disabled = function (req, res) {
 exports.new = function (req, res) {
   User.new().then((result) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'create.ejs'), {
-      user: result,
+      userToCreate: result,
       message: req.flash('signupMessage'),
     });
   }).catch((err) => {

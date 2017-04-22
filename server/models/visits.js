@@ -22,6 +22,6 @@ DayMetricsDecorator.addDayMetrics(instance);
 HourMetricsDecorator.addHourMetrics(instance);
 DayAndHourMetricDecorator.addDayAndHourTable(instance);
 
-AccessibleParent.decorate(instance, require('./places'));
+AccessibleParent.decorate(instance, { table_name: 'places' });
 
 module.exports = instance;

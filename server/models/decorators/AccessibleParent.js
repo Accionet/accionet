@@ -35,6 +35,7 @@ function countFilterWithAccess(user_id, is_active) {
   const where = this.getWhereParamsForAccessible(user_id, this.parent_table_name, is_active);
 
   return new Promise((resolve, reject) => {
+    console.log('time to get', this.parent_table_name);
     const singularParent = this.parent_table_name.substring(0, this.parent_table_name.length - 1);
     // console.log(knex.count().from(knex.raw('(' + knex.select(`${this.parent_table_name}.id`) // eslint-disable-line prefer-template
     //         .from(`${this.parent_table_name}`).innerJoin(Access.table_name, `${this.parent_table_name}.id`, '=', `${Access.table_name}.access_id`)
@@ -53,6 +54,9 @@ function countFilterWithAccess(user_id, is_active) {
 
 
 exports.decorate = function (prototype, parent) {
+  console.log('decorate');
+  console.log(parent);
+  console.log(parent.table_name);
   prototype.parent_table_name = parent.table_name;
 
   // count

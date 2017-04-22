@@ -6,8 +6,8 @@ const path = '/visits/new';
 const place_id = 41;
 
 
-const VISITS_PER_ITERATION = 10;
-const AMOUNT_OF_ITERATION = 20;
+const VISITS_PER_ITERATION = 5;
+const AMOUNT_OF_ITERATION = 60 * 10;
 const TIME_BETWEEN_ITERATION = 1000;
 let iteration = 0;
 
@@ -28,6 +28,8 @@ function printFinishMessage() {
   }
 }
 
+console.log(`Se enviarán un total de ${VISITS_PER_ITERATION * AMOUNT_OF_ITERATION} en un tiempo total de ${(TIME_BETWEEN_ITERATION * AMOUNT_OF_ITERATION) / 1000} segundos.`);
+console.log(`Es decir se enviarán ${(VISITS_PER_ITERATION / TIME_BETWEEN_ITERATION) * 1000} requests por segundo`);
 const loop = setInterval(() => {
   iteration++;
   if (iteration === AMOUNT_OF_ITERATION) {

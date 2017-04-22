@@ -7,9 +7,14 @@ module.exports = [{
   name: 'Barrio Franklin',
   description: '',
   daily_visits: 45000,
-  is_active: false,
+  is_active: true,
 }, {
   name: 'Mercado Central',
+  description: '',
+  daily_visits: 2020,
+  is_active: true,
+}, {
+  name: 'Other place',
   description: '',
   daily_visits: 2020,
   is_active: false,

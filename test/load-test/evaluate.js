@@ -6,7 +6,7 @@
  let max_diff = -1;
 
  knex('visits').where({
-   place_id: 41,
+   place_id: 5,
  }).then((results) => {
    for (let i = 0; i < results.length; i++) {
      const time_diff = new Date(results[i].created_at) - new Date(results[i].macaddress);

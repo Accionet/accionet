@@ -1,13 +1,13 @@
 const requestify = require('requestify');
 
 /* eslint-disable no-console*/
-const domain = 'http://localhost:3000';
+const domain = 'https://guarded-tor-23589.herokuapp.com';
 const path = '/visits/new';
-const place_id = 41;
+const place_id = 5;
 
 
 const VISITS_PER_ITERATION = 5;
-const AMOUNT_OF_ITERATION = 60 * 10;
+const AMOUNT_OF_ITERATION = 1;
 const TIME_BETWEEN_ITERATION = 1000;
 let iteration = 0;
 
@@ -28,6 +28,7 @@ function printFinishMessage() {
   }
 }
 
+console.log('enviando a ', 'https://guarded-tor-23589.herokuapp.com');
 console.log(`Se enviarán un total de ${VISITS_PER_ITERATION * AMOUNT_OF_ITERATION} en un tiempo total de ${(TIME_BETWEEN_ITERATION * AMOUNT_OF_ITERATION) / 1000} segundos.`);
 console.log(`Es decir se enviarán ${(VISITS_PER_ITERATION / TIME_BETWEEN_ITERATION) * 1000} requests por segundo`);
 const loop = setInterval(() => {

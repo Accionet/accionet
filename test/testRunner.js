@@ -6,7 +6,7 @@ const knex = require('../server/db/knex');
 
 
 
-
+const failed = [];
 let testFiles = [];
 let running = false;
 const timeout = 20000;
@@ -49,16 +49,20 @@ function runNextTest() {
       console.log(stdout);
       if (stdout.indexOf('failing') < 0) {
         ok_count += 1;
-        console.log('\x1b[32m%s\x1b[0m', `Test ${path} finished`);
+        console.log('\x1b[32m%s\x1b[0m', `Test: ${path} finished`);
       } else {
         failure_count += 1;
-        console.log('\x1b[31m%s\x1b[0m', `Test ${path} finished with error`);
+        failed.push(path);
+        console.log('\x1b[31m%s\x1b[0m', `Test: ${path} finished with error`);
       }
       if (ok_count) {
         console.log('\x1b[42m%s\x1b[0m', `${ok_count} OK`);
       }
       if (failure_count) {
-        console.log('\x1b[41m%s\x1b[0m', `${failure_count} failure`);
+        console.log('\x1b[41m%s\x1b[0m', `${failure_count} failure:`);
+        for (let i = 0; i < failed.length; i++) {
+          console.log('\t \x1b[31m%s\x1b[0m', failed[i]);
+        }
       }
 
 

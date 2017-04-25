@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const dateChai = require('chai-datetime');
-const knex = require('../../../../server/db/knex');
+// const knex = require('../../../../server/db/knex');
 const Place = require('../../../../server/models/places');
 const utils = require('../../../../server/services/utils');
 
@@ -16,16 +16,6 @@ chai.use(dateChai);
 
 // eslint-disable-next-line no-undef
 describe('Place Metrics: Check json has correct attributes', () => {
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
-
   // eslint-disable-next-line no-undef
   it('Count amount of options', (done) => {
     return Place.all().then((places) => {

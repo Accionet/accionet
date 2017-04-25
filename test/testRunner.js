@@ -1,6 +1,10 @@
 /* eslint-disable no-console */
+process.env.NODE_ENV = 'test';
+
 const exec = require('child_process').exec;
 const knex = require('../server/db/knex');
+
+
 
 
 let testFiles = [];

@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const dateChai = require('chai-datetime');
 
-const knex = require('../../../../../server/db/knex');
+// const knex = require('../../../../../server/db/knex');
 const AnswerMetric = require('../../../../../server/models/metrics/answerMetric');
 const Answer = require('../../../../../server/models/answer');
 const Question = require('../../../../../server/models/questions');
@@ -30,17 +30,6 @@ function getMultipleChoiceQuestion(questions) {
 
 // eslint-disable-next-line no-undef
 describe('AnswerMetric of Question: type Multiple choice', () => {
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
-
-
   // eslint-disable-next-line no-undef
   it('type is not multiple_choice', (done) => {
     const question = { type: 'not multiple_choice' };

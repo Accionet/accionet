@@ -6,7 +6,7 @@ const chai = require('chai');
 const Response = require('../../../../server/models/responses');
 const Survey = require('../../../../server/models/surveys');
 const utils = require('../../../../server/services/utils');
-const knex = require('../../../../server/db/knex');
+// const knex = require('../../../../server/db/knex');
 
 
 const DEFAULT_ERROR = 'Something went wrong';
@@ -103,15 +103,6 @@ function cloneAnswers(response) {
 
 // eslint-disable-next-line no-undef
 describe('Responses: save, check it saves the response correctly', () => {
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
   // eslint-disable-next-line no-undef
   it('Check the response has the correct attributes', (done) => {
     return getRandomSurvey().then((survey) => {

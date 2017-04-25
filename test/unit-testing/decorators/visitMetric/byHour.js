@@ -25,15 +25,6 @@ chai.use(dateChai);
 
 // eslint-disable-next-line no-undef
 describe('Visit: Malicious byHour', () => {
-  // eslint-disable-next-line
-  // before((done) => {
-  //   return knex.seed.run()
-  //     .then(() => {
-  //       done();
-  //     }).catch((err) => {
-  //       done(err);
-  //     });
-  // });
   // eslint-disable-next-line no-undef
   it('Pass as parameter something that is a json, without id attribute', (done) => {
     const place = {

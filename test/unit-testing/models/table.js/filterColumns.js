@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const dateChai = require('chai-datetime');
 
-const knex = require('../../../../server/db/knex');
+// const knex = require('../../../../server/db/knex');
 const Survey = require('../../../../server/models/surveys');
 // const utils = require('../../../../server/services/utils');
 
@@ -22,15 +22,6 @@ chai.use(dateChai);
 
 // eslint-disable-next-line no-undef
 describe('Tested on Surveys: Filter columns', () => {
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
   // eslint-disable-next-line no-undef
   it('Does not delete anything', (done) => {
     return Survey.filterColumns(['id', 'title']).then((surveys) => {

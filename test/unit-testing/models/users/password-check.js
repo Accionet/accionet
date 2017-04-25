@@ -17,16 +17,6 @@ describe('User check valid password', () => {
   const password = 'pass';
 
   // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
-
-  // eslint-disable-next-line no-undef
   it('Creates user and check password is encrypted', (done) => {
     return User.new().then((user) => {
       user.username = 'test name';

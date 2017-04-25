@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 const exec = require('child_process').exec;
+const knex = require('../server/db/knex');
+
 
 let testFiles = [];
 let running = false;
@@ -32,26 +34,35 @@ function runNextTest() {
   if (!path) {
     return;
   }
-  console.log('\x1b[36m%s\x1b[0m', `Running test: ${path}`); // cyan
+  console.log('\x1b[36m%s\x1b[0m', 'Running seeds....'); // cyan
 
-  exec(`mocha --timeout ${timeout} ${path} `, (error, stdout) => {
-    console.log(stdout);
-    if (stdout.indexOf('failing') < 0) {
-      ok_count += 1;
-      console.log('\x1b[32m%s\x1b[0m', `Test ${path} finished`);
-    } else {
-      failure_count += 1;
-      console.log('\x1b[31m%s\x1b[0m', `Test ${path} finished with error`);
-    }
-    if (ok_count) {
-      console.log('\x1b[42m%s\x1b[0m', `${ok_count} OK`);
-    }
-    if (failure_count) {
-      console.log('\x1b[41m%s\x1b[0m', `${failure_count} failure`);
-    }
+  knex.seed.run().then(() => {
+    console.log('\x1b[36m%s\x1b[0m', 'seeded correctly'); // cyan
+
+    console.log('\x1b[36m%s\x1b[0m', `Running test: ${path}`); // cyan
+
+    exec(`mocha --timeout ${timeout} ${path} `, (error, stdout) => {
+      console.log(stdout);
+      if (stdout.indexOf('failing') < 0) {
+        ok_count += 1;
+        console.log('\x1b[32m%s\x1b[0m', `Test ${path} finished`);
+      } else {
+        failure_count += 1;
+        console.log('\x1b[31m%s\x1b[0m', `Test ${path} finished with error`);
+      }
+      if (ok_count) {
+        console.log('\x1b[42m%s\x1b[0m', `${ok_count} OK`);
+      }
+      if (failure_count) {
+        console.log('\x1b[41m%s\x1b[0m', `${failure_count} failure`);
+      }
 
 
-    runNextTest();
+      runNextTest();
+    });
+  }).catch((err) => {
+    console.log('\x1b[41m%s\x1b[0m', 'ERROR RUNNING SEEDS');
+    console.log('\x1b[31m%s\x1b[0m', err);
   });
 }
 

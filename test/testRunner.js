@@ -70,5 +70,11 @@ function getChilds(path) {
 }
 
 
+const INITIAL_PATH = process.argv[2] || 'test/unit-testing';
+
 dequeue();
-getChilds('test/unit-testing');
+if (INITIAL_PATH.endsWith('.js')) {
+  addTest(INITIAL_PATH);
+} else if (INITIAL_PATH.indexOf('.' < 0) && INITIAL_PATH !== '') {
+  getChilds(INITIAL_PATH);
+}

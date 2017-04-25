@@ -5,7 +5,9 @@ const exec = require('child_process').exec;
 const knex = require('../server/db/knex');
 
 
-
+const START_TIME = new Date();
+let added_files = 0;
+let tested_files = 0;
 const failed = [];
 let testFiles = [];
 let running = false;
@@ -26,6 +28,7 @@ function queue(elem) {
 }
 
 function addTest(path) {
+  added_files++;
   queue(path);
   if (!running) {
     running = true;
@@ -33,11 +36,20 @@ function addTest(path) {
   }
 }
 
+function hasFinised() {
+  if (running && added_files === tested_files) {
+    const FINISH_TIME = new Date();
+    console.log(`Finished in ${(FINISH_TIME.getTime() - START_TIME.getTime()) / 1000}s`);
+  }
+}
+
 function runNextTest() {
   const path = dequeue();
   if (!path) {
+    hasFinised();
     return;
   }
+  tested_files++;
   console.log('\x1b[36m%s\x1b[0m', 'Running seeds....'); // cyan
 
   knex.seed.run().then(() => {

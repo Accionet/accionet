@@ -23,7 +23,12 @@ $(function() {
 
 
   rotateHotspot.on('click', function (event) {
-
+    if($(this).hasClass('text-muted')){
+      return;
+    }
+    var currentWidth = $('.screen').width() + "px";
+    var currentHeight = $('.screen').height() + "px";
+    setScreenSize(currentHeight, currentWidth);
   })
 
 function disableRotator() {
@@ -35,6 +40,14 @@ function disableRotator() {
   }
 }
 
+function setScreenSize(width, height) {
+  $('.screen').width(width);
+  $('.screen').height(height);
+  $('.screen').css({
+      "max-height": height,
+      "max-width": width
+    });
+}
 
 
   changeHotspotSize.on('click', function(event) {
@@ -42,13 +55,7 @@ function disableRotator() {
     var height = $(this).data('height') + "px";
     current_view = $(this).data('name');
     disableRotator();
-
-    $('.screen').width(width);
-    $('.screen').height(height);
-    $('.screen').css({
-        "max-height": height,
-        "max-width": width
- });
+    setScreenSize(width, height);
 
   });
 

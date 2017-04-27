@@ -3,7 +3,6 @@
 $(function() {
 
   var converter = new showdown.Converter();
-  var pad = $('#pad');
   var text = $('#markdown');
   var image = $('.hotspot img');
   var fileupload = $('#image-upload');
@@ -17,9 +16,19 @@ $(function() {
     text.html(html);
   };
 
-  pad.bind('input propertychange', function() {
-    convertTextAreaToMarkdown();
-  })
+
+
+  var convertToHtml = function convertToHtml(){
+    $('#hotspot').remove();
+    console.log('converting ');
+    var text = $('#imageTemplate').val();
+    var iframe = $('<iframe frameborder="0" name="hotspot" id="hotspot"> </iframe>');
+    iframe.appendTo('#iframewrapper');
+    var iframewindow= iframe[0].contentWindow? iframe[0].contentWindow : iframe[0].contentDocument.defaultView;
+        iframewindow.document.open();
+        iframewindow.document.write(text);
+        iframewindow.document.close();
+  }
 
 
   rotateHotspot.on('click', function (event) {

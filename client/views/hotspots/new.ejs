@@ -9,31 +9,77 @@
   <body class="container-fluid">
 
     <section class="row">
-      <div class="col-lg-6 screen" id="markdown">
-        <div class="hotspot" id="imagePrototype">
-          <p class='hotspot_title'>
-            Titulo
-          </p>
-          <img src='/images/login.jpg'/>
-          <a>
-            Conectar
-          </a>
-        </div>
-      </div>
+      <div class="col-lg-6 screen" id="hotspotContainer"></div>
       <div class="col-lg-6">
-        <div class="btn btn-default btn-file" >
-            Subir imagen <input type="file" id="image-upload">
+        <div class="btn btn-default btn-file">
+          Subir imagen
+          <input type="file" id="image-upload">
         </div>
 
         <div class="big-text">
-          <span class="change_size" data-width='375' data-height='667' data-name="mobile"> <i class="fa fa-mobile" aria-hidden="true"></i></span>
-          <span class="change_size" data-width='1024' data-height='768' data-name="tablet"> <i class="fa fa-tablet" aria-hidden="true"></i></span>
-          <span class="change_size" data-width='1280' data-height='800' data-name="computer"> <i class="fa fa-desktop" aria-hidden="true"></i></span>
-          <span class="rotate" > <i class="fa fa-rotate-right" aria-hidden="true"></i></span>
+          <span class="change_size" data-width='375' data-height='667' data-name="mobile">
+            <i class="fa fa-mobile" aria-hidden="true"></i>
+          </span>
+          <span class="change_size" data-width='1024' data-height='768' data-name="tablet">
+            <i class="fa fa-tablet" aria-hidden="true"></i>
+          </span>
+          <span class="change_size" data-width='1280' data-height='800' data-name="computer">
+            <i class="fa fa-desktop" aria-hidden="true"></i>
+          </span>
+          <span class="rotate">
+            <i class="fa fa-rotate-right" aria-hidden="true"></i>
+          </span>
 
         </div>
 
+        <textarea class="hidden" id="imageTemplate">
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="UTF-8">
+              <title>Ingresar</title>
+              <link rel="stylesheet" href="css/normalize.css">
+              <link rel="stylesheet" href="css/style.css">
+              <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Sign Up Form</title>
+              <link rel="stylesheet" href="css/normalize.css">
+            </head>
+            <body>
+              <form id="#myForm">
+                <img class="logo" src="img/antenasola.png">
+                <h1>Accionet</h1>
+                <p style="text-align: center;">
+                  Accionet es una empresa dedicada a activar redes de wifi gratuitas.
+                  <br/>
+                  <br/>
+                  Luego de apretar navegar podr&aacute;s navegar por 1 hora.
+                </p>
+                <input type="hidden" id="macAddress" value="T-$(mac-esc)">
+                <input type="hidden" id="link" value="$(link-login-only)?dst=http://goo.gl/JiDICB&amp;username=T-$(mac-esc)">
+                <a id="connect" class="boton submit" href="$(link-login-only)?dst=http://goo.gl/OyxlnE&amp;username=T-$(mac-esc)">
+                  Navegar
+                </a>
+                <!-- <a class="only-navigate" href="term_and_conditions.html" target="_blank">Solo quiero navegar
+                          </a> -->
+                <fieldset>
+                  <input type="checkbox" id="terms_and_conditions" value="" name="accept_terms">
+                  <label class="light" for="terms_and_conditions">He leído y aceptado los
+                    <a href="term_and_conditions.html" target="_blank">terminos y condiciones de uso
+                    </a>
+                  </label>
+                  <br>
+                </fieldset>
+              </form>
+              <script type="text/javascript" src="js/log.js"></script>
+              <script type="text/javascript" src="js/ready_to_send.js"></script>
 
+              <script type="text/javascript" src="js/counter.js"></script>
+            </body>
+          </html>
+
+        </textarea>
       </div>
     </section>
 
@@ -42,7 +88,8 @@
     <% include ../partials/scripts.ejs %>
 
     <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
-    <script src="/javascripts/js/hotspot_render.js"></script>
+    <script src="/javascripts/hotspot/render.js"></script>
+    <script src="/javascripts/hotspot/resize.js"></script>
 
-  </body>
+</body>
 </html>

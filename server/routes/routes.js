@@ -289,6 +289,11 @@ module.exports = function router(app, passport) {
   app.post('/users/new', isAdmin, (req, res, next) => {
     userController.create(req, res, next);
   });
+
+  app.get('/hotspots/new', isLoggedIn, (req, res, next) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {
+    });
+  });
 };
 //
 // ////////////////////////////////////////////
@@ -310,7 +315,7 @@ function selfUser(req) {
   if (!(req.user && req.params.id)) {
     return false;
   }
-// turn then to strings to avoid returning false when one is 1 and the other "1"
+  // turn then to strings to avoid returning false when one is 1 and the other "1"
   return req.user.id.toString() === req.params.id.toString();
 }
 

@@ -32,376 +32,390 @@
 
         </div>
 
-        <textarea class="hidden" id="imageTemplate">
+        <!-- <img/> -->
+
+        <textarea class="hidden" id="imageTemplate" data-image-src='10536'>
           <!DOCTYPE html>
           <html>
-              <head>
-                  <meta charset="UTF-8">
-                  <title>Ingresar</title>
-                  <style>
-                      /*! normalize.css v4.0.0 | MIT License | github.com/necolas/normalize.css */
-                      html {
-                          font-family: sans-serif;
-                          -ms-text-size-adjust: 100%;
-                          -webkit-text-size-adjust: 100%;
-                      }
-                      body {
-                          margin: 0;
-                      }
-                      article,
-                      aside,
-                      details,
-                      figcaption,
-                      figure,
-                      footer,
-                      header,
-                      main,
-                      menu,
-                      nav,
-                      section,
-                      summary {
-                          display: block;
-                      }
-                      audio,
-                      canvas,
-                      progress,
-                      video {
-                          display: inline-block;
-                      }
-                      audio:not([controls]) {
-                          display: none;
-                          height: 0;
-                      }
-                      progress {
-                          vertical-align: baseline;
-                      }
-                      [hidden],
-                      template {
-                          display: none;
-                      }
-                      a {
-                          background-color: transparent;
-                      }
-                      a:active,
-                      a:hover {
-                          outline-width: 0;
-                      }
-                      abbr[title] {
-                          border-bottom: none;
-                          text-decoration: underline;
-                          text-decoration: underline dotted;
-                      }
-                      b,
-                      strong {
-                          font-weight: inherit;
-                      }
-                      b,
-                      strong {
-                          font-weight: bolder;
-                      }
-                      dfn {
-                          font-style: italic;
-                      }
-                      h1 {
-                          font-size: 2em;
-                          margin: 0.67em 0;
-                      }
-                      mark {
-                          background-color: #ff0;
-                          color: #000;
-                      }
-                      small {
-                          font-size: 80%;
-                      }
-                      sub,
-                      sup {
-                          font-size: 75%;
-                          line-height: 0;
-                          position: relative;
-                          vertical-align: baseline;
-                      }
-                      sub {
-                          bottom: -0.25em;
-                      }
-                      sup {
-                          top: -0.5em;
-                      }
-                      img {
-                          border-style: none;
-                      }
-                      svg:not(:root) {
-                          overflow: hidden;
-                      }
-                      code,
-                      kbd,
-                      pre,
-                      samp {
-                          font-family: monospace, monospace;
-                          font-size: 1em;
-                      }
-                      figure {
-                          margin: 1em 40px;
-                      }
-                      hr {
-                          box-sizing: content-box;
-                          height: 0;
-                          overflow: visible;
-                      }
-                      button,
-                      input,
-                      select,
-                      textarea {
-                          font: inherit;
-                          margin: 0;
-                      }
-                      optgroup {
-                          font-weight: bold;
-                      }
-                      button,
-                      input,
-                      select {
-                          overflow: visible;
-                      }
-                      button,
-                      select {
-                          text-transform: none;
-                      }
-                      [type="button"],
-                      [type="reset"],
-                      [type="submit"],
-                      button {
-                          cursor: pointer;
-                      }
-                      [disabled] {
-                          cursor: default;
-                      }
-                      [type="reset"],
-                      [type="submit"],
-                      button,
-                      html [type="button"] {
-                          -webkit-appearance: button;
-                      }
-                      button::-moz-focus-inner,
-                      input::-moz-focus-inner {
-                          border: 0;
-                          padding: 0;
-                      }
-                      button:-moz-focusring,
-                      input:-moz-focusring {
-                          outline: 1px dotted ButtonText;
-                      }
-                      fieldset {
-                          border: 1px solid #c0c0c0;
-                          margin: 0 2px;
-                          padding: 0.35em 0.625em 0.75em;
-                      }
-                      legend {
-                          box-sizing: border-box;
-                          color: inherit;
-                          display: table;
-                          max-width: 100%;
-                          padding: 0;
-                          white-space: normal;
-                      }
-                      textarea {
-                          overflow: auto;
-                      }
-                      [type="checkbox"],
-                      [type="radio"] {
-                          box-sizing: border-box;
-                          padding: 0;
-                      }
-                      [type="number"]::-webkit-inner-spin-button,
-                      [type="number"]::-webkit-outer-spin-button {
-                          height: auto;
-                      }
-                      [type="search"] {
-                          -webkit-appearance: textfield;
-                      }
-                      [type="search"]::-webkit-search-cancel-button,
-                      [type="search"]::-webkit-search-decoration {
-                          -webkit-appearance: none;
-                      }
-                  </style>
-                  <style>
-                      *,
-                      *:after,
-                      *:before {
-                          -moz-box-sizing: border-box;
-                          -webkit-box-sizing: border-box;
-                          box-sizing: border-box;
-                      }
-                      body {
-                          font-family: 'Nunito', sans-serif;
-                          color: #384047;
-                      }
-                      form {
-                          max-width: 300px;
-                          margin: 10px auto;
-                          padding: 10px 20px;
-                          background: #f4f7f8;
-                          border-radius: 8px;
-                      }
-                      h1 {
-                          margin: 0 0 30px;
-                          text-align: center;
-                      }
-                      input[type="date"],
-                      input[type="datetime"],
-                      input[type="email"],
-                      input[type="number"],
-                      input[type="password"],
-                      input[type="search"],
-                      input[type="tel"],
-                      input[type="text"],
-                      input[type="time"],
-                      input[type="url"],
-                      select,
-                      textarea {
-                          background: rgba(255,255,255,0.1);
-                          border: none;
-                          font-size: 16px;
-                          height: auto;
-                          margin: 0;
-                          outline: 0;
-                          padding: 15px;
-                          width: 100%;
-                          background-color: #e8eeef;
-                          color: #8a97a0;
-                          box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
-                          margin-bottom: 30px;
-                      }
-                      input[type="checkbox"],
-                      input[type="radio"] {
-                          margin: 0 4px 8px 0;
-                      }
-                      select {
-                          padding: 6px;
-                          height: 32px;
-                          border-radius: 2px;
-                      }
-                      button {
-                          padding: 19px 39px 18px;
-                          color: #FFF;
-                          background-color: #4bc970;
-                          font-size: 18px;
-                          text-align: center;
-                          font-style: normal;
-                          border-radius: 5px;
-                          width: 100%;
-                          border: 1px solid #3ac162;
-                          border-width: 1px 1px 3px;
-                          box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
-                          margin-bottom: 10px;
-                      }
-                      .submit {
-                          display: block;
-                          padding: 19px 39px 18px;
-                          color: #FFF;
-                          background-color: #4bc970;
-                          font-size: 18px;
-                          text-align: center;
-                          font-style: normal;
-                          border-radius: 5px;
-                          width: 100%;
-                          border: 1px solid #3ac162;
-                          border-width: 1px 1px 3px;
-                          box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
-                          margin-bottom: 10px;
-                          opacity: 0.5;
-                          pointer-events: none;
-                          cursor: default;
-                      }
-                      fieldset {
-                          margin-bottom: 30px;
-                          border: none;
-                      }
-                      legend {
-                          font-size: 1.4em;
-                          margin-bottom: 10px;
-                      }
-                      label {
-                          display: block;
-                          margin-bottom: 8px;
-                      }
-                      label.light {
-                          font-weight: 300;
-                          display: inline;
-                      }
-                      .number {
-                          background-color: #5fcf80;
-                          color: #fff;
-                          height: 30px;
-                          width: 30px;
-                          display: inline-block;
-                          font-size: 0.8em;
-                          margin-right: 4px;
-                          line-height: 30px;
-                          text-align: center;
-                          text-shadow: 0 1px 0 rgba(255,255,255,0.2);
-                          border-radius: 100%;
-                      }
-                      .logo {
-                          display: block;
-                          width: 25%;
-                          margin: auto;
-                          text-align: auto;
-                      }
-                      @media screen and (min-width: 480px) {
-                          form {
-                              max-width: 480px;
-                          }
-                      }
-                  </style>
-                  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-                  <meta charset="utf-8">
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Sign Up Form</title>
-              </head>
-              <body>
-                  <form id="#myForm">
-                      <img class="logo" src="/images/antenasola.png">
-                      <h1>Accionet</h1>
-                      <p style="text-align: center;">
-                          Accionet es una empresa dedicada a activar redes de wifi gratuitas.
-                          <br/>
-                          <br/>
-                          Luego de apretar navegar podr&aacute;s navegar por 1 hora.
-                      </p>
-                      <input type="hidden" id="macAddress" value="T-$(mac-esc)">
-                      <input type="hidden" id="link" value="$(link-login-only)?dst=http://goo.gl/JiDICB&amp;username=T-$(mac-esc)">
-                      <a id="connect" class="boton submit" href="$(link-login-only)?dst=http://goo.gl/OyxlnE&amp;username=T-$(mac-esc)">
-                          Navegar
-                      </a>
-                      <!-- <a class="only-navigate" href="term_and_conditions.html" target="_blank">Solo quiero navegar
+            <head>
+              <meta charset="UTF-8">
+              <title>Ingresar</title>
+              <style>
+                body,
+                html,
+                section {
+                  height: 100%;
+                }
+                /*! normalize.css v4.0.0 | MIT License | github.com/necolas/normalize.css */
+                html {
+                  font-family: sans-serif;
+                  -ms-text-size-adjust: 100%;
+                  -webkit-text-size-adjust: 100%;
+                }
+                body {
+                  background-color: white;
+                  margin: 0;
+                }
+                article,
+                aside,
+                details,
+                figcaption,
+                figure,
+                footer,
+                header,
+                main,
+                menu,
+                nav,
+                section,
+                summary {
+                  display: block;
+                }
+                audio,
+                canvas,
+                progress,
+                video {
+                  display: inline-block;
+                }
+                audio:not([controls]) {
+                  display: none;
+                  height: 0;
+                }
+                progress {
+                  vertical-align: baseline;
+                }
+                [hidden],
+                template {
+                  display: none;
+                }
+                a {
+                  background-color: transparent;
+                }
+                a:active,
+                a:hover {
+                  outline-width: 0;
+                }
+                abbr[title] {
+                  border-bottom: none;
+                  text-decoration: underline;
+                  text-decoration: underline dotted;
+                }
+                b,
+                strong {
+                  font-weight: inherit;
+                }
+                b,
+                strong {
+                  font-weight: bolder;
+                }
+                dfn {
+                  font-style: italic;
+                }
+                h1 {
+                  font-size: 2em;
+                  margin: 0.67em 0;
+                }
+                mark {
+                  background-color: #ff0;
+                  color: #000;
+                }
+                small {
+                  font-size: 80%;
+                }
+                sub,
+                sup {
+                  font-size: 75%;
+                  line-height: 0;
+                  position: relative;
+                  vertical-align: baseline;
+                }
+                sub {
+                  bottom: -0.25em;
+                }
+                sup {
+                  top: -0.5em;
+                }
+                img {
+                  border-style: none;
+                }
+                svg:not(:root) {
+                  overflow: hidden;
+                }
+                code,
+                kbd,
+                pre,
+                samp {
+                  font-family: monospace, monospace;
+                  font-size: 1em;
+                }
+                figure {
+                  margin: 1em 40px;
+                }
+                hr {
+                  box-sizing: content-box;
+                  height: 0;
+                  overflow: visible;
+                }
+                button,
+                input,
+                select,
+                textarea {
+                  font: inherit;
+                  margin: 0;
+                }
+                optgroup {
+                  font-weight: bold;
+                }
+                button,
+                input,
+                select {
+                  overflow: visible;
+                }
+                button,
+                select {
+                  text-transform: none;
+                }
+                [type="button"],
+                [type="reset"],
+                [type="submit"],
+                button {
+                  cursor: pointer;
+                }
+                [disabled] {
+                  cursor: default;
+                }
+                [type="reset"],
+                [type="submit"],
+                button,
+                html [type="button"] {
+                  -webkit-appearance: button;
+                }
+                button::-moz-focus-inner,
+                input::-moz-focus-inner {
+                  border: 0;
+                  padding: 0;
+                }
+                button:-moz-focusring,
+                input:-moz-focusring {
+                  outline: 1px dotted ButtonText;
+                }
+                fieldset {
+                  border: 1px solid #c0c0c0;
+                  margin: 0 2px;
+                  padding: 0.35em 0.625em 0.75em;
+                }
+                legend {
+                  box-sizing: border-box;
+                  color: inherit;
+                  display: table;
+                  max-width: 100%;
+                  padding: 0;
+                  white-space: normal;
+                }
+                textarea {
+                  overflow: auto;
+                }
+                [type="checkbox"],
+                [type="radio"] {
+                  box-sizing: border-box;
+                  padding: 0;
+                }
+                [type="number"]::-webkit-inner-spin-button,
+                [type="number"]::-webkit-outer-spin-button {
+                  height: auto;
+                }
+                [type="search"] {
+                  -webkit-appearance: textfield;
+                }
+                [type="search"]::-webkit-search-cancel-button,
+                [type="search"]::-webkit-search-decoration {
+                  -webkit-appearance: none;
+                }
+
+              </style>
+              <style>
+                *,
+                *:after,
+                *:before {
+                  -moz-box-sizing: border-box;
+                  -webkit-box-sizing: border-box;
+                  box-sizing: border-box;
+                }
+                body {
+                  font-family: 'Nunito', sans-serif;
+                  color: #384047;
+                }
+                form {
+                  max-width: 300px;
+                  margin: 10px auto;
+                  padding: 10px 20px;
+                  background: #f4f7f8;
+                  border-radius: 8px;
+                }
+                h1 {
+                  margin: 0 0 30px;
+                  text-align: center;
+                }
+                input[type="date"],
+                input[type="datetime"],
+                input[type="email"],
+                input[type="number"],
+                input[type="password"],
+                input[type="search"],
+                input[type="tel"],
+                input[type="text"],
+                input[type="time"],
+                input[type="url"],
+                select,
+                textarea {
+                  background: rgba(255,255,255,0.1);
+                  border: none;
+                  font-size: 16px;
+                  height: auto;
+                  margin: 0;
+                  outline: 0;
+                  padding: 15px;
+                  width: 100%;
+                  background-color: #e8eeef;
+                  color: #8a97a0;
+                  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+                  margin-bottom: 30px;
+                }
+                input[type="checkbox"],
+                input[type="radio"] {
+                  margin: 0 4px 8px 0;
+                }
+                select {
+                  padding: 6px;
+                  height: 32px;
+                  border-radius: 2px;
+                }
+                button {
+                  padding: 19px 39px 18px;
+                  color: #FFF;
+                  background-color: #4bc970;
+                  font-size: 18px;
+                  text-align: center;
+                  font-style: normal;
+                  border-radius: 5px;
+                  width: 100%;
+                  border: 1px solid #3ac162;
+                  border-width: 1px 1px 3px;
+                  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+                  margin-bottom: 10px;
+                }
+                .submit {
+                  display: block;
+                  padding: 19px 39px 18px;
+                  color: #FFF;
+                  background-color: #4bc970;
+                  font-size: 18px;
+                  text-align: center;
+                  font-style: normal;
+                  border-radius: 5px;
+                  width: 100%;
+                  border: 1px solid #3ac162;
+                  border-width: 1px 1px 3px;
+                  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+                  margin-bottom: 10px;
+                  opacity: 0.5;
+                  pointer-events: none;
+                  cursor: default;
+                }
+                fieldset {
+                  margin-bottom: 30px;
+                  border: none;
+                }
+                legend {
+                  font-size: 1.4em;
+                  margin-bottom: 10px;
+                }
+                label {
+                  display: block;
+                  margin-bottom: 8px;
+                }
+                label.light {
+                  font-weight: 300;
+                  display: inline;
+                }
+                .number {
+                  background-color: #5fcf80;
+                  color: #fff;
+                  height: 30px;
+                  width: 30px;
+                  display: inline-block;
+                  font-size: 0.8em;
+                  margin-right: 4px;
+                  line-height: 30px;
+                  text-align: center;
+                  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+                  border-radius: 100%;
+                }
+                .logo {
+                  display: block;
+                  width: 25%;
+                  margin: auto;
+                  text-align: auto;
+                }
+                @media screen and (min-width: 480px) {
+                  form {
+                    max-width: 480px;
+                  }
+                }
+
+              </style>
+              <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Sign Up Form</title>
+            </head>
+            <body>
+              <form id="#myForm">
+                <img class="logo" src="/images/antenasola.png">
+                <h1>Accionet</h1>
+                <p style="text-align: center;">
+                  Accionet es una empresa dedicada a activar redes de wifi gratuitas.
+                  <br/>
+                  <br/>
+                  Luego de apretar navegar podr&aacute;s navegar por 1 hora.
+                </p>
+                <input type="hidden" id="macAddress" value="T-$(mac-esc)">
+                <input type="hidden" id="link" value="$(link-login-only)?dst=http://goo.gl/JiDICB&amp;username=T-$(mac-esc)">
+                <a id="connect" class="boton submit" href="$(link-login-only)?dst=http://goo.gl/OyxlnE&amp;username=T-$(mac-esc)">
+                  Navegar
+                </a>
+
+                <!-- <a class="only-navigate" href="term_and_conditions.html" target="_blank">Solo quiero navegar
                           </a> -->
-                      <fieldset>
-                          <input type="checkbox" id="terms_and_conditions" value="" name="accept_terms">
-                          <label class="light" for="terms_and_conditions">He leído y aceptado los
-                              <a href="term_and_conditions.html" target="_blank">terminos y condiciones de uso
-                              </a>
-                          </label>
-                          <br>
-                      </fieldset>
-                  </form>
-                  <script>
-                      $('input').change(function() {
-                          const $input = $(this);
-                          console.log('hola');
-                          if ($('#terms_and_conditions').is(':checked')) {
-                              $('.boton').css({opacity: '0.9', 'pointer-events': 'auto', cursor: 'pointer'});
-                          } else {
-                              $('.boton').css({opacity: '0.5', 'pointer-events': 'none', cursor: 'default'});
-                          }
-                      });
-                  </script>
-              </body>
+                <fieldset>
+                  <input type="checkbox" id="terms_and_conditions" value="" name="accept_terms">
+                  <label class="light" for="terms_and_conditions">He leído y aceptado los
+                    <a href="term_and_conditions.html" target="_blank">terminos y condiciones de uso
+                    </a>
+                  </label>
+                  <br>
+                </fieldset>
+                <img class="logo" src="/images/antenasola.png">
+
+              </form>
+              <script>
+                $('input').change(function () {
+                  const $input = $(this);
+                  console.log('hola');
+                  if ($('#terms_and_conditions').is(':checked')) {
+                    $('.boton').css({opacity: '0.9', 'pointer-events': 'auto', cursor: 'pointer'});
+                  } else {
+                    $('.boton').css({opacity: '0.5', 'pointer-events': 'none', cursor: 'default'});
+                  }
+                });
+              </script>
+            </body>
           </html>
+
         </textarea>
-      </div>
+
+
+
     </section>
-
-
 
     <% include ../partials/scripts.ejs %>
 
@@ -409,5 +423,5 @@
     <script src="/javascripts/hotspot/render.js"></script>
     <script src="/javascripts/hotspot/resize.js"></script>
 
-</body>
+  </body>
 </html>

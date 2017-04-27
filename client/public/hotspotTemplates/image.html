@@ -4,6 +4,11 @@
         <meta charset="UTF-8">
         <title>Ingresar</title>
         <style>
+            body,
+            html,
+            section {
+                height: 100%;
+            }
             /*! normalize.css v4.0.0 | MIT License | github.com/necolas/normalize.css */
             html {
                 font-family: sans-serif;
@@ -11,6 +16,7 @@
                 -webkit-text-size-adjust: 100%;
             }
             body {
+              background-color: white;
                 margin: 0;
             }
             article,
@@ -338,6 +344,7 @@
             <a id="connect" class="boton submit" href="$(link-login-only)?dst=http://goo.gl/OyxlnE&amp;username=T-$(mac-esc)">
                 Navegar
             </a>
+
             <!-- <a class="only-navigate" href="term_and_conditions.html" target="_blank">Solo quiero navegar
                 </a> -->
             <fieldset>
@@ -348,6 +355,8 @@
                 </label>
                 <br>
             </fieldset>
+            <img class="logo" src="/images/antenasola.png">
+
         </form>
         <script>
             $('input').change(function() {

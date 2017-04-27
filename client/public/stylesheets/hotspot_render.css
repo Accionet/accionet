@@ -24,23 +24,20 @@ html, body, section, .full-height {
 
 .screen {
   margin: 50px;
-  background-color: white;
 
   width: 375px;
   height: 667px;
   max-width: 375px;
   max-height: 667px;
-  overflow: scroll;
-  padding: 30px;
-
+  overflow: hidden;
 }
 
-.hotspot {
+#hotspot {
   height: 100%;
   width: 100%;
 }
 
-.hotspot  img {
+#hotspot  img {
   width: 100%;
 }
 

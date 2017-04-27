@@ -9,7 +9,7 @@
   <body class="container-fluid">
 
     <section class="row">
-      <div class="screen" id="markdown">
+      <div class="col-lg-6 screen" id="markdown">
         <div class="hotspot" id="imagePrototype">
           <p class='hotspot_title'>
             Titulo
@@ -20,7 +20,14 @@
           </a>
         </div>
       </div>
+      <div class="col-lg-6">
+        <span class="btn btn-default btn-file" >
+            Subir imagen <input type="file" id="image-upload">
+        </span>
+      </div>
     </section>
+
+
 
     <% include ../partials/scripts.ejs %>
 

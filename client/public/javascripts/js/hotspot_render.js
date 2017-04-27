@@ -15,4 +15,5 @@ $(function () {
   pad.bind('input propertychange', function() {
     convertTextAreaToMarkdown();
   })
+
 });

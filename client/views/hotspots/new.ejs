@@ -37,6 +37,19 @@
           </div>
         </div>
         <div class="example">
+          <div class="example-title">Seleccionar ancho de la imagen</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group">
+                <input type="text" ng-model="imageWidth" class="form-control" ng-change="recompile('IMAGE-WIDTH', imageWidth + '%')"/>
+                <span class="input-group-addon">
+                  %
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
           <div class="example-title">Seleccionar color de fondo</div>
           <div class="example-content well">
             <div class="example-content-widget">
@@ -76,9 +89,114 @@
             </div>
           </div>
         </div>
-
-
-
+        <div class="example">
+          <div class="example-title">Seleccionar T&iacute;tulo</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group" style="width: 100%;">
+                <input type="text" ng-model="title" class="form-control" ng-change="recompile('TITLE-TEXT', title)"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+          <div class="example-title">Seleccionar Texto 1</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group" style="width: 100%;">
+                <textarea type="text" ng-model="paragraph1" class="form-control" ng-change="recompile('PARAGRAPH-1-TEXT', paragraph1)"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+          <div class="example-title">Seleccionar Texto 2</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group" style="width: 100%;">
+                <textarea type="text" ng-model="paragraph2" class="form-control" ng-change="recompile('PARAGRAPH-2-TEXT', paragraph2)"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+        <div class="example-title">Seleccionar color del bot&oacute;n</div>
+        <div class="example-content well">
+          <div class="example-content-widget">
+            <div id="cp2" class="input-group colorpicker-component">
+              <input type="text" ng-init="buttonBackgroundColor = '#FFF'" ng-model="buttonBackgroundColor" class="form-control" ng-change="recompile('BUTTON-BACKGROUND-COLOR', buttonBackgroundColor)"/>
+              <span class="input-group-addon">
+                <i></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="example">
+      <div class="example-title">Seleccionar color del borde del bot&oacute;n</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div id="cp2" class="input-group colorpicker-component">
+            <input type="text" ng-init="buttonBorderColor = '#FFF'" ng-model="buttonBorderColor" class="form-control" ng-change="recompile('BUTTON-BORDER-COLOR', buttonBorderColor)"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+        <div class="example">
+          <div class="example-title">Seleccionar color del texto del bot&oacute;n</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group colorpicker-component">
+                <input type="text" ng-init="buttonColor = '#FFF'" ng-model="buttonColor" class="form-control" ng-change="recompile('BUTTON-COLOR', buttonColor)"/>
+                <span class="input-group-addon">
+                  <i></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+          <div class="example-title">Texto del bot&oacute;n</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group colorpicker-component">
+                <input type="text" ng-init="buttonColor = '#FFF'" ng-model="buttonColor" class="form-control" ng-change="recompile('BUTTON-COLOR', buttonColor)"/>
+                <span class="input-group-addon">
+                  <i></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+          <div class="example-title">Seleccionar P&aacute;gina de redirecci&oacute;n</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group" style="width: 100%;">
+                <span class="input-group-addon">
+                  http://
+                </span>
+                <input type="text" ng-model="landingPage" class="form-control" ng-change="recompile('LANDING-PAGE', 'https://' + landingPage)"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+        <div class="example-title">Color del hiperv&iacute;nculo a t&eacute;rminos y condiciones</div>
+        <div class="example-content well">
+          <div class="example-content-widget">
+            <div id="cp2" class="input-group colorpicker-component">
+              <input type="text" ng-model="termAndCondColor" class="form-control" ng-change="recompile('TERMS-AND-COND-COLOR', termAndCondColor)"/>
+              <span class="input-group-addon">
+                <i></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
       </section>
 
     </body>

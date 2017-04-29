@@ -68,8 +68,10 @@ $(function() {
       var reader = new FileReader();
 
       reader.onload = function(e) {
-        var startPoint = $imageTemplate.data('imageSrc');
-        changeAttribute(e.target.result, startPoint);
+
+        angular.element(input).scope().recompile('IMAGE-PATH', e.target.result);
+        // var startPoint = $imageTemplate.data('imageSrc');
+        // changeAttribute(e.target.result, startPoint);
       }
 
       reader.readAsDataURL(input.files[0]);
@@ -77,11 +79,14 @@ $(function() {
   }
 
   $("#imgInp").change(function() {
+    console.log('cambio imgINp');
     readURL(this);
   });
 
   fileupload.on('change', function(event) {
-    readURL(this)
+    console.log('cambio');
+
+    readURL(this, 'IMAGE-PATH')
   });
 
 });

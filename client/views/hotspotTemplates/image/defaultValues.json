@@ -1,0 +1,21 @@
+{
+  "FONT-FAMILY": "'Nunito', sans-serif",
+  "BACKGROUND-COLOR": "white",
+  "BACKGROUND-IMAGE": "none",
+  "IMAGE-PATH": "/images/antenasola.png",
+  "BUTTON-COLOR": "#FFF",
+  "BUTTON-BACKGROUND-COLOR": "4bc970",
+  "BUTTON-BORDER-COLOR": "3ac162",
+  "IMAGE-WIDTH": "25%",
+  "TERMS-AND-COND-COLOR": "#00F",
+  "TERMS-AND-COND-VISITED-COLOR": "#551a8b",
+  "FORM-BACKGROUND-COLOR": "#f4f7f8",
+  "TEXT-COLOR": "#384047",
+  "TITLE-SIZE": "2em",
+  "PARAGRAPH-SIZE": "1em",
+  "TITLE-TEXT": "Accionet",
+  "PARAGRAPH-1-TEXT":"",
+  "PARAGRAPH-2-TEXT":"",
+  "BUTTON-TEXT": "NAVEGAR",
+  "LANDING-PAGE": "https://www.accionet.cl"
+}

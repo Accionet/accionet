@@ -10,6 +10,10 @@ $(function() {
   var rotateHotspot = $('.rotate')
   var current_view = 'mobile';
 
+  var $changeIframe = $('.change-iframe');
+
+
+
 
 
 
@@ -31,25 +35,41 @@ $(function() {
 
 
 
-  function changeImage(path) {
+  var changeAttribute = function changeAttribute(path, startPoint) {
     var html = $imageTemplate.val();
-    var startPoint = $imageTemplate.data('imageSrc');
     var startQuote = html.indexOf('"', startPoint);
     var endQuote = html.indexOf('"', startQuote + 1);
     var endHtml = html.substring(0, startQuote + 1) + path + html.substring(endQuote, html.length);
-    $imageTemplate.text(endHtml);
+    $imageTemplate.text(endHtml)
     convertToHtml();
   }
+
+  function changeText(text, startPoint) {
+    var html = $imageTemplate.val();
+    console.log(html.indexOf('<h3>'));
+    var endPoint = html.indexOf('<', startPoint);
+    console.log(html.substring(startPoint, endPoint));
+  }
+
+  $changeIframe.on('input', function() {
+    var current = $(this);
+    startPoint = $imageTemplate.data(current.data('attrToChange'));
+    text = current.val();
+    changeText(text, startPoint);
+  });
+
+
+
+
 
 
   function readURL(input) {
     if (input.files && input.files[0]) {
-      console.log('reaad IRL');
       var reader = new FileReader();
 
       reader.onload = function(e) {
-        changeImage(e.target.result);
-        // console.log(e.target.result);
+        var startPoint = $imageTemplate.data('imageSrc');
+        changeAttribute(e.target.result, startPoint);
       }
 
       reader.readAsDataURL(input.files[0]);

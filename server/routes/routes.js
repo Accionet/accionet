@@ -13,6 +13,8 @@ const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
 const visitController = require('../controllers/visitController');
 const accessController = require('../controllers/accessController');
+const hotspotController = require('../controllers/hotspotController');
+
 
 // models
 const User = require('../models/users');
@@ -290,9 +292,17 @@ module.exports = function router(app, passport) {
     userController.create(req, res, next);
   });
 
+
+  // //////////////////////////////////////////
+  // ///////// hotspots  ////////////////////////
+  // ////////////////////////////////////////
+
   app.get('/hotspots/new', isLoggedIn, (req, res, next) => {
-    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {
-    });
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
+  });
+
+  app.get('/hotspots/template/:template', isLoggedIn, (req, res, next) => {
+    hotspotController.getHotspot(req, res, next);
   });
 };
 //

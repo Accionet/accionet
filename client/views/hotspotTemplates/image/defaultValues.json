@@ -1,7 +1,7 @@
 {
   "FONT-FAMILY": "'Nunito', sans-serif",
   "BACKGROUND-COLOR": "white",
-  "BACKGROUND-IMAGE": "none",
+  "BACKGROUND-IMAGE": "/images/login.jpg",
   "IMAGE-PATH": "/images/antenasola.png",
   "BUTTON-COLOR": "#FFF",
   "BUTTON-BACKGROUND-COLOR": "#4bc970",

@@ -13,7 +13,6 @@
       <div class="col-lg-6 screen" id="hotspotContainer"></div>
       <div class="col-lg-6">
 
-
         <div class="example-content well big-text">
           <span class="change_size" data-width='375' data-height='667' data-name="mobile">
             <i class="fa fa-mobile" aria-hidden="true"></i>
@@ -33,14 +32,14 @@
 
           <div class="btn btn-default btn-file">
             Cambiar imagen
-            <input type="file" id="image-upload">
+            <input type="file" class="file-upload" data-key="IMAGE-PATH">
           </div>
         </div>
         <div class="example">
           <div class="example-title">Seleccionar ancho de la imagen</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group">
+              <div class="input-group">
                 <input type="text" ng-model="imageWidth" class="form-control" ng-change="recompile('IMAGE-WIDTH', imageWidth + '%')"/>
                 <span class="input-group-addon">
                   %
@@ -53,7 +52,7 @@
           <div class="example-title">Seleccionar color de fondo</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group colorpicker-component">
+              <div class="input-group colorpicker-component">
                 <input type="text" ng-init="backgroundColor = '#FFF'" ng-model="backgroundColor" class="form-control" ng-change="recompile('BACKGROUND-COLOR', backgroundColor)"/>
                 <span class="input-group-addon">
                   <i></i>
@@ -62,12 +61,30 @@
             </div>
           </div>
         </div>
+        <input class="form-control" type="file" disabled>
+        <div class="example">
+          <div class="example-title">Seleccionar imagen de fondo</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div class="background-image btn btn-default btn-file">
+                Cambiar imagen
+                <input class="background-image file-upload" type="file" data-key="BACKGROUND-IMAGE"/>
+              </div>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input data-disable=".background-image" class="disable-checkbox" type="checkbox" ng-click="recompile('BACKGROUND-IMAGE','none')">
+                Sin imagen de fondo
+              </label>
+            </div>
+          </div>
+        </div>
 
         <div class="example">
           <div class="example-title">Seleccionar color de fondo del contenedor</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group colorpicker-component">
+              <div class="input-group colorpicker-component">
                 <input type="text" ng-init="formBackgroundColor = '#FFF'" ng-model="formBackgroundColor" class="form-control" ng-change="recompile('FORM-BACKGROUND-COLOR', formBackgroundColor)"/>
                 <span class="input-group-addon">
                   <i></i>
@@ -80,7 +97,7 @@
           <div class="example-title">Seleccionar color del texto</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group colorpicker-component">
+              <div class="input-group colorpicker-component">
                 <input type="text" ng-init="textColor = '#FFF'" ng-model="textColor" class="form-control" ng-change="recompile('TEXT-COLOR', textColor)"/>
                 <span class="input-group-addon">
                   <i></i>
@@ -93,7 +110,7 @@
           <div class="example-title">Seleccionar T&iacute;tulo</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group" style="width: 100%;">
+              <div class="input-group" style="width: 100%;">
                 <input type="text" ng-model="title" class="form-control" ng-change="recompile('TITLE-TEXT', title)"/>
               </div>
             </div>
@@ -103,7 +120,7 @@
           <div class="example-title">Seleccionar Texto 1</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group" style="width: 100%;">
+              <div class="input-group" style="width: 100%;">
                 <textarea type="text" ng-model="paragraph1" class="form-control" ng-change="recompile('PARAGRAPH-1-TEXT', paragraph1)"></textarea>
               </div>
             </div>
@@ -113,43 +130,43 @@
           <div class="example-title">Seleccionar Texto 2</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group" style="width: 100%;">
+              <div class="input-group" style="width: 100%;">
                 <textarea type="text" ng-model="paragraph2" class="form-control" ng-change="recompile('PARAGRAPH-2-TEXT', paragraph2)"></textarea>
               </div>
             </div>
           </div>
         </div>
         <div class="example">
-        <div class="example-title">Seleccionar color del bot&oacute;n</div>
-        <div class="example-content well">
-          <div class="example-content-widget">
-            <div id="cp2" class="input-group colorpicker-component">
-              <input type="text" ng-init="buttonBackgroundColor = '#FFF'" ng-model="buttonBackgroundColor" class="form-control" ng-change="recompile('BUTTON-BACKGROUND-COLOR', buttonBackgroundColor)"/>
-              <span class="input-group-addon">
-                <i></i>
-              </span>
+          <div class="example-title">Seleccionar color del bot&oacute;n</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div class="input-group colorpicker-component">
+                <input type="text" ng-init="buttonBackgroundColor = '#FFF'" ng-model="buttonBackgroundColor" class="form-control" ng-change="recompile('BUTTON-BACKGROUND-COLOR', buttonBackgroundColor)"/>
+                <span class="input-group-addon">
+                  <i></i>
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="example">
-      <div class="example-title">Seleccionar color del borde del bot&oacute;n</div>
-      <div class="example-content well">
-        <div class="example-content-widget">
-          <div id="cp2" class="input-group colorpicker-component">
-            <input type="text" ng-init="buttonBorderColor = '#FFF'" ng-model="buttonBorderColor" class="form-control" ng-change="recompile('BUTTON-BORDER-COLOR', buttonBorderColor)"/>
-            <span class="input-group-addon">
-              <i></i>
-            </span>
+        <div class="example">
+          <div class="example-title">Seleccionar color del borde del bot&oacute;n</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div class="input-group colorpicker-component">
+                <input type="text" ng-init="buttonBorderColor = '#FFF'" ng-model="buttonBorderColor" class="form-control" ng-change="recompile('BUTTON-BORDER-COLOR', buttonBorderColor)"/>
+                <span class="input-group-addon">
+                  <i></i>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
         <div class="example">
           <div class="example-title">Seleccionar color del texto del bot&oacute;n</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group colorpicker-component">
+              <div class="input-group colorpicker-component">
                 <input type="text" ng-init="buttonColor = '#FFF'" ng-model="buttonColor" class="form-control" ng-change="recompile('BUTTON-COLOR', buttonColor)"/>
                 <span class="input-group-addon">
                   <i></i>
@@ -162,7 +179,7 @@
           <div class="example-title">Texto del bot&oacute;n</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group colorpicker-component">
+              <div class="input-group colorpicker-component">
                 <input type="text" ng-init="buttonColor = '#FFF'" ng-model="buttonColor" class="form-control" ng-change="recompile('BUTTON-COLOR', buttonColor)"/>
                 <span class="input-group-addon">
                   <i></i>
@@ -175,9 +192,9 @@
           <div class="example-title">Seleccionar P&aacute;gina de redirecci&oacute;n</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div id="cp2" class="input-group" style="width: 100%;">
+              <div class="input-group" style="width: 100%;">
                 <span class="input-group-addon">
-                  http://
+                  https://
                 </span>
                 <input type="text" ng-model="landingPage" class="form-control" ng-change="recompile('LANDING-PAGE', 'https://' + landingPage)"/>
               </div>
@@ -185,24 +202,35 @@
           </div>
         </div>
         <div class="example">
-        <div class="example-title">Color del hiperv&iacute;nculo a t&eacute;rminos y condiciones</div>
-        <div class="example-content well">
-          <div class="example-content-widget">
-            <div id="cp2" class="input-group colorpicker-component">
-              <input type="text" ng-model="termAndCondColor" class="form-control" ng-change="recompile('TERMS-AND-COND-COLOR', termAndCondColor)"/>
-              <span class="input-group-addon">
-                <i></i>
-              </span>
+          <div class="example-title">Color del hiperv&iacute;nculo a t&eacute;rminos y condiciones</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div class="input-group colorpicker-component">
+                <input type="text" ng-model="termAndCondColor" class="form-control" ng-change="recompile('TERMS-AND-COND-COLOR', termAndCondColor)"/>
+                <span class="input-group-addon">
+                  <i></i>
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </section>
 
     </body>
     <script>
       $(function () {
         $('.colorpicker-component').colorpicker();
+
+        $("input[type='checkbox']").on('click', function (event) {
+          var elemToDisable = $(this).data('disable');
+          if (this.checked) {
+            $(elemToDisable).addClass('disabled');
+            $(elemToDisable).prop('disabled', true);
+          } else {
+            $(elemToDisable).removeClass('disabled');
+            $(elemToDisable).prop('disabled', false);
+          }
+        })
       });
     </script>
     <% include ../partials/scripts.ejs%>

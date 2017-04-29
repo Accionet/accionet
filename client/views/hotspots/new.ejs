@@ -46,12 +46,33 @@
                   <i></i>
                 </span>
               </div>
-              <script>
-                $(function () {
-                  $('#cp2').colorpicker();
-                });
-              </script>
+            </div>
+          </div>
+        </div>
 
+        <div class="example">
+          <div class="example-title">Seleccionar color de fondo del contenedor</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group colorpicker-component">
+                <input type="text" ng-init="formBackgroundColor = '#FFF'" ng-model="formBackgroundColor" class="form-control" ng-change="recompile('FORM-BACKGROUND-COLOR', formBackgroundColor)"/>
+                <span class="input-group-addon">
+                  <i></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+          <div class="example-title">Seleccionar color del texto</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div id="cp2" class="input-group colorpicker-component">
+                <input type="text" ng-init="textColor = '#FFF'" ng-model="textColor" class="form-control" ng-change="recompile('TEXT-COLOR', textColor)"/>
+                <span class="input-group-addon">
+                  <i></i>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -61,6 +82,11 @@
       </section>
 
     </body>
+    <script>
+      $(function () {
+        $('.colorpicker-component').colorpicker();
+      });
+    </script>
     <% include ../partials/scripts.ejs%>
     <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
     <script src="/javascripts/hotspot/render.js"></script>

@@ -278,7 +278,7 @@
                 padding: 19px 39px 18px;
                 color: $BUTTON-COLOR$;
                 background-color: $BUTTON-BACKGROUND-COLOR$;
-                font-size: 18px;
+                font-size: $BUTTON-TEXT-SIZE$;
                 text-align: center;
                 font-style: normal;
                 border-radius: 5px;
@@ -370,7 +370,6 @@
         <script>
             $('input').change(function() {
                 const $input = $(this);
-                console.log('hola');
                 if ($('#terms_and_conditions').is(':checked')) {
                     $('.boton').css({opacity: '0.9', 'pointer-events': 'auto', cursor: 'pointer'});
                 } else {

@@ -61,7 +61,6 @@
             </div>
           </div>
         </div>
-        <input class="form-control" type="file" disabled>
         <div class="example">
           <div class="example-title">Seleccionar imagen de fondo</div>
           <div class="example-content well">
@@ -113,6 +112,17 @@
               <div class="input-group" style="width: 100%;">
                 <input type="text" ng-model="title" class="form-control" ng-change="recompile('TITLE-TEXT', title)"/>
               </div>
+              <br/>
+              <div class="input-group" style="width: 100%;">
+                <span class="input-group-addon" ng-click="recompileSize('TITLE-SIZE', 'down')">
+                  <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </span>
+                <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['TITLE-SIZE']}}" class="form-control" readonly/>
+
+                <span class="input-group-addon" ng-click="recompileSize('TITLE-SIZE', 'up')">
+                  <i class="fa fa-caret-up" aria-hidden="true"></i>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -132,6 +142,23 @@
             <div class="example-content-widget">
               <div class="input-group" style="width: 100%;">
                 <textarea type="text" ng-model="paragraph2" class="form-control" ng-change="recompile('PARAGRAPH-2-TEXT', paragraph2)"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example">
+          <div class="example-title">Tama&ntilde;o Texto:</div>
+          <div class="example-content well">
+            <div class="example-content-widget">
+              <div class="input-group" style="width: 100%;">
+                <span class="input-group-addon" ng-click="recompileSize('PARAGRAPH-SIZE', 'down')">
+                  <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </span>
+                <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['PARAGRAPH-SIZE']}}" class="form-control" readonly/>
+
+                <span class="input-group-addon" ng-click="recompileSize('PARAGRAPH-SIZE', 'up')">
+                  <i class="fa fa-caret-up" aria-hidden="true"></i>
+                </span>
               </div>
             </div>
           </div>
@@ -179,10 +206,18 @@
           <div class="example-title">Texto del bot&oacute;n</div>
           <div class="example-content well">
             <div class="example-content-widget">
-              <div class="input-group colorpicker-component">
-                <input type="text" ng-init="buttonColor = '#FFF'" ng-model="buttonColor" class="form-control" ng-change="recompile('BUTTON-COLOR', buttonColor)"/>
-                <span class="input-group-addon">
-                  <i></i>
+              <div class="input-group" style="width: 100%;">
+                <input type="text" ng-model="buttonText" class="form-control" ng-change="recompile('BUTTON-TEXT', buttonText)"/>
+              </div>
+              <br/>
+              <div class="input-group" style="width: 100%;">
+                <span class="input-group-addon" ng-click="recompileSize('BUTTON-TEXT-SIZE', 'down')">
+                  <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </span>
+                <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['BUTTON-TEXT-SIZE']}}" class="form-control" readonly/>
+
+                <span class="input-group-addon" ng-click="recompileSize('BUTTON-TEXT-SIZE', 'up')">
+                  <i class="fa fa-caret-up" aria-hidden="true"></i>
                 </span>
               </div>
             </div>

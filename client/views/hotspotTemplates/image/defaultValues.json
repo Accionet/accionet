@@ -17,5 +17,7 @@
   "PARAGRAPH-1-TEXT":"Accionet es una empresa dedicada a activar redes de wifi gratuitas.",
   "PARAGRAPH-2-TEXT":"Luego de apretar navegar podr&aacute;s navegar por 1 hora.",
   "BUTTON-TEXT": "NAVEGAR",
+  "BUTTON-TEXT-SIZE": "1.4em",
+
   "LANDING-PAGE": "https://www.accionet.cl"
 }

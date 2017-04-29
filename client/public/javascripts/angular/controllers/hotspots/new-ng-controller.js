@@ -53,7 +53,6 @@ controllers
      });
 
     $scope.recompile = function (key, value) {
-      console.log(key, value);
       if(key in $scope.current_hotspot.values){
         $scope.current_hotspot.values[key] = value;
       }

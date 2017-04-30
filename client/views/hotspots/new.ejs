@@ -9,18 +9,32 @@
     <script src="/vendor/jquery/jquery.min.js"></script>
   </head>
   <body class="container-fluid" ng-controller="newHotspotController">
-    <section class="row">
-      <div class="col-lg-6 screen" id="hotspotContainer"></div>
-      <div class="col-lg-6">
 
+
+
+
+    <section class="row">
+
+      <div class="col-lg-6" style="min-height: 920px" >
+        <img id="mobile-border" class="screen-border" src="/images/iphoneborderblack.png" height="920" width="440"/>
+        <img id="tablet-border" class=" screen-border hidden" src="/images/ipadborder.png" height="820" width="1105"/>
+        <img id="computer-border" class=" screen-border hidden" src="/images/computerborder.png" height="955" width="1200"/>
+
+        <div class="screen" id="hotspotContainer"></div>
+      </div>
+
+    </section>
+      <section class="row">
+
+      <div class="col-lg-6">
         <div class="example-content well big-text">
           <span class="change_size" data-width='375' data-height='667' data-name="mobile">
             <i class="fa fa-mobile" aria-hidden="true"></i>
           </span>
-          <span class="change_size" data-width='1024' data-height='768' data-name="tablet">
+          <span class="change_size" data-width='800' data-height='600' data-name="tablet">
             <i class="fa fa-tablet" aria-hidden="true"></i>
           </span>
-          <span class="change_size" data-width='1280' data-height='800' data-name="computer">
+          <span class="change_size" data-width='1098' data-height='618' data-name="computer">
             <i class="fa fa-desktop" aria-hidden="true"></i>
           </span>
           <span class="rotate">
@@ -269,7 +283,8 @@
       });
     </script>
     <% include ../partials/scripts.ejs%>
-    <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script>
+    <!-- <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script> -->
+    <script src='/vendor/jquery-rotate/JQueryRotate.js'></script>
     <script src="/javascripts/hotspot/render.js"></script>
     <script src="/javascripts/hotspot/resize.js"></script>
     <script src="/javascripts/angular/controllers/hotspots/new-ng-controller.js"></script>

@@ -2,20 +2,7 @@
 /* eslint-disable */
 $(function() {
 
-  var converter = new showdown.Converter();
-  var text = $('#markdown');
-  var $imageTemplate = $('#imageTemplate');
   var fileupload = $('.file-upload');
-  var changeHotspotSize = $('.change_size');
-  var rotateHotspot = $('.rotate')
-  var current_view = 'mobile';
-
-
-
-
-
-
-
 
   function readURL(input, key) {
     if (input.files && input.files[0]) {

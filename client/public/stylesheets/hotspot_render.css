@@ -23,14 +23,17 @@ html, body, section, .full-height {
 }
 
 .screen {
-  margin: 50px;
-
   width: 375px;
   height: 667px;
   max-width: 375px;
   max-height: 667px;
   overflow: hidden;
+  position: relative;
+  z-index: 1000;
+  margin-top: -789px;
+  margin-left: 37px;
 }
+
 
 #hotspot {
   height: 100%;

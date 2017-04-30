@@ -14,6 +14,11 @@ $(function() {
       "mobile": 30,
       "tablet": 153,
       "computer": 51,
+    },
+    "landscape": {
+      "mobile": 92,
+      "tablet": 253,
+      "computer": 51,
     }
   }
 
@@ -22,6 +27,27 @@ $(function() {
       "mobile": -653,
       "tablet": -710,
       "computer": -908,
+    },
+    "landscape": {
+      "mobile": -538,
+      "tablet": -810,
+      "computer": 51,
+    }
+  }
+
+  var rotate = {
+    "mobile": -90,
+    "tablet": 90
+  }
+
+  var screenBorderMarginLandscape = {
+    "top": {
+      "mobile": "0px",
+      "tablet": "100px",
+    },
+    "left": {
+      "mobile": "182.5px",
+      "tablet": "0px",
     }
   }
 
@@ -30,11 +56,15 @@ $(function() {
 
     if (orientation === 'landscape') {
       var margin = ($screenBorder.width() / 2).toString() + "px";
-      $screenBorder.rotate(-90);
-      $screenBorder.css("margin-left", margin);
+      $screenBorder.rotate(rotate[current_view]);
+      $screenBorder.css("margin-left", screenBorderMarginLandscape["left"][current_view]);
+      $screenBorder.css("margin-top", screenBorderMarginLandscape["top"][current_view]);
+
     } else {
       $screenBorder.rotate(0);
       $screenBorder.css("margin-left", "0px");
+      $screenBorder.css("margin-top", "0px");
+
     }
 
 
@@ -52,11 +82,12 @@ $(function() {
     if ($(this).hasClass('text-muted')) {
       return;
     }
-    var currentWidth = $('.screen').width() + "px";
-    var currentHeight = $('.screen').height() + "px";
+    var currentWidth = $('.screen').width();
+    var currentHeight = $('.screen').height();
     rotateOrientation();
     rotateScreenBorder();
-    setSize($('.screen'), currentHeight, currentWidth);
+    changeSectionsSizes();
+    resizeScreen(currentHeight, currentWidth);
   })
 
   function disableRotator() {
@@ -103,20 +134,40 @@ $(function() {
     }
   }
 
+  var changePageWrapperWidth = function() {
+    if(current_view === 'mobile') {
+      console.log(($('#page-wrapper').width()));
+      $('#page-wrapper').width('auto');
+      $()
+    } else {
+      $('#page-wrapper').width('100%');
+
+    }
+  }
+
   var changeSectionsSizes = function() {
-    console.log(current_view);
-    if (current_view === 'mobile') {
-      console.log('entro');
+    //class change
+    if (current_view === 'mobile' && orientation === 'portrait') {
       $('#attrChangeSection').removeClass('row');
       $('#attrChangeSection').addClass('col-lg-6');
       $('#hotspotSection').removeClass('row');
       $('#hotspotSection').addClass('col-lg-6');
+      $('#mobilePortraitRow').addClass('row');
+
     } else {
       $('#attrChangeSection').removeClass('col-lg-6');
       $('#attrChangeSection').addClass('row');
       $('#hotspotSection').removeClass('col-lg-6');
       $('#hotspotSection').addClass('row');
+      $('#mobilePortraitRow').removeClass('row');
     }
+    if (current_view === 'mobile' && orientation === 'landscape') {
+      $('#hotspotSection').css('min-height', "700px");
+    } else {
+      $('#hotspotSection').css('min-height', "1000px");
+    }
+
+    changePageWrapperWidth();
   }
 
 
@@ -125,15 +176,13 @@ $(function() {
     var height = $(this).data('height');
     current_view = $(this).data('name');
     disableRotator();
-    resizeScreen(width, height);
     if (orientation === 'landscape') {
       rotateOrientation();
       rotateScreenBorder();
     }
+    resizeScreen(width, height);
     changeBorder();
     changeSectionsSizes();
-
-
   });
 
 });

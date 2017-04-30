@@ -9,17 +9,21 @@ $(function() {
   var $tablet = $('#tablet-border');
   var $computer = $('#computer-border');
 
-  var leftMargins = { "portrait": {
+  var leftMargins = {
+    "portrait": {
       "mobile": 37,
       "tablet": 153,
       "computer": 51,
-  }}
+    }
+  }
 
-  var topMargins = { "portrait": {
+  var topMargins = {
+    "portrait": {
       "mobile": -789,
       "tablet": -710,
       "computer": -908,
-  }}
+    }
+  }
 
   var rotateScreenBorder = function() {
     var $screenBorder = $('.screen-border');
@@ -98,14 +102,30 @@ $(function() {
     $mobile.addClass('hidden');
     $tablet.addClass('hidden');
     $computer.addClass('hidden');
-    if(current_view === 'mobile'){
+    if (current_view === 'mobile') {
       $mobile.removeClass('hidden');
     }
-    if(current_view === 'tablet'){
+    if (current_view === 'tablet') {
       $tablet.removeClass('hidden');
     }
-    if(current_view === 'computer'){
+    if (current_view === 'computer') {
       $computer.removeClass('hidden');
+    }
+  }
+
+  var changeSectionsSizes = function() {
+    console.log(current_view);
+    if (current_view === 'mobile') {
+      console.log('entro');
+      $('#attrChangeSection').removeClass('row');
+      $('#attrChangeSection').addClass('col-lg-6');
+      $('#hotspotSection').removeClass('row');
+      $('#hotspotSection').addClass('col-lg-6');
+    } else {
+      $('#attrChangeSection').removeClass('col-lg-6');
+      $('#attrChangeSection').addClass('row');
+      $('#hotspotSection').removeClass('col-lg-6');
+      $('#hotspotSection').addClass('row');
     }
   }
 
@@ -116,7 +136,12 @@ $(function() {
     current_view = $(this).data('name');
     disableRotator();
     resizeScreen(width, height);
+    if (orientation === 'landscape') {
+      rotateOrientation();
+      rotateScreenBorder();
+    }
     changeBorder();
+    changeSectionsSizes();
     // resizeBorder(width, height);
     // setSize($('.screen'), width.toString() + "px", height.toString() + "px");
     // var leftMargin = stretchLinear(width, screenLeftMarginPort);

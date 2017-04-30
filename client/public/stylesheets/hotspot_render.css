@@ -7,7 +7,7 @@ html, body, section, .full-height {
 #attrChangeSection{
   max-height: 1000px;
   overflow: scroll;
-  margin-top: 131px;
+  margin-top: 30px;
   padding-top: 50px;
 }
 
@@ -17,15 +17,15 @@ html, body, section, .full-height {
 }
 
 .screen {
-  width: 375px;
-  height: 667px;
-  max-width: 375px;
-  max-height: 667px;
+  width: 310px;
+  height: 551px;
+  max-width: 310px;
+  max-height: 551px;
   overflow: hidden;
   position: relative;
   z-index: 1000;
-  margin-top: -789px;
-  margin-left: 37px;
+  margin-top: -653px;
+  margin-left: 30px;
 }
 
 

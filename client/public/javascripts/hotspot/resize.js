@@ -11,7 +11,7 @@ $(function() {
 
   var leftMargins = {
     "portrait": {
-      "mobile": 37,
+      "mobile": 30,
       "tablet": 153,
       "computer": 51,
     }
@@ -19,7 +19,7 @@ $(function() {
 
   var topMargins = {
     "portrait": {
-      "mobile": -789,
+      "mobile": -653,
       "tablet": -710,
       "computer": -908,
     }
@@ -77,16 +77,6 @@ $(function() {
     });
   }
 
-  var stretchLinear = function(length, anchor) {
-    var multiplier = parseInt(length) / 375;
-    return (multiplier * anchor).toString() + "px";
-  }
-
-  var stretchVertically = function(length, anchor) {
-    var multiplier = parseInt(length) / 667;
-    return (multiplier * anchor - borderHeightPort).toString() + "px";
-  }
-
   var setScreenMargins = function(width, height) {
     $('.screen').css("margin-left", leftMargins[orientation][current_view]);
     $('.screen').css("margin-top", topMargins[orientation][current_view]);
@@ -142,12 +132,7 @@ $(function() {
     }
     changeBorder();
     changeSectionsSizes();
-    // resizeBorder(width, height);
-    // setSize($('.screen'), width.toString() + "px", height.toString() + "px");
-    // var leftMargin = stretchLinear(width, screenLeftMarginPort);
-    // $('.screen').css("margin-left", leftMargin);
-    // var borderWidth = stretchLinear(width, borderWidthPort);
-    // setSize($('#screen-border'),borderWidth, height);
+
 
   });
 

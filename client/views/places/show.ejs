@@ -77,8 +77,10 @@
               <!-- /.panel-heading -->
               <div id="description" class="panel-collapse collapse in">
                 <ul>
-                  <li ng-if="selectedPlace.description">
-                    {{selectedPlace.description}}
+                  <li  ng-if="selectedPlace.description">
+                    <p ng-repeat="line in (selectedPlace.description | newlines)">
+                      {{line}}
+                    </p>
                   </li>
                   <li ng-if="!selectedPlace.description">
                     No hay descripción disponible

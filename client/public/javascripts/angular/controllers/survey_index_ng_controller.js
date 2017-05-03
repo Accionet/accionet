@@ -1,7 +1,7 @@
 /* eslint-disable */
 controllers
 
-  .controller('surveyIndexController', function($scope, $http, $window) {
+  .controller('surveyIndexController', function($scope, $http, $window, Utils) {
   $scope.surveys = {};
   $scope.selectedSurvey = null;
   $scope.responses = {};
@@ -37,13 +37,13 @@ controllers
   // Get all surveys
   $scope.initializeSurveys = function(surveys, selectedSurvey, responses) {
     if (surveys) {
-      $scope.surveys = JSON.parse(surveys);
+      $scope.surveys = Utils.parseJson(surveys);
     }
     if (selectedSurvey) {
-      $scope.selectedSurvey = JSON.parse(selectedSurvey);
+      $scope.selectedSurvey = Utils.parseJson(selectedSurvey);
     }
     if (responses) {
-      $scope.responses = JSON.parse(responses);
+      $scope.responses = Utils.parseJson(responses);
     }
   };
 

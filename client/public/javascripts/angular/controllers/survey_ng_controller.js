@@ -1,7 +1,7 @@
 /*eslint-disable */
 controllers
 
-  .controller('surveyController', function($scope, $http, $window) {
+  .controller('surveyController', function($scope, $http, $window, Utils) {
   $scope.surveys = {};
   $scope.selectedSurvey = {
     questions: [],
@@ -44,7 +44,7 @@ controllers
   // Get all surveys
   $scope.initializeSurveys = function(surveys, selectedSurvey) {
     if (selectedSurvey) {
-      $scope.selectedSurvey = JSON.parse(selectedSurvey);
+      $scope.selectedSurvey = Utils.parseJson(selectedSurvey);
     }
   };
 

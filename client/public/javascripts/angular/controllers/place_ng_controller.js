@@ -1,7 +1,7 @@
 /* eslint-disable */
 controllers
 
-  .controller('placeController', function($scope, $http, $window) {
+  .controller('placeController', function($scope, $http, $window, Utils) {
   $scope.places = {};
   $scope.selectedPlace = null;
   $scope.metrics = {};
@@ -10,20 +10,21 @@ controllers
   $scope.loadingVisitsByDayAndHourChart = true;
 
 
+
   // Get all places
   $scope.initializePlaces = function(places, selectedPlace) {
     if (places) {
-      $scope.places = JSON.parse(places);
+      $scope.places = Utils.parseJson(places);
     }
     if (selectedPlace) {
-      $scope.selectedPlace = JSON.parse(selectedPlace);
+      $scope.selectedPlace = Utils.parseJson(selectedPlace);
     }
   };
 
   $scope.initializeMetrics = function(metrics) {
 
     if (metrics) {
-      $scope.metrics = JSON.parse(metrics);
+      $scope.metrics = Utils.parseJson(metrics);
     }
   };
 

@@ -34,8 +34,6 @@
             <div class="panel-body">
               <h4>Nombre:
                 {{selectedUser.name}}</h4>
-              <h4>Descripci&oacute;n:
-                {{selectedUser.description}}</h4>
               <h4>
                 email:
                 {{selectedUser.email}}</h4>
@@ -46,7 +44,9 @@
               <h4 ng-if="selectedUser.description">Descripci&oacute;n:
               </h4>
               <p>
-                {{selectedUser.description}}</p>
+                <p ng-repeat="line in (selectedUser.description | newlines)">
+                  {{line}}
+                </p></p>
             </div>
           </div>
         </div>

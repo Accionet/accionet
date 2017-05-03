@@ -2,7 +2,7 @@
 
 controllers
 
-  .controller('newHotspotController', function($scope, $http) {
+  .controller('newHotspotController', function($scope, $http, Utils) {
   $scope.IMAGE_TEMPLATE = {
     template: "",
     defaultValues: "",
@@ -17,7 +17,7 @@ controllers
     $http.get('/hotspots/template/' + template)
       .success(function(data) {
         $scope.IMAGE_TEMPLATE.template = data.htmlData;
-        $scope.IMAGE_TEMPLATE.values = JSON.parse(data.defaultValues);
+        $scope.IMAGE_TEMPLATE.values = Utils.parseJson(data.defaultValues);
         $scope.compile($scope.IMAGE_TEMPLATE, makeCurrent);
       })
       .error(function(error) {

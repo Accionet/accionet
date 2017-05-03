@@ -1,14 +1,14 @@
 /* eslint-disable*/
 controllers
 
-    .controller('placeIndexController', function ($scope, $http, $window) {
+    .controller('placeIndexController', function ($scope, $http, $window, Utils) {
         $scope.places = {};
         $scope.myOrderBy = 'name';
 
     // Get all places
         $scope.initializePlaces = function (places) {
             if (places) {
-                $scope.places = JSON.parse(places);
+                $scope.places = Utils.parseJson(places);
             }
         };
 

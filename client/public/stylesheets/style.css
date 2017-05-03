@@ -60,3 +60,11 @@ td a .tooltip {
 .big-text {
   font-size: 3em;
 }
+
+.selected{
+  background-color: #DDD;
+}
+
+.page-wrapper-alert {
+  margin: 0 -30px;
+}

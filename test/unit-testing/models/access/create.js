@@ -7,7 +7,7 @@ const Survey = require('../../../../server/models/surveys');
 const Place = require('../../../../server/models/places');
 const User = require('../../../../server/models/users');
 const Access = require('../../../../server/models/access');
-const knex = require('../../../../server/db/knex');
+// const knex = require('../../../../server/db/knex');
 
 
 // eslint-disable-next-line no-unused-vars
@@ -39,15 +39,6 @@ function getSurvey() {
 
 // eslint-disable-next-line no-undef
 describe('Save User with access to place.', () => {
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
   // eslint-disable-next-line no-undef
   it('Save Access', (done) => {
     return Place.save(getPlace()).then((place) => {
@@ -82,15 +73,6 @@ describe('Save User with access to place.', () => {
 
 // eslint-disable-next-line no-undef
 describe('Test Has Access.', () => {
-// eslint-disable-next-line
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
   // eslint-disable-next-line no-undef
   it('Read: only read', (done) => {
     const table_name = 'places';

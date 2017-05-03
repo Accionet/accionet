@@ -6,7 +6,6 @@ const chai = require('chai');
 const Response = require('../../../../server/models/responses');
 const Survey = require('../../../../server/models/surveys');
 const utils = require('../../../../server/services/utils');
-const knex = require('../../../../server/db/knex');
 
 
 // eslint-disable-next-line no-unused-vars
@@ -41,15 +40,6 @@ function assertQuestionInSurvey(excelData, survey) {
 
 // eslint-disable-next-line no-undef
 describe('Responses Excel: check correct attributes', () => {
-  // eslint-disable-next-line no-undef
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
   // eslint-disable-next-line no-undef
   it('Check the response has the correct attributes', (done) => {
     return getRandomSurvey().then((survey) => {

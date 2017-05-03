@@ -7,7 +7,7 @@ const place_id = 5;
 
 
 const VISITS_PER_ITERATION = 5;
-const AMOUNT_OF_ITERATION = 1;
+const AMOUNT_OF_ITERATION = 10 * 60;
 const TIME_BETWEEN_ITERATION = 1000;
 let iteration = 0;
 

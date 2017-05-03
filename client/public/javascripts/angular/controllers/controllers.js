@@ -1,1 +1,2 @@
-const controllers = angular.module('app.controllers', []);
+/* eslint-disable */
+var controllers = angular.module('app.controllers', []);

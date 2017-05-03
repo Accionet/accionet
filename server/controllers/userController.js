@@ -104,7 +104,6 @@ exports.create = function (req, res) {
 };
 
 function getUser(id, req, res) {
-  console.log(`LLwndo a buscar a ${id}`);
   User.findById(id).then((user) => {
     if (!user) {
       return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'users', 'show.ejs'), {

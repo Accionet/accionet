@@ -13,7 +13,7 @@ const Access = require('../../../../server/models/access');
 const Place = require('../../../../server/models/places');
 
 // const utils = require('../../../../server/services/utils');
-const knex = require('../../../../server/db/knex');
+// const knex = require('../../../../server/db/knex');
 
 
 // const Option = new Options();
@@ -104,17 +104,12 @@ function createAccessTo(user, to) {
 describe('Check for surveys:', () => {
   // eslint-disable-next-line no-undef
   before((done) => {
-    return knex.seed.run().then(() => {
-      Survey.all().then((results) => {
-        surveys = results;
-        User.save(getUser()).then((tempUser) => {
-          user = tempUser;
-
-          createAccessTo(user, 'surveys').then(() => {
-            done();
-          }).catch((err) => {
-            done(err);
-          });
+    return Survey.all().then((results) => {
+      surveys = results;
+      User.save(getUser()).then((tempUser) => {
+        user = tempUser;
+        createAccessTo(user, 'surveys').then(() => {
+          done();
         }).catch((err) => {
           done(err);
         });

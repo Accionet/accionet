@@ -13,6 +13,8 @@ const surveyController = require('../controllers/surveyController');
 const dashboardController = require('../controllers/dashboardController');
 const visitController = require('../controllers/visitController');
 const accessController = require('../controllers/accessController');
+const hotspotController = require('../controllers/hotspotController');
+
 
 // models
 const User = require('../models/users');
@@ -289,6 +291,19 @@ module.exports = function router(app, passport) {
   app.post('/users/new', isAdmin, (req, res, next) => {
     userController.create(req, res, next);
   });
+
+
+  // //////////////////////////////////////////
+  // ///////// hotspots  ////////////////////////
+  // ////////////////////////////////////////
+
+  app.get('/hotspots/new', isLoggedIn, (req, res, next) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
+  });
+
+  app.get('/hotspots/template/:template', isLoggedIn, (req, res, next) => {
+    hotspotController.getHotspot(req, res, next);
+  });
 };
 //
 // ////////////////////////////////////////////
@@ -310,7 +325,7 @@ function selfUser(req) {
   if (!(req.user && req.params.id)) {
     return false;
   }
-// turn then to strings to avoid returning false when one is 1 and the other "1"
+  // turn then to strings to avoid returning false when one is 1 and the other "1"
   return req.user.id.toString() === req.params.id.toString();
 }
 

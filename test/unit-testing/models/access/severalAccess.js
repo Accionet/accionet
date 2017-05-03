@@ -6,7 +6,7 @@ const chai = require('chai');
 const Place = require('../../../../server/models/places');
 const User = require('../../../../server/models/users');
 const Access = require('../../../../server/models/access');
-const knex = require('../../../../server/db/knex');
+// const knex = require('../../../../server/db/knex');
 
 
 // eslint-disable-next-line no-unused-vars
@@ -37,15 +37,6 @@ function isAccessToPlaceSavedIn(placeAccess, access) {
 
 // eslint-disable-next-line no-undef
 describe('Test Has Access. Several', () => {
-  // eslint-disable-next-line
-  before((done) => {
-    return knex.seed.run()
-      .then(() => {
-        done();
-      }).catch((err) => {
-        done(err);
-      });
-  });
   // eslint-disable-next-line no-undef
   it('Read: only read', (done) => {
     return Place.save(getPlace()).then((place1) => {

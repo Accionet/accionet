@@ -187,6 +187,7 @@ module.exports = function router(app, passport) {
   });
 
   app.get('/api/v1/surveys/:id/metrics/enduser/count', hasAccessToRead, (req, res, next) => {
+    console.log('llego para metrics =========================================================================================');
     surveyController.countEndUser(req, res, next);
   });
 

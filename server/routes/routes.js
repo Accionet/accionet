@@ -405,7 +405,8 @@ function isAdmin(req, res, next) {
 
 function logout(req, res) {
   // if they aren't redirect them to the home page
-
+  console.log('==================================================logout');
+  console.log(req);
   req.logout();
   res.redirect('/');
 }

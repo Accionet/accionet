@@ -359,19 +359,24 @@ function hasAccessToWrite(req, res, next) {
 }
 
 function hasAccessToRead(req, res, next) {
+  console.log('EN ACCESS TO READD=================================');
   if (selfUser(req)) {
+    console.log('es self user');
     return next();
   }
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
+    console.log('authenticated');
     const access = { in: extractTableFromUrl(req.url),
       to: req.params.id,
       user_id: req.user.id,
     };
+    console.log(access);
     const promises = [];
     promises.push(User.isAdmin(access.user_id));
     promises.push(Access.hasReadAccess(access.user_id, access.to, access.in));
     Promise.all(promises).then((results) => {
+      console.log(results);
       if (results[0] || results[1]) {
         return next();
       }
@@ -381,6 +386,7 @@ function hasAccessToRead(req, res, next) {
       logout(req, res);
     });
   } else {
+    console.log('NO ESTA AUTENTIFICADO');
     // if they aren't redirect them to the home page
     logout(req, res);
   }

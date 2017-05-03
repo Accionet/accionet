@@ -82,9 +82,11 @@ controllers
         };
 
         $scope.getTotalEndUsers = function (place) {
+          console.log('ir a buscar total end users');
             $http.get('/api/v1/places/' + place.id + '/metrics/endusers/count')
 
         .success(function (results) {
+          console.log(results);
             place.totalEndUsers = results.data.toString();
         })
             .error(function (data) {});

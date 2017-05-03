@@ -1,7 +1,8 @@
-const app = angular.module('accionet-web-app', ['app.controllers', 'app.directives']);
+/*eslint-disable*/
+var app = angular.module('accionet-web-app', ['app.controllers', 'app.directives', 'app.services', 'app.filters']);
 
 
-const INTEGER_REGEXP = /^\-?\d+$/;
+var INTEGER_REGEXP = /^\-?\d+$/;
 app.directive('integer', function validate() {
     return {
         require: 'ngModel',

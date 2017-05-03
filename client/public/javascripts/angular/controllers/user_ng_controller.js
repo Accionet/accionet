@@ -1,7 +1,7 @@
 /* eslint-disable */
 controllers
 
-  .controller('userController', function($scope, $http, $window) {
+  .controller('userController', function($scope, $http, $window, Utils) {
   $scope.users = {};
   $scope.selectedUser = null;
   $scope.metrics = {};
@@ -34,17 +34,17 @@ controllers
   // Get all users
   $scope.initializeUsers = function(users, selectedUser) {
     if (users) {
-      $scope.users = JSON.parse(users);
+      $scope.users = Utils.parseJson(users);
     }
     if (selectedUser) {
-      $scope.selectedUser = JSON.parse(selectedUser);
+      $scope.selectedUser = Utils.parseJson(selectedUser);
       initialUsername = $scope.selectedUser.username;
     }
   };
 
   $scope.initializeMetrics = function(metrics) {
     if (metrics) {
-      $scope.metrics = JSON.parse(metrics);
+      $scope.metrics = Utils.parseJson(metrics);
     }
   };
 
@@ -291,7 +291,7 @@ controllers
     if (access.in && access.to) {
       changeSelected($scope[access.in], access.to, false);
     }
-    var temp = JSON.parse(accessTo);
+    var temp = Utils.parseJson(accessTo);
     access.in = temp.in;
     access.to = temp.to;
     changeSelected($scope[access.in], access.to, true);

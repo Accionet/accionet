@@ -40,8 +40,9 @@
                 {{selectedSurvey.updated_at | date}}</h4>
               <h4 ng-if="selectedSurvey.description">Descripcion de Encuesta:
               </h4>
-              <p>
-                {{selectedSurvey.description}}</p>
+              <p ng-repeat="line in (selectedSurvey.description | newlines)">
+                {{line}}
+              </p>
             </div>
           </div>
         </div>

@@ -1,14 +1,14 @@
 /* eslint-disable*/
 controllers
 
-    .controller('userIndexController', function ($scope, $http, $window) {
+    .controller('userIndexController', function ($scope, $http, $window, Utils) {
         $scope.users = {};
         $scope.myOrderBy = 'name';
 
     // Get all users
         $scope.initializeUsers = function (users) {
             if (users) {
-                $scope.users = JSON.parse(users);
+                $scope.users = Utils.parseJson(users);
             }
         };
 

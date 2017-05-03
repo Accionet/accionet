@@ -49,6 +49,7 @@ module.exports = function router(app, passport) {
   }));
 
   app.get('/logout', (req, res) => {
+    console.log('lo tiro para afuera');
     req.logout();
     res.redirect('/');
   });

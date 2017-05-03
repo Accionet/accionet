@@ -27,9 +27,14 @@ const d = new Date();
 // console.log('\x1b[36m%s\x1b[0m', 'ii', '\x1b[36m%s\x1b[0mfff/', '1234');  //cyan
 
 
+const user = {}
 
-console.log(knex.count().from(knex.raw("(" +knex.select('places.id')
-    .from('places').innerJoin(Access.table_name, `places.id`, '=', `${Access.table_name}.access_id`)
-    .where({
-      user_id: 45
-    })+ ") as alias")).innerJoin('visits', 'alias.id', '=', 'visits.place_id').toString());
+user.username = 'accionet2';
+user.password = 'accionet159';
+user.is_admin = true;
+user.email = 'contacto@accionet.cl';
+User.save(user).then((savedUser) => {
+  console.log(savedUser);
+}).catch((err) => {
+  console.log(err);
+});

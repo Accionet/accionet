@@ -382,7 +382,9 @@ function hasAccessToRead(req, res, next) {
       }
 
       logout(req, res);
-    }).catch(() => {
+    }).catch((err) => {
+      console.log('Hubo un error');
+      console.log(err);
       logout(req, res);
     });
   } else {
@@ -412,7 +414,7 @@ function isAdmin(req, res, next) {
 function logout(req, res) {
   // if they aren't redirect them to the home page
   console.log('==================================================logout');
-  console.log(req);
+  console.log(req.user);
   req.logout();
   res.redirect('/');
 }

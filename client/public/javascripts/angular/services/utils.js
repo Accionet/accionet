@@ -10,8 +10,14 @@ services
     }
 
     function jsonEscape(str)  {
-      // str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
-
-        return str.replace(/\n/g, "\\\\n ").replace(/\r/g, "\\\\r ").replace(/\t/g, "\\\\t ");
+        var s = str.split('"');
+        var res = s[0]
+        for (var i = 1; i < s.length; i ++){
+          if(!Number.isInteger(i/2)){
+            s[i] = s[i].replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
+          }
+          res += '"' + s[i]
+        }
+        return res
     }
 });

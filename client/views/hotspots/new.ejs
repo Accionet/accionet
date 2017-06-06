@@ -253,6 +253,58 @@
             </div>
           </div>
           <div class="example">
+            <div class="example-title">Tama&ntilde;o bot&oacute;n alternativo</div>
+            <div class="example-content well">
+              <div class="example-content-widget">
+                <div class="input-group" style="width: 100%;">
+                  <span class="input-group-addon" ng-click="recompileSize('ONLY-NAVIGATE-SIZE', 'down')">
+                    <i class="fa fa-caret-down" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['ONLY-NAVIGATE-SIZE']}}" class="form-control" readonly/>
+
+                  <span class="input-group-addon" ng-click="recompileSize('ONLY-NAVIGATE-SIZE', 'up')">
+                    <i class="fa fa-caret-up" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="example-title">Texto del bot&oacute;n alternativo</div>
+            <div class="example-content well">
+              <div class="example-content-widget">
+                <div class="input-group" style="width: 100%;">
+                  <input type="text" ng-model="onlyNavigate" class="form-control" ng-change="recompile('ONLY-NAVIGATE', onlyNavigate)"/>
+                </div>
+                <br/>
+                <div class="input-group" style="width: 100%;">
+                  <span class="input-group-addon" ng-click="recompileSize('BUTTON-TEXT-SIZE', 'down')">
+                    <i class="fa fa-caret-down" aria-hidden="true"></i>
+                  </span>
+                  <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['BUTTON-TEXT-SIZE']}}" class="form-control" readonly/>
+
+                  <span class="input-group-addon" ng-click="recompileSize('BUTTON-TEXT-SIZE', 'up')">
+                    <i class="fa fa-caret-up" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="example-title">Color del bot&oacute;n alternativo</div>
+            <div class="example-content well">
+              <div class="example-content-widget">
+                <div class="input-group colorpicker-component">
+                  <input type="text" ng-model="termAndCondColor" class="form-control" ng-change="recompile('ONLY-NAVIGATE-COLOR', termAndCondColor)"/>
+                  <span class="input-group-addon">
+                    <i></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="example">
             <div class="example-title">Color del hiperv&iacute;nculo a t&eacute;rminos y condiciones</div>
             <div class="example-content well">
               <div class="example-content-widget">

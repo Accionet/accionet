@@ -291,6 +291,17 @@
                 pointer-events: none;
                 cursor: default;
             }
+            .only-navigate {
+                display: block;
+                width: 100%;
+                color: $ONLY-NAVIGATE-COLOR$;
+                font-size: $ONLY-NAVIGATE-SIZE$;
+                text-align: center;
+                font-style: normal;
+                width: 100%;
+                pointer-events: none;
+                cursor: default;
+            }
 
             .submit:visited{
               color: $BUTTON-COLOR$;
@@ -356,8 +367,8 @@
             <a id="connect" class="boton submit" href="$LANDING-PAGE$">
                 $BUTTON-TEXT$
             </a>
-            <!-- <a class="only-navigate" href="term_and_conditions.html" target="_blank">Solo quiero navegar
-                </a> -->
+            <a class="only-navigate" href="term_and_conditions.html" target="_blank"> $ONLY-NAVIGATE$
+                </a>
             <fieldset>
                 <input type="checkbox" id="terms_and_conditions" value="" name="accept_terms">
                 <label class="light" for="terms_and_conditions">He leído y aceptado los

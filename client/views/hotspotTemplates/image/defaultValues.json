@@ -18,6 +18,8 @@
   "PARAGRAPH-2-TEXT":"Luego de apretar navegar podr&aacute;s navegar por 1 hora.",
   "BUTTON-TEXT": "NAVEGAR",
   "BUTTON-TEXT-SIZE": "1.4em",
-
+  "ONLY-NAVIGATE": "Solo quiero navegar",
+  "ONLY-NAVIGATE-COLOR": "#00F",
+  "ONLY-NAVIGATE-SIZE": "1em",
   "LANDING-PAGE": "https://www.accionet.cl"
 }

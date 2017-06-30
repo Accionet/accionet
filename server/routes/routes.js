@@ -307,13 +307,17 @@ module.exports = function router(app, passport, S3_BUCKET) {
   });
 
 
+  app.post('/hotspots/save/', isLoggedIn, (req, res, next) => {
+    hotspotController.upload(req, res, next);
+  });
+
+
   // S3 debug
   app.get('/account', (req, res) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'uploadtos3test', 'account.ejs'), {});
   });
 
   app.get('/sign-s3', (req, res) => {
-    console.log('BUCKET', S3_BUCKET);
     const s3 = new aws.S3();
     const fileName = req.query['file-name'];
     const fileType = req.query['file-type'];
@@ -324,7 +328,6 @@ module.exports = function router(app, passport, S3_BUCKET) {
       ContentType: fileType,
       ACL: 'public-read',
     };
-
     s3.getSignedUrl('putObject', s3Params, (err, data) => {
       if (err) {
         return res.end();

@@ -46,7 +46,6 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // for S3_BUCKET file managment
 
 const S3_BUCKET = process.env.S3_BUCKET; //eslint-disable-line
-console.log('el bucket es ==========', S3_BUCKET);
 
 require('./server/routes/routes')(app, passport, S3_BUCKET); // load our routes and pass in our app and fully configured passport
 

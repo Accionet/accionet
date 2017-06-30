@@ -1,8 +1,8 @@
 /* eslint-disable */
 (function() {
   document.getElementById("file-input").onchange = function() {
-    const files = document.getElementById('file-input').files;
-    const file = files[0];
+    var files = document.getElementById('file-input').files;
+    var file = files[0];
     if (file == null) {
       return alert('No file selected.');
     }

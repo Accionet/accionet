@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const aws = require('aws-sdk');
+
+const S3_BUCKET = process.env.S3_BUCKET;
 
 exports.getHotspot = function (req, res) {
   fs.readFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'template.html'), 'utf8', (err, data) => {
@@ -15,6 +18,33 @@ exports.getHotspot = function (req, res) {
         defaultValues: json,
       };
       return res.status(200).send(response);
+    });
+  });
+};
+
+
+exports.upload = function (req, res) {
+  const fileBody = req.body.compiledHTML;
+  // console.log(fileBody);
+  const s3bucket = new aws.S3({
+    params: {
+      Bucket: S3_BUCKET,
+    },
+  });
+  s3bucket.createBucket(() => {
+    const params = {
+      Key: 'hotspots/login.html', // file.name doesn't exist as a property
+      Body: fileBody,
+    };
+    s3bucket.upload(params, (err, data) => {
+      console.log(data);
+      if (err) {
+        console.log('ERROR MSG: ', err);
+        res.status(500).send(err);
+      } else {
+        console.log('Successfully uploaded data');
+        res.status(200).end();
+      }
     });
   });
 };

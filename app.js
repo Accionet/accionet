@@ -43,7 +43,12 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-require('./server/routes/routes')(app, passport); // load our routes and pass in our app and fully configured passport
+// for S3_BUCKET file managment
+
+const S3_BUCKET = process.env.S3_BUCKET; //eslint-disable-line
+console.log('el bucket es ==========', S3_BUCKET);
+
+require('./server/routes/routes')(app, passport, S3_BUCKET); // load our routes and pass in our app and fully configured passport
 
 app.use('/place', placeRoutes);
 

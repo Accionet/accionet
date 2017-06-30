@@ -1,5 +1,7 @@
-fs = require('fs');
-fs.writeFile('helloworld.txt', 'Hello World!', function (err) {
-  if (err) return console.log(err);
-  console.log('Hello World > helloworld.txt');
+const fs = require('fs');
+
+fs.writeFile('./client/public/helloworld.html', 'Hello World menehs!', (err) => {
+  if (err) {
+    return console.log(err);
+  }
 });

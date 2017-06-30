@@ -2,6 +2,7 @@
 
 // const express = require('express');
 const path = require('path');
+const aws = require('aws-sdk');
 // eslint-disable-next-line new-cap
 
 // var passport = require('passport');
@@ -21,7 +22,7 @@ const User = require('../models/users');
 const Access = require('../models/access');
 
 
-module.exports = function router(app, passport) {
+module.exports = function router(app, passport, S3_BUCKET) {
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -303,6 +304,42 @@ module.exports = function router(app, passport) {
 
   app.get('/hotspots/template/:template', isLoggedIn, (req, res, next) => {
     hotspotController.getHotspot(req, res, next);
+  });
+
+
+  // S3 debug
+  app.get('/account', (req, res) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'uploadtos3test', 'account.ejs'), {});
+  });
+
+  app.get('/sign-s3', (req, res) => {
+    console.log('BUCKET', S3_BUCKET);
+    const s3 = new aws.S3();
+    const fileName = req.query['file-name'];
+    const fileType = req.query['file-type'];
+    const s3Params = {
+      Bucket: S3_BUCKET,
+      Key: fileName,
+      Expires: 60,
+      ContentType: fileType,
+      ACL: 'public-read',
+    };
+
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+      if (err) {
+        return res.end();
+      }
+      const returnData = {
+        signedRequest: data,
+        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
+      };
+      res.write(JSON.stringify(returnData));
+      res.end();
+    });
+  });
+
+  app.post('/save-details', (req, res) => {
+  // TODO: Read POSTed form data and do something useful
   });
 };
 //

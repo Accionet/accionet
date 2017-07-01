@@ -298,7 +298,7 @@ module.exports = function router(app, passport, S3_BUCKET) {
   // ///////// hotspots  ////////////////////////
   // ////////////////////////////////////////
 
-  app.get('/hotspots/new', isLoggedIn, (req, res, next) => {
+  app.get('/hotspots/new', isLoggedIn, () => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
   });
 
@@ -306,9 +306,12 @@ module.exports = function router(app, passport, S3_BUCKET) {
     hotspotController.getHotspot(req, res, next);
   });
 
-
   app.post('/hotspots/save/', isLoggedIn, (req, res, next) => {
     hotspotController.upload(req, res, next);
+  });
+
+  app.get('/hotspots/:id', (req, res, next) => {
+    hotspotController.get(req, res, next);
   });
 
 

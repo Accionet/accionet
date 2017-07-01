@@ -120,9 +120,8 @@ const save = function (url, template) {
 exports.get = function (req, res) {
   const hotspot_id = req.params.id;
   Hotspot.findById(hotspot_id).then((hotspot) => {
-    console.log(hotspot.url);
     Requestify.get(hotspot.url).then((html) => {
-      console.log(html);
+      res.send(html.body);
     }).catch((err) => {
       // TODO: respond with default hotspot? or error hotspot?
     });

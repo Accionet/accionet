@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const aws = require('aws-sdk');
+const Hotspot = require('../models/hotspot');
+const Requestify = require('requestify');
+
 
 const S3_BUCKET = process.env.S3_BUCKET;
 
@@ -48,7 +51,7 @@ exports.ignedRequest = function (req, res) {
 
 const changeImageValue = function (values, key, path) {
   // const extension = values[key].split('.').pop();
-  values[key] = `https://${S3_BUCKET}.s3.amazonaws.com/${path}${key}`;
+  values[key] = `${path}${key}`;
   return values;
 };
 
@@ -78,13 +81,16 @@ const compile = function (template_id, template, values, folder) {
 
 exports.upload = function (req, res) {
   const folderPath = `hotspots/${(new Date()).getTime()}`;
-  const fileBody = compile(req.body.template_id, req.body.template, req.body.values, folderPath);
+  const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
+  const absolutePath = basePath + folderPath;
+  const fileBody = compile(req.body.template_id, req.body.template, req.body.values, absolutePath);
   const filePath = `${folderPath}/login.html`;
   const s3bucket = new aws.S3({
     params: {
       Bucket: S3_BUCKET,
     },
   });
+  save(basePath + filePath, req.body.template_id);
   s3bucket.createBucket(() => {
     const params = {
       Key: filePath,
@@ -99,5 +105,28 @@ exports.upload = function (req, res) {
         });
       }
     });
+  });
+};
+
+const save = function (url, template) {
+  const params = {
+    url,
+    template,
+  };
+  Hotspot.save(params);
+};
+
+
+exports.get = function (req, res) {
+  const hotspot_id = req.params.id;
+  Hotspot.findById(hotspot_id).then((hotspot) => {
+    console.log(hotspot.url);
+    Requestify.get(hotspot.url).then((html) => {
+      console.log(html);
+    }).catch((err) => {
+      // TODO: respond with default hotspot? or error hotspot?
+    });
+  }).catch((err) => {
+    // TODO: respond with default hotspot
   });
 };

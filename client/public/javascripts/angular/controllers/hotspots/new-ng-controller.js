@@ -80,18 +80,73 @@ controllers
     $scope.compile($scope.current_hotspot, true);
   }
 
-  $scope.saveHotspot = function(){
+  function parseValuesToSend() {
+    temp = $scope.current_hotspot.values;
+    temp['IMAGE-PATH'] = "IMAGE-PATH";
+    temp['BACKGROUND-IMAGE'] = "BACKGROUND-IMAGE";
+    return temp;
+  }
+
+  $scope.saveHotspot = function() {
+    console.log($scope.current_hotspot);
+    $(function() {
+      var f = document.getElementById('image-file').files[0];
+      console.log(f);
+    });
+    var values = parseValuesToSend();
+    console.log(values);
     $http.post('/hotspots/save/', {
-      compiledHTML: $scope.current_hotspot.compiledHTML
-    })
+        template_id: "LANDING-PAGE",
+        template: $scope.current_hotspot.template,
+        values: values,
+      })
       .success(function(data) {
-        console.log('yeai');
+        console.log(data);
+        var files = document.getElementById('image-file').files;
+        var file = files[0];
+        if (file == null) {
+          return alert('No file selected.');
+        }
+        var path = data.imageFolder + 'IMAGE-PATH';
+        getSignedRequest(file, path);
       })
       .error(function(error) {
         console.log(error);
       });
 
   }
+
+  function getSignedRequest(file, path) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `/sign-s3?file-name=${path}&file-type=${file.type}`);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          uploadFile(file, response.signedRequest, response.url);
+        } else {
+          alert('Could not get signed URL.');
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  function uploadFile(file, signedRequest, url) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', signedRequest);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // notify all good
+        } else {
+          alert('Could not upload file.');
+        }
+      }
+    };
+    xhr.send(file);
+  }
+
 
 
   $scope.getTemplate("image", true);

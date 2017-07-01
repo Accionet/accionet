@@ -22,10 +22,64 @@ exports.getHotspot = function (req, res) {
   });
 };
 
+exports.ignedRequest = function (req, res) {
+  const s3 = new aws.S3();
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read',
+  };
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if (err) {
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
+    };
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+};
+
+const changeImageValue = function (values, key, path) {
+  // const extension = values[key].split('.').pop();
+  values[key] = `https://${S3_BUCKET}.s3.amazonaws.com/${path}${key}`;
+  return values;
+};
+
+const changeImages = function (template_id, values, path) {
+  switch (template_id) {
+  case 'LANDING-PAGE':
+    values = changeImageValue(values, 'IMAGE-PATH', path);
+    values = changeImageValue(values, 'BACKGROUND-IMAGE', path);
+    break;
+  default:
+    break;
+  }
+  return values;
+};
+
+const compile = function (template_id, template, values, folder) {
+  const path = `${folder}/images/`;
+  values = changeImages(template_id, values, path);
+  const keys = Object.keys(values);
+  for (let i = 0; i < keys.length; i++) {
+    const inTextKey = '\\$' + keys[i] + '\\$'; // eslint-disable-line
+    const search = new RegExp(inTextKey, 'g');
+    template = template.replace(search, values[keys[i]]);
+  }
+  return template;
+};
 
 exports.upload = function (req, res) {
-  const fileBody = req.body.compiledHTML;
-  // console.log(fileBody);
+  const folderPath = `hotspots/${(new Date()).getTime()}`;
+  const fileBody = compile(req.body.template_id, req.body.template, req.body.values, folderPath);
+  const filePath = `${folderPath}/login.html`;
   const s3bucket = new aws.S3({
     params: {
       Bucket: S3_BUCKET,
@@ -33,17 +87,16 @@ exports.upload = function (req, res) {
   });
   s3bucket.createBucket(() => {
     const params = {
-      Key: 'hotspots/login.html', // file.name doesn't exist as a property
+      Key: filePath,
       Body: fileBody,
     };
-    s3bucket.upload(params, (err, data) => {
-      console.log(data);
+    s3bucket.upload(params, (err) => {
       if (err) {
-        console.log('ERROR MSG: ', err);
         res.status(500).send(err);
       } else {
-        console.log('Successfully uploaded data');
-        res.status(200).end();
+        res.status(200).send({
+          imageFolder: `${folderPath}/images/`,
+        });
       }
     });
   });

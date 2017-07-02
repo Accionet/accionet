@@ -298,7 +298,7 @@ module.exports = function router(app, passport, S3_BUCKET) {
   // ///////// hotspots  ////////////////////////
   // ////////////////////////////////////////
 
-  app.get('/hotspots/new', isLoggedIn, () => {
+  app.get('/hotspots/new', isLoggedIn, (req, res) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
   });
 
@@ -307,7 +307,7 @@ module.exports = function router(app, passport, S3_BUCKET) {
   });
 
   app.post('/hotspots/save/', isLoggedIn, (req, res, next) => {
-    hotspotController.upload(req, res, next);
+    hotspotController.save(req, res, next);
   });
 
   app.get('/hotspots/:id', (req, res, next) => {
@@ -342,10 +342,6 @@ module.exports = function router(app, passport, S3_BUCKET) {
       res.write(JSON.stringify(returnData));
       res.end();
     });
-  });
-
-  app.post('/save-details', (req, res) => {
-  // TODO: Read POSTed form data and do something useful
   });
 };
 //

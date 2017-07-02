@@ -3,6 +3,7 @@ const path = require('path');
 const aws = require('aws-sdk');
 const Hotspot = require('../models/hotspot');
 const Requestify = require('requestify');
+const Template = require('../services/Template');
 
 
 const S3_BUCKET = process.env.S3_BUCKET;
@@ -50,7 +51,6 @@ exports.ignedRequest = function (req, res) {
 };
 
 const changeImageValue = function (values, key, path) {
-  // const extension = values[key].split('.').pop();
   values[key] = `${path}${key}`;
   return values;
 };
@@ -70,17 +70,31 @@ const changeImages = function (template_id, values, path) {
 const compile = function (template_id, template, values, folder) {
   const path = `${folder}/images/`;
   values = changeImages(template_id, values, path);
-  const keys = Object.keys(values);
-  for (let i = 0; i < keys.length; i++) {
-    const inTextKey = '\\$' + keys[i] + '\\$'; // eslint-disable-line
-    const search = new RegExp(inTextKey, 'g');
-    template = template.replace(search, values[keys[i]]);
-  }
+  template = Template.compile(template, values);
   return template;
 };
 
-exports.upload = function (req, res) {
+
+exports.save = function (req, res) {
   const folderPath = `hotspots/${(new Date()).getTime()}`;
+  const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
+  const filePath = `${folderPath}/login.html`;
+  saveToDB(basePath + filePath, req.body.template_id).then((hotspot) => {
+    saveCounter(hotspot).then(() => {
+      saveActivityCatcher(hotspot).then(() => {
+        return uploadHTML(folderPath, req, res);
+      }).catch((err) => {
+        res.status(500).send(err);
+      });
+    }).catch((err) => {
+      res.status(500).send(err);
+    });
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
+};
+
+const uploadHTML = function (folderPath, req, res) {
   const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
   const absolutePath = basePath + folderPath;
   const fileBody = compile(req.body.template_id, req.body.template, req.body.values, absolutePath);
@@ -90,11 +104,11 @@ exports.upload = function (req, res) {
       Bucket: S3_BUCKET,
     },
   });
-  save(basePath + filePath, req.body.template_id);
   s3bucket.createBucket(() => {
     const params = {
       Key: filePath,
       Body: fileBody,
+      ACL: 'public-read',
     };
     s3bucket.upload(params, (err) => {
       if (err) {
@@ -108,12 +122,57 @@ exports.upload = function (req, res) {
   });
 };
 
-const save = function (url, template) {
+exports.upload = function (req, res) {
+  const folderPath = `hotspots/${(new Date()).getTime()}`;
+  const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
+  const absolutePath = basePath + folderPath;
+  const fileBody = compile(req.body.template_id, req.body.template, req.body.values, absolutePath);
+  const filePath = `${folderPath}/login.html`;
+  const s3bucket = new aws.S3({
+    params: {
+      Bucket: S3_BUCKET,
+    },
+  });
+  saveToDB(basePath + filePath, req.body.template_id).then(() => {
+    s3bucket.createBucket(() => {
+      const params = {
+        Key: filePath,
+        Body: fileBody,
+        ACL: 'public-read',
+      };
+      s3bucket.upload(params, (err) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.status(200).send({
+            imageFolder: `${folderPath}/images/`,
+          });
+        }
+      });
+    });
+  }).catch((err) => {
+    return res.status(500).send(err);
+  });
+};
+
+const saveCounter = function () {
+  return new Promise((resolve, reject) => {
+    resolve();
+  });
+};
+
+const saveActivityCatcher = function () {
+  return new Promise((resolve, reject) => {
+    resolve();
+  });
+};
+
+const saveToDB = function (url, template) {
   const params = {
     url,
     template,
   };
-  Hotspot.save(params);
+  return Hotspot.save(params);
 };
 
 

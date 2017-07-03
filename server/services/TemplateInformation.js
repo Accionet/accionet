@@ -1,4 +1,3 @@
-
 exports.IDS = ['LANDING-PAGE', 'SURVEY'];
 
 exports.JSkeys = {
@@ -8,4 +7,19 @@ exports.JSkeys = {
 
 exports.mediaKeys = {
   'LANDING-PAGE': ['IMAGE-PATH', 'BACKGROUND-IMAGE'],
+};
+
+exports.activityCatcher = {
+  'LANDING-PAGE': [{
+    title: 'Botón apretado',
+    number: 1,
+    type: 'multiple_choice',
+    options: [{
+      statement: 'Botón principal',
+      enumeration: 'A',
+    }, {
+      statement: 'Solo quiero navegar',
+      enumeration: 'B',
+    }],
+  }],
 };

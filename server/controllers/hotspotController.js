@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const aws = require('aws-sdk');
 const Hotspot = require('../models/hotspot');
+const Survey = require('../models/surveys');
+
 const Requestify = require('requestify');
 const Template = require('../services/Template');
 const TemplateInformation = require('../services/TemplateInformation');
@@ -79,9 +81,12 @@ exports.save = function (req, res) {
   const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
   const filePath = `${folderPath}/login.html`;
   const absolutePath = basePath + filePath;
+  console.log('inicio');
   saveToDB(absolutePath, req.body.template_id).then((hotspot) => {
+    console.log('se guardo en BBDD');
     saveCounter(folderPath, hotspot).then(() => {
-      saveActivityCatcher(absolutePath, hotspot).then(() => {
+      console.log('counter ok');
+      saveActivityCatcher(folderPath, req.body.template_id, hotspot).then(() => {
         return uploadHTML(folderPath, basePath, req, res);
       }).catch((err) => {
         res.status(500).send(err);
@@ -125,7 +130,6 @@ const saveCounter = function (folderPath, hotspot) {
   const path = `${folderPath}/counter.js`;
   return new Promise((resolve, reject) => {
     Template.compileVisitCounter(hotspot.id).then((counter) => {
-      console.log(counter);
       const s3bucket = new aws.S3({
         params: {
           Bucket: S3_BUCKET,
@@ -151,9 +155,29 @@ const saveCounter = function (folderPath, hotspot) {
   });
 };
 
-const saveActivityCatcher = function () {
+
+const buildActivityCatcher = function (hotspot, questions) {
+  return {
+    title: `Actividad en portal ${hotspot.id}`,
+    is_active: true,
+    questions,
+  };
+};
+
+const saveActivityCatcher = function (folderPath, template_id, hotspot) {
+  console.log('llego');
   return new Promise((resolve, reject) => {
-    resolve();
+    const questions = TemplateInformation.activityCatcher[template_id];
+    console.log(questions);
+    const params = buildActivityCatcher(hotspot, questions);
+    console.log(params);
+    Survey.save(params).then((survey) => {
+      console.log(survey);
+      resolve(survey);
+    }).catch((err) => {
+      console.log(err);
+      reject(err);
+    });
   });
 };
 

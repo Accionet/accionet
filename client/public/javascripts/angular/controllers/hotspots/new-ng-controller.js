@@ -88,13 +88,11 @@ controllers
   }
 
   $scope.saveHotspot = function() {
-    console.log($scope.current_hotspot);
     $(function() {
       var f = document.getElementById('image-file').files[0];
       console.log(f);
     });
     var values = parseValuesToSend();
-    console.log(values);
     $http.post('/hotspots/save/', {
         template_id: "LANDING-PAGE",
         template: $scope.current_hotspot.template,

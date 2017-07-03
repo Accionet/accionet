@@ -12,14 +12,14 @@ const compileString = function (string, values) {
   return string;
 };
 
-const compileFile = function (path, values) {
-  fs.readFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'template.html'), 'utf8', (err, data) => {
-    if (err) {
-      return {
-        error: err,
-      };
-    }
-    return compileString(data, values);
+const compileFile = function (filePath, values) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(compileString(data, values));
+    });
   });
 };
 
@@ -33,3 +33,9 @@ exports.compileVisitCounter = function (hotspot_id) {
 
 
 exports.compile = compileString;
+
+
+exports.addJS = function (values, visitCounterPath) {
+  values['VISIT-COUNTER'] = visitCounterPath;
+  return values;
+};

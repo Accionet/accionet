@@ -78,4 +78,4 @@ exports.sendFile = function (filepath, filename, fileExtension, res) {
 };
 
 
-exports.HOST = process.env.NODE_ENV !== 'production' ? 'https://accionet.herokuapp.com' : 'http://localhost:3000/';
+exports.HOST = process.env.NODE_ENV === 'production' ? 'https://accionet.herokuapp.com' : 'http://localhost:3000';

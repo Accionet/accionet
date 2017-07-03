@@ -43,6 +43,7 @@ function hasFinised() {
   }
 }
 
+
 function runNextTest() {
   const path = dequeue();
   if (!path) {

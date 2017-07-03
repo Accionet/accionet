@@ -49,13 +49,10 @@ exports.create = function (req, res) {
   const visit = req.body;
   addRequestParams(visit, req);
   Visits.save(visit).then(() => {
-    console.log('guardada');
     return res.status(200).send({
       success: 'success',
     });
   }).catch((err) => {
-    console.log('fallo');
-    console.log(err);
     return res.status(400).send({
       error: err,
     });

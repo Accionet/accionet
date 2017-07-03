@@ -1,6 +1,7 @@
 const fs = require('fs');
 const utils = require('./utils');
 const path = require('path');
+const TemplateInformation = require('./TemplateInformation');
 
 const compileString = function (string, values) {
   const keys = Object.keys(values);

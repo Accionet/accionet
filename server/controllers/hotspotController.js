@@ -4,6 +4,8 @@ const aws = require('aws-sdk');
 const Hotspot = require('../models/hotspot');
 const Requestify = require('requestify');
 const Template = require('../services/Template');
+const TemplateInformation = require('../services/TemplateInformation');
+
 
 
 const S3_BUCKET = process.env.S3_BUCKET;
@@ -56,13 +58,9 @@ const changeImageValue = function (values, key, path) {
 };
 
 const changeImages = function (template_id, values, path) {
-  switch (template_id) {
-  case 'LANDING-PAGE':
-    values = changeImageValue(values, 'IMAGE-PATH', path);
-    values = changeImageValue(values, 'BACKGROUND-IMAGE', path);
-    break;
-  default:
-    break;
+  for (let i = 0; i < TemplateInformation.mediaKeys[template_id].length; i++) {
+    const key = TemplateInformation.mediaKeys[template_id][i];
+    values = changeImageValue(values, key, path);
   }
   return values;
 };
@@ -82,7 +80,6 @@ exports.save = function (req, res) {
   const filePath = `${folderPath}/login.html`;
   const absolutePath = basePath + filePath;
   saveToDB(absolutePath, req.body.template_id).then((hotspot) => {
-    console.log(hotspot);
     saveCounter(folderPath, hotspot).then(() => {
       saveActivityCatcher(absolutePath, hotspot).then(() => {
         return uploadHTML(folderPath, basePath, req, res);
@@ -90,8 +87,6 @@ exports.save = function (req, res) {
         res.status(500).send(err);
       });
     }).catch((err) => {
-      console.log('fallo el counter');
-      console.log(err);
       res.status(500).send(err);
     });
   }).catch((err) => {

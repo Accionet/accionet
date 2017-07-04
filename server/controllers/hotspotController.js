@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const aws = require('aws-sdk');
 const Hotspot = require('../models/hotspot');
 const Survey = require('../models/surveys');
 
 const Requestify = require('requestify');
 const Template = require('../services/Template');
 const TemplateInformation = require('../services/TemplateInformation');
-
+const S3connection = require('../services/S3connection');
 
 
 const S3_BUCKET = process.env.S3_BUCKET;
@@ -30,29 +29,6 @@ exports.getHotspot = function (req, res) {
   });
 };
 
-exports.ignedRequest = function (req, res) {
-  const s3 = new aws.S3();
-  const fileName = req.query['file-name'];
-  const fileType = req.query['file-type'];
-  const s3Params = {
-    Bucket: S3_BUCKET,
-    Key: fileName,
-    Expires: 60,
-    ContentType: fileType,
-    ACL: 'public-read',
-  };
-  s3.getSignedUrl('putObject', s3Params, (err, data) => {
-    if (err) {
-      return res.end();
-    }
-    const returnData = {
-      signedRequest: data,
-      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
-    };
-    res.write(JSON.stringify(returnData));
-    res.end();
-  });
-};
 
 const changeImageValue = function (values, key, path) {
   values[key] = `${path}${key}`;
@@ -81,7 +57,6 @@ exports.save = function (req, res) {
   const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
   const filePath = `${folderPath}/login.html`;
   const absolutePath = basePath + filePath;
-  console.log('save');
   saveToDB(absolutePath, req.body.template_id).then((hotspot) => {
     saveCounter(folderPath, hotspot).then(() => {
       saveActivityCatcher(folderPath, req.body.template_id, hotspot).then(() => {
@@ -101,53 +76,20 @@ const uploadHTML = function (folderPath, basePath, req, res) {
   const absolutePath = basePath + folderPath;
   const fileBody = compile(req.body.template_id, req.body.template, req.body.values, absolutePath);
   const filePath = `${folderPath}/login.html`;
-  const s3bucket = new aws.S3({
-    params: {
-      Bucket: S3_BUCKET,
-    },
-  });
-  s3bucket.createBucket(() => {
-    const params = {
-      Key: filePath,
-      Body: fileBody,
-      ACL: 'public-read',
-    };
-    s3bucket.upload(params, (err) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.status(200).send({
-          imageFolder: `${folderPath}/images/`,
-        });
-      }
+  S3connection.uploadFile(filePath, fileBody, true).then(() => {
+    res.status(200).send({
+      imageFolder: `${folderPath}/images/`,
     });
+  }).catch((err) => {
+    res.status(500).send(err);
   });
 };
 
 const saveCounter = function (folderPath, hotspot) {
-  console.log('saveCounter');
   const path = `${folderPath}/counter.js`;
   return new Promise((resolve, reject) => {
     Template.compileVisitCounter(hotspot.id).then((counter) => {
-      const s3bucket = new aws.S3({
-        params: {
-          Bucket: S3_BUCKET,
-        },
-      });
-      s3bucket.createBucket(() => {
-        const params = {
-          Key: path,
-          Body: counter,
-          ACL: 'public-read',
-        };
-        s3bucket.upload(params, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
+      resolve(S3connection.uploadFile(path, counter, true));
     }).catch((err) => {
       reject(err);
     });
@@ -164,13 +106,11 @@ const buildActivityCatcher = function (hotspot, questions) {
 };
 
 const saveActivityCatcher = function (folderPath, template_id, hotspot) {
-  console.log('save activityCatcher');
   return new Promise((resolve, reject) => {
     const questions = TemplateInformation.activityCatcher[template_id];
     const params = buildActivityCatcher(hotspot, questions);
     Survey.save(params).then((survey) => {
       Template.compileActivityCatcher(folderPath, template_id, survey).then((activityCatcher) => {
-        console.log(activityCatcher);
         resolve();
       }).catch((err) => {
         reject(err);

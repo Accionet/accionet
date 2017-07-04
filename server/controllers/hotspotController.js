@@ -81,11 +81,8 @@ exports.save = function (req, res) {
   const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
   const filePath = `${folderPath}/login.html`;
   const absolutePath = basePath + filePath;
-  console.log('inicio');
   saveToDB(absolutePath, req.body.template_id).then((hotspot) => {
-    console.log('se guardo en BBDD');
     saveCounter(folderPath, hotspot).then(() => {
-      console.log('counter ok');
       saveActivityCatcher(folderPath, req.body.template_id, hotspot).then(() => {
         return uploadHTML(folderPath, basePath, req, res);
       }).catch((err) => {
@@ -165,17 +162,12 @@ const buildActivityCatcher = function (hotspot, questions) {
 };
 
 const saveActivityCatcher = function (folderPath, template_id, hotspot) {
-  console.log('llego');
   return new Promise((resolve, reject) => {
     const questions = TemplateInformation.activityCatcher[template_id];
-    console.log(questions);
     const params = buildActivityCatcher(hotspot, questions);
-    console.log(params);
     Survey.save(params).then((survey) => {
-      console.log(survey);
-      resolve(survey);
+      resolve(Template.createActivityCatcher(folderPath, template_id, survey.questions));
     }).catch((err) => {
-      console.log(err);
       reject(err);
     });
   });

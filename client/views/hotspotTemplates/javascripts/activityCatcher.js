@@ -17,7 +17,7 @@ $(function() {
       data: {
         string_json: json_send
       },
-      url: ('$HOST$survey/$SURVEY-ID$/response'),
+      url: ('$HOST$/survey/$SURVEY-ID$/response'),
       success: function() {
         survey_done = true;
         redirect();

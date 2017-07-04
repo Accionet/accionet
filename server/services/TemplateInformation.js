@@ -23,3 +23,10 @@ exports.activityCatcher = {
     }],
   }],
 };
+
+exports.optionCompilingData = {
+  'LANDING-PAGE': {
+    statement: ['Botón principal', 'Solo quiero navegar'],
+    keys: ['CONNECT', 'SURF-ONLY'],
+  },
+};

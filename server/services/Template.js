@@ -40,3 +40,28 @@ exports.addJS = function (values, visitCounterPath) {
   values['VISIT-COUNTER'] = visitCounterPath;
   return values;
 };
+
+/* FIXME: this method assumes that its a survey with only 1 question. This could(or should) change*/
+const extractQuestionIds = function (survey, template_id, values) {
+  const compilingData = TemplateInformation.optionCompilingData[template_id];
+  for (let i = 0; i < survey.questions[0].options.length; i++) {
+    const option = survey.questions[0].options[i];
+    for (let i = 0; i < compilingData.statement.length; i++) {
+      const v = compilingData.statement[i];
+      if (v === option.statement) {
+        values[compilingData.keys[i]] = option.id;
+      }
+    }
+  }
+  values['QUESTION-ID'] = survey.questions[0].id;
+  return values;
+};
+
+exports.compileActivityCatcher = function (folderPath, template_id, survey) {
+  let values = {
+    HOST: utils.HOST,
+    'SURVEY-ID': survey.id,
+  };
+  values = extractQuestionIds(survey, template_id, values);
+  return compileFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'javascripts', 'activityCatcher.js'), values);
+};

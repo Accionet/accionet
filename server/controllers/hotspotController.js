@@ -81,6 +81,7 @@ exports.save = function (req, res) {
   const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
   const filePath = `${folderPath}/login.html`;
   const absolutePath = basePath + filePath;
+  console.log('save');
   saveToDB(absolutePath, req.body.template_id).then((hotspot) => {
     saveCounter(folderPath, hotspot).then(() => {
       saveActivityCatcher(folderPath, req.body.template_id, hotspot).then(() => {
@@ -124,6 +125,7 @@ const uploadHTML = function (folderPath, basePath, req, res) {
 };
 
 const saveCounter = function (folderPath, hotspot) {
+  console.log('saveCounter');
   const path = `${folderPath}/counter.js`;
   return new Promise((resolve, reject) => {
     Template.compileVisitCounter(hotspot.id).then((counter) => {
@@ -162,11 +164,18 @@ const buildActivityCatcher = function (hotspot, questions) {
 };
 
 const saveActivityCatcher = function (folderPath, template_id, hotspot) {
+  console.log('save activityCatcher');
   return new Promise((resolve, reject) => {
     const questions = TemplateInformation.activityCatcher[template_id];
     const params = buildActivityCatcher(hotspot, questions);
     Survey.save(params).then((survey) => {
-      resolve(Template.createActivityCatcher(folderPath, template_id, survey.questions));
+      Template.compileActivityCatcher(folderPath, template_id, survey).then((activityCatcher) => {
+        console.log(activityCatcher);
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+      resolve();
     }).catch((err) => {
       reject(err);
     });

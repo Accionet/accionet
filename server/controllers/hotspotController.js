@@ -111,7 +111,8 @@ const saveActivityCatcher = function (folderPath, template_id, hotspot) {
     const params = buildActivityCatcher(hotspot, questions);
     Survey.save(params).then((survey) => {
       Template.compileActivityCatcher(folderPath, template_id, survey).then((activityCatcher) => {
-        resolve();
+        const path = `${folderPath}/activityCatcher.js`;
+        resolve(S3connection.uploadFile(path, activityCatcher, true));
       }).catch((err) => {
         reject(err);
       });

@@ -46,7 +46,7 @@ const changeImages = function (template_id, values, path) {
 const compile = function (template_id, template, values, folder) {
   const path = `${folder}/images/`;
   values = changeImages(template_id, values, path);
-  values = Template.addJS(values, `${folder}/counter.js`);
+  values = Template.addJS(values, folder);
   template = Template.compile(template, values);
   return template;
 };

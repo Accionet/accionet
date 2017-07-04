@@ -36,8 +36,9 @@ exports.compileVisitCounter = function (hotspot_id) {
 exports.compile = compileString;
 
 
-exports.addJS = function (values, visitCounterPath) {
-  values['VISIT-COUNTER'] = visitCounterPath;
+exports.addJS = function (values, folderAbsolutePath) {
+  values['VISIT-COUNTER'] = `${folderAbsolutePath}/counter.js`;
+  values['ACTIVITY-CATCHER'] = `${folderAbsolutePath}/activityCatcher.js`;
   return values;
 };
 

@@ -21,5 +21,6 @@
   "ONLY-NAVIGATE": "Solo quiero navegar",
   "ONLY-NAVIGATE-COLOR": "#00F",
   "ONLY-NAVIGATE-SIZE": "1em",
-  "LANDING-PAGE": "https://www.accionet.cl"
+  "LANDING-PAGE": "https://www.accionet.cl",
+  "DEFAULT-LANDING-PAGE": "https://www.accionet.cl"
 }

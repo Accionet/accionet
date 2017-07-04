@@ -1,6 +1,8 @@
 /* eslint-disable */
 $(function() {
+  var destination = 'https://www.facebook.com/accionet.cl'
   var macAddress = $('#macAddress').val();
+
   function registerLinkPressed(id_pressed) {
     var json = {
       survey_id: $SURVEY-ID$,
@@ -29,14 +31,21 @@ $(function() {
     });
   }
 
+  function redirect() {
+    window.location = destination;
+  }
+
   $('#connect').on('click', function(event) {
     event.preventDefault();
+    destination = $(this).attr('href');
+    console.log(destination);
     registerLinkPressed($CONNECT$);
   });
 
   $('#surf-only').on('click', function(event) {
     event.preventDefault();
     destination = $(this).attr('href');
+    console.log(destination);
     registerLinkPressed($SURF-ONLY$);
   });
 

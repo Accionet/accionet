@@ -11,6 +11,21 @@ const S3connection = require('../services/S3connection');
 
 const S3_BUCKET = process.env.S3_BUCKET;
 
+/* Shows the view to create a new hotspot */
+exports.new = function getNewPlace(req, res) {
+  Hotspot.new().then((result) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'create.ejs'), {
+      hotspot: result,
+    });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'create.ejs'), {
+      error: `ERROR: ${err}`,
+      hotspot: [],
+    });
+  });
+};
+
+
 exports.getHotspot = function (req, res) {
   fs.readFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'template.html'), 'utf8', (err, data) => {
     fs.readFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'defaultValues.json'), 'utf8', (errJson, json) => {

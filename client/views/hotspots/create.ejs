@@ -1,0 +1,57 @@
+<html ng-app="accionet-web-app">
+
+  <head>
+    <title>Lugares - Accionet</title>
+    <% include ../partials/head.ejs %>
+  </head>
+
+  <body ng-controller="hotspotController">
+    <% include ../partials/message_log.ejs %>
+    <%= include ../partials/navbar.ejs %>
+    <div id="page-wrapper" ng-init="initializeHotspot(null, ' <%= JSON.stringify(hotspot) %>')">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">{{selectedHotspot.name}}</h1>
+        </div>
+      </div>
+
+      <br>
+      <div class="row">
+        <div class="col-lg-12">
+          <ul class="text-center">
+            <button id='1'  type="button" class="btn btn-primary">
+              <span type="button" class="btn btn-outline btn-default btn-circle">1</span>
+              Informaci&oacute;n </button>
+              <span type="button" class="btn btn-link ">
+                > </span>
+            <button id='2' type="button" class="btn btn-outline btn-primary">
+              <span type="button" class="btn btn-outline btn-default btn-circle">2</span>
+              Crear portal ></button>
+              <span type="button" class="btn btn-link ">
+                > </span>
+            <button id='3' type="button" class="btn btn-outline btn-primary">
+              <span type="button" class="btn btn-outline btn-default btn-circle">3</span>
+              Informaci&oacute;n</button>
+
+          </ul>
+        </div>
+      </div>
+      <br/>
+
+      <% include partials/form.ejs %>
+
+      <br>
+      <ul class="text-center">
+        <button id='previous' type="button" class="btn btn-outline btn-warning hidden" ng-click="previousStep()">
+          Anterior</button>
+
+        <button id='next' type="button" class="btn btn-outline btn-success" ng-click="nextStep()">
+          Siguiente</button>
+      </ul>
+    </div>
+    <% include ../partials/scripts.ejs %>
+    <% include partials/hotspots_scripts.ejs %>
+
+  </body>
+
+</html>

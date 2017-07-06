@@ -298,7 +298,11 @@ module.exports = function router(app, passport, S3_BUCKET) {
   // ///////// hotspots  ////////////////////////
   // ////////////////////////////////////////
 
-  app.get('/hotspots/new', isLoggedIn, (req, res) => {
+  app.get('/hotspots/new', isAdmin, (req, res) => {
+    hotspotController.new(req, res);
+  });
+
+  app.get('/hotspots/new/debug', isLoggedIn, (req, res) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
   });
 

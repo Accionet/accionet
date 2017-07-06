@@ -68,3 +68,8 @@ td a .tooltip {
 .page-wrapper-alert {
   margin: 0 -30px;
 }
+
+
+.nav_step {
+  background-color: red;
+}

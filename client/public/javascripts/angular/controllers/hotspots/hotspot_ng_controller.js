@@ -1,14 +1,16 @@
 /* eslint-disable */
-controllers.controller('hotspotController', function($scope, $http, $window, Utils) {
+controllers.controller('hotspotController', function($scope, $http, $window, Utils, placeService) {
 
   $scope.i = 1; // current_step
   $scope.selectedHotspot;
-
+  $scope.places;
+  $scope.loadingPlaces = true;
+  $scope.loadPlacesFailed = false;
 
 
   // Get all places
   $scope.initializeHotspot = function(hotspot) {
-      $scope.selectedHotspot = Utils.parseJson(hotspot);
+    $scope.selectedHotspot = Utils.parseJson(hotspot);
 
   };
 
@@ -18,8 +20,18 @@ controllers.controller('hotspotController', function($scope, $http, $window, Uti
     });
   }
 
+  function allowedToGoToNextStep() {
+    if ($scope.i >= 3) {
+      return false;
+    }
+    if ($scope.i == 1 && !($scope.selectedHotspot.place_id && $scope.selectedHotspot.name)) {
+      return false;
+    }
+    return true
+  }
+
   $scope.nextStep = function() {
-    if ($scope.i < 3) {
+    if (allowedToGoToNextStep()) {
 
       var className = "btn-outline";
       toggleClass($scope.i, className);
@@ -48,5 +60,18 @@ controllers.controller('hotspotController', function($scope, $http, $window, Uti
       }
     }
   }
+
+  $scope.getPlaces = function() {
+
+    placeService.getNames(function(err, places) {
+      $scope.loadingPlaces = false;
+      if (err) {
+        $scope.loadPlacesFailed = true;
+        return;
+      }
+      $scope.places = places;
+    })
+  }
+  $scope.getPlaces()
 
 });

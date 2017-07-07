@@ -57,4 +57,41 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Lugar
+          </h4>
+        </div>
+        <!-- /.panel-heading -->
+
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="description">Seleccionar lugar:
+            </label>
+            <div ng-if='!loadingPlaces && !loadPlacesFailed'>
+              <select ng-model="selectedHotspot.place_id" name="place_id" required>
+                <option value="{{p.id}}" ng-repeat="p in places" ng-selected="selectedHotspot.place_id === p.id">{{p.name}}
+                </option>
+              </select>
+            </div>
+            <div ng-if='loadingPlaces' class='center-text'>
+                <i class="fa fa-spinner fa-pulse fa-fw "></i>
+            </div>
+            <div ng-show="loadPlacesFailed" class="alert alert-danger">
+              <p>
+                Hubo un problema, porfavor intentar m&aacute;s tarde
+              </p>
+            </div>
+            <div ng-show="!selectedHotspot.place_id" class="alert alert-danger">
+              <p>
+                Debe estar asociado a un lugar
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>

@@ -1,10 +1,12 @@
+<!DOCTYPE html>
 <html ng-app="accionet-web-app">
-
   <head>
-    <title>Lugares - Accionet</title>
-    <% include ../partials/head.ejs %>
+    <title>Hotspot</title>
+    <%= include ../partials/head.ejs %>
+    <link href="/stylesheets/hotspot_render.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <script src="/vendor/jquery/jquery.min.js"></script>
   </head>
-
   <body ng-controller="hotspotController">
     <% include ../partials/message_log.ejs %>
     <%= include ../partials/navbar.ejs %>
@@ -14,31 +16,40 @@
           <h1 class="page-header">{{selectedHotspot.name}}</h1>
         </div>
       </div>
-
       <br>
       <div class="row">
         <div class="col-lg-12">
           <ul class="text-center">
-            <button id='1'  type="button" class="btn btn-primary">
+            <button id='1' type="button" class="btn btn-primary">
               <span type="button" class="btn btn-outline btn-default btn-circle">1</span>
-              Informaci&oacute;n </button>
-              <span type="button" class="btn btn-link ">
-                > </span>
+              Informaci&oacute;n
+            </button>
+            <span type="button" class="btn btn-link ">
+              >
+            </span>
             <button id='2' type="button" class="btn btn-outline btn-primary">
               <span type="button" class="btn btn-outline btn-default btn-circle">2</span>
               Crear portal ></button>
-              <span type="button" class="btn btn-link ">
-                > </span>
+            <span type="button" class="btn btn-link ">
+              >
+            </span>
             <button id='3' type="button" class="btn btn-outline btn-primary">
               <span type="button" class="btn btn-outline btn-default btn-circle">3</span>
               Informaci&oacute;n</button>
-
           </ul>
         </div>
       </div>
       <br/>
+      <div ng-if="i == 1">
+        <% include partials/form.ejs %>
+      </div>
+      <section id="hotspotEditor" ng-controller="newHotspotController" ng-show='i == 2'>
+        <% include editor.ejs %>
 
-      <% include partials/form.ejs %>
+      </section>
+      <div ng-if="i == 3">
+        1
+      </div>
 
       <br>
       <ul class="text-center">
@@ -49,9 +60,31 @@
           Siguiente</button>
       </ul>
     </div>
-    <% include ../partials/scripts.ejs %>
-    <% include partials/hotspots_scripts.ejs %>
-
   </body>
+
+  <script>
+    $(function () {
+      $('.colorpicker-component').colorpicker();
+
+      $("input[type='checkbox']").on('click', function (event) {
+        var elemToDisable = $(this).data('disable');
+        if (this.checked) {
+          $(elemToDisable).addClass('disabled');
+          $(elemToDisable).prop('disabled', true);
+        } else {
+          $(elemToDisable).removeClass('disabled');
+          $(elemToDisable).prop('disabled', false);
+        }
+      })
+    });
+  </script>
+  <% include ../partials/scripts.ejs%>
+  <% include partials/hotspots_scripts.ejs %>
+  <!-- <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script> -->
+  <script src='/vendor/jquery-rotate/JQueryRotate.js'></script>
+  <script src="/javascripts/hotspot/render.js"></script>
+  <script src="/javascripts/hotspot/resize.js"></script>
+  <script src="/javascripts/angular/controllers/hotspots/new-ng-controller.js"></script>
+  <script src="/vendor/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
 
 </html>

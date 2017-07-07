@@ -303,7 +303,7 @@ module.exports = function router(app, passport, S3_BUCKET) {
   });
 
   app.get('/hotspots/new/debug', isLoggedIn, (req, res) => {
-    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new_backup.ejs'), {});
   });
 
   app.get('/hotspots/template/:template', isLoggedIn, (req, res, next) => {

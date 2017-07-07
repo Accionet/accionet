@@ -2,6 +2,15 @@
 controllers.controller('hotspotController', function($scope, $http, $window, Utils) {
 
   $scope.i = 1; // current_step
+  $scope.selectedHotspot;
+
+
+
+  // Get all places
+  $scope.initializeHotspot = function(hotspot) {
+      $scope.selectedHotspot = Utils.parseJson(hotspot);
+
+  };
 
   function toggleClass(id, className) {
     $(function() {

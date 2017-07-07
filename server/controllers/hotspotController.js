@@ -72,7 +72,7 @@ exports.save = function (req, res) {
   const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
   const filePath = `${folderPath}/login.html`;
   const absolutePath = basePath + filePath;
-  saveToDB(absolutePath, req.body.template_id).then((hotspot) => {
+  saveToDB(req.body.hotspotInfo, absolutePath).then((hotspot) => {
     saveCounter(folderPath, hotspot).then(() => {
       saveActivityCatcher(folderPath, req.body.template_id, hotspot).then(() => {
         return uploadHTML(folderPath, basePath, req, res);
@@ -138,11 +138,9 @@ const saveActivityCatcher = function (folderPath, template_id, hotspot) {
   });
 };
 
-const saveToDB = function (url, template) {
-  const params = {
-    url,
-    template,
-  };
+const saveToDB = function (params, url) {
+  params.url = url;
+  console.log(params);
   return Hotspot.save(params);
 };
 

@@ -40,16 +40,18 @@
         </div>
       </div>
       <br/>
-      {{selectedHotspot}}
       <div ng-if="i == 1">
         <% include partials/form.ejs %>
       </div>
-      <section id="hotspotEditor" ng-controller="newHotspotController" ng-show='i == 2'>
+      <section id="hotspotEditor" ng-show='i == 2'>
         <% include editor.ejs %>
 
       </section>
-      <div ng-if="i == 3">
-
+      <div class="text-center" ng-if="i == 3">
+        <hr />
+        <button  type="button" class="btn btn-outline btn-success" ng-click="saveHotspot()">
+          Guardar</button>
+          <hr />
       </div>
 
       <br>

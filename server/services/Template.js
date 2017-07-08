@@ -24,10 +24,11 @@ const compileFile = function (filePath, values) {
   });
 };
 
-exports.compileVisitCounter = function (hotspot_id) {
+exports.compileVisitCounter = function (hotspot_id, place_id) {
   const values = {
     HOST: utils.HOST,
     HOTSPOT_ID: hotspot_id,
+    PLACE_ID: place_id,
   };
   return compileFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'javascripts', 'visitCounter.js'), values);
 };

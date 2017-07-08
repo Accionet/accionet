@@ -7,6 +7,7 @@ $(function() {
   var max_times_to_try = 5;
   var visitJSON = {
     hotspot_id: $HOTSPOT_ID$,
+    place_id: $PLACE_ID$,
     macaddress: macAddress,
   }
 
@@ -64,6 +65,7 @@ $(function() {
           //See if this works
           $.post('$HOST$/visits/new', {
             hotspot_id: $HOTSPOT_ID$,
+            place_id: $PLACE_ID$,
             macaddress: macAddress,
           });
         } else if (times_tried < max_times_to_try) {

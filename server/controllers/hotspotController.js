@@ -72,9 +72,10 @@ exports.save = function (req, res) {
   const basePath = `https://s3.amazonaws.com/${S3_BUCKET}/`;
   const filePath = `${folderPath}/login.html`;
   const absolutePath = basePath + filePath;
+  const template_id = req.body.hotspotInfo.template;
   saveToDB(req.body.hotspotInfo, absolutePath).then((hotspot) => {
     saveCounter(folderPath, hotspot).then(() => {
-      saveActivityCatcher(folderPath, req.body.template_id, hotspot).then(() => {
+      saveActivityCatcher(folderPath, template_id, hotspot).then(() => {
         return uploadHTML(folderPath, basePath, req, res);
       }).catch((err) => {
         res.status(500).send(err);
@@ -89,7 +90,8 @@ exports.save = function (req, res) {
 
 const uploadHTML = function (folderPath, basePath, req, res) {
   const absolutePath = basePath + folderPath;
-  const fileBody = compile(req.body.template_id, req.body.template, req.body.values, absolutePath);
+  const template_id = req.body.hotspotInfo.template;
+  const fileBody = compile(template_id, req.body.template, req.body.values, absolutePath);
   const filePath = `${folderPath}/login.html`;
   S3connection.uploadFile(filePath, fileBody, true).then(() => {
     res.status(200).send({
@@ -103,7 +105,7 @@ const uploadHTML = function (folderPath, basePath, req, res) {
 const saveCounter = function (folderPath, hotspot) {
   const path = `${folderPath}/counter.js`;
   return new Promise((resolve, reject) => {
-    Template.compileVisitCounter(hotspot.id).then((counter) => {
+    Template.compileVisitCounter(hotspot.id, hotspot.place_id).then((counter) => {
       resolve(S3connection.uploadFile(path, counter, true));
     }).catch((err) => {
       reject(err);

@@ -7,7 +7,7 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
   $scope.loadingPlaces = true;
   $scope.loadPlacesFailed = false;
   $scope.completed = 0;
-  $scope.TEMPLATE = 'LANDING-PAGE';
+  $scope.CURRENT_TEMPLATE = 'LANDING-PAGE';
   $scope.FILE_KEYS = ['IMAGE-PATH', 'BACKGROUND-IMAGE']; //FIXME
 
 
@@ -78,22 +78,27 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
 
   $scope.getPlaces();
   // -------------------------------------------TEMPLATE AREA ------------------------------------------------
-  $scope.IMAGE_TEMPLATE = {
-    template: "",
-    defaultValues: "",
-    compiledHTML: "",
-  };
+  TEMPLATES = {};
 
   $scope.current_hotspot;
 
+
+function initializeTemplate(temp) {
+  TEMPLATES[temp] = {
+    template: "",
+    defaultValues: "",
+    compiledHTML: "",
+  }
+}
 
   // getTemplate
   $scope.getTemplate = function(template, makeCurrent) {
     $http.get('/hotspots/template/' + template)
       .success(function(data) {
-        $scope.IMAGE_TEMPLATE.template = data.htmlData;
-        $scope.IMAGE_TEMPLATE.values = Utils.parseJson(data.defaultValues);
-        $scope.compile($scope.IMAGE_TEMPLATE, makeCurrent);
+        initializeTemplate(template);
+        TEMPLATES[template].template = data.htmlData;
+        TEMPLATES[template].values = Utils.parseJson(data.defaultValues);
+        $scope.compile(TEMPLATES[template], makeCurrent);
       })
       .error(function(error) {
         console.log(error);
@@ -169,7 +174,7 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     console.log(values);
     $scope.selectedHotspot.template = "LANDING-PAGE";
     $http.post('/hotspots/save/', {
-        template_id: $scope.TEMPLATE,
+        template_id: $scope.CURRENT_TEMPLATE,
         hotspotInfo: $scope.selectedHotspot,
         template: $scope.current_hotspot.template,
         values: values,
@@ -254,5 +259,5 @@ var uploadedFiles = 0;
     canceled = true;
   }
 
-  $scope.getTemplate("image", true);
+  $scope.getTemplate($scope.CURRENT_TEMPLATE, true);
 });

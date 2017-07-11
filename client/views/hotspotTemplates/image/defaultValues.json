@@ -22,5 +22,6 @@
   "ONLY-NAVIGATE-COLOR": "#00F",
   "ONLY-NAVIGATE-SIZE": "1em",
   "LANDING-PAGE": "https://www.accionet.cl",
-  "DEFAULT-LANDING-PAGE": "https://www.accionet.cl"
+  "DEFAULT-LANDING-PAGE": "https://www.accionet.cl",
+  "FILE-KEYS": ["IMAGE-PATH", "BACKGROUND-IMAGE"]
 }

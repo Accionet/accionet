@@ -115,6 +115,7 @@ function initializeTemplate(temp) {
     }
     fileToCompile.compiledHTML = temp;
     if (makeCurrent) {
+      $scope.FILE_KEYS = fileToCompile.values['FILE-KEYS']
       $scope.current_hotspot = fileToCompile;
       $scope.renderHotspot();
     }

@@ -16,7 +16,7 @@
           <h1 class="page-header">{{selectedHotspot.name}}</h1>
         </div>
       </div>
-      <br>
+
       <div class="row">
         <div class="col-lg-12">
           <ul class="text-center">
@@ -35,7 +35,7 @@
             </span>
             <button id='3' type="button" class="btn btn-outline btn-primary">
               <span type="button" class="btn btn-outline btn-default btn-circle">3</span>
-              Informaci&oacute;n</button>
+              Guardar</button>
           </ul>
         </div>
       </div>
@@ -47,11 +47,21 @@
         <% include editor.ejs %>
 
       </section>
-      <div class="text-center" ng-if="i == 3">
-        <hr />
-        <button  type="button" class="btn btn-outline btn-success" ng-click="saveHotspot()">
-          Guardar</button>
-          <hr />
+      <div class="text-center" ng-show='i == 3'>
+        <hr/>
+        <p class="text-muted">
+          {{completed}}%
+        </p>
+        <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{completed}}" aria-valuemin="0" aria-valuemax="100" style="width: {{completed}}%"></div>
+        </div>
+        <button type="button" class="btn btn-outline btn-success" ng-click="saveHotspot()" ng-if="completed == 0">
+          Guardar portal
+        {{selectedHotspot.name}} </button>
+        <button type="button" class="btn btn-outline btn-warning" ng-click="cancelUpload()" ng-if="completed > 0">
+          Cancelar</button>
+
+        <hr/>
       </div>
 
       <br>

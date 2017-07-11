@@ -2,13 +2,19 @@
 controllers.controller('hotspotController', function($scope, $http, $window, $location, Utils, placeService) {
 
   $scope.i = 1; // current_step
-  $scope.selectedHotspot;
+  $scope.selectedHotspot; // name, description and that stuff
   $scope.places;
   $scope.loadingPlaces = true;
   $scope.loadPlacesFailed = false;
   $scope.completed = 0;
   $scope.CURRENT_TEMPLATE = 'LANDING-PAGE';
   $scope.FILE_KEYS = ['IMAGE-PATH', 'BACKGROUND-IMAGE']; //FIXME
+  $scope.current_hotspot = {
+    values: {},
+    template: {}
+  }
+
+
 
 
   // Get all places
@@ -64,6 +70,14 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     }
   }
 
+  $scope.porcentageWatcher = function (watcher, watchee) {
+    $scope.$watch('current_hotspot.values["' + watchee +'"]', function() {
+      $scope[watcher] = $scope.current_hotspot.values['IMAGE-WIDTH'].slice(0, -1);
+    });
+  }
+
+
+
   $scope.getPlaces = function() {
 
     placeService.getNames(function(err, places) {
@@ -80,16 +94,15 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
   // -------------------------------------------TEMPLATE AREA ------------------------------------------------
   TEMPLATES = {};
 
-  $scope.current_hotspot;
 
 
-function initializeTemplate(temp) {
-  TEMPLATES[temp] = {
-    template: "",
-    defaultValues: "",
-    compiledHTML: "",
+  function initializeTemplate(temp) {
+    TEMPLATES[temp] = {
+      template: "",
+      defaultValues: "",
+      compiledHTML: "",
+    }
   }
-}
 
   // getTemplate
   $scope.getTemplate = function(template, makeCurrent) {
@@ -190,8 +203,8 @@ function initializeTemplate(temp) {
   }
 
 
-var filesToSend = 0;
-var uploadedFiles = 0;
+  var filesToSend = 0;
+  var uploadedFiles = 0;
 
   function uploadFiles(path) {
     filesToSend = 0;
@@ -202,8 +215,8 @@ var uploadedFiles = 0;
         var file = document.getElementById($scope.FILE_KEYS[i]).files[0];
         console.log(file);
         if (file !== null && file !== undefined) {
-          filesToSend +=1;
-          var filePath = path  + $scope.FILE_KEYS[i];
+          filesToSend += 1;
+          var filePath = path + $scope.FILE_KEYS[i];
           getSignedRequest(file, filePath, progressPerFile);
         }
       }
@@ -217,9 +230,9 @@ var uploadedFiles = 0;
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
           console.log(file);
-          changeCompleted(increment/2);
+          changeCompleted(increment / 2);
           const response = JSON.parse(xhr.responseText);
-          uploadFile(file, response.signedRequest, response.url, increment/2);
+          uploadFile(file, response.signedRequest, response.url, increment / 2);
         } else {
           alert('Could not get signed URL.');
         }
@@ -250,7 +263,7 @@ var uploadedFiles = 0;
     $scope.completed += increment;
     $scope.$apply();
     console.log($scope.completed);
-    if(uploadedFiles == filesToSend && endable) {
+    if (uploadedFiles == filesToSend && endable) {
       $window.location.href = '/hotspots/';
 
     }

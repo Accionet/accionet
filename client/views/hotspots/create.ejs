@@ -40,13 +40,14 @@
         </div>
       </div>
       <br/>
-      <div ng-if="i == 1">
-        <% include partials/form.ejs %>
-      </div>
-      <section id="hotspotEditor" ng-show='i == 2'>
+
+      <section id="hotspotEditor" ng-show='i == 1'>
         <% include editor.ejs %>
 
       </section>
+      <div ng-if="i == 1">
+        <% include partials/form.ejs %>
+      </div>
       <div class="text-center" ng-show='i == 3'>
         <hr/>
         <p class="text-muted">
@@ -94,6 +95,8 @@
   <% include ../partials/scripts.ejs%>
   <script src="/javascripts/angular/services/places.js"></script>
   <% include partials/hotspots_scripts.ejs %>
+  <script src="/javascripts/angular/directives/porcentage.js"></script>
+
   <!-- <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script> -->
   <script src='/vendor/jquery-rotate/JQueryRotate.js'></script>
   <script src="/javascripts/hotspot/render.js"></script>

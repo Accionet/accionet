@@ -1,6 +1,5 @@
 /* eslint-disable */
 
-console.log('mene');
 services
 
   .service('placeService', function($http) {

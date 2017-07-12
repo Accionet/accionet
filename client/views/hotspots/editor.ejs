@@ -60,10 +60,9 @@
       Cambiar Atributos:</h2>
 
     <div class="example-content well">
-
       <div class="btn btn-default btn-file">
         Cambiar imagen
-        <input type="file" class="file-upload" data-key="IMAGE-PATH" id="IMAGE-PATH">
+        <input type="file" class="file-upload" data-key="IMAGE-PATH" ng-click="fileChanged('IMAGE-PATH')" id="IMAGE-PATH">
       </div>
     </div>
     <div class="example">
@@ -85,7 +84,7 @@
         <div class="example-content-widget">
           <div class="background-image btn btn-default btn-file">
             Cambiar imagen
-            <input class="background-image file-upload" type="file" data-key="BACKGROUND-IMAGE" id='BACKGROUND-IMAGE'/>
+            <input class="background-image file-upload" type="file" ng-click="fileChanged('BACKGROUND-IMAGE')" data-key="BACKGROUND-IMAGE" id='BACKGROUND-IMAGE'/>
           </div>
         </div>
         <div class="checkbox">

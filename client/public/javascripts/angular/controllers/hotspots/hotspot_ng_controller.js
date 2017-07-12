@@ -8,7 +8,9 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
   $scope.loadPlacesFailed = false;
   $scope.completed = 0;
   $scope.CURRENT_TEMPLATE = 'LANDING-PAGE';
-  $scope.FILE_KEYS = ['IMAGE-PATH', 'BACKGROUND-IMAGE']; //FIXME
+  $scope.FILE_KEYS = [];
+  var FILE_CHANGED = {}
+
   $scope.current_hotspot = {
     values: {},
     template: {}
@@ -70,16 +72,20 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     }
   }
 
-  $scope.porcentageWatcher = function (watcher, watchee) {
-    $scope.$watch('current_hotspot.values["' + watchee +'"]', function() {
-      $scope[watcher] = $scope.current_hotspot.values[watchee].slice(0, -1);
+  $scope.porcentageWatcher = function(watcher, watchee) {
+    $scope.$watch('current_hotspot.values["' + watchee + '"]', function() {
+      if ($scope.current_hotspot.values[watchee]) {
+        $scope[watcher] = $scope.current_hotspot.values[watchee].slice(0, -1);
+      }
     });
   }
 
-  $scope.pathWatcher = function (watcher, watchee) {
-    $scope.$watch('current_hotspot.values["' + watchee +'"]', function() {
-      var parts = $scope.current_hotspot.values[watchee].split('://')
-      $scope[watcher] = parts[1];
+  $scope.pathWatcher = function(watcher, watchee) {
+    $scope.$watch('current_hotspot.values["' + watchee + '"]', function() {
+      if ($scope.current_hotspot.values[watchee]) {
+        var parts = $scope.current_hotspot.values[watchee].split('://');
+        $scope[watcher] = parts[1];
+      }
     });
   }
 
@@ -154,7 +160,7 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     });
   }
 
-  $scope.recompile = function(key, value) {
+  $scope.recompile = function(key, value, temporaryChange) {
     if (key in $scope.current_hotspot.values) {
       $scope.current_hotspot.values[key] = value;
     }
@@ -181,18 +187,26 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     $scope.compile($scope.current_hotspot, true);
   }
 
+  $scope.fileChanged = function fileChanged(key) {
+    FILE_CHANGED[key] = true;
+  }
+
   function parseValuesToSend() {
     temp = $scope.current_hotspot.values;
-    temp['IMAGE-PATH'] = "IMAGE-PATH";
-    temp['BACKGROUND-IMAGE'] = "BACKGROUND-IMAGE";
+    for (var i = 0; i < $scope.FILE_KEYS.length; i++) {
+      if (FILE_CHANGED[$scope.FILE_KEYS[i]]) {
+        temp[$scope.FILE_KEYS[i]] = null;
+      }
+    }
     return temp;
   }
+
 
   $scope.saveHotspot = function() {
     $scope.completed = 0;
     canceled = false;
     var values = parseValuesToSend();
-    console.log(values);
+    console.log('values cambiados');
     $scope.selectedHotspot.template = "LANDING-PAGE";
     $http.post('/hotspots/save/', {
         template_id: $scope.CURRENT_TEMPLATE,
@@ -201,7 +215,6 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
         values: values,
       })
       .success(function(data) {
-        console.log('se guardo en heroku');
         changeCompleted(10);
         var path = data.imageFolder;
         uploadFiles(path);
@@ -220,7 +233,6 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
       progressPerFile = 80 / $scope.FILE_KEYS.length;
       for (var i = 0; i < $scope.FILE_KEYS.length; i++) {
         var file = document.getElementById($scope.FILE_KEYS[i]).files[0];
-        console.log(file);
         if (file !== null && file !== undefined) {
           filesToSend += 1;
           var filePath = path + $scope.FILE_KEYS[i];
@@ -236,7 +248,6 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          console.log(file);
           changeCompleted(increment / 2);
           const response = JSON.parse(xhr.responseText);
           uploadFile(file, response.signedRequest, response.url, increment / 2);
@@ -269,7 +280,6 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
   function changeCompleted(increment, endable) {
     $scope.completed += increment;
     $scope.$apply();
-    console.log($scope.completed);
     if (uploadedFiles == filesToSend && endable) {
       $window.location.href = '/hotspots/';
 

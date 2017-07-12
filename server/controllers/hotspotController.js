@@ -7,6 +7,8 @@ const Requestify = require('requestify');
 const Template = require('../services/Template');
 const TemplateInformation = require('../services/TemplateInformation');
 const S3connection = require('../services/S3connection');
+const utils = require('../services/utils');
+
 
 
 const S3_BUCKET = process.env.S3_BUCKET;
@@ -46,7 +48,13 @@ exports.getHotspot = function (req, res) {
 
 
 const changeImageValue = function (values, key, path) {
-  values[key] = `${path}${key}`;
+  // If its not defined then its have been modified
+  if (!values[key]) {
+    values[key] = `${path}${key}`;
+  } else {
+    values[key] = `${utils.HOST}${values[key]}`;
+  }
+  console.log(values[key]);
   return values;
 };
 
@@ -142,7 +150,6 @@ const saveActivityCatcher = function (folderPath, template_id, hotspot) {
 
 const saveToDB = function (params, url) {
   params.url = url;
-  console.log(params);
   return Hotspot.save(params);
 };
 

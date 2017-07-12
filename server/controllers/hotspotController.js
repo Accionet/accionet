@@ -29,8 +29,11 @@ exports.new = function getNewPlace(req, res) {
 
 
 exports.getHotspot = function (req, res) {
-  fs.readFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'template.html'), 'utf8', (err, data) => {
-    fs.readFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'defaultValues.json'), 'utf8', (errJson, json) => {
+  console.log(req.params.template);
+  const templatePath = TemplateInformation.templateFilePath[req.params.template];
+  const valuesPath = TemplateInformation.valuesPath[req.params.template];
+  fs.readFile(templatePath, 'utf8', (err, data) => {
+    fs.readFile(valuesPath, 'utf8', (errJson, json) => {
       if (err || errJson) {
         const response = {
           error: err || errJson,
@@ -54,7 +57,6 @@ const changeImageValue = function (values, key, path) {
   } else {
     values[key] = `${utils.HOST}${values[key]}`;
   }
-  console.log(values[key]);
   return values;
 };
 

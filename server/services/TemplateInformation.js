@@ -1,3 +1,5 @@
+const path = require('path');
+
 exports.IDS = ['LANDING-PAGE', 'SURVEY'];
 
 exports.JSkeys = {
@@ -29,4 +31,20 @@ exports.optionCompilingData = {
     statement: ['Botón principal', 'Solo quiero navegar'],
     keys: ['CONNECT', 'SURF-ONLY'],
   },
+};
+
+
+exports.templateFilePath = {
+  'LANDING-PAGE': path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'landing-page', 'template.html'),
+  GIF: path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'landing-page', 'template.html'),
+  IMAGE: path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'landing-page', 'template.html'),
+
+};
+
+
+exports.valuesPath = {
+  'LANDING-PAGE': path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'defaultValues.json'),
+  GIF: path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'gif', 'defaultValues.json'),
+  IMAGE: path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'defaultValues.json'),
+
 };

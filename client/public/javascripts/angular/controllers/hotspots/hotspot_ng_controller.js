@@ -72,7 +72,14 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
 
   $scope.porcentageWatcher = function (watcher, watchee) {
     $scope.$watch('current_hotspot.values["' + watchee +'"]', function() {
-      $scope[watcher] = $scope.current_hotspot.values['IMAGE-WIDTH'].slice(0, -1);
+      $scope[watcher] = $scope.current_hotspot.values[watchee].slice(0, -1);
+    });
+  }
+
+  $scope.pathWatcher = function (watcher, watchee) {
+    $scope.$watch('current_hotspot.values["' + watchee +'"]', function() {
+      var parts = $scope.current_hotspot.values[watchee].split('://')
+      $scope[watcher] = parts[1];
     });
   }
 

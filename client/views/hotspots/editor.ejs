@@ -262,7 +262,7 @@
             <span class="input-group-addon">
               https://
             </span>
-            <input type="text" ng-model="landingPage" class="form-control" ng-change="recompile('LANDING-PAGE', 'https://' + landingPage)"/>
+            <input type="text" ng-model="landingPage" ng-init='pathWatcher("landingPage", "LANDING-PAGE")'  class="form-control" ng-change="recompile('LANDING-PAGE', 'https://' + landingPage)"/>
           </div>
         </div>
       </div>

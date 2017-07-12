@@ -58,7 +58,7 @@
         <button type="button" class="btn btn-outline btn-success" ng-click="saveHotspot()" ng-if="completed == 0">
           Guardar portal
         {{selectedHotspot.name}} </button>
-        <button type="button" class="btn btn-outline btn-warning" ng-click="cancelUpload()" ng-if="completed > 0">
+        <button type="button" class="btn btn-outline btn-warning" ng-click="cancelUpload()" ng-if="completed > 0 && uploading">
           Cancelar</button>
 
         <hr/>
@@ -66,7 +66,7 @@
 
       <br>
       <ul class="text-center">
-        <button id='previous' type="button" class="btn btn-outline btn-warning hidden" ng-click="previousStep()">
+        <button id='previous' type="button" class="btn btn-outline btn-warning hidden" ng-if='!uploading' ng-click="previousStep()">
           Anterior</button>
 
         <button id='next' type="button" class="btn btn-outline btn-success" ng-click="nextStep()">

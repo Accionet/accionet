@@ -10,6 +10,7 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
   $scope.CURRENT_TEMPLATE = 'LANDING-PAGE';
   $scope.FILE_KEYS = [];
   var FILE_CHANGED = {}
+  $scope.uploading = false;
 
   $scope.current_hotspot = {
     values: {},
@@ -204,6 +205,7 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
 
   $scope.saveHotspot = function() {
     $scope.completed = 0;
+    $scope.uploading = true;
     canceled = false;
     var values = parseValuesToSend();
     $scope.selectedHotspot.template = "LANDING-PAGE";
@@ -298,6 +300,7 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     $scope.completed += increment;
     $scope.$apply();
     if (uploadedFiles == filesToSend && endable) {
+      $scope.uploading = false;
       $window.location.href = '/hotspots/';
 
     }
@@ -305,6 +308,8 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
 
   $scope.cancelUpload = function() {
     canceled = true;
+    $scope.uploading = false;
+
   }
 
   $scope.getTemplate($scope.CURRENT_TEMPLATE, true);

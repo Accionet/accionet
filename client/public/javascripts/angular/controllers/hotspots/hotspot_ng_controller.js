@@ -206,7 +206,6 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     $scope.completed = 0;
     canceled = false;
     var values = parseValuesToSend();
-    console.log('values cambiados');
     $scope.selectedHotspot.template = "LANDING-PAGE";
     $http.post('/hotspots/save/', {
         template_id: $scope.CURRENT_TEMPLATE,
@@ -226,17 +225,35 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
   var filesToSend = 0;
   var uploadedFiles = 0;
 
+  function countFilesToSend() {
+    var c = 0;
+    for (var i = 0; i < $scope.FILE_KEYS.length; i++) {
+      if (FILE_CHANGED[$scope.FILE_KEYS[i]]) {
+        var file = document.getElementById($scope.FILE_KEYS[i]).files[0];
+        if (file !== null && file !== undefined) {
+          c += 1;
+        }
+      }
+    }
+    return c;
+  }
+
   function uploadFiles(path) {
-    filesToSend = 0;
+    filesToSend = countFilesToSend();
     uploadedFiles = 0;
     if (!canceled) {
       progressPerFile = 80 / $scope.FILE_KEYS.length;
       for (var i = 0; i < $scope.FILE_KEYS.length; i++) {
-        var file = document.getElementById($scope.FILE_KEYS[i]).files[0];
-        if (file !== null && file !== undefined) {
-          filesToSend += 1;
-          var filePath = path + $scope.FILE_KEYS[i];
-          getSignedRequest(file, filePath, progressPerFile);
+        if (FILE_CHANGED[$scope.FILE_KEYS[i]]) {
+          var file = document.getElementById($scope.FILE_KEYS[i]).files[0];
+          if (file !== null && file !== undefined) {
+            var filePath = path + $scope.FILE_KEYS[i];
+            getSignedRequest(file, filePath, progressPerFile);
+          }
+        } else {
+          uploadFiles += 1;
+          changeCompleted(progressPerFile, true);
+
         }
       }
     }

@@ -88,8 +88,9 @@
           </div>
         </div>
         <div class="checkbox">
+          {{hasBackgroundImage}}
           <label>
-            <input data-disable=".background-image" class="disable-checkbox" type="checkbox" ng-click="recompile('BACKGROUND-IMAGE','none')">
+            <input data-disable=".background-image" class="disable-checkbox" type="checkbox" ng-model="hasBackgroundImage"  ng-click=" hasBackgroundImage && recompile('BACKGROUND-IMAGE', 'none')">
             Sin imagen de fondo
           </label>
         </div>

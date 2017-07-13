@@ -296,6 +296,10 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     }
   }
 
+  $scope.changeBackgroundImage = function (key) {
+
+  }
+
   function changeCompleted(increment, endable) {
     $scope.completed += increment;
     $scope.$apply();

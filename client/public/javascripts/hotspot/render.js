@@ -9,7 +9,8 @@ $(function() {
       var reader = new FileReader();
 
       reader.onload = function(e) {
-        angular.element(input).scope().recompile(key, e.target.result, true);
+
+        angular.element(input).scope().recompile(key, e.target.result);
       }
       reader.readAsDataURL(input.files[0]);
     }

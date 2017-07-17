@@ -43,7 +43,7 @@ exports.templateFilePath = {
 
 
 exports.valuesPath = {
-  'LANDING-PAGE': path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'defaultValues.json'),
+  'LANDING-PAGE': path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'landing-page', 'defaultValues.json'),
   GIF: path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'gif', 'defaultValues.json'),
   IMAGE: path.join(__dirname, '../', '../', 'client', 'views', 'hotspotTemplates', 'image', 'defaultValues.json'),
 

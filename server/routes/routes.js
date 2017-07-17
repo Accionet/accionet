@@ -298,6 +298,14 @@ module.exports = function router(app, passport, S3_BUCKET) {
   // ///////// hotspots  ////////////////////////
   // ////////////////////////////////////////
 
+  app.get('/hotspots', isLoggedIn, (req, res, next) => {
+    hotspotController.index(req, res, next);
+  });
+
+  app.get('/hotspots/disabled', isAdmin, (req, res, next) => {
+    hotspotController.disabled(req, res, next);
+  });
+
   app.get('/hotspots/new', isAdmin, (req, res) => {
     hotspotController.new(req, res);
   });

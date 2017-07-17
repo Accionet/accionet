@@ -207,6 +207,7 @@ controllers.controller('hotspotController', function($scope, $http, $window, $lo
     $scope.completed = 0;
     $scope.uploading = true;
     canceled = false;
+    $scope.selectedHotspot.is_active = true;
     var values = parseValuesToSend();
     $scope.selectedHotspot.template = "LANDING-PAGE";
     $http.post('/hotspots/save/', {

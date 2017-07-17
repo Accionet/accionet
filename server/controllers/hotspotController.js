@@ -13,6 +13,31 @@ const utils = require('../services/utils');
 
 const S3_BUCKET = process.env.S3_BUCKET;
 
+
+function all(req, res, active) {
+  Hotspot.accessibleBy(req.user.id, active).then((result) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'index.ejs'), {
+      hotspots: result,
+      show_active: active,
+    });
+  }).catch((err) => {
+    return res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'index.ejs'), {
+      error: `ERROR: ${err}`,
+      hotspots: [],
+      show_active: active,
+    });
+  });
+}
+
+exports.index = function (req, res) {
+  return all(req, res, true);
+};
+
+exports.disabled = function (req, res) {
+  return all(req, res, false);
+};
+
+
 /* Shows the view to create a new hotspot */
 exports.new = function getNewPlace(req, res) {
   Hotspot.new().then((result) => {
@@ -29,7 +54,6 @@ exports.new = function getNewPlace(req, res) {
 
 
 exports.getHotspot = function (req, res) {
-  console.log(req.params.template);
   const templatePath = TemplateInformation.templateFilePath[req.params.template];
   const valuesPath = TemplateInformation.valuesPath[req.params.template];
   fs.readFile(templatePath, 'utf8', (err, data) => {

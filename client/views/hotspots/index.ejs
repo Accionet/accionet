@@ -1,0 +1,148 @@
+<html ng-app="accionet-web-app">
+
+  <head>
+    <title>Portales - Accionet</title>
+    <% include ../partials/head.ejs %>
+
+    <!-- DataTables CSS -->
+    <link href="/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+  </head>
+
+  <body ng-controller="hotspotIndexController">
+
+    <% include ../partials/message_log.ejs %>
+
+    <div id="wrapper">
+
+      <%= include ../partials/navbar.ejs %>
+
+      <div id="page-wrapper" ng-init="initializeHotspots(' <%= JSON.stringify(hotspots) %>', null)">
+        <!-- /.row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">Índice de Portales</h1>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="input-group custom-search-form">
+                <input type="text" class="form-control" placeholder="Buscar..." ng-model="myFilter.name"/>
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <!-- /.panel-heading -->
+              <div class="panel-body">
+                {{hotspots}}
+                <table width="100%" class="table table-hover" id="" ng-init="myFilter.is_active =  <%= show_active %>">
+                  <thead>
+                    <tr>
+                      <th ng-click="setOrderBy('updated_at')">Fecha</th>
+                      <th ng-click="setOrderBy('name')">Nombre</th>
+                      <th ng-click="setOrderBy('totalVisits')">Total de visitas
+                      </th>
+                      <th ng-click="setOrderBy('totalEndUsers')">Alcance
+                      </th>
+                      <th>Acciones
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="" ng-repeat="hotspot in hotspots | orderBy:myOrderBy |filter: myFilter">
+                      <td>
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        {{hotspot.updated_at | date}}
+                      </td>
+                      <td>
+                        <span class="glyphicon glyphicon-file"></span>
+                        {{hotspot.name}}</td>
+                      <td ng-init="getTotalVisits(hotspot)">
+                        <span ng-if="hotspot.totalVisits" class="percent">{{hotspot.totalVisits}}</span>
+                        <span ng-if="!hotspot.totalVisits" class="percent">
+                          <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
+                      </td>
+                      <td class="center" ng-init="getTotalEndUsers(hotspot)">
+                        <span ng-if="hotspot.totalEndUsers" class="percent">{{hotspot.totalEndUsers}}</span>
+                        <span ng-if="!hotspot.totalEndUsers" class="percent">
+                          <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
+                      </td>
+                      <td class="text-right text-nowrap">
+                        <% if(user.is_admin) {%>
+                          <a ng-click="toggleIsActive(hotspot)" class="pull-right dark-red icon-list-holder" ng-if="hotspot.is_active" data-toggle="tooltip" data-placement="top" title="Desactivar">
+                            <i class="fa fa-trash"></i>
+                          </a>
+                          <a ng-click="toggleIsActive(hotspot)" class="pull-right dark-green icon-list-holder" ng-if="!hotspot.is_active" data-toggle="tooltip" data-placement="top" title="Activar">
+                            <i class="fa fa-check"></i>
+                          </a>
+                          <a href="/hotspots/{{hotspot.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
+                            <i class="fa fa-edit"></i>
+                          </a>
+                        <%}%>
+                        <a ng-if='hotspot.access_type ==="r/w"' href="/hotspots/{{hotspot.id}}/edit" class="pull-right orange icon-list-holder" data-toggle="tooltip" data-placement="top" title="Editar">
+                          <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="pull-right blue icon-list-holder" href="/hotspots/{{hotspot.id}}/metrics" data-toggle="tooltip" data-placement="top" title="Ver m&eacute;tricas">
+                          <i class="fa fa-line-chart"></i>
+                        </a>
+                        <a href="/hotspots/{{hotspot.id}}" class="pull-right green icon-list-holder" data-toggle="tooltip" data-placement="top" title="Ver detalles">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+          </div>
+          <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+      </div>
+      <!-- /#page-wrapper -->
+
+    </div>
+
+    <% include ../partials/scripts.ejs %>
+
+    <% include partials/hotspots_scripts.ejs %>
+
+    <!-- DataTables JavaScript -->
+    <script src="/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $('#dataTables-example').DataTable({responsive: true});
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+  </body>
+
+</html>

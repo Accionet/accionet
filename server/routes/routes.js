@@ -327,6 +327,14 @@ module.exports = function router(app, passport, S3_BUCKET) {
   });
 
 
+  // ///////////////////// API ////////////////////////////
+
+
+  app.get('/api/v1/hotspots/:id/metrics/visits/count', hasAccessToRead, (req, res, next) => {
+    req.params.key = 'hotspot_id';
+    visitController.countOf(req, res, next);
+  });
+
   // S3 debug
   app.get('/account', (req, res) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'uploadtos3test', 'account.ejs'), {});

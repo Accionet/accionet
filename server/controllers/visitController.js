@@ -149,6 +149,28 @@ exports.countOfPlace = function (req, res) {
   });
 };
 
+/**
+This method also return the first date of a visits to count the daily average.
+**/
+exports.countOf = function (req, res) {
+  const id = req.params.id;
+  const key = req.params.key;
+  const attr = {};
+  attr[key] = id;
+  Visits.count(attr).then((data) => {
+    Visits.getFirstDate(attr).then((date) => {
+      const json = httpResponse.success('Visitas por entrada', ['data', 'date'], [data, date]);
+      return res.status(200).send(json);
+    }).catch((err) => {
+      const json = httpResponse.error(err);
+      return res.status(400).send(json);
+    });
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
+  });
+};
+
 exports.countEndUsersOfPlace = function (req, res) {
   const id = req.params.id;
   const attr = {

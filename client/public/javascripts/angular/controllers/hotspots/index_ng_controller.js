@@ -14,7 +14,6 @@ controllers
 
 
   $scope.getTotalVisits = function(hotspot) {
-    console.log('a mandar');
     visitMetrics.totalVisitOf('hotspots', hotspot.id, function(err, results) {
       if (err) {
         return;
@@ -22,4 +21,22 @@ controllers
       hotspot.totalVisits = results.data;
     });
   };
+
+  $scope.getTotalEndUsers = function(hotspot) {
+    visitMetrics.getTotalEndUsers('hotspots', hotspot.id, function(err, results) {
+      if (err) {
+        return;
+      }
+      hotspot.totalEndUsers = results.data.toString();
+    });
+  };
+
+  $scope.setOrderBy = function(key) {
+    if ($scope.myOrderBy === key) {
+      $scope.myOrderBy = `-${key}`;
+    } else {
+      $scope.myOrderBy = key;
+    }
+  };
+
 });

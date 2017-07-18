@@ -185,6 +185,20 @@ exports.countEndUsersOfPlace = function (req, res) {
   });
 };
 
+exports.countEndUsersOf = function (req, res) {
+  const id = req.params.id;
+  const key = req.params.key;
+  const attr = {};
+  attr[key] = id;
+  Metric.countEndUsers(attr).then((data) => {
+    const json = httpResponse.success('Usuarios finales', ['data'], [data]);
+    return res.status(200).send(json);
+  }).catch((err) => {
+    const json = httpResponse.error(err);
+    return res.status(400).send(json);
+  });
+};
+
 exports.generateExcel = function (req, res) {
   const attr = {
     place_id: parseInt(req.params.id, 10),

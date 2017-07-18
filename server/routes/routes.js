@@ -326,6 +326,10 @@ module.exports = function router(app, passport, S3_BUCKET) {
     hotspotController.get(req, res, next);
   });
 
+  app.put('/hotspots/:id/toggleIsActive', hasAccessToWrite, (req, res, next) => {
+    hotspotController.toggleIsActive(req, res, next);
+  });
+
 
   // ///////////////////// API ////////////////////////////
 

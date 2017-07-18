@@ -5,11 +5,18 @@ controllers
   $scope.hotspots = {};
   $scope.myOrderBy = 'name';
 
-  // Get all places
   $scope.initializeHotspots = function(hotspots) {
     if (hotspots) {
       $scope.hotspots = Utils.parseJson(hotspots);
     }
+  };
+
+  $scope.toggleIsActive = function(hotspot) {
+    $http.put(`/hotspots/${hotspot.id}/toggleIsActive`)
+      .success(function(data) {
+        hotspot.is_active = data.hotspot.is_active;
+      })
+      .error(function(data) {});
   };
 
 

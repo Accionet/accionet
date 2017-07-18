@@ -53,6 +53,19 @@ exports.new = function getNewPlace(req, res) {
 };
 
 
+exports.toggleIsActive = function toggleIsActive(req, res) {
+  Hotspot.toggleIsActive(req.params.id).then((response) => {
+    const json = {
+      hotspot: response,
+    };
+    return res.status(200).send(json);
+  }).catch((err) => {
+    return res.status(400).send({
+      error: err,
+    });
+  });
+};
+
 exports.getHotspot = function (req, res) {
   const templatePath = TemplateInformation.templateFilePath[req.params.template];
   const valuesPath = TemplateInformation.valuesPath[req.params.template];

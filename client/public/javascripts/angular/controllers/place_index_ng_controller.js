@@ -27,11 +27,9 @@ controllers
 
 
   $scope.toggleIsActive = function(place) {
-    console.log(place);
     $http.put(`/places/${place.id}/toggleIsActive`)
       .success(function(data) {
         place.is_active = data.place.is_active;
-        // locallyUpdatePlace(data.place);
       })
       .error(function(data) {});
   };

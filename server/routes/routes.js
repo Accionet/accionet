@@ -49,6 +49,7 @@ module.exports = function router(app, passport) {
   }));
 
   app.get('/logout', (req, res) => {
+    console.log('lo tiro para afuera');
     req.logout();
     res.redirect('/');
   });
@@ -186,6 +187,7 @@ module.exports = function router(app, passport) {
   });
 
   app.get('/api/v1/surveys/:id/metrics/enduser/count', hasAccessToRead, (req, res, next) => {
+    console.log('llego para metrics =========================================================================================');
     surveyController.countEndUser(req, res, next);
   });
 
@@ -361,28 +363,36 @@ function hasAccessToWrite(req, res, next) {
 }
 
 function hasAccessToRead(req, res, next) {
+  console.log('EN ACCESS TO READD=================================');
   if (selfUser(req)) {
+    console.log('es self user');
     return next();
   }
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
+    console.log('authenticated');
     const access = { in: extractTableFromUrl(req.url),
       to: req.params.id,
       user_id: req.user.id,
     };
+    console.log(access);
     const promises = [];
     promises.push(User.isAdmin(access.user_id));
     promises.push(Access.hasReadAccess(access.user_id, access.to, access.in));
     Promise.all(promises).then((results) => {
+      console.log(results);
       if (results[0] || results[1]) {
         return next();
       }
 
       logout(req, res);
-    }).catch(() => {
+    }).catch((err) => {
+      console.log('Hubo un error');
+      console.log(err);
       logout(req, res);
     });
   } else {
+    console.log('NO ESTA AUTENTIFICADO');
     // if they aren't redirect them to the home page
     logout(req, res);
   }
@@ -407,7 +417,8 @@ function isAdmin(req, res, next) {
 
 function logout(req, res) {
   // if they aren't redirect them to the home page
-
+  console.log('==================================================logout');
+  console.log(req.user);
   req.logout();
   res.redirect('/');
 }

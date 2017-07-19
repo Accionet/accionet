@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+      <title>Ingresar</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta http-equiv="pragma" content="no-cache"/>
+      <meta http-equiv="expires" content="-1"/>
+      <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+        <title>Ingresar
+        </title>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/normalize.css">
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <link href="http://fonts.googleapis.com/css?family=Nunito:400,300" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <form id="#myForm">
+            <img class="logo" src="img/logo.png">
+            <p class="cabify-text">
+                ¿Sab&iacute;as que ahora puedes pagar Cabify con Redcompra?
+            </p>
+            <p class="cabify-text">
+                Descarga Cabify y obt&eacute;n <b>2</b> viajes de $3.000 utilizando el c&oacute;digo <b>CABIFYWIFI</b>, en la categor&iacute;a d&eacute;bito
+            </p>
+            <input type="hidden" id="macAddress" value="T-$(mac-esc)">
+            <input id="link-iphone" type="hidden" value="$(link-login-only)?dst=https://itunes.apple.com/us/app/cabify-your-private-driver/id476087442?mt=8&amp;username=T-$(mac-esc)" />
+            <input id="link-android" type="hidden" value="$(link-login-only)?dst=market://details?id=com.cabify.rider&hl=en&amp;username=T-$(mac-esc)" />
+            <input id="link-android-browser" type="hidden" value="$(link-login-only)?dst=https://play.google.com/store?hl=en&amp;username=T-$(mac-esc)" />
+            <input id="link-windows-phone" type="hidden" value="$(link-login-only)?dst=http://windowsphoneapks.com/APK_Cabify-Your-private-driver_Windows-Phone.html&amp;username=T-$(mac-esc)" />
+            <input id="link" type="hidden" value="$(link-login-only)?dst=https://cabify.com/chile/santiago&amp;username=T-$(mac-esc)" />
+
+            <a id="download_cabify" class="boton submit" href="$(link-login-only)?dst=https://cabify.com/chile/santiago&amp;username=T-$(mac-esc)">
+                Descargar Cabify
+            </a>
+
+            <a id="navigate" class="boton only-navigate" href="$(link-login-only)?dst=https://cabify.com/chile/santiago&amp;username=T-$(mac-esc)" target="_blank">Solo quiero navegar
+            </a>
+            <fieldset>
+                <input type="checkbox" id="terms_and_conditions" value="" name="accept_terms">
+                <label class="light" for="terms_and_conditions">He le&iacute;do y aceptado los
+                    <a class="terms" href="term_and_conditions.html" target="_blank">terminos y condiciones de uso
+                    </a>
+                </label><br>
+                <label class="light" for="terms_and_conditions">C&oacute;digo v&aacute;lido para nuevos usuarios, sin viajes ni c&oacute;digos ingresados previamente
+                </label>
+            </fieldset>
+            <!-- <p style="color: #000;" id="response">
+              log:/
+            </p> -->
+
+
+        </form>
+    </body>
+    <script type="text/javascript" src="js/log.js"></script>
+    <script type="text/javascript" src="js/ready_to_send.js"></script>
+    <!-- <script type="text/javascript" src="js/counter.js"></script> -->
+</html>

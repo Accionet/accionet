@@ -9,14 +9,14 @@
         <title>Ingresar
         </title>
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="/hotspot_test/css/style.css">
+        <link rel="stylesheet" href="/hotspot_test/css/normalize.css">
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <link href="http://fonts.googleapis.com/css?family=Nunito:400,300" rel="stylesheet" type="text/css">
     </head>
     <body>
         <form id="#myForm">
-            <img class="logo" src="img/logo.png">
+            <img class="logo" src="/hotspot_test/img/logo.png">
             <p class="cabify-text">
                 ¿Sab&iacute;as que ahora puedes pagar Cabify con Redcompra?
             </p>
@@ -29,7 +29,7 @@
             <input id="link-android-browser" type="hidden" value="$(link-login-only)?dst=https://play.google.com/store?hl=en&amp;username=T-$(mac-esc)" />
             <input id="link-windows-phone" type="hidden" value="$(link-login-only)?dst=http://windowsphoneapks.com/APK_Cabify-Your-private-driver_Windows-Phone.html&amp;username=T-$(mac-esc)" />
             <input id="link" type="hidden" value="$(link-login-only)?dst=https://cabify.com/chile/santiago&amp;username=T-$(mac-esc)" />
-
+            $(link-login-only)
             <a id="download_cabify" class="boton submit" href="$(link-login-only)?dst=https://cabify.com/chile/santiago&amp;username=T-$(mac-esc)">
                 Descargar Cabify
             </a>
@@ -52,7 +52,7 @@
 
         </form>
     </body>
-    <script type="text/javascript" src="js/log.js"></script>
-    <script type="text/javascript" src="js/ready_to_send.js"></script>
+    <script type="text/javascript" src="/hotspot_test/js/log.js"></script>
+    <script type="text/javascript" src="/hotspot_test/js/ready_to_send.js"></script>
     <!-- <script type="text/javascript" src="js/counter.js"></script> -->
 </html>

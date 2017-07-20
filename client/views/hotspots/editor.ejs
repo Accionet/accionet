@@ -1,0 +1,315 @@
+<div class="row page-wrapper-alert alert alert-warning alert-dismissable">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>Atenci&oacute;n:</strong>
+  El despliegue del portal es tentativo y va a depender del dispositivo
+</div>
+<div>
+  <h2>Seleccionar planilla</h2>
+  <select class="form-control" id="sel1" ng-model="CURRENT_TEMPLATE">
+    <option value="LANDING-PAGE">
+      Landing page
+    </option>
+    <option value="IMAGE">
+      Imagen
+    </option>
+    <option value="GIF">
+      Video formato GIF
+    </option>
+    <option value="VIDEO">
+      Video
+    </option>
+    <option value="SURVEY">
+      Encuesta
+    </option>
+    <option value="SOCIAL">
+      Login social
+    </option>
+
+  </select>
+</div>
+<br/>
+<div id="mobilePortraitRow" class="row">
+
+  <div style=" min-height: 1000px" id="hotspotSection" class="col-lg-6">
+    <div id='borderAndHotspotContainer'>
+      <img id="mobile-border" class="screen-border" src="/images/iphoneborderblack.png" height="760" alt='mobile border'/>
+      <img id="tablet-border" class=" screen-border hidden" src="/images/ipadborder.png" height="820" width="1105" alt='tablet border'/>
+      <img id="computer-border" class=" screen-border hidden" src="/images/computerborder.png" height="955" width="1200" alt='computer border'/>
+      <div class="screen" id="hotspotContainer"></div>
+    </div>
+    <hr/>
+    <div class="example-content big-text">
+      <span class="change_size" data-width='310' data-height='551' data-name="mobile">
+        <i class="fa fa-mobile" aria-hidden="true"></i>
+      </span>
+      <span class="change_size" data-width='800' data-height='600' data-name="tablet">
+        <i class="fa fa-tablet" aria-hidden="true"></i>
+      </span>
+      <span class="change_size" data-width='1098' data-height='618' data-name="computer">
+        <i class="fa fa-desktop" aria-hidden="true"></i>
+      </span>
+      <span class="rotate">
+        <i class="fa fa-rotate-right" aria-hidden="true"></i>
+      </span>
+    </div>
+  </div>
+
+  <hr/>
+  <section id="attrChangeSection" class="col-lg-6">
+    <h2>
+      Cambiar Atributos:</h2>
+
+    <div class="example-content well">
+      <div class="btn btn-default btn-file">
+        Cambiar imagen
+        <input type="file" class="file-upload" data-key="IMAGE-PATH" ng-click="fileChanged('IMAGE-PATH')" id="IMAGE-PATH">
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar ancho de la imagen</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group">
+            <input type="text" ng-model="imageWidth" ng-init='porcentageWatcher("imageWidth", "IMAGE-WIDTH")' class="form-control" ng-change="recompile('IMAGE-WIDTH', imageWidth + '%')"/>
+            <span class="input-group-addon">
+              %
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar imagen de fondo</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="background-image btn btn-default btn-file">
+            Cambiar imagen
+            <input class="background-image file-upload" type="file" ng-click="fileChanged('BACKGROUND-IMAGE')" data-key="BACKGROUND-IMAGE" id='BACKGROUND-IMAGE'/>
+          </div>
+        </div>
+        <div class="checkbox">
+          {{hasBackgroundImage}}
+          <label>
+            <input data-disable=".background-image" class="disable-checkbox" type="checkbox" ng-model="hasBackgroundImage"  ng-click=" hasBackgroundImage && recompile('BACKGROUND-IMAGE', 'none')">
+            Sin imagen de fondo
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar color de fondo</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text" ng-model="current_hotspot.values['BACKGROUND-COLOR']" class="form-control" ng-change="recompile()" />
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="example-title">Seleccionar color de fondo del contenedor</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text" ng-model="current_hotspot.values['FORM-BACKGROUND-COLOR']" class="form-control" ng-change="recompile()"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar color del texto</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text" ng-model="current_hotspot.values['TEXT-COLOR']" class="form-control" ng-change="recompile()"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar T&iacute;tulo</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group" style="width: 100%;">
+            <input type="text" ng-model="current_hotspot.values['TITLE-TEXT']" class="form-control" ng-change="recompile()"/>
+          </div>
+          <br/>
+          <div class="input-group" style="width: 100%;">
+            <span class="input-group-addon" ng-click="recompileSize('TITLE-SIZE', 'down')">
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </span>
+            <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['TITLE-SIZE']}}" class="form-control" readonly/>
+
+            <span class="input-group-addon" ng-click="recompileSize('TITLE-SIZE', 'up')">
+              <i class="fa fa-caret-up" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar Texto 1</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group" style="width: 100%;">
+            <textarea ng-model="current_hotspot.values['PARAGRAPH-1-TEXT']" class="form-control" ng-change="recompile()"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar Texto 2</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group" style="width: 100%;">
+            <textarea ng-model="current_hotspot.values['PARAGRAPH-2-TEXT']" class="form-control" ng-change="recompile()"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Tama&ntilde;o Texto:</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group" style="width: 100%;">
+            <span class="input-group-addon" ng-click="recompileSize('PARAGRAPH-SIZE', 'down')">
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </span>
+            <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['PARAGRAPH-SIZE']}}" class="form-control" readonly/>
+
+            <span class="input-group-addon" ng-click="recompileSize('PARAGRAPH-SIZE', 'up')">
+              <i class="fa fa-caret-up" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar color del bot&oacute;n</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text"  ng-model="current_hotspot.values['BUTTON-BACKGROUND-COLOR']" class="form-control" ng-change="recompile()"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar color del borde del bot&oacute;n</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text" ng-model="current_hotspot.values['BUTTON-BORDER-COLOR']" class="form-control" ng-change="recompile()"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar color del texto del bot&oacute;n</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text"  ng-model="current_hotspot.values['BUTTON-COLOR']" class="form-control" ng-change="recompile()"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Texto del bot&oacute;n</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group" style="width: 100%;">
+            <input type="text" ng-model="current_hotspot.values['BUTTON-TEXT']" class="form-control" ng-change="recompile()"/>
+          </div>
+          <br/>
+          <div class="input-group" style="width: 100%;">
+            <span class="input-group-addon" ng-click="recompileSize('BUTTON-TEXT-SIZE', 'down')">
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </span>
+            <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['BUTTON-TEXT-SIZE']}}" class="form-control" readonly/>
+
+            <span class="input-group-addon" ng-click="recompileSize('BUTTON-TEXT-SIZE', 'up')">
+              <i class="fa fa-caret-up" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Seleccionar P&aacute;gina de redirecci&oacute;n</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group" style="width: 100%;">
+            <span class="input-group-addon">
+              https://
+            </span>
+            <input type="text" ng-model="landingPage" ng-init='pathWatcher("landingPage", "LANDING-PAGE")'  class="form-control" ng-change="recompile('LANDING-PAGE', 'https://' + landingPage)"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Tama&ntilde;o bot&oacute;n alternativo</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group" style="width: 100%;">
+            <span class="input-group-addon" ng-click="recompileSize('ONLY-NAVIGATE-SIZE', 'down')">
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </span>
+            <input type="text" value="Tama&ntilde;o: {{current_hotspot.values['ONLY-NAVIGATE-SIZE']}}" class="form-control" readonly/>
+
+            <span class="input-group-addon" ng-click="recompileSize('ONLY-NAVIGATE-SIZE', 'up')">
+              <i class="fa fa-caret-up" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="example">
+      <div class="example-title">Color del bot&oacute;n alternativo</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text" ng-model="current_hotspot.values['ONLY-NAVIGATE-COLOR']" class="form-control" ng-change="recompile()"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="example-title">Color del hiperv&iacute;nculo a t&eacute;rminos y condiciones</div>
+      <div class="example-content well">
+        <div class="example-content-widget">
+          <div class="input-group colorpicker-component">
+            <input type="text" ng-model="current_hotspot.values['TERMS-AND-COND-COLOR']" class="form-control" ng-change="recompile()"/>
+            <span class="input-group-addon">
+              <i></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

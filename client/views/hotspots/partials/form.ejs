@@ -1,0 +1,89 @@
+<!-- Nav tabs -->
+
+<form name="form">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">General
+          </h4>
+        </div>
+        <!-- /.panel-heading -->
+
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="name">
+              Nombre del portal:
+            </label>
+            <input class="form-control" name="name" type="text" placeholder="Nombre" ng-model="selectedHotspot.name" required ng-maxlength="80"/>
+            <div ng-show="form.name.$error.required" class="alert alert-danger">
+              No puede ser vacio
+            </div>
+            <div ng-show="form.name.$error.maxlength" class="alert alert-danger">
+              No puede tener más de 80 caracteres
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Descripción
+          </h4>
+        </div>
+        <!-- /.panel-heading -->
+
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="description">Descripción:
+            </label>
+            <textarea class="form-control" name="description" rows="5" placeholder="Descripción" ng-model="selectedHotspot.description" ng-maxlength="800"></textarea>
+            <div ng-show="form.description.$error.maxlength" class="alert alert-danger">
+              La descripción no puede tener más de 800 caracteres
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Lugar
+          </h4>
+        </div>
+        <!-- /.panel-heading -->
+
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="description">Seleccionar lugar:
+            </label>
+            <div ng-if='!loadingPlaces && !loadPlacesFailed'>
+              <select ng-model="selectedHotspot.place_id" name="place_id" required>
+                <option value="{{p.id}}" ng-repeat="p in places" ng-selected="selectedHotspot.place_id === p.id">{{p.name}}
+                </option>
+              </select>
+            </div>
+            <div ng-if='loadingPlaces' class='center-text'>
+                <i class="fa fa-spinner fa-pulse fa-fw "></i>
+            </div>
+            <div ng-show="loadPlacesFailed" class="alert alert-danger">
+              <p>
+                Hubo un problema, porfavor intentar m&aacute;s tarde
+              </p>
+            </div>
+            <div ng-show="!selectedHotspot.place_id" class="alert alert-danger">
+              <p>
+                Debe estar asociado a un lugar
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

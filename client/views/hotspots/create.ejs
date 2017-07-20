@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="accionet-web-app">
+  <head>
+    <title>Hotspot</title>
+    <%= include ../partials/head.ejs %>
+    <link href="/stylesheets/hotspot_render.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <script src="/vendor/jquery/jquery.min.js"></script>
+  </head>
+  <body ng-controller="hotspotController">
+    <% include ../partials/message_log.ejs %>
+    <%= include ../partials/navbar.ejs %>
+    <div id="page-wrapper" ng-init="initializeHotspot(' <%= JSON.stringify(hotspot) %>')">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">{{selectedHotspot.name}}</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <ul class="text-center">
+            <button id='1' type="button" class="btn btn-primary">
+              <span type="button" class="btn btn-outline btn-default btn-circle">1</span>
+              Informaci&oacute;n
+            </button>
+            <span type="button" class="btn btn-link ">
+              >
+            </span>
+            <button id='2' type="button" class="btn btn-outline btn-primary">
+              <span type="button" class="btn btn-outline btn-default btn-circle">2</span>
+              Crear portal ></button>
+            <span type="button" class="btn btn-link ">
+              >
+            </span>
+            <button id='3' type="button" class="btn btn-outline btn-primary">
+              <span type="button" class="btn btn-outline btn-default btn-circle">3</span>
+              Guardar</button>
+          </ul>
+        </div>
+      </div>
+      <br/>
+      <section id="hotspotEditor" ng-show='i == 2'>
+        <% include editor.ejs %>
+      </section>
+      <div ng-if="i == 1">
+        <% include partials/form.ejs %>
+      </div>
+
+      <div class="text-center" ng-show='i == 3'>
+        <hr/>
+        <p class="text-muted">
+          {{completed}}%
+        </p>
+        <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{completed}}" aria-valuemin="0" aria-valuemax="100" style="width: {{completed}}%"></div>
+        </div>
+        <button type="button" class="btn btn-outline btn-success" ng-click="saveHotspot()" ng-if="completed == 0">
+          Guardar portal
+        {{selectedHotspot.name}} </button>
+        <button type="button" class="btn btn-outline btn-warning" ng-click="cancelUpload()" ng-if="completed > 0 && uploading">
+          Cancelar</button>
+
+        <hr/>
+      </div>
+
+      <br>
+      <ul class="text-center">
+        <button id='previous' type="button" class="btn btn-outline btn-warning hidden" ng-if='!uploading' ng-click="previousStep()">
+          Anterior</button>
+
+        <button id='next' type="button" class="btn btn-outline btn-success" ng-click="nextStep()">
+          Siguiente</button>
+      </ul>
+    </div>
+  </body>
+
+  <script>
+    $(function () {
+      $('.colorpicker-component').colorpicker();
+
+      $("input[type='checkbox']").on('click', function (event) {
+        var elemToDisable = $(this).data('disable');
+        if (this.checked) {
+          $(elemToDisable).addClass('disabled');
+          $(elemToDisable).prop('disabled', true);
+        } else {
+          $(elemToDisable).removeClass('disabled');
+          $(elemToDisable).prop('disabled', false);
+        }
+      })
+    });
+  </script>
+  <% include ../partials/scripts.ejs%>
+  <script src="/javascripts/angular/services/places.js"></script>
+  <% include partials/hotspots_scripts.ejs %>
+
+  <!-- <script src="https://cdn.rawgit.com/showdownjs/showdown/1.0.2/dist/showdown.min.js"></script> -->
+  <script src='/vendor/jquery-rotate/JQueryRotate.js'></script>
+  <script src="/javascripts/hotspot/render.js"></script>
+  <script src="/javascripts/hotspot/resize.js"></script>
+  <script src="/vendor/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+
+</html>

@@ -28,6 +28,11 @@ html, body, section, .full-height {
   margin-left: 30px;
 }
 
+#borderAndHotspotContainer {
+  display: inline-block;
+  margin-bottom: 120px;
+}
+
 
 #hotspot {
   height: 100%;
@@ -37,6 +42,8 @@ html, body, section, .full-height {
 #hotspot  img {
   width: 100%;
 }
+
+
 
 .btn-file {
     position: relative;

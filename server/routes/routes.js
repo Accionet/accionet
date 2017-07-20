@@ -2,6 +2,7 @@
 
 // const express = require('express');
 const path = require('path');
+const aws = require('aws-sdk');
 // eslint-disable-next-line new-cap
 
 // var passport = require('passport');
@@ -21,7 +22,7 @@ const User = require('../models/users');
 const Access = require('../models/access');
 
 
-module.exports = function router(app, passport) {
+module.exports = function router(app, passport, S3_BUCKET) {
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -49,7 +50,6 @@ module.exports = function router(app, passport) {
   }));
 
   app.get('/logout', (req, res) => {
-    console.log('lo tiro para afuera');
     req.logout();
     res.redirect('/');
   });
@@ -187,7 +187,6 @@ module.exports = function router(app, passport) {
   });
 
   app.get('/api/v1/surveys/:id/metrics/enduser/count', hasAccessToRead, (req, res, next) => {
-    console.log('llego para metrics =========================================================================================');
     surveyController.countEndUser(req, res, next);
   });
 
@@ -299,8 +298,20 @@ module.exports = function router(app, passport) {
   // ///////// hotspots  ////////////////////////
   // ////////////////////////////////////////
 
-  app.get('/hotspots/new', isLoggedIn, (req, res) => {
-    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
+  app.get('/hotspots', isLoggedIn, (req, res, next) => {
+    hotspotController.index(req, res, next);
+  });
+
+  app.get('/hotspots/disabled', isAdmin, (req, res, next) => {
+    hotspotController.disabled(req, res, next);
+  });
+
+  app.get('/hotspots/new', isAdmin, (req, res) => {
+    hotspotController.new(req, res);
+  });
+
+  app.get('/hotspots/new/debug', isLoggedIn, (req, res) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new_backup.ejs'), {});
   });
 
   app.get('/hotspot/render', (req, res) => {
@@ -309,6 +320,61 @@ module.exports = function router(app, passport) {
 
   app.get('/hotspots/template/:template', isLoggedIn, (req, res, next) => {
     hotspotController.getHotspot(req, res, next);
+  });
+
+  app.post('/hotspots/save/', isLoggedIn, (req, res, next) => {
+    hotspotController.save(req, res, next);
+  });
+
+  app.get('/hotspots/:id', (req, res, next) => {
+    hotspotController.get(req, res, next);
+  });
+
+  app.put('/hotspots/:id/toggleIsActive', hasAccessToWrite, (req, res, next) => {
+    hotspotController.toggleIsActive(req, res, next);
+  });
+
+
+  // ///////////////////// API ////////////////////////////
+
+
+  app.get('/api/v1/hotspots/:id/metrics/visits/count', hasAccessToRead, (req, res, next) => {
+    req.params.key = 'hotspot_id';
+    visitController.countOf(req, res, next);
+  });
+
+  app.get('/api/v1/hotspots/:id/metrics/endusers/count', hasAccessToRead, (req, res, next) => {
+    req.params.key = 'hotspot_id';
+    visitController.countEndUsersOf(req, res, next);
+  });
+
+  // S3 debug
+  app.get('/account', (req, res) => {
+    res.render(path.join(__dirname, '../', '../', 'client', 'views', 'uploadtos3test', 'account.ejs'), {});
+  });
+
+  app.get('/sign-s3', (req, res) => {
+    const s3 = new aws.S3();
+    const fileName = req.query['file-name'];
+    const fileType = req.query['file-type'];
+    const s3Params = {
+      Bucket: S3_BUCKET,
+      Key: fileName,
+      Expires: 60,
+      ContentType: fileType,
+      ACL: 'public-read',
+    };
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+      if (err) {
+        return res.end();
+      }
+      const returnData = {
+        signedRequest: data,
+        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
+      };
+      res.write(JSON.stringify(returnData));
+      res.end();
+    });
   });
 };
 //
@@ -363,36 +429,28 @@ function hasAccessToWrite(req, res, next) {
 }
 
 function hasAccessToRead(req, res, next) {
-  console.log('EN ACCESS TO READD=================================');
   if (selfUser(req)) {
-    console.log('es self user');
     return next();
   }
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
-    console.log('authenticated');
     const access = { in: extractTableFromUrl(req.url),
       to: req.params.id,
       user_id: req.user.id,
     };
-    console.log(access);
     const promises = [];
     promises.push(User.isAdmin(access.user_id));
     promises.push(Access.hasReadAccess(access.user_id, access.to, access.in));
     Promise.all(promises).then((results) => {
-      console.log(results);
       if (results[0] || results[1]) {
         return next();
       }
 
       logout(req, res);
-    }).catch((err) => {
-      console.log('Hubo un error');
-      console.log(err);
+    }).catch((err) => { // eslint-disable-line no-unused-vars
       logout(req, res);
     });
   } else {
-    console.log('NO ESTA AUTENTIFICADO');
     // if they aren't redirect them to the home page
     logout(req, res);
   }
@@ -417,8 +475,6 @@ function isAdmin(req, res, next) {
 
 function logout(req, res) {
   // if they aren't redirect them to the home page
-  console.log('==================================================logout');
-  console.log(req.user);
   req.logout();
   res.redirect('/');
 }

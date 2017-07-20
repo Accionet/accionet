@@ -299,8 +299,12 @@ module.exports = function router(app, passport) {
   // ///////// hotspots  ////////////////////////
   // ////////////////////////////////////////
 
-  app.get('/hotspots/new', isLoggedIn, (req, res, next) => {
+  app.get('/hotspots/new', isLoggedIn, (req, res) => {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new.ejs'), {});
+  });
+
+  app.get('/hotspot/render', (req, res) => {
+    res.sendFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspot_test', 'login.html'), {});
   });
 
   app.get('/hotspots/template/:template', isLoggedIn, (req, res, next) => {

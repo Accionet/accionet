@@ -376,7 +376,21 @@ module.exports = function router(app, passport, S3_BUCKET) {
       res.end();
     });
   });
+
+
+  //
+  // ////////////////////////////////////////////
+  // /////////// FACEBOOK LOGIN  ///////////////
+  // //////////////////////////////////////////
+  //
+
+  // route for facebook authentication and login
+  app.get('/auth/facebook', passport.authenticate('facebook', {
+    scope: 'email',
+  }));
 };
+
+
 //
 // ////////////////////////////////////////////
 // /////////// CHECK LOGIN  //////////////////

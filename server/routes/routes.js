@@ -314,6 +314,10 @@ module.exports = function router(app, passport, S3_BUCKET) {
     res.render(path.join(__dirname, '../', '../', 'client', 'views', 'hotspots', 'new_backup.ejs'), {});
   });
 
+  app.get('/hotspot/render', (req, res) => {
+    res.sendFile(path.join(__dirname, '../', '../', 'client', 'views', 'hotspot_test', 'login.html'), {});
+  });
+
   app.get('/hotspots/template/:template', isLoggedIn, (req, res, next) => {
     hotspotController.getHotspot(req, res, next);
   });
@@ -443,7 +447,7 @@ function hasAccessToRead(req, res, next) {
       }
 
       logout(req, res);
-    }).catch(() => {
+    }).catch((err) => { // eslint-disable-line no-unused-vars
       logout(req, res);
     });
   } else {
@@ -471,7 +475,6 @@ function isAdmin(req, res, next) {
 
 function logout(req, res) {
   // if they aren't redirect them to the home page
-
   req.logout();
   res.redirect('/');
 }

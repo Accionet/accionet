@@ -55,6 +55,7 @@ controllers
           console.log(place);
           $window.location.href = '/places/' + place.id;
         })
+<<<<<<< HEAD
         .error(function(error) {
           console.log(error);
         });

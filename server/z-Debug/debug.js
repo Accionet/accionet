@@ -9,7 +9,7 @@
 // const Access = require('../models/access');
 //
 //
-// const Survey = require('../models/surveys');
+const Person = require('../models/person');
 //
 // const AnswerMetric = require('../models/metrics/answerMetric');
 // const knex = require('../db/knex');
@@ -19,6 +19,12 @@
 // const Visit = require('../models/visits');
 //
 // const hotspotCotroller = require('../controllers/hotspotController');
+const knex = require('../db/knex');
 
 
-const d = new Date();
+Person.findByFBId(3);
+// knex('person').select('*').where(knex.raw("facebook->>'id' = ?", [3])).then((v) =>{
+//   console.log(v);
+// }).catch((err) =>{
+//   console.log(err);
+// })

@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  return knex.schema.table('response', (table) => {
+  return knex.schema.table('person', (table) => {
     table.string('macaddress');
   });
 };

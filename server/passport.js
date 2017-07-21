@@ -145,39 +145,50 @@ module.exports = function auth(passport) {
 
     // facebook will send back the token and profile
     (token, refreshToken, profile, done) => {
+      console.log('faceboook');
+      console.log(profile);
       // asynchronous
       process.nextTick(() => {
         // find the user in the database based on their facebook id
-        User.findByFBId(profile.id, (err, user) => {
-          // if there is an error, stop everything and return that
-          // ie an error connecting to the database
-          if (err) {
-            return done(err);
-          }
+        Person.findByFBId(profile.id).then((user) => {
           // if the user is found, then log them in
           if (user) {
             return done(null, user); // user found, return that user
           }
           // if there is no user found with that facebook id, create them
-          const newUser = new User();
-          // set all of the facebook information in our user model
-          newUser.facebook.id = profile.id; // set the users facebook id
-          // we will save the token that facebook provides to the user
-          newUser.facebook.token = token;
-          newUser.facebook.name = `${profile.name.givenName} ${profile.name.familyName}`; // look at the passport user profile to see how names are returned
-          // facebook can return multiple emails so we'll take the first
-          if (profile.emails) {
-            newUser.facebook.email = profile.emails[0].value;
-          }
-
-          // save our user to the database
-          newUser.save((err) => {
-            if (err) {
-              throw err;
+          Person.new().then((newPerson) => {
+            newPerson.facebook = {};
+            // set all of the facebook information in our user model
+            newPerson.facebook.id = profile.id; // set the users facebook id
+            // we will save the token that facebook provides to the user
+            newPerson.facebook.token = token;
+            newPerson.facebook.name = `${profile.name.givenName} ${profile.name.familyName}`; // look at the passport user profile to see how names are returned
+            // facebook can return multiple emails so we'll take the first
+            if (profile.emails) {
+              newPerson.facebook.email = profile.emails[0].value;
             }
-            // if successful, return the new user
-            return done(null, newUser);
+            console.log('newPerson');
+            console.log(newPerson);
+
+            // save our user to the database
+            Person.save(newPerson).then((savedEntry) => {
+              console.log('saved');
+              console.log(newPerson);
+              // if successful, return the new user
+              return done(null, savedEntry);
+            }).catch((err) => {
+              console.log(err);
+              return done(err);
+            });
+          }).catch((err) => {
+            console.log('err');
+            console.log(err);
+            throw err;
           });
+        }).catch((err) => {
+          // if there is an error, stop everything and return that
+          // ie an error connecting to the database
+          return done(err);
         });
       });
     }));

@@ -62,6 +62,7 @@ class Table {
             resolve(entry[0]);
           })
             .catch((err) => { //eslint-disable-line
+              console.log(err);
               reject(errorString);
             });
         }).catch((err) => {
